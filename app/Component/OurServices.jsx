@@ -40,12 +40,12 @@ export default function OurServices() {
     }, [words.length]);
 
     return (
-        <section className="relative w-full bg-white py-20 md:py-32 overflow-hidden font-sans">
-            <div className="container mx-auto px-6 max-w-7xl">
-                <div className="flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-20">
+        <section className="relative w-full bg-white py-12 md:py-20 lg:py-32 overflow-hidden font-sans">
+            <div className="container mx-auto px-4 sm:px-6 max-w-7xl">
+                <div className="flex flex-col lg:flex-row items-center justify-between gap-10 md:gap-16 lg:gap-20">
 
                     {/* Left Content Column */}
-                    <div className="w-full lg:w-1/2 flex flex-col items-start text-left space-y-8 order-2 lg:order-1 animate-in fade-in slide-in-from-left duration-1000">
+                    <div className="w-full lg:w-1/2 flex flex-col items-start text-left space-y-6 md:space-y-8 order-2 lg:order-1 animate-in fade-in slide-in-from-left duration-1000">
                         {/* Tag Badge */}
                         <div className="flex items-center gap-3 animate-fade-in">
                             <div className="w-4 h-4 bg-[#6B46E5] rounded-sm shadow-[0_0_10px_rgba(107,70,229,0.3)]"></div>
@@ -55,7 +55,7 @@ export default function OurServices() {
                         </div>
 
                         {/* Main Heading */}
-                        <h2 className="text-4xl md:text-5xl lg:text-[49px] font-semibold text-[#1a1a2e]  tracking-tight">
+                        <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-[49px] font-semibold text-[#1a1a2e] tracking-tight leading-tight">
                             Unlock Cyber Resilience <br className="hidden md:block" />
                             with <span className="text-[#6B46E5]">Cyber Whisper</span>
                         </h2>
@@ -63,7 +63,7 @@ export default function OurServices() {
                         {/* Description Paragraph */}
                         <p
                             ref={ref}
-                            className="text-lg md:text-xl font-medium leading-relaxed max-w-[550px]"
+                            className="text-base sm:text-lg md:text-xl font-medium leading-relaxed max-w-[550px]"
                         >
                             {words.map((word, index) => (
                                 <span
@@ -82,7 +82,7 @@ export default function OurServices() {
 
                     {/* Right Image Column */}
                     <div className="w-full lg:w-1/2 flex justify-center lg:justify-end order-1 lg:order-2 animate-in fade-in slide-in-from-right duration-1000">
-                        <div className="relative w-full max-w-[600px]">
+                        <div className="relative w-full max-w-[400px] md:max-w-[500px] lg:max-w-[600px]">
                             <Image
                                 src={pcImage}
                                 alt="Cyber Resilience Illustration"

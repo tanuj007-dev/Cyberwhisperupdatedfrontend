@@ -6,43 +6,43 @@ import { ArrowRight } from 'lucide-react'
 import pathBg from "./assets/path.png"
 export default function FreeTrial() {
     return (
-        <section className="w-full py-16 px-6 font-sans">
+        <section className="w-full py-8 md:py-16 px-4 md:px-6 font-sans">
             <div className="max-w-7xl mx-auto">
                 <motion.div
                     initial={{ opacity: 0, scale: 0.95 }}
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.6 }}
-                    className="relative overflow-hidden bg-[#7B2CFF] rounded-[2.5rem] p-8 md:p-16 flex flex-col lg:flex-row items-center justify-between gap-8 md:gap-12"
+                    className="relative overflow-hidden bg-[#7B2CFF] rounded-3xl md:rounded-[2.5rem] p-6 sm:p-10 md:p-16 flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-12 text-center lg:text-left"
                 >
                     {/* Background Wave Pattern */}
-                    <div className="absolute inset-0 z-0  pointer-events-none">
+                    <div className="absolute inset-0 z-0 pointer-events-none">
                         <Image
                             src={pathBg}
                             alt="Background Pattern"
                             fill
-                            className="object-cover"
+                            className="object-cover opacity-80 mix-blend-soft-light"
                             priority
                         />
                     </div>
 
                     {/* Text Content */}
-                    <div className="relative z-10 max-w-2xl text-center lg:text-left space-y-6">
-                        <h2 className="text-3xl md:text-[44px] leading-tight font-semibold text-white tracking-tight">
+                    <div className="relative z-10 w-full max-w-2xl space-y-4 md:space-y-6">
+                        <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-[44px] leading-tight font-semibold text-white tracking-tight">
                             Get 19 hours of <br className="hidden md:block" />
                             Full-Access Labs On Us
                         </h2>
-                        <p className="text-white/80 text-base md:text-xl   leading-relaxed max-w-xl">
-                            Test-drive our cyber range and SOC portal with your own data. No credit card, no strings—just proof that better security can start today
+                        <p className="text-white/90 text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed max-w-xl mx-auto lg:mx-0">
+                            Test-drive our cyber range and SOC portal with your own data. No credit card, no strings—just proof that better security can start today.
                         </p>
                     </div>
 
                     {/* Action Button */}
-                    <div className="relative z-10 shrink-0">
-                        <button className="group relative flex items-center bg-[#E4BB03] hover:bg-[#EAB308] text-[#1a1a2e] px-8 py-3 rounded-full text-lg transition-all  active:scale-95 whitespace-nowrap">
+                    <div className="relative z-10 shrink-0 w-full sm:w-auto">
+                        <button className="group relative w-full sm:w-auto flex items-center justify-center bg-[#E4BB03] hover:bg-[#EAB308] text-[#1a1a2e] px-6 sm:px-8 py-3 rounded-full text-base sm:text-lg font-medium transition-all active:scale-95 whitespace-nowrap shadow-lg shadow-black/10">
                             Start My Free Trial
-                            <div className="ml-4 w-9 h-9 bg-[#310E3F] rounded-full flex items-center justify-center transition-transform group-hover:translate-x-1">
-                                <ArrowRight className="w-5 h-5 text-white" />
+                            <div className="ml-3 sm:ml-4 w-8 h-8 sm:w-9 sm:h-9 bg-[#310E3F] rounded-full flex items-center justify-center transition-transform group-hover:translate-x-1">
+                                <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                             </div>
                         </button>
                     </div>

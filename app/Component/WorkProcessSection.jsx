@@ -83,8 +83,8 @@ export default function WorkProcessSection() {
           </button>
         </div>
 
-        {/* Process Flow Desktop */}
-        <div className="relative hidden lg:block h-[620px] mt-12 w-full max-w-[1280px] mx-auto">
+        {/* Process Flow Desktop - visible only on XL screens where fixed layout fits */}
+        <div className="relative hidden xl:block h-[620px] mt-12 w-full max-w-[1280px] mx-auto">
           {/* Cards Grid Staggered */}
           {/* Top Row (Centers: 130, 640, 1150) */}
           <div className="absolute left-[-30px] top-[28px] w-[320px] h-[180px] rounded-2xl border border-[#6F2DFF]/30 bg-white shadow-[0_10px_40px_rgba(111,45,255,0.08)] overflow-hidden transition-all duration-300 hover:shadow-[0_20px_50px_rgba(111,45,255,0.15)] hover:-translate-y-1">
@@ -208,10 +208,10 @@ export default function WorkProcessSection() {
           </svg>
         </div>
 
-        {/* Mobile Layout (Stacked) */}
-        <div className="lg:hidden flex flex-col gap-8">
+        {/* Mobile/Tablet Layout (Stacked) */}
+        <div className="xl:hidden flex flex-col gap-6 max-w-2xl mx-auto">
           {processes.map((p, i) => (
-            <div key={i} className="w-full h-[180px] rounded-2xl border border-[#6F2DFF]/30 bg-white shadow-[0_10px_40px_rgba(111,45,255,0.08)] overflow-hidden relative">
+            <div key={i} className="w-full min-h-[180px] h-auto rounded-2xl border border-[#6F2DFF]/30 bg-white shadow-[0_10px_40px_rgba(111,45,255,0.08)] overflow-hidden relative">
               <ProcessCard {...p} />
             </div>
           ))}
@@ -233,7 +233,7 @@ function ProcessCard({ step, heading, description }) {
         {step}
       </div>
 
-      <h3 className="text-[#1a1a2e] font-bold text-xl mb-3 tracking-tight whitespace-nowrap">
+      <h3 className="text-[#1a1a2e] font-bold text-xl mb-3 tracking-tight">
         {heading}
       </h3>
 

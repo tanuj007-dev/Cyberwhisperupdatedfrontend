@@ -74,19 +74,19 @@ const ToolsScroller = () => {
     const scrollingTools = [...tools, ...tools, ...tools];
 
     return (
-        <section className="py-24 bg-white overflow-hidden font-sans">
+        <section className="py-12 md:py-16 bg-white overflow-hidden font-sans">
             <div className="container mx-auto px-6 max-w-7xl">
-                <div className="text-center mb-16">
+                <div className="text-center mb-8 md:mb-12">
                     <h2 className="text-4xl md:text-[50px] text-black font-semibold   tracking-tight mb-4 uppercase">
                         TOOLS & FRAMEWORKS
                     </h2>
-                    <p className="text-slate-500 text-lg    font-medium max-w-2xl mx-auto">
+                    <p className="text-slate-500 text-lg    font-medium max-w-3xl mx-auto">
                         Powered by industry-standard tools and cutting-edge technologies to deliver the most realistic training environments.
                     </p>
                 </div>
             </div>
 
-            <div className="relative flex overflow-hidden py-10">
+            <div className="relative flex overflow-hidden py-6">
                 <motion.div
                     animate={{
                         x: ["0%", "-33.33%"]
@@ -95,18 +95,18 @@ const ToolsScroller = () => {
                         x: {
                             repeat: Infinity,
                             repeatType: "loop",
-                            duration: 35,
+                            duration: 80,
                             ease: "linear",
                         }
                     }}
-                    className="flex gap-8 whitespace-nowrap"
+                    className="flex gap-4 md:gap-8 whitespace-nowrap"
                 >
                     {scrollingTools.map((tool, i) => (
                         <div
                             key={i}
-                            className="flex-none p-8 rounded-4xl bg-white shadow-lg border border-slate-100 flex flex-col items-center justify-center min-w-[240px] group transition-all duration-300 hover:border-purple-500/50 hover:shadow-purple-500/10"
+                            className="flex-none p-6 md:p-8 rounded-3xl md:rounded-4xl bg-white shadow-lg border border-slate-100 flex flex-col items-center justify-center min-w-[160px] md:min-w-[240px] group transition-all duration-300 hover:border-purple-500/50 hover:shadow-purple-500/10"
                         >
-                            <div className="w-24 h-24  flex items-center justify-center  group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
+                            <div className="w-16 h-16 md:w-24 md:h-24 flex items-center justify-center group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
                                 <Image
                                     src={tool.image}
                                     alt="Cyber Tool"

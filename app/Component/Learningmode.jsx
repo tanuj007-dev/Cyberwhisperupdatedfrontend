@@ -31,31 +31,31 @@ const modes = [
 
 export default function LearningMode() {
     return (
-        <section className="relative w-full py-24 bg-[#FBF9FF] overflow-hidden font-sans">
+        <section className="relative w-full py-12 md:py-24 bg-[#FBF9FF] overflow-hidden font-sans">
 
             {/* Background Glow (Top Left) */}
-            <div className="absolute top-0 left-0 w-[800px] h-[800px] bg-purple-100/50 rounded-full blur-[120px] -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
+            <div className="absolute top-0 left-0 w-[400px] md:w-[800px] h-[400px] md:h-[800px] bg-purple-100/50 rounded-full blur-[80px] md:blur-[120px] -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
 
-            <div className="max-w-7xl mx-auto px-6 relative z-10">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 z-10 relative">
 
                 {/* Header */}
-                <div className="text-center mb-16 space-y-4">
-                    <div className="flex items-center justify-center gap-3">
-                        <div className="w-5 h-5 bg-[#8B5CF6] rounded-[3px]"></div>
-                        <span className="text-sm font-bold text-gray-700 uppercase tracking-widest">LEARNING MODE</span>
+                <div className="text-center mb-10 md:mb-16 space-y-3 md:space-y-4">
+                    <div className="flex items-center justify-center gap-2 md:gap-3">
+                        <div className="w-4 h-4 md:w-5 md:h-5 bg-[#8B5CF6] rounded-[3px]"></div>
+                        <span className="text-xs md:text-sm font-bold text-gray-700 uppercase tracking-widest">LEARNING MODE</span>
                     </div>
 
-                    <h2 className="text-3xl md:text-5xl font-bold text-[#1a1a2e]">
+                    <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold text-[#1a1a2e] leading-tight">
                         Choose Your Preferred Learning Mode
                     </h2>
 
-                    <p className="text-gray-500 max-w-3xl mx-auto text-lg leading-relaxed">
+                    <p className="text-gray-500 max-w-3xl mx-auto text-base md:text-lg leading-relaxed px-2">
                         Real-world labs, round-the-clock defense, and expert guidance everything you need to outsmart tomorrow's threats.
                     </p>
                 </div>
 
                 {/* Cards Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
                     {modes.map((mode, idx) => (
                         <motion.div
                             key={idx}
@@ -63,17 +63,19 @@ export default function LearningMode() {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ delay: idx * 0.15, duration: 0.6 }}
-                            className="bg-white rounded-4xl border border-purple-200 p-8 flex flex-col hover:shadow-[0_20px_50px_rgba(107,70,229,0.1)] transition-all duration-300 group"
+                            className="bg-white rounded-[2rem] border border-purple-200 p-6 md:p-8 flex flex-col hover:shadow-[0_20px_50px_rgba(107,70,229,0.1)] transition-all duration-300 group"
                         >
                             {/* Content */}
-                            <div className="mb-8">
-                                <h3 className="text-2xl font-bold text-[#1a1a2e] mb-3">{mode.title}</h3>
-                                <p className="text-gray-500 text-sm leading-relaxed mb-6 h-10">
+                            <div className="mb-6 md:mb-8 flex flex-col h-full">
+                                <h3 className="text-xl md:text-2xl font-bold text-[#1a1a2e] mb-2 md:mb-3 text-center md:text-left">{mode.title}</h3>
+                                <p className="text-gray-500 text-sm leading-relaxed mb-4 md:mb-6 h-auto md:h-12 text-center md:text-left">
                                     {mode.description}
                                 </p>
-                                <button className="bg-[#26103A] text-white px-8 py-3 rounded-full text-sm font-semibold hover:bg-[#7B3FE4] transition-colors shadow-md">
-                                    {mode.btnText}
-                                </button>
+                                <div className="flex justify-center md:justify-start">
+                                    <button className="bg-[#26103A] text-white px-6 py-2.5 md:px-8 md:py-3 rounded-full text-sm font-semibold hover:bg-[#7B3FE4] transition-colors shadow-md active:scale-95">
+                                        {mode.btnText}
+                                    </button>
+                                </div>
                             </div>
 
                             {/* Image */}

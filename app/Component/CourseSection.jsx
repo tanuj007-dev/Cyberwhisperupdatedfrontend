@@ -53,7 +53,7 @@ export default function CourseSection() {
 
             const data = await response.json()
             const fetchedCategories = Array.isArray(data) ? data : (data.categories || [])
-            
+
             if (fetchedCategories.length > 0) {
                 setCategories(fetchedCategories)
                 setActiveCategory(fetchedCategories[0])
@@ -111,7 +111,7 @@ export default function CourseSection() {
     }
 
     return (
-        <section className="relative w-full bg-white py-24 px-6 overflow-hidden font-sans">
+        <section className="relative w-full bg-white py-12 md:py-24 px-4 md:px-6 overflow-hidden font-sans">
             {/* Background Decorative Lines */}
             <div className="absolute inset-0 z-0 pointer-events-none opacity-[0.05]">
                 <svg width="100%" height="100%" viewBox="0 0 1440 800" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -123,24 +123,48 @@ export default function CourseSection() {
 
             <div className="relative z-10 max-w-7xl mx-auto">
                 {/* Header Section */}
-                <div className="text-center mb-16 space-y-4">
-                    <div className="flex items-center justify-center gap-2">
-                        <div className="w-4 h-4 bg-[#6B46E5] shadow-[3px_3px_6px_rgba(107,70,229,0.45)]"></div>
+                <div className="text-center mb-10 md:mb-16 space-y-3 md:space-y-4">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6 }}
+                        className="flex items-center justify-center gap-2"
+                    >
+                        <div className="w-3 h-3 md:w-4 md:h-4 bg-[#6B46E5] shadow-[3px_3px_6px_rgba(107,70,229,0.45)]"></div>
 
-                        <span className="text-[13px] font-semibold text-[#1a1a2e] uppercase tracking-[0.2em]">
+                        <span className="text-[11px] md:text-[13px] font-semibold text-[#1a1a2e] uppercase tracking-[0.2em]">
                             LEARNING HUB
                         </span>
-                    </div>
-                    <h2 className="text-4xl md:text-[50px] font-semibold text-[#1a1a2e] tracking-tight">
+                    </motion.div>
+                    <motion.h2
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6, delay: 0.2 }}
+                        className="text-3xl md:text-[50px] font-semibold text-[#1a1a2e] tracking-tight leading-tight"
+                    >
                         {categories.length > 0 ? `Explore ${categories.length} Training Categories` : 'Stay Connected, Keep Training'}
-                    </h2>
-                    <p className="text-slate-500 text-lg  font-medium max-w-3xl mx-auto">
+                    </motion.h2>
+                    <motion.p
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6, delay: 0.4 }}
+                        className="text-slate-500 text-sm md:text-lg font-medium max-w-3xl mx-auto px-4"
+                    >
                         Discover comprehensive courses tailored to your skill level and career goals
-                    </p>
+                    </motion.p>
                 </div>
 
                 {/* Filter Categories */}
-                <div className="flex flex-wrap justify-center gap-3 mb-16">
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6, delay: 0.6 }}
+                    className="flex flex-wrap justify-center gap-3 mb-10 md:mb-16"
+                >
                     {categoriesLoading ? (
                         <div className="text-center py-8">
                             <div className="inline-block">
@@ -149,13 +173,13 @@ export default function CourseSection() {
                             <p className="text-slate-500 mt-2">Loading categories...</p>
                         </div>
                     ) : (
-                        <div className="inline-flex bg-[#F8F9FD] p-1.5 rounded-full border border-gray-100 shadow-sm max-w-full overflow-x-auto scrollbar-hide flex-wrap">
+                        <div className="inline-flex bg-[#F8F9FD] p-1.5 rounded-full border border-gray-100 shadow-sm max-w-full overflow-x-auto scrollbar-hide flex-nowrap md:flex-wrap">
                             {categories.length > 0 ? (
                                 categories.map((cat) => (
                                     <button
                                         key={cat}
                                         onClick={() => setActiveCategory(cat)}
-                                        className={`px-6 py-2.5 rounded-full text-sm font-bold transition-all duration-300 whitespace-nowrap ${activeCategory === cat
+                                        className={`px-4 md:px-6 py-2 md:py-2.5 rounded-full text-xs md:text-sm font-bold transition-all duration-300 whitespace-nowrap ${activeCategory === cat
                                             ? 'bg-[#1a1a2e] text-white shadow-lg'
                                             : 'text-slate-500 hover:text-[#1a1a2e]'
                                             }`}
@@ -168,7 +192,7 @@ export default function CourseSection() {
                             )}
                         </div>
                     )}
-                </div>
+                </motion.div>
 
                 {/* Course Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
@@ -264,12 +288,16 @@ export default function CourseSection() {
                 {/* View All Button */}
                 <div className="flex justify-center">
                     <Link href="/courses">
-                        <button className="group flex items-center gap-3 bg-[#1a1a2e] text-white px-10 py-3 rounded-full font-bold text-lg hover:bg-[#6B46E5] transition-all hover:shadow-2xl active:scale-95">
+                        <motion.button
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            className="group flex items-center gap-3 bg-[#1a1a2e] text-white px-8 md:px-10 py-3 rounded-full font-bold text-base md:text-lg hover:bg-[#6B46E5] transition-all hover:shadow-2xl"
+                        >
                             View All
-                            <div className="w-7 h-7 bg-white/10 rounded-full flex items-center justify-center transition-transform group-hover:translate-x-1">
-                                <ArrowRight className="w-4 h-4" />
+                            <div className="w-6 h-6 md:w-7 md:h-7 bg-white/10 rounded-full flex items-center justify-center transition-transform group-hover:translate-x-1">
+                                <ArrowRight className="w-3 h-3 md:w-4 md:h-4" />
                             </div>
-                        </button>
+                        </motion.button>
                     </Link>
                 </div>
             </div>

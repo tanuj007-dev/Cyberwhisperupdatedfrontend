@@ -57,33 +57,33 @@ const students = [
 
 export default function Placement() {
     return (
-        <section className="w-full py-20 bg-[#FBF9FF] font-sans overflow-hidden">
+        <section className="w-full py-10 md:py-20 bg-[#FBF9FF] font-sans overflow-hidden">
             <div className="max-w-[1400px] mx-auto px-4 md:px-8">
 
                 {/* Header */}
-                <div className="mb-12">
-                    <div className="flex items-center gap-3 mb-3">
-                        <div className="w-5 h-5 bg-[#7B2CFF] rounded-[4px] shadow-sm"></div>
-                        <span className="text-sm font-bold text-gray-700 uppercase tracking-widest">SUCCESS STORIES</span>
+                <div className="mb-8 md:mb-12">
+                    <div className="flex items-center gap-2 md:gap-3 mb-2 md:mb-3">
+                        <div className="w-4 h-4 md:w-5 md:h-5 bg-[#7B2CFF] rounded-[4px] shadow-sm"></div>
+                        <span className="text-xs md:text-sm font-bold text-gray-700 uppercase tracking-widest">SUCCESS STORIES</span>
                     </div>
-                    <h2 className="text-3xl md:text-4xl font-bold text-[#1a1a2e]">
+                    <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-[#1a1a2e]">
                         Our Recent Placement Stories
                     </h2>
                 </div>
 
                 {/* Grid Container - Responsive for all sizes */}
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-3 sm:gap-4 mb-16">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-3 sm:gap-4 mb-10 md:mb-16">
                     {students.map((student, idx) => (
                         <motion.div
                             key={idx}
                             initial={{ opacity: 0, scale: 0.9 }}
                             whileInView={{ opacity: 1, scale: 1 }}
+                            viewport={{ once: true }}
                             transition={{ delay: idx * 0.05, duration: 0.4 }}
-                            className="flex flex-col items-center justify-between p-3 rounded-2xl border border-[#7B2CFF] hover:border-purple-300 shadow-sm hover:shadow-md transition-all h-[180px] bg-white group"
+                            className="flex flex-col items-center justify-between p-2 md:p-3 rounded-2xl border border-[#7B2CFF]/20 hover:border-[#7B2CFF] shadow-sm hover:shadow-md transition-all h-[160px] md:h-[180px] bg-white group cursor-default"
                         >
                             {/* Profile Image */}
-                            {/* Profile Image */}
-                            <div className="relative w-14 h-14 rounded-full overflow-hidden mb-2 border-2 group-hover:border-purple-200 transition-colors">
+                            <div className="relative w-12 h-12 md:w-14 md:h-14 rounded-full overflow-hidden mb-2 border-2 group-hover:border-purple-200 transition-colors shrink-0">
                                 <Image
                                     src={student.image}
                                     alt={student.name}
@@ -93,20 +93,19 @@ export default function Placement() {
                             </div>
 
                             {/* Info */}
-                            {/* Info */}
-                            <div className="text-center mb-2">
-                                <h3 className="text-[11px] font-bold text-[#1a1a2e] leading-tight mb-0.5">{student.name}</h3>
-                                <p className="text-[9px] text-gray-400 font-medium">{student.role}</p>
+                            <div className="text-center mb-1 w-full px-1">
+                                <h3 className="text-[10px] md:text-[11px] font-bold text-[#1a1a2e] leading-tight mb-0.5 truncate">{student.name}</h3>
+                                <p className="text-[9px] md:text-[10px] text-gray-500 font-medium truncate">{student.role}</p>
                             </div>
 
                             {/* Company Logo Area  */}
-                            <div className="mt-auto pt-1.5 border-t border-gray-50 w-full flex justify-center items-center h-8 relative">
-                                <div className="relative w-20 h-6">
+                            <div className="mt-auto pt-1.5 border-t border-gray-50 w-full flex justify-center items-center h-8 relative shrink-0">
+                                <div className="relative w-16 h-5 md:w-20 md:h-6">
                                     <Image
                                         src={student.companyLogo}
                                         alt="Company Logo"
                                         fill
-                                        className="object-contain" // Use contain to show the full logo cleanly
+                                        className="object-contain"
                                     />
                                 </div>
                             </div>
@@ -116,10 +115,10 @@ export default function Placement() {
 
                 {/* View All Button */}
                 <div className="flex justify-center">
-                    <button className="flex items-center gap-3 bg-[#26103A] text-white pl-8 pr-2 py-3 rounded-full font-bold hover:bg-[#7B3FE4] transition-all duration-300 hover:shadow-xl active:scale-95 group">
+                    <button className="flex items-center gap-3 bg-[#26103A] text-white pl-6 pr-2 py-2.5 md:pl-8 md:pr-2 md:py-3 rounded-full font-bold text-sm md:text-base hover:bg-[#7B3FE4] transition-all duration-300 hover:shadow-xl active:scale-95 group">
                         View All
-                        <span className="w-8 h-8 bg-white rounded-full flex items-center justify-center text-[#26103A] group-hover:scale-110 transition-transform">
-                            <ArrowRight size={16} />
+                        <span className="w-7 h-7 md:w-8 md:h-8 bg-white rounded-full flex items-center justify-center text-[#26103A] group-hover:scale-110 transition-transform">
+                            <ArrowRight size={14} className="md:w-4 md:h-4" />
                         </span>
                     </button>
                 </div>

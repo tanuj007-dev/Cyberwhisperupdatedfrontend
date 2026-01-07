@@ -26,9 +26,9 @@ const TrustedByBest = () => {
     useEffect(() => {
         const handleResize = () => {
             if (window.innerWidth < 640) {
-                setLogosPerSlide(2);
+                setLogosPerSlide(3); // Increased from 2 to 3 for compactness
             } else if (window.innerWidth < 768) {
-                setLogosPerSlide(3);
+                setLogosPerSlide(4);
             } else if (window.innerWidth < 1024) {
                 setLogosPerSlide(4);
             } else if (window.innerWidth < 1280) {
@@ -78,36 +78,36 @@ const TrustedByBest = () => {
     };
 
     return (
-        <section className="relative py-12 md:py-16 lg:py-20 bg-white overflow-hidden">
+        <section className="relative py-8 md:py-12 bg-white overflow-hidden">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex flex-col md:flex-row items-center gap-6 md:gap-8 lg:gap-12 xl:gap-16">
+                <div className="flex flex-col md:flex-row items-center gap-6 md:gap-8 lg:gap-12">
 
                     {/* Left Side - Text Content */}
-                    <div className="w-full md:w-[35%] space-y-4 lg:space-y-6 shrink-0">
+                    <div className="w-full md:w-[35%] space-y-3 lg:space-y-4 shrink-0 text-center md:text-left">
                         {/* Badge */}
-                        <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-purple-600 rounded">
-                            <div className="w-3 h-3 bg-white rounded-sm" />
-                            <span className="text-xs font-semibold text-white uppercase tracking-wide">
+                        <div className="inline-flex items-center gap-2 px-3 py-1 bg-purple-600 rounded">
+                            <div className="w-2.5 h-2.5 bg-white rounded-sm" />
+                            <span className="text-[10px] md:text-xs font-semibold text-white uppercase tracking-wide">
                                 Trusted by the Best
                             </span>
                         </div>
 
                         {/* Heading */}
-                        <div className="space-y-3">
-                            <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-[50px] font-semibold text-black leading-tight">
+                        <div className="space-y-2">
+                            <h2 className="text-3xl sm:text-4xl md:text-[42px] lg:text-[50px] font-semibold text-black leading-[1.1]">
                                 Defence Staff
                                 <br />
                                 Training
                             </h2>
 
-                            {/* Yellow Curved Underline - SVG for smooth curve */}
+                            {/* Yellow Curved Underline */}
                             <svg
                                 width="220"
                                 height="12"
                                 viewBox="0 0 220 12"
                                 fill="none"
                                 xmlns="http://www.w3.org/2000/svg"
-                                className="w-32 sm:w-40 md:w-48 lg:w-56"
+                                className="w-24 sm:w-32 md:w-40 lg:w-48 mx-auto md:mx-0"
                             >
                                 <path
                                     d="M2 10C50 2, 170 2, 218 10"
@@ -122,15 +122,15 @@ const TrustedByBest = () => {
 
                     {/* Right Side - Logo Carousel with Navigation */}
                     <div className="w-full md:w-[65%] relative">
-                        <div className="flex items-center gap-4 md:gap-6">
+                        <div className="flex items-center gap-2 sm:gap-4 md:gap-6">
 
                             {/* Previous Button */}
                             <button
                                 onClick={handlePrev}
-                                className="shrink-0 w-10 h-10 md:w-12 md:h-12 rounded-full bg-purple-100 hover:bg-purple-200 transition-all duration-300 flex items-center justify-center group hover:scale-110 active:scale-95"
+                                className="shrink-0 w-8 h-8 md:w-10 md:h-10 rounded-full bg-purple-100 hover:bg-purple-200 transition-all duration-300 flex items-center justify-center group hover:scale-110 active:scale-95"
                                 aria-label="Previous logos"
                             >
-                                <ChevronLeft className="w-5 h-5 md:w-6 md:h-6 text-purple-600 group-hover:text-purple-700 transition-colors" />
+                                <ChevronLeft className="w-4 h-4 md:w-5 md:h-5 text-purple-600 group-hover:text-purple-700 transition-colors" />
                             </button>
 
                             <div className="flex-1 overflow-hidden">
@@ -143,13 +143,13 @@ const TrustedByBest = () => {
                                     {Array.from({ length: Math.ceil(logos.length / logosPerSlide) }).map((_, pageIndex) => {
                                         const pageLogos = logos.slice(pageIndex * logosPerSlide, (pageIndex + 1) * logosPerSlide);
                                         return (
-                                            <div key={pageIndex} className="min-w-full flex items-center justify-center gap-4 md:gap-6 lg:gap-8 px-4">
+                                            <div key={pageIndex} className="min-w-full flex items-center justify-around px-2">
                                                 {pageLogos.map((logo) => (
                                                     <div
                                                         key={logo.id}
-                                                        className="shrink-0"
+                                                        className="shrink-0 flex items-center justify-center"
                                                     >
-                                                        <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 flex items-center justify-center p-2 transition-transform duration-300 hover:scale-110">
+                                                        <div className="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 flex items-center justify-center p-1.5 transition-transform duration-300 hover:scale-110">
                                                             <img
                                                                 src={logo.image}
                                                                 alt={logo.name}
@@ -157,7 +157,7 @@ const TrustedByBest = () => {
                                                                 onError={(e) => {
                                                                     e.target.style.display = 'none';
                                                                     e.target.parentElement.innerHTML = `
-                                                          <div class="text-gray-600 text-xs text-center font-medium px-1">
+                                                          <div class="text-gray-600 text-[10px] text-center font-medium px-1">
                                                             ${logo.name}
                                                           </div>
                                                         `;
@@ -174,10 +174,10 @@ const TrustedByBest = () => {
                             {/* Next Button */}
                             <button
                                 onClick={handleNext}
-                                className="shrink-0 w-10 h-10 md:w-12 md:h-12 rounded-full bg-purple-600 hover:bg-purple-700 transition-all duration-300 flex items-center justify-center group hover:scale-110 active:scale-95 shadow-lg shadow-purple-300/50"
+                                className="shrink-0 w-8 h-8 md:w-10 md:h-10 rounded-full bg-purple-600 hover:bg-purple-700 transition-all duration-300 flex items-center justify-center group hover:scale-110 active:scale-95 shadow-md shadow-purple-300/50"
                                 aria-label="Next logos"
                             >
-                                <ChevronRight className="w-5 h-5 md:w-6 md:h-6 text-white transition-transform group-hover:translate-x-0.5" />
+                                <ChevronRight className="w-4 h-4 md:w-5 md:h-5 text-white transition-transform group-hover:translate-x-0.5" />
                             </button>
                         </div>
                     </div>

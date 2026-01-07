@@ -26,25 +26,25 @@ const partners = [
 
 export default function TrustedAlleid() {
     return (
-        <section className="w-full py-16 bg-white overflow-hidden font-sans">
-            <div className="max-w-7xl mx-auto px-6 text-center mb-12">
-                <span className="text-sm font-bold text-gray-500 uppercase tracking-widest block mb-3">
+        <section className="w-full py-10 md:py-16 bg-white overflow-hidden font-sans">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 text-center mb-8 md:mb-12">
+                <span className="text-xs md:text-sm font-bold text-gray-500 uppercase tracking-widest block mb-1.5 md:mb-3">
                     TRUSTED ALLIES IN PROGRESS
                 </span>
-                <h2 className="text-3xl md:text-4xl font-bold text-[#1a1a2e]">
+                <h2 className="text-2xl pt-2 sm:text-3xl md:text-4xl font-bold text-[#1a1a2e]">
                     Our Valued Global Learning Partners
                 </h2>
             </div>
 
-            <div className="relative w-full overflow-hidden">
+            <div className="relative w-full overflow-hidden px-0 md:px-6">
                 {/* Gradient Masks for fading effect */}
-                <div className="absolute top-0 left-0 h-full w-20 md:w-40 bg-linear-to-r from-white to-transparent z-10 pointer-events-none" />
-                <div className="absolute top-0 right-0 h-full w-20 md:w-40 bg-linear-to-l from-white to-transparent z-10 pointer-events-none" />
+                <div className="absolute top-0 left-0 h-full w-12 sm:w-20 md:w-40 bg-linear-to-r from-white to-transparent z-10 pointer-events-none" />
+                <div className="absolute top-0 right-0 h-full w-12 sm:w-20 md:w-40 bg-linear-to-l from-white to-transparent z-10 pointer-events-none" />
 
                 {/* Carousel Track */}
-                <div className="flex gap-16 md:gap-24 animate-partner-scroll w-max items-center">
+                <div className="flex gap-8 sm:gap-16 md:gap-24 animate-partner-scroll w-max items-center">
                     {partners.map((partner, index) => (
-                        <div key={index} className="relative w-40 h-20 md:w-48 md:h-24   transition-all duration-300    flex items-center justify-center">
+                        <div key={index} className="relative w-28 h-14 sm:w-36 sm:h-16 md:w-48 md:h-24 transition-all duration-300 flex items-center justify-center grayscale hover:grayscale-0 opacity-70 hover:opacity-100">
                             <Image
                                 src={partner.logo}
                                 alt={partner.name}
