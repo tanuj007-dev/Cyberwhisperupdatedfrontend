@@ -1,0 +1,103 @@
+"use client"
+
+import { motion } from "framer-motion"
+import { Target, Eye, ShieldCheck, Zap } from "lucide-react"
+
+const values = [
+  {
+    icon: ShieldCheck,
+    title: "Uncompromising Trust",
+    description:
+      "Security is built on trust. We maintain the highest standards of data integrity and client confidentiality.",
+    color: "text-primary",
+  },
+  {
+    icon: Zap,
+    title: "Rapid Resilience",
+    description: "In an era of zero-day threats, speed is safety. Our systems respond to anomalies in milliseconds.",
+    color: "text-accent",
+  },
+  {
+    icon: Target,
+    title: "Precision Defense",
+    description:
+      "We don't just block; we identify. Precise threat modeling ensures your specific vulnerabilities are covered.",
+    color: "text-primary",
+  },
+  {
+    icon: Eye,
+    title: "Infinite Vision",
+    description: "Proactive monitoring and predictive analytics allow us to see threats before they materialize.",
+    color: "text-accent",
+  },
+]
+
+export function ValuesSection() {
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15,
+      },
+    },
+  }
+
+  const itemVariants = {
+    hidden: { opacity: 0, scale: 0.9, y: 20 },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      y: 0,
+      transition: { duration: 0.5 }
+    },
+  }
+
+  return (
+    <section className="py-24 relative">
+      <div className="w-full max-w-7xl mx-auto px-4">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-16"
+        >
+          <h2 className="text-3xl md:text-5xl font-bold mb-4">Our Core Values</h2>
+          <p className="text-muted-foreground max-w-2xl mx-auto">
+            The pillars that support our mission to redefine cybersecurity for the digital age.
+          </p>
+        </motion.div>
+
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-50px" }}
+          className="grid md:grid-cols-2 lg:grid-cols-4 gap-6"
+        >
+          {values.map((value, index) => (
+            <motion.div
+              key={index}
+              variants={itemVariants}
+              whileHover={{ y: -5, transition: { duration: 0.2 } }}
+              className="glass-panel p-8 rounded-2xl group cursor-default"
+            >
+              <div
+                className={`p-3 rounded-xl bg-white/5 w-fit mb-6 group-hover:scale-110 transition-transform duration-300 ${value.color}`}
+              >
+                <value.icon className="w-8 h-8" />
+              </div>
+              <h3 className="text-xl font-semibold mb-3">{value.title}</h3>
+              <p className="text-muted-foreground text-sm leading-relaxed">{value.description}</p>
+              <div className="mt-6 flex items-center text-xs font-mono text-primary opacity-0 group-hover:opacity-100 transition-opacity">
+                <span>SYSTEM_CHECK: STABLE</span>
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
+      </div>
+    </section>
+  )
+}
+

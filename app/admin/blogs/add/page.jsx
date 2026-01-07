@@ -1,0 +1,689 @@
+'use client';
+
+import { useState, useEffect, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAdmin } from '@/contexts/AdminContext';
+import { Button, Input, Select, Textarea, Toggle, Toast } from '@/components/ui';
+import RichTextEditor from '@/components/ui/RichTextEditor';
+import {
+    Upload, X, FileText, Image as ImageIcon, User, Search, Settings,
+    ChevronDown, ChevronUp, Save, Send, ArrowLeft, Calendar
+} from 'lucide-react';
+
+// Section Component - Defined OUTSIDE the main component to prevent re-creation on every render
+const Section = ({ id, title, icon: Icon, children, isCollapsed, onToggle }) => {
+    return (
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            <button
+                type="button"
+                onClick={() => onToggle(id)}
+                className="w-full px-6 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors"
+            >
+                <div className="flex items-center gap-3">
+                    <div className="p-2 bg-violet-50 rounded-lg">
+                        <Icon className="text-violet-600" size={20} />
+                    </div>
+                    <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
+                </div>
+                {isCollapsed ? <ChevronDown size={20} className="text-gray-400" /> : <ChevronUp size={20} className="text-gray-400" />}
+            </button>
+            <div className={`transition-all duration-300 ${isCollapsed ? 'max-h-0 opacity-0 overflow-hidden' : 'max-h-[2000px] opacity-100'}`}>
+                <div className="px-6 pb-6 pt-2 border-t border-gray-100">
+                    {children}
+                </div>
+            </div>
+        </div>
+    );
+};
+
+const AddBlog = () => {
+    const router = useRouter();
+    const { addBlog, categories, users, tags } = useAdmin();
+
+    // Form State - organized by sections
+    const [formData, setFormData] = useState({
+        // Basic Info
+        title: '',
+        slug: '',
+        shortDescription: '',
+        blog_category_id: '',
+        selectedTags: [],
+        readingTime: '',
+
+        // Featured Image
+        thumbnail: '',
+        imageAltText: '',
+        imageCaption: '',
+
+        // Author & Publishing
+        user_id: '',
+        publishDate: new Date().toISOString().split('T')[0],
+        status: 'draft',
+        visibility: 'public',
+        is_popular: false,
+
+        // Content
+        description: '',
+
+        // SEO
+        seoTitle: '',
+        seoDescription: '',
+        focusKeyword: '',
+        canonicalUrl: '',
+        metaRobots: 'index',
+
+        // Settings
+        allowComments: true,
+        showOnHomepage: true,
+        pinPost: false,
+
+        // Legacy fields
+        keywords: '',
+        banner: ''
+    });
+
+    // Section collapse state
+    const [collapsedSections, setCollapsedSections] = useState({
+        seo: true,
+        settings: true
+    });
+    const [thumbnailPreview, setThumbnailPreview] = useState('');
+    const [toast, setToast] = useState({ isVisible: false, message: '', type: 'success' });
+    const [errors, setErrors] = useState({});
+
+    // Auto-generate slug from title (debounced effect)
+    useEffect(() => {
+        if (formData.title && !formData.slug) {
+            const generatedSlug = formData.title
+                .toLowerCase()
+                .replace(/[^a-z0-9\s-]/g, '')
+                .replace(/\s+/g, '-')
+                .replace(/-+/g, '-')
+                .trim();
+            setFormData(prev => ({ ...prev, slug: generatedSlug }));
+        }
+    }, [formData.title]);
+
+    const toggleSection = useCallback((section) => {
+        setCollapsedSections(prev => ({
+            ...prev,
+            [section]: !prev[section]
+        }));
+    }, []);
+
+    const handleChange = useCallback((e) => {
+        const { name, value, checked, type } = e.target;
+        setFormData(prev => ({
+            ...prev,
+            [name]: type === 'checkbox' ? checked : value
+        }));
+        if (errors[name]) {
+            setErrors(prev => ({ ...prev, [name]: '' }));
+        }
+    }, [errors]);
+
+    const handleImageChange = useCallback((e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                const imageUrl = reader.result;
+                setThumbnailPreview(imageUrl);
+                setFormData(prev => ({ ...prev, thumbnail: imageUrl }));
+            };
+            reader.readAsDataURL(file);
+        }
+    }, []);
+
+    const handleTagAdd = useCallback((tagId) => {
+        setFormData(prev => {
+            if (!prev.selectedTags.includes(tagId)) {
+                return { ...prev, selectedTags: [...prev.selectedTags, tagId] };
+            }
+            return prev;
+        });
+    }, []);
+
+    const handleTagRemove = useCallback((tagId) => {
+        setFormData(prev => ({
+            ...prev,
+            selectedTags: prev.selectedTags.filter(id => id !== tagId)
+        }));
+    }, []);
+
+    const validateForm = () => {
+        const newErrors = {};
+        if (!formData.title.trim()) newErrors.title = 'Title is required';
+        if (!formData.blog_category_id) newErrors.blog_category_id = 'Category is required';
+        if (!formData.user_id) newErrors.user_id = 'Author is required';
+        if (!formData.description.trim()) newErrors.description = 'Content is required';
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
+    const handleSubmit = (status = 'draft') => {
+        if (!validateForm()) {
+            showToast('Please fill in all required fields', 'error');
+            return;
+        }
+
+        const blogData = {
+            title: formData.title,
+            slug: formData.slug,
+            blog_category_id: parseInt(formData.blog_category_id),
+            user_id: parseInt(formData.user_id),
+            keywords: formData.selectedTags.map(id => tags.find(t => t.id === id)?.name).join(', '),
+            description: formData.description,
+            thumbnail: formData.thumbnail || 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800',
+            banner: formData.thumbnail || 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=1200',
+            is_popular: formData.is_popular,
+            status: status === 'publish' ? 'active' : 'inactive',
+            // Extended fields
+            shortDescription: formData.shortDescription,
+            readingTime: formData.readingTime,
+            imageAltText: formData.imageAltText,
+            imageCaption: formData.imageCaption,
+            publishDate: formData.publishDate,
+            visibility: formData.visibility,
+            seoTitle: formData.seoTitle,
+            seoDescription: formData.seoDescription,
+            focusKeyword: formData.focusKeyword,
+            canonicalUrl: formData.canonicalUrl,
+            metaRobots: formData.metaRobots,
+            allowComments: formData.allowComments,
+            showOnHomepage: formData.showOnHomepage,
+            pinPost: formData.pinPost
+        };
+
+        addBlog(blogData);
+        showToast(status === 'publish' ? 'Blog published successfully!' : 'Blog saved as draft!', 'success');
+
+        setTimeout(() => {
+            router.push('/admin/blogs');
+        }, 1500);
+    };
+
+    const showToast = (message, type = 'success') => {
+        setToast({ isVisible: true, message, type });
+        setTimeout(() => setToast({ isVisible: false, message: '', type: 'success' }), 3000);
+    };
+
+    const categoryOptions = categories
+        .filter(c => c.status === 'active')
+        .map(c => ({ value: c.id, label: c.name }));
+
+    const userOptions = users
+        .filter(u => u.status === 'active')
+        .map(u => ({
+            value: u.id,
+            label: `${u.first_name} ${u.last_name} ${u.is_instructor ? '(Instructor)' : ''}`
+        }));
+
+    return (
+        <div className="max-w-5xl mx-auto space-y-6">
+            {/* Header */}
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div className="flex items-center gap-4">
+                    <button
+                        onClick={() => router.push('/admin/blogs')}
+                        className="p-2 hover:bg-gray-100 rounded-xl transition-colors"
+                    >
+                        <ArrowLeft size={20} className="text-gray-600" />
+                    </button>
+                    <div>
+                        <h1 className="text-3xl font-bold text-gray-900 mb-1">Add New Blog</h1>
+                        <p className="text-gray-600">Create a new blog post with full details</p>
+                    </div>
+                </div>
+                <div className="flex items-center gap-3">
+                    <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => handleSubmit('draft')}
+                        className="flex items-center gap-2"
+                    >
+                        <Save size={18} />
+                        Save Draft
+                    </Button>
+                    <button
+                        type="button"
+                        onClick={() => handleSubmit('publish')}
+                        className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-violet-600 to-purple-600 text-white font-medium rounded-lg hover:shadow-lg hover:shadow-purple-500/25 transition-all"
+                    >
+                        <Send size={18} />
+                        Publish
+                    </button>
+                </div>
+            </div>
+
+            <div className="space-y-6">
+                {/* SECTION 1 — BASIC INFO */}
+                <Section
+                    id="basic"
+                    title="Basic Information"
+                    icon={FileText}
+                    isCollapsed={collapsedSections.basic ?? false}
+                    onToggle={toggleSection}
+                >
+                    <div className="space-y-5">
+                        <Input
+                            label="Title"
+                            name="title"
+                            value={formData.title}
+                            onChange={handleChange}
+                            placeholder="Enter blog title"
+                            required
+                            error={errors.title}
+                        />
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                                    Slug <span className="text-gray-400">(auto-generated)</span>
+                                </label>
+                                <div className="flex items-center">
+                                    <span className="px-3 py-2.5 bg-gray-100 border border-r-0 border-gray-300 rounded-l-xl text-gray-500 text-sm">/blog/</span>
+                                    <input
+                                        name="slug"
+                                        value={formData.slug}
+                                        onChange={handleChange}
+                                        placeholder="your-blog-slug"
+                                        className="w-full px-4 py-2.5 border border-gray-300 rounded-r-xl focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                                    />
+                                </div>
+                            </div>
+                            <Input
+                                label="Reading Time"
+                                name="readingTime"
+                                value={formData.readingTime}
+                                onChange={handleChange}
+                                placeholder="e.g., 5 min read"
+                            />
+                        </div>
+
+                        <Textarea
+                            label="Short Description (Excerpt)"
+                            name="shortDescription"
+                            value={formData.shortDescription}
+                            onChange={handleChange}
+                            placeholder="Brief summary of the blog post..."
+                            rows={3}
+                        />
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <Select
+                                label="Category"
+                                name="blog_category_id"
+                                value={formData.blog_category_id}
+                                onChange={handleChange}
+                                options={categoryOptions}
+                                required
+                                error={errors.blog_category_id}
+                                placeholder="Select a category"
+                            />
+
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Tags</label>
+                                <div className="border border-gray-300 rounded-xl p-3 min-h-[100px]">
+                                    {/* Selected Tags */}
+                                    <div className="flex flex-wrap gap-2 mb-3">
+                                        {formData.selectedTags.map(tagId => {
+                                            const tag = tags.find(t => t.id === tagId);
+                                            return tag ? (
+                                                <span
+                                                    key={tag.id}
+                                                    className="inline-flex items-center gap-1 px-3 py-1 bg-violet-100 text-violet-700 rounded-full text-sm font-medium"
+                                                >
+                                                    {tag.name}
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => handleTagRemove(tag.id)}
+                                                        className="hover:text-violet-900"
+                                                    >
+                                                        <X size={14} />
+                                                    </button>
+                                                </span>
+                                            ) : null;
+                                        })}
+                                    </div>
+                                    {/* Tag Options */}
+                                    <div className="flex flex-wrap gap-2">
+                                        {tags
+                                            .filter(t => !formData.selectedTags.includes(t.id))
+                                            .slice(0, 8)
+                                            .map(tag => (
+                                                <button
+                                                    key={tag.id}
+                                                    type="button"
+                                                    onClick={() => handleTagAdd(tag.id)}
+                                                    className="px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-sm hover:bg-violet-100 hover:text-violet-700 transition-colors"
+                                                >
+                                                    + {tag.name}
+                                                </button>
+                                            ))}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </Section>
+
+                {/* SECTION 2 — FEATURED IMAGE */}
+                <Section
+                    id="image"
+                    title="Featured Image"
+                    icon={ImageIcon}
+                    isCollapsed={collapsedSections.image ?? false}
+                    onToggle={toggleSection}
+                >
+                    <div className="space-y-5">
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                                Featured Image <span className="text-red-500">*</span>
+                            </label>
+                            {thumbnailPreview ? (
+                                <div className="relative group rounded-xl overflow-hidden">
+                                    <img
+                                        src={thumbnailPreview}
+                                        alt="Preview"
+                                        className="w-full h-64 object-cover"
+                                    />
+                                    <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
+                                        <button
+                                            type="button"
+                                            onClick={() => {
+                                                setThumbnailPreview('');
+                                                setFormData(prev => ({ ...prev, thumbnail: '' }));
+                                            }}
+                                            className="p-3 bg-red-500 text-white rounded-xl hover:bg-red-600 transition-colors"
+                                        >
+                                            <X size={20} />
+                                        </button>
+                                    </div>
+                                </div>
+                            ) : (
+                                <label className="flex flex-col items-center justify-center w-full h-64 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer hover:border-violet-400 hover:bg-violet-50/30 transition-all group">
+                                    <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                                        <div className="p-4 bg-violet-100 rounded-2xl mb-4 group-hover:bg-violet-200 transition-colors">
+                                            <Upload className="text-violet-600" size={32} />
+                                        </div>
+                                        <p className="mb-2 text-sm text-gray-600">
+                                            <span className="font-semibold text-violet-600">Click to upload</span> or drag and drop
+                                        </p>
+                                        <p className="text-xs text-gray-500">PNG, JPG, WebP up to 10MB</p>
+                                    </div>
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={handleImageChange}
+                                        className="hidden"
+                                    />
+                                </label>
+                            )}
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <Input
+                                label="Image Alt Text"
+                                name="imageAltText"
+                                value={formData.imageAltText}
+                                onChange={handleChange}
+                                placeholder="Describe the image for accessibility"
+                            />
+                            <Input
+                                label="Image Caption"
+                                name="imageCaption"
+                                value={formData.imageCaption}
+                                onChange={handleChange}
+                                placeholder="Optional caption for the image"
+                            />
+                        </div>
+                    </div>
+                </Section>
+
+                {/* SECTION 3 — AUTHOR & PUBLISHING */}
+                <Section
+                    id="author"
+                    title="Author & Publishing"
+                    icon={User}
+                    isCollapsed={collapsedSections.author ?? false}
+                    onToggle={toggleSection}
+                >
+                    <div className="space-y-5">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <Select
+                                label="Author"
+                                name="user_id"
+                                value={formData.user_id}
+                                onChange={handleChange}
+                                options={userOptions}
+                                required
+                                error={errors.user_id}
+                                placeholder="Select an author"
+                            />
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                                    Publish Date
+                                </label>
+                                <div className="relative">
+                                    <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                                    <input
+                                        type="date"
+                                        name="publishDate"
+                                        value={formData.publishDate}
+                                        onChange={handleChange}
+                                        className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>
+                                <div className="flex gap-3">
+                                    {['draft', 'published', 'scheduled'].map((status) => (
+                                        <label key={status} className="flex items-center gap-2 cursor-pointer">
+                                            <input
+                                                type="radio"
+                                                name="status"
+                                                value={status}
+                                                checked={formData.status === status}
+                                                onChange={handleChange}
+                                                className="w-4 h-4 text-violet-600 focus:ring-violet-500"
+                                            />
+                                            <span className="text-sm text-gray-700 capitalize">{status}</span>
+                                        </label>
+                                    ))}
+                                </div>
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-2">Visibility</label>
+                                <div className="flex gap-3">
+                                    {['public', 'private'].map((vis) => (
+                                        <label key={vis} className="flex items-center gap-2 cursor-pointer">
+                                            <input
+                                                type="radio"
+                                                name="visibility"
+                                                value={vis}
+                                                checked={formData.visibility === vis}
+                                                onChange={handleChange}
+                                                className="w-4 h-4 text-violet-600 focus:ring-violet-500"
+                                            />
+                                            <span className="text-sm text-gray-700 capitalize">{vis}</span>
+                                        </label>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+
+                        <Toggle
+                            label="Mark as Featured Post"
+                            name="is_popular"
+                            checked={formData.is_popular}
+                            onChange={handleChange}
+                        />
+                    </div>
+                </Section>
+
+                {/* SECTION 4 — CONTENT */}
+                <Section
+                    id="content"
+                    title="Content"
+                    icon={FileText}
+                    isCollapsed={collapsedSections.content ?? false}
+                    onToggle={toggleSection}
+                >
+                    <div className="space-y-4">
+                        <label className="block text-sm font-medium text-gray-700">
+                            Blog Content <span className="text-red-500">*</span>
+                        </label>
+                        <RichTextEditor
+                            value={formData.description}
+                            onChange={handleChange}
+                            placeholder="Write your blog content here... (Supports Markdown)"
+                            rows={16}
+                            error={errors.description}
+                        />
+                        {errors.description && (
+                            <p className="text-sm text-red-600">{errors.description}</p>
+                        )}
+                    </div>
+                </Section>
+
+                {/* SECTION 5 — SEO */}
+                <Section
+                    id="seo"
+                    title="SEO Settings"
+                    icon={Search}
+                    isCollapsed={collapsedSections.seo ?? true}
+                    onToggle={toggleSection}
+                >
+                    <div className="space-y-5">
+                        <Input
+                            label="SEO Title"
+                            name="seoTitle"
+                            value={formData.seoTitle}
+                            onChange={handleChange}
+                            placeholder="SEO optimized title (60 characters recommended)"
+                        />
+                        <Textarea
+                            label="SEO Description"
+                            name="seoDescription"
+                            value={formData.seoDescription}
+                            onChange={handleChange}
+                            placeholder="Meta description for search engines (155 characters recommended)"
+                            rows={3}
+                        />
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <Input
+                                label="Focus Keyword"
+                                name="focusKeyword"
+                                value={formData.focusKeyword}
+                                onChange={handleChange}
+                                placeholder="Main keyword to optimize for"
+                            />
+                            <Input
+                                label="Canonical URL"
+                                name="canonicalUrl"
+                                value={formData.canonicalUrl}
+                                onChange={handleChange}
+                                placeholder="https://..."
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">Meta Robots</label>
+                            <div className="flex gap-4">
+                                {['index', 'noindex'].map((option) => (
+                                    <label key={option} className="flex items-center gap-2 cursor-pointer">
+                                        <input
+                                            type="radio"
+                                            name="metaRobots"
+                                            value={option}
+                                            checked={formData.metaRobots === option}
+                                            onChange={handleChange}
+                                            className="w-4 h-4 text-violet-600 focus:ring-violet-500"
+                                        />
+                                        <span className="text-sm text-gray-700 capitalize">{option}</span>
+                                    </label>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                </Section>
+
+                {/* SECTION 6 — SETTINGS */}
+                <Section
+                    id="settings"
+                    title="Post Settings"
+                    icon={Settings}
+                    isCollapsed={collapsedSections.settings ?? true}
+                    onToggle={toggleSection}
+                >
+                    <div className="space-y-4">
+                        <Toggle
+                            label="Allow Comments"
+                            name="allowComments"
+                            checked={formData.allowComments}
+                            onChange={handleChange}
+                        />
+                        <Toggle
+                            label="Show on Homepage"
+                            name="showOnHomepage"
+                            checked={formData.showOnHomepage}
+                            onChange={handleChange}
+                        />
+                        <Toggle
+                            label="Pin Post (Sticky)"
+                            name="pinPost"
+                            checked={formData.pinPost}
+                            onChange={handleChange}
+                        />
+                    </div>
+                </Section>
+            </div>
+
+            {/* Bottom Action Bar */}
+            <div className="sticky bottom-0 bg-white/80 backdrop-blur-xl border-t border-gray-200 -mx-4 lg:-mx-8 px-4 lg:px-8 py-4 mt-8">
+                <div className="max-w-5xl mx-auto flex items-center justify-between">
+                    <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => router.push('/admin/blogs')}
+                    >
+                        Cancel
+                    </Button>
+                    <div className="flex items-center gap-3">
+                        <Button
+                            type="button"
+                            variant="outline"
+                            onClick={() => handleSubmit('draft')}
+                            className="flex items-center gap-2"
+                        >
+                            <Save size={18} />
+                            Save as Draft
+                        </Button>
+                        <button
+                            type="button"
+                            onClick={() => handleSubmit('publish')}
+                            className="flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-violet-600 to-purple-600 text-white font-medium rounded-lg hover:shadow-lg hover:shadow-purple-500/25 transition-all"
+                        >
+                            <Send size={18} />
+                            Publish Now
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            {/* Toast Notification */}
+            <Toast
+                isVisible={toast.isVisible}
+                message={toast.message}
+                type={toast.type}
+                onClose={() => setToast({ ...toast, isVisible: false })}
+            />
+        </div>
+    );
+};
+
+export default AddBlog;
