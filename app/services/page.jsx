@@ -11,7 +11,7 @@ import NeedHelp from '../Component/NeedHelp';
 export default function ServicesPage() {
 
   return (
-    <main className="bg-white">
+    <main className="bg-white dark:bg-black transition-colors duration-300">
       <ServiceHero />
       {/* <FeaturedScroll /> */}
       <OurServices />

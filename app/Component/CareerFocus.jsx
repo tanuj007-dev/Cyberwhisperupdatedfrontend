@@ -39,7 +39,7 @@ const careerCards = [
 
 export default function CareerFocus() {
     return (
-        <section className="relative w-full bg-white py-24 px-6 overflow-hidden font-sans">
+        <section className="relative w-full bg-white dark:bg-black py-24 px-6 overflow-hidden font-sans transition-colors duration-300">
             {/* Decorative Gradients */}
             <div className="absolute top-0 left-0 w-[600px] h-[600px] bg-purple-300/20 blur-[140px] rounded-full -translate-y-1/3 -translate-x-1/3 pointer-events-none z-0" />
             <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-purple-300/30 blur-[140px] rounded-full translate-y-1/3 translate-x-1/3 pointer-events-none z-0" />
@@ -59,10 +59,10 @@ export default function CareerFocus() {
                                 <Image src={okayAsset} alt="Okay" width={50} height={50} />
                             </div>
                         </div>
-                        <h2 className="text-5xl md:text-5xl font-semibold  text-[#1a1a2e] tracking-tight">
+                        <h2 className="text-5xl md:text-5xl font-semibold  text-[#1a1a2e] dark:text-white tracking-tight">
                             Career Focus
                         </h2>
-                        <p className="text-slate-500 text-lg md:text-xl font-medium max-w-[280px] mx-auto lg:mx-0">
+                        <p className="text-slate-500 dark:text-gray-400 text-lg md:text-xl font-medium max-w-[280px] mx-auto lg:mx-0">
                             Boost work communication skills.
                         </p>
                     </motion.div>
@@ -90,21 +90,21 @@ export default function CareerFocus() {
                             />
 
                             {/* Card Content */}
-                            <div className="relative bg-white rounded-[calc(2.5rem-2px)] p-10 shadow-[0_30px_60px_rgba(0,0,0,0.02)] flex flex-col items-start text-left h-full z-10 transition-all duration-500 group-hover:shadow-[0_40px_80px_rgba(107,70,229,0.04)]">
+                            <div className="relative bg-white dark:bg-gray-900 rounded-[calc(2.5rem-2px)] p-10 shadow-[0_30px_60px_rgba(0,0,0,0.02)] flex flex-col items-start text-left h-full z-10 transition-all duration-500 group-hover:shadow-[0_40px_80px_rgba(107,70,229,0.04)]">
                                 <span className="bg-[#EFEEFF] text-[#6B46E5] px-4 py-1.5 rounded-md text-[13px] font-bold mb-6">
                                     {card.badge}
                                 </span>
 
-                                <h3 className="text-[22px] font-semibold text-[#1a1a2e] mb-5 tracking-tight group-hover:text-[#6B46E5] transition-colors">
+                                <h3 className="text-[22px] font-semibold text-[#1a1a2e] dark:text-white mb-5 tracking-tight group-hover:text-[#6B46E5] transition-colors">
                                     {card.title}
                                 </h3>
 
-                                <p className="text-slate-500 text-[14px]  font-medium mb-12">
+                                <p className="text-slate-500 dark:text-gray-400 text-[14px]  font-medium mb-12">
                                     {card.description}
                                 </p>
 
                                 <div className="mt-auto w-full flex justify-center">
-                                    <div className="relative w-full aspect-16/10 flex items-center justify-center bg-[#EDE2FF33] rounded-2xl overflow-hidden p-4">
+                                    <div className="relative w-full aspect-16/10 flex items-center justify-center bg-[#EDE2FF33] dark:bg-purple-900/20 rounded-2xl overflow-hidden p-4">
                                         <Image
                                             src={card.image}
                                             alt={card.title}

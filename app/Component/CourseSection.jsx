@@ -111,7 +111,7 @@ export default function CourseSection() {
     }
 
     return (
-        <section className="relative w-full bg-white py-12 md:py-24 px-4 md:px-6 overflow-hidden font-sans">
+        <section className="relative w-full bg-background py-12 md:py-24 px-4 md:px-6 overflow-hidden font-sans transition-colors duration-300">
             {/* Background Decorative Lines */}
             <div className="absolute inset-0 z-0 pointer-events-none opacity-[0.05]">
                 <svg width="100%" height="100%" viewBox="0 0 1440 800" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -133,7 +133,7 @@ export default function CourseSection() {
                     >
                         <div className="w-3 h-3 md:w-4 md:h-4 bg-[#6B46E5] shadow-[3px_3px_6px_rgba(107,70,229,0.45)]"></div>
 
-                        <span className="text-[11px] md:text-[13px] font-semibold text-[#1a1a2e] uppercase tracking-[0.2em]">
+                        <span className="text-[11px] md:text-[13px] font-semibold text-foreground uppercase tracking-[0.2em]">
                             LEARNING HUB
                         </span>
                     </motion.div>
@@ -142,7 +142,7 @@ export default function CourseSection() {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.6, delay: 0.2 }}
-                        className="text-3xl md:text-[50px] font-semibold text-[#1a1a2e] tracking-tight leading-tight"
+                        className="text-3xl md:text-[50px] font-semibold text-foreground tracking-tight leading-tight"
                     >
                         {categories.length > 0 ? `Explore ${categories.length} Training Categories` : 'Stay Connected, Keep Training'}
                     </motion.h2>
@@ -151,7 +151,7 @@ export default function CourseSection() {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.6, delay: 0.4 }}
-                        className="text-slate-500 text-sm md:text-lg font-medium max-w-3xl mx-auto px-4"
+                        className="text-muted-foreground text-sm md:text-lg font-medium max-w-3xl mx-auto px-4"
                     >
                         Discover comprehensive courses tailored to your skill level and career goals
                     </motion.p>
@@ -173,15 +173,15 @@ export default function CourseSection() {
                             <p className="text-slate-500 mt-2">Loading categories...</p>
                         </div>
                     ) : (
-                        <div className="inline-flex bg-[#F8F9FD] p-1.5 rounded-full border border-gray-100 shadow-sm max-w-full overflow-x-auto scrollbar-hide flex-nowrap md:flex-wrap">
+                        <div className="inline-flex bg-secondary p-1.5 rounded-full border border-gray-100 dark:border-gray-800 shadow-sm max-w-full overflow-x-auto scrollbar-hide flex-nowrap md:flex-wrap">
                             {categories.length > 0 ? (
                                 categories.map((cat) => (
                                     <button
                                         key={cat}
                                         onClick={() => setActiveCategory(cat)}
                                         className={`px-4 md:px-6 py-2 md:py-2.5 rounded-full text-xs md:text-sm font-bold transition-all duration-300 whitespace-nowrap ${activeCategory === cat
-                                            ? 'bg-[#1a1a2e] text-white shadow-lg'
-                                            : 'text-slate-500 hover:text-[#1a1a2e]'
+                                            ? 'bg-primary text-primary-foreground shadow-lg'
+                                            : 'text-muted-foreground hover:text-foreground'
                                             }`}
                                     >
                                         {cat}
@@ -225,7 +225,7 @@ export default function CourseSection() {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ delay: idx * 0.1 }}
-                            className="bg-white rounded-[2.5rem] border border-[#7B2CFF] shadow-[0_15px_40px_rgba(0,0,0,0.04)] overflow-hidden group hover:shadow-[0_25px_60px_rgba(107,70,229,0.08)] transition-all duration-500 flex flex-col"
+                            className="bg-card text-card-foreground rounded-[2.5rem] border border-[#7B2CFF] shadow-[0_15px_40px_rgba(0,0,0,0.04)] overflow-hidden group hover:shadow-[0_25px_60px_rgba(107,70,229,0.08)] transition-all duration-500 flex flex-col"
                         >
                             {/* Card Content Top */}
                             <div className="p-8 pb-4 space-y-6 grow">
@@ -234,12 +234,12 @@ export default function CourseSection() {
                                         {course.category}
                                     </span>
                                     <div className="flex items-center gap-1">
-                                        <span className="text-sm   text-slate-900">{course.rating}</span>
+                                        <span className="text-sm   text-foreground">{course.rating}</span>
                                         <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
                                     </div>
                                 </div>
 
-                                <h3 className="text-[22px] font-semibold text-[#1a1a2e] leading-[1.2] group-hover:text-[#6B46E5] transition-colors">
+                                <h3 className="text-[22px] font-semibold text-foreground leading-[1.2] group-hover:text-[#6B46E5] transition-colors">
                                     {course.title}
                                 </h3>
 
@@ -291,7 +291,7 @@ export default function CourseSection() {
                         <motion.button
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
-                            className="group flex items-center gap-3 bg-[#1a1a2e] text-white px-8 md:px-10 py-3 rounded-full font-bold text-base md:text-lg hover:bg-[#6B46E5] transition-all hover:shadow-2xl"
+                            className="group flex items-center gap-3 bg-primary text-primary-foreground px-8 md:px-10 py-3 rounded-full font-bold text-base md:text-lg hover:bg-[#6B46E5] transition-all hover:shadow-2xl"
                         >
                             View All
                             <div className="w-6 h-6 md:w-7 md:h-7 bg-white/10 rounded-full flex items-center justify-center transition-transform group-hover:translate-x-1">

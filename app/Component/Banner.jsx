@@ -9,7 +9,7 @@ import pathImg from './assets/path.webp';
 
 export default function Banner() {
     return (
-        <section className="relative w-full py-12 md:py-20 bg-white overflow-hidden font-sans">
+        <section className="relative w-full py-12 md:py-20 bg-white dark:bg-black overflow-hidden font-sans transition-colors duration-300">
             <div className="max-w-7xl mx-auto px-4 sm:px-6">
 
                 {/* Top Review Section */}
@@ -20,8 +20,8 @@ export default function Banner() {
                     transition={{ duration: 0.6 }}
                     className="flex flex-wrap items-center justify-center sm:justify-start gap-3 mb-8 md:mb-12"
                 >
-                    <span className="text-[#1a1a2e] font-semibold text-base sm:text-lg">Review on</span>
-                    <span className="text-[#1a1a2e] font-bold text-lg sm:text-xl flex items-center select-none">
+                    <span className="text-[#1a1a2e] dark:text-white font-semibold text-base sm:text-lg">Review on</span>
+                    <span className="text-[#1a1a2e] dark:text-white font-bold text-lg sm:text-xl flex items-center select-none">
                         <span className="text-[#4285F4]">G</span>
                         <span className="text-[#EA4335]">o</span>
                         <span className="text-[#FBBC05]">o</span>
@@ -41,7 +41,7 @@ export default function Banner() {
                             </motion.div>
                         ))}
                     </div>
-                    <span className="text-gray-600 font-medium text-xs sm:text-sm">2200+ reviews</span>
+                    <span className="text-gray-600 dark:text-gray-400 font-medium text-xs sm:text-sm">2200+ reviews</span>
                 </motion.div>
 
                 {/* Main Banner */}
@@ -50,7 +50,7 @@ export default function Banner() {
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.8, ease: "easeOut" }}
-                    className="relative w-full bg-[#8B5CF6] rounded-[2rem] md:rounded-[2.5rem] p-6 sm:p-10 md:p-12 overflow-hidden shadow-2xl shadow-purple-200"
+                    className="relative w-full bg-[#8B5CF6] rounded-4xl md:rounded-[2.5rem] p-6 sm:p-10 md:p-12 overflow-hidden shadow-2xl shadow-purple-200"
                 >
                     {/* Background Texture Layers */}
                     <div className="absolute inset-0 z-0 opacity-50 mix-blend-overlay pointer-events-none">
@@ -77,16 +77,16 @@ export default function Banner() {
                             viewport={{ once: true }}
                             transition={{ duration: 0.6, delay: 0.2 }}
                             whileHover={{ scale: 1.02 }}
-                            className="relative w-full md:w-1/2 aspect-[16/10] bg-white/20 backdrop-blur-sm p-2 sm:p-3 rounded-2xl sm:rounded-[1.5rem] shadow-lg border border-white/20"
+                            className="relative w-full md:w-1/2 aspect-16/10 bg-white/20 dark:bg-black/20 backdrop-blur-sm p-2 sm:p-3 rounded-2xl sm:rounded-[1.5rem] shadow-lg border border-white/20"
                         >
-                            <div className="relative w-full h-full rounded-xl sm:rounded-[1.2rem] overflow-hidden bg-gray-100">
+                            <div className="relative w-full h-full rounded-xl sm:rounded-[1.2rem] overflow-hidden bg-gray-100 dark:bg-gray-800">
                                 <Image
                                     src={bannerLock}
                                     alt="Cyber Security Lock"
                                     fill
                                     className="object-cover transition-transform duration-700 hover:scale-105"
                                 />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+                                <div className="absolute inset-0 bg-linear-to-t from-black/20 to-transparent" />
                             </div>
                         </motion.div>
 
@@ -97,16 +97,16 @@ export default function Banner() {
                             viewport={{ once: true }}
                             transition={{ duration: 0.6, delay: 0.4 }}
                             whileHover={{ scale: 1.02 }}
-                            className="relative w-full md:w-1/2 aspect-[16/10] bg-white/20 backdrop-blur-sm p-2 sm:p-3 rounded-2xl sm:rounded-[1.5rem] shadow-lg border border-white/20"
+                            className="relative w-full md:w-1/2 aspect-16/10 bg-white/20 dark:bg-black/20 backdrop-blur-sm p-2 sm:p-3 rounded-2xl sm:rounded-[1.5rem] shadow-lg border border-white/20"
                         >
-                            <div className="relative w-full h-full rounded-xl sm:rounded-[1.2rem] overflow-hidden bg-gray-100">
+                            <div className="relative w-full h-full rounded-xl sm:rounded-[1.2rem] overflow-hidden bg-gray-100 dark:bg-gray-800">
                                 <Image
                                     src={bannerAnalyst}
                                     alt="Cyber Security Analyst"
                                     fill
                                     className="object-cover transition-transform duration-700 hover:scale-105"
                                 />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+                                <div className="absolute inset-0 bg-linear-to-t from-black/20 to-transparent" />
                             </div>
                         </motion.div>
 

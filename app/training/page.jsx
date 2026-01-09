@@ -22,7 +22,7 @@ export const metadata = {
 
 export default function TrainingPage() {
     return (
-        <main>
+        <main className="bg-white dark:bg-black transition-colors duration-300">
             <TrainingHero />
             <Banner />
             <TrainingSection />

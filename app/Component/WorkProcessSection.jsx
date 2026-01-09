@@ -47,7 +47,7 @@ const AnimatedPath = ({ d, delay = 0 }) => (
 
 export default function WorkProcessSection() {
   return (
-    <section className="relative py-24 bg-white overflow-hidden font-sans">
+    <section className="relative py-24 bg-background overflow-hidden font-sans transition-colors duration-300">
 
       <div
         className="absolute inset-x-0 top-2/4 -translate-y-2/4 h-[1000px] w-full opacity-[0.2] pointer-events-none select-none z-0"
@@ -64,11 +64,11 @@ export default function WorkProcessSection() {
         <div className="text-center mb-20">
           <div className="inline-flex items-center gap-2 mb-6">
             <div className="w-4 h-4 bg-[#6B46E5] shadow-[3px_3px_6px_rgba(107,70,229,0.45)]"></div>
-            <span className="text-[#1a1a2e] text-[15px] font-semibold uppercase tracking-[0.2em]">
+            <span className="text-foreground text-[15px] font-semibold uppercase tracking-[0.2em]">
               HOW IT WORKS
             </span>
           </div>
-          <h2 className="text-4xl md:text-[50px] font-semibold text-[#1a1a2e] mb-10 tracking-tight">
+          <h2 className="text-4xl md:text-[50px] font-semibold text-foreground mb-10 tracking-tight">
             Our Engagement Process
           </h2>
 
@@ -87,21 +87,21 @@ export default function WorkProcessSection() {
         <div className="relative hidden xl:block h-[620px] mt-12 w-full max-w-[1280px] mx-auto">
           {/* Cards Grid Staggered */}
           {/* Top Row (Centers: 130, 640, 1150) */}
-          <div className="absolute left-[-30px] top-[28px] w-[320px] h-[180px] rounded-2xl border border-[#6F2DFF]/30 bg-white shadow-[0_10px_40px_rgba(111,45,255,0.08)] overflow-hidden transition-all duration-300 hover:shadow-[0_20px_50px_rgba(111,45,255,0.15)] hover:-translate-y-1">
+          <div className="absolute left-[-30px] top-[28px] w-[320px] h-[180px] rounded-2xl border border-[#6F2DFF]/30 bg-card shadow-[0_10px_40px_rgba(111,45,255,0.08)] overflow-hidden transition-all duration-300 hover:shadow-[0_20px_50px_rgba(111,45,255,0.15)] hover:-translate-y-1">
             <ProcessCard {...processes[0]} />
           </div>
-          <div className="absolute left-[460px] top-[28px] w-[320px] h-[180px] rounded-2xl border border-[#6F2DFF]/30 bg-white shadow-[0_10px_40px_rgba(111,45,255,0.08)] overflow-hidden transition-all duration-300 hover:shadow-[0_20px_50px_rgba(111,45,255,0.15)] hover:-translate-y-1">
+          <div className="absolute left-[460px] top-[28px] w-[320px] h-[180px] rounded-2xl border border-[#6F2DFF]/30 bg-card shadow-[0_10px_40px_rgba(111,45,255,0.08)] overflow-hidden transition-all duration-300 hover:shadow-[0_20px_50px_rgba(111,45,255,0.15)] hover:-translate-y-1">
             <ProcessCard {...processes[2]} />
           </div>
-          <div className="absolute left-[950px] top-[28px] w-[320px] h-[180px] rounded-2xl border border-[#6F2DFF]/30 bg-white shadow-[0_10px_40px_rgba(111,45,255,0.08)] overflow-hidden transition-all duration-300 hover:shadow-[0_20px_50px_rgba(111,45,255,0.15)] hover:-translate-y-1">
+          <div className="absolute left-[950px] top-[28px] w-[320px] h-[180px] rounded-2xl border border-[#6F2DFF]/30 bg-card shadow-[0_10px_40px_rgba(111,45,255,0.08)] overflow-hidden transition-all duration-300 hover:shadow-[0_20px_50px_rgba(111,45,255,0.15)] hover:-translate-y-1">
             <ProcessCard {...processes[4]} />
           </div>
 
           {/* Bottom Row (Centers: 385, 895) */}
-          <div className="absolute left-[215px] top-[400px] w-[320px] h-[180px] rounded-2xl border border-[#6F2DFF]/30 bg-white shadow-[0_10px_40px_rgba(111,45,255,0.08)] overflow-hidden transition-all duration-300 hover:shadow-[0_20px_50px_rgba(111,45,255,0.15)] hover:-translate-y-1">
+          <div className="absolute left-[215px] top-[400px] w-[320px] h-[180px] rounded-2xl border border-[#6F2DFF]/30 bg-card shadow-[0_10px_40px_rgba(111,45,255,0.08)] overflow-hidden transition-all duration-300 hover:shadow-[0_20px_50px_rgba(111,45,255,0.15)] hover:-translate-y-1">
             <ProcessCard {...processes[1]} />
           </div>
-          <div className="absolute left-[700px] top-[400px] w-[320px] h-[180px] rounded-2xl border border-[#6F2DFF]/30 bg-white shadow-[0_10px_40px_rgba(111,45,255,0.08)] overflow-hidden transition-all duration-300 hover:shadow-[0_20px_50px_rgba(111,45,255,0.15)] hover:-translate-y-1">
+          <div className="absolute left-[700px] top-[400px] w-[320px] h-[180px] rounded-2xl border border-[#6F2DFF]/30 bg-card shadow-[0_10px_40px_rgba(111,45,255,0.08)] overflow-hidden transition-all duration-300 hover:shadow-[0_20px_50px_rgba(111,45,255,0.15)] hover:-translate-y-1">
             <ProcessCard {...processes[3]} />
           </div>
 
@@ -211,7 +211,7 @@ export default function WorkProcessSection() {
         {/* Mobile/Tablet Layout (Stacked) */}
         <div className="xl:hidden flex flex-col gap-6 max-w-2xl mx-auto">
           {processes.map((p, i) => (
-            <div key={i} className="w-full min-h-[180px] h-auto rounded-2xl border border-[#6F2DFF]/30 bg-white shadow-[0_10px_40px_rgba(111,45,255,0.08)] overflow-hidden relative">
+            <div key={i} className="w-full min-h-[180px] h-auto rounded-2xl border border-[#6F2DFF]/30 bg-card shadow-[0_10px_40px_rgba(111,45,255,0.08)] overflow-hidden relative">
               <ProcessCard {...p} />
             </div>
           ))}
@@ -227,17 +227,17 @@ function ProcessCard({ step, heading, description }) {
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      className="bg-white w-full h-full p-6 flex flex-col items-center justify-center text-center group transition-all duration-500"
+      className="bg-card w-full h-full p-6 flex flex-col items-center justify-center text-center group transition-all duration-500"
     >
       <div className="text-[#6B46E5] font-semibold text-lg mb-2 tracking-tight">
         {step}
       </div>
 
-      <h3 className="text-[#1a1a2e] font-bold text-xl mb-3 tracking-tight">
+      <h3 className="text-foreground font-bold text-xl mb-3 tracking-tight">
         {heading}
       </h3>
 
-      <p className="text-[#1a1a2e] text-[14px] leading-relaxed font-medium">
+      <p className="text-muted-foreground text-[14px] leading-relaxed font-medium">
         {description}
       </p>
     </motion.div>

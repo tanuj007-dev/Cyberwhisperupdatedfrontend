@@ -6,7 +6,7 @@ export function CyberBackground() {
   return (
     <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
       {/* Deep Navy Base */}
-      <div className="absolute inset-0 bg-[#030014]" />
+      <div className="absolute inset-0 bg-white dark:bg-[#030014] transition-colors duration-300" />
 
       {/* Animated Grid Overlay */}
       <div className="absolute inset-0 bg-grid-pattern opacity-10" />

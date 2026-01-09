@@ -46,7 +46,7 @@ export function ApproachSection() {
   }
 
   return (
-    <section className="py-16 bg-[#F8F9FA] relative">
+    <section className="py-16 bg-[#F8F9FA] dark:bg-[#030014] relative transition-colors duration-300">
       <div className="w-full max-w-7xl mx-auto px-4 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -56,7 +56,7 @@ export function ApproachSection() {
           className="text-center max-w-5xl mx-auto mb-12 space-y-4"
         >
           <span className="text-[#6F2DFF] font-black uppercase tracking-[0.3em] text-[15px]">Our Strategy</span>
-          <h2 className="text-3xl md:text-[50px] text-[#030014] font-semibold tracking-tighter">
+          <h2 className="text-3xl md:text-[50px] text-[#030014] dark:text-white font-semibold tracking-tighter">
             Strengthening security, <span className="text-[#6F2DFF]  ">your future</span>
           </h2>
         </motion.div>
@@ -119,7 +119,7 @@ export function ApproachSection() {
       </div>
 
       {/* Background Decorative Element */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-purple-100/20 blur-[130px] rounded-full z-0 pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-purple-100/20 dark:bg-purple-900/10 blur-[130px] rounded-full z-0 pointer-events-none" />
     </section>
   )
 }

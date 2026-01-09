@@ -57,9 +57,9 @@ export default function TeamSpecialists() {
     const [hoveredId, setHoveredId] = useState<number | null>(null)
 
     return (
-        <section className="py-24 bg-white relative overflow-hidden">
+        <section className="py-24 bg-white dark:bg-[#030014] relative overflow-hidden transition-colors duration-300">
             {/* Subtle Background Glow */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[600px] bg-purple-50/50 blur-[120px] rounded-full pointer-events-none" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[600px] bg-purple-50/50 dark:bg-purple-900/10 blur-[120px] rounded-full pointer-events-none" />
 
             <div className="container mx-auto px-6 max-w-7xl relative z-10">
                 {/* Section Heading */}
@@ -68,7 +68,7 @@ export default function TeamSpecialists() {
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="text-4xl md:text-[50px] font-semibold text-[#1C0F2D] leading-[1.1] max-w-7xl mx-auto tracking-tight"
+                        className="text-4xl md:text-[50px] font-semibold text-[#1C0F2D] dark:text-white leading-[1.1] max-w-7xl mx-auto tracking-tight"
                     >
                         The minds, innovators, and problem-solvers driving our mission <span className="text-[#A855F7]">to create safer</span>
                     </motion.h2>
@@ -160,7 +160,7 @@ export default function TeamSpecialists() {
                     className="mt-20 flex flex-wrap items-center justify-center gap-4 text-center"
                 >
                     <span className="bg-[#6B46E5] text-white text-[11px] font-black uppercase px-3 py-1 rounded-md shadow-lg shadow-blue-500/20">Free</span>
-                    <p className="text-[#1C0F2D] text-lg font-medium">
+                    <p className="text-[#1C0F2D] dark:text-white text-lg font-medium">
                         Let's Create Something Better Together -
                         <a href="/contact" className="ml-2 text-[#6B46E5] underline decoration-2 underline-offset-4 hover:text-[#6B46E5] transition-colors font-extrabold">
                             Contact Us Today!

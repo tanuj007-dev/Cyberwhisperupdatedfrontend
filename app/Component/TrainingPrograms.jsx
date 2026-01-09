@@ -6,7 +6,7 @@ import img2 from "./assets/img2.webp";
 import path from "./assets/path.webp";
 export default function TrainingPrograms() {
     return (
-        <section className="relative w-full bg-white py-12 px-4 md:px-8 lg:px-12 overflow-hidden font-sans">
+        <section className="relative w-full bg-background py-12 px-4 md:px-8 lg:px-12 overflow-hidden font-sans transition-colors duration-300">
             <div className="max-w-7xl mx-auto">
                 <div className="relative w-full bg-[#6b46e5] rounded-[2rem] md:rounded-[3rem] px-6 py-10 md:px-16 lg:px-20 md:py-16 overflow-hidden shadow-2xl">
 

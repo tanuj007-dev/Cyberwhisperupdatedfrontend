@@ -1,6 +1,7 @@
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import dynamic from 'next/dynamic';
+import { ThemeProvider } from "./context/ThemeContext";
 
 // Load font with optimal settings
 const poppins = Poppins({
@@ -55,9 +56,11 @@ export default function RootLayout({ children }) {
                 suppressHydrationWarning
             >
                 <PreloaderHandler>
-                    <ConditionalLayout>
-                        {children}
-                    </ConditionalLayout>
+                    <ThemeProvider>
+                        <ConditionalLayout>
+                            {children}
+                        </ConditionalLayout>
+                    </ThemeProvider>
                 </PreloaderHandler>
             </body>
         </html>

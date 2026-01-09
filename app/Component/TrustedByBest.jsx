@@ -78,7 +78,7 @@ const TrustedByBest = () => {
     };
 
     return (
-        <section className="relative py-8 md:py-12 bg-white overflow-hidden">
+        <section className="relative py-8 md:py-12 bg-white dark:bg-black overflow-hidden transition-colors duration-300">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex flex-col md:flex-row items-center gap-6 md:gap-8 lg:gap-12">
 
@@ -94,7 +94,7 @@ const TrustedByBest = () => {
 
                         {/* Heading */}
                         <div className="space-y-2">
-                            <h2 className="text-3xl sm:text-4xl md:text-[42px] lg:text-[50px] font-semibold text-black leading-[1.1]">
+                            <h2 className="text-3xl sm:text-4xl md:text-[42px] lg:text-[50px] font-semibold text-black dark:text-white leading-[1.1]">
                                 Defence Staff
                                 <br />
                                 Training
@@ -127,10 +127,10 @@ const TrustedByBest = () => {
                             {/* Previous Button */}
                             <button
                                 onClick={handlePrev}
-                                className="shrink-0 w-8 h-8 md:w-10 md:h-10 rounded-full bg-purple-100 hover:bg-purple-200 transition-all duration-300 flex items-center justify-center group hover:scale-110 active:scale-95"
+                                className="shrink-0 w-8 h-8 md:w-10 md:h-10 rounded-full bg-purple-100 dark:bg-purple-900/30 hover:bg-purple-200 dark:hover:bg-purple-900/50 transition-all duration-300 flex items-center justify-center group hover:scale-110 active:scale-95"
                                 aria-label="Previous logos"
                             >
-                                <ChevronLeft className="w-4 h-4 md:w-5 md:h-5 text-purple-600 group-hover:text-purple-700 transition-colors" />
+                                <ChevronLeft className="w-4 h-4 md:w-5 md:h-5 text-purple-600 dark:text-purple-300 group-hover:text-purple-700 transition-colors" />
                             </button>
 
                             <div className="flex-1 overflow-hidden">
@@ -149,7 +149,7 @@ const TrustedByBest = () => {
                                                         key={logo.id}
                                                         className="shrink-0 flex items-center justify-center"
                                                     >
-                                                        <div className="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 flex items-center justify-center p-1.5 transition-transform duration-300 hover:scale-110">
+                                                        <div className="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 flex items-center justify-center p-1.5 transition-transform duration-300 hover:scale-110 bg-white dark:bg-white/5 rounded-full">
                                                             <img
                                                                 src={logo.image}
                                                                 alt={logo.name}

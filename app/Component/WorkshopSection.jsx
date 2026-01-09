@@ -6,7 +6,7 @@ import path from "./assets/path.webp";
 import { GrWorkshop } from "react-icons/gr";
 export default function WorkshopSection() {
     return (
-        <section className="relative py-12 sm:py-16 md:py-20 lg:py-24 px-4 sm:px-6 md:px-8 lg:px-12 bg-white overflow-hidden font-sans">
+        <section className="relative py-12 sm:py-16 md:py-20 lg:py-24 px-4 sm:px-6 md:px-8 lg:px-12 bg-background overflow-hidden font-sans transition-colors duration-300">
 
             {/* Background Image Layer (path.webp) */}
             <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 z-0 pointer-events-none opacity-100 select-none min-h-screen">
@@ -29,14 +29,14 @@ export default function WorkshopSection() {
                     <div className="flex items-center justify-center gap-2 sm:gap-3 mb-4 sm:mb-6">
                         <div className="w-3 h-3 sm:w-4 sm:h-4 bg-[#6B46E5] shadow-[3px_3px_6px_rgba(107,70,229,0.45)]"></div>
 
-                        <span className="text-xs sm:text-sm md:text-[15px] font-semibold text-[#1a1a2e]">
+                        <span className="text-xs sm:text-sm md:text-[15px] font-semibold text-foreground">
                             WHY CYPHER WHISPER
                         </span>
                     </div>
-                    <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-[50px] font-semibold text-[#1a1a2e] mb-4 sm:mb-6 leading-tight">
+                    <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-[50px] font-semibold text-foreground mb-4 sm:mb-6 leading-tight">
                         Why Learners and Organizations Choose <br className="hidden sm:block" /> <span className="text-[#6B46E5]">Cyber Whisper</span>
                     </h2>
-                    <p className="text-gray-500 text-sm sm:text-base md:text-lg lg:text-xl font-medium max-w-5xl mx-auto leading-relaxed">
+                    <p className="text-muted-foreground text-sm sm:text-base md:text-lg lg:text-xl font-medium max-w-5xl mx-auto leading-relaxed">
                         We combine real-world cybersecurity experience, hands-on platforms, and practical training to deliver outcomes—not just courses.
                     </p>
                 </div>
@@ -67,7 +67,7 @@ export default function WorkshopSection() {
                     ].map((item, index) => (
                         <div
                             key={index}
-                            className="group relative border border-[#7B2CFF] bg-transparent rounded-2xl sm:rounded-3xl md:rounded-[2.5rem] p-5 sm:p-6 md:p-8 transition-all duration-500 hover:shadow-[0_20px_40px_rgba(107,70,229,0.08)] md:hover:shadow-[0_30px_60px_rgba(107,70,229,0.08)] hover:-translate-y-1 md:hover:-translate-y-1.5"
+                            className="group relative border border-[#7B2CFF] bg-card rounded-2xl sm:rounded-3xl md:rounded-[2.5rem] p-5 sm:p-6 md:p-8 transition-all duration-500 hover:shadow-[0_20px_40px_rgba(107,70,229,0.08)] md:hover:shadow-[0_30px_60px_rgba(107,70,229,0.08)] hover:-translate-y-1 md:hover:-translate-y-1.5"
                         >
                             {/* Icon Container */}
                             <div className="mb-4 sm:mb-5 md:mb-6 relative inline-block">
@@ -82,7 +82,7 @@ export default function WorkshopSection() {
                                 <h3 className="text-lg sm:text-xl md:text-xl text-[#6B46E5] font-semibold tracking-tight">
                                     {item.title}
                                 </h3>
-                                <p className="text-[#0B021C] text-sm sm:text-[15px] leading-relaxed font-medium">
+                                <p className="text-card-foreground text-sm sm:text-[15px] leading-relaxed font-medium">
                                     {item.desc}
                                 </p>
                             </div>

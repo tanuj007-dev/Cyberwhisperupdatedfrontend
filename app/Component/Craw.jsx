@@ -7,7 +7,7 @@ import logo from './assets/craw.webp'; // Assuming this is the Craw Security log
 
 export default function Craw() {
     return (
-        <section className="w-full py-8 md:py-16 bg-[#FBF9FF] font-sans px-4 sm:px-6 md:px-8">
+        <section className="w-full py-8 md:py-16 bg-[#FBF9FF] dark:bg-black font-sans px-4 sm:px-6 md:px-8 transition-colors duration-300">
             <div className="max-w-7xl mx-auto relative rounded-[1.5rem] md:rounded-[2.5rem] bg-[#7848F9] overflow-hidden shadow-xl md:shadow-2xl">
 
                 {/* Background Pattern */}

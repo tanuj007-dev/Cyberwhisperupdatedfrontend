@@ -75,7 +75,7 @@ export default function CoreServicesOverview() {
     };
 
     return (
-        <section className="relative w-full bg-[#FBFAFF] py-12 md:py-24 px-4 md:px-6 overflow-hidden font-sans">
+        <section className="relative w-full bg-background py-12 md:py-24 px-4 md:px-6 overflow-hidden font-sans transition-colors duration-300">
             <div className="relative z-10 max-w-7xl mx-auto">
 
                 {/* Header Section */}
@@ -89,7 +89,7 @@ export default function CoreServicesOverview() {
                     >
                         <div className="w-3 h-3 md:w-4 md:h-4 bg-[#6B46E5] shadow-[3px_3px_6px_rgba(107,70,229,0.45)]"></div>
 
-                        <span className="text-xs md:text-[15px] font-semibold text-[#1a1a2e] uppercase tracking-[0.2em]">
+                        <span className="text-xs md:text-[15px] font-semibold text-foreground uppercase tracking-[0.2em]">
                             CORE SERVICES OVERVIEW
                         </span>
                     </motion.div>
@@ -98,7 +98,7 @@ export default function CoreServicesOverview() {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.6, delay: 0.2 }}
-                        className="text-2xl md:text-4xl lg:text-[50px] font-semibold text-[#1a1a2e] tracking-tight leading-tight px-4"
+                        className="text-2xl md:text-4xl lg:text-[50px] font-semibold text-foreground tracking-tight leading-tight px-4"
                     >
                         Unlock Cyber Resilience with Cyber Whisper
                     </motion.h2>
@@ -107,7 +107,7 @@ export default function CoreServicesOverview() {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.6, delay: 0.4 }}
-                        className="text-slate-500 text-sm md:text-lg font-medium max-w-3xl mx-auto leading-relaxed px-4"
+                        className="text-muted-foreground text-sm md:text-lg font-medium max-w-3xl mx-auto leading-relaxed px-4"
                     >
                         Hands-on cyber ranges, SOC-focused training, and expert-led consulting to help organizations and individuals strengthen security readiness.
                     </motion.p>
@@ -151,16 +151,16 @@ export default function CoreServicesOverview() {
                                     <div className="absolute inset-0 rounded-[2.5rem] border-gradient-anim" />
 
                                     {/* Card Content */}
-                                    <div className="relative bg-white rounded-[calc(2.5rem-2px)] p-6 md:p-10 shadow-[0_20px_50px_rgba(0,0,0,0.03)] flex flex-col items-start text-left min-h-[400px] md:min-h-[500px] h-full z-10">
+                                    <div className="relative bg-card rounded-[calc(2.5rem-2px)] p-6 md:p-10 shadow-[0_20px_50px_rgba(0,0,0,0.03)] flex flex-col items-start text-left min-h-[400px] md:min-h-[500px] h-full z-10">
                                         <span className="bg-[#E9E4FF] text-[#6B46E5] px-4 py-1.5 rounded-md text-xs md:text-[13px] font-bold mb-6">
                                             {service.badge}
                                         </span>
 
-                                        <h3 className="text-lg md:text-xl font-semibold text-[#1a1a2e] mb-4 md:mb-5 tracking-tight">
+                                        <h3 className="text-lg md:text-xl font-semibold text-foreground mb-4 md:mb-5 tracking-tight">
                                             {service.title}
                                         </h3>
 
-                                        <p className="text-slate-500 text-sm md:text-[15px] mb-8 md:mb-12">
+                                        <p className="text-muted-foreground text-sm md:text-[15px] mb-8 md:mb-12">
                                             {service.description}
                                         </p>
 

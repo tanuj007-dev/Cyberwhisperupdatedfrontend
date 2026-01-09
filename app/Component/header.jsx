@@ -4,10 +4,13 @@ import logo from './assets/logo.png'
 import { useState } from 'react';
 import Link from 'next/link';
 import { useEnquiry } from '../context/EnquiryContext';
+import { useTheme } from '../context/ThemeContext';
+import { Sun, Moon } from 'lucide-react';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { openEnquiry } = useEnquiry();
+  const { theme, toggleTheme } = useTheme();
 
   const navigationLinks = [
     { name: 'Home', href: '/' },
@@ -53,11 +56,18 @@ export default function Header() {
               ))}
             </div>
 
-            {/* Get Quote Button */}
-            <div className="hidden md:block">
+            {/* Get Quote Button & Theme Toggle */}
+            <div className="hidden md:flex items-center space-x-4">
+              <button
+                onClick={toggleTheme}
+                className="p-2 rounded-full text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                aria-label="Toggle Theme"
+              >
+                {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+              </button>
               <button
                 onClick={openEnquiry}
-                className="rounded-full bg-[#310E3F] px-6 py-2 text-[16px] font-semibold text-white shadow-md transition-all duration-300 hover:from-purple-700 hover:to-indigo-700 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 font-sans"
+                className="rounded-full bg-[#310E3F] dark:bg-purple-600 px-6 py-2 text-[16px] font-semibold text-white shadow-md transition-all duration-300 hover:from-purple-700 hover:to-indigo-700 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 font-sans"
               >
                 Get Quote
               </button>
@@ -111,7 +121,17 @@ export default function Header() {
                       {link.name}
                     </Link>
                   ))}
-                  <div className="pt-2">
+                  <div className="pt-2 flex flex-col gap-4">
+                    <button
+                      onClick={() => {
+                        toggleTheme();
+                        // Keep menu open to allow seeing change or close it? usually close it or keep it.
+                        // Let's keep it simple.
+                      }}
+                      className="flex items-center justify-center gap-2 w-full rounded-full border border-gray-200 dark:border-gray-700 px-6 py-3 text-[16px] font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+                    >
+                      {theme === 'dark' ? <><Sun size={20} /> Light Mode</> : <><Moon size={20} /> Dark Mode</>}
+                    </button>
                     <button
                       onClick={() => {
                         setIsMenuOpen(false);

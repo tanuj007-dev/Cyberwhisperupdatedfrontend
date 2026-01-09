@@ -47,7 +47,7 @@ export default function TrainingSection() {
     const [activeCategory, setActiveCategory] = useState('Programming')
 
     return (
-        <section className="relative w-full bg-white py-24 px-6 overflow-hidden font-sans">
+        <section className="relative w-full bg-white dark:bg-black py-24 px-6 overflow-hidden font-sans transition-colors duration-300">
             {/* Background Decorative Lines */}
             <div className="absolute inset-0 z-0 pointer-events-none opacity-[0.05]">
                 <svg width="100%" height="100%" viewBox="0 0 1440 800" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -63,28 +63,28 @@ export default function TrainingSection() {
                     <div className="flex items-center justify-center gap-2">
                         <div className="w-4 h-4 bg-[#6B46E5] shadow-[3px_3px_6px_rgba(107,70,229,0.45)]"></div>
 
-                        <span className="text-[13px] font-semibold text-[#1a1a2e] uppercase tracking-[0.2em]">
+                        <span className="text-[13px] font-semibold text-[#1a1a2e] dark:text-white uppercase tracking-[0.2em]">
                             LEARNING HUB
                         </span>
                     </div>
-                    <h2 className="text-4xl md:text-[50px] font-semibold text-[#1a1a2e] tracking-tight">
+                    <h2 className="text-4xl md:text-[50px] font-semibold text-[#1a1a2e] dark:text-white tracking-tight">
                         Stay Connected, Keep Training
                     </h2>
-                    <p className="text-slate-500 text-lg  font-medium max-w-3xl mx-auto">
+                    <p className="text-slate-500 dark:text-gray-400 text-lg  font-medium max-w-3xl mx-auto">
                         Immersive Tech Experiences in Our Workshop at Techfest, IIT Bombay
                     </p>
                 </div>
 
                 {/* Filter Categories */}
                 <div className="flex flex-wrap justify-center gap-3 mb-16">
-                    <div className="inline-flex bg-[#F8F9FD] p-1.5 rounded-full border border-gray-100 shadow-sm max-w-full overflow-x-auto scrollbar-hide">
+                    <div className="inline-flex bg-[#F8F9FD] dark:bg-gray-900 p-1.5 rounded-full border border-gray-100 dark:border-gray-800 shadow-sm max-w-full overflow-x-auto scrollbar-hide">
                         {categories.map((cat) => (
                             <button
                                 key={cat}
                                 onClick={() => setActiveCategory(cat)}
                                 className={`px-6 py-2.5 rounded-full text-sm font-bold transition-all duration-300 whitespace-nowrap ${activeCategory === cat
-                                    ? 'bg-[#1a1a2e] text-white shadow-lg'
-                                    : 'text-slate-500 hover:text-[#1a1a2e]'
+                                    ? 'bg-[#1a1a2e] dark:bg-white text-white dark:text-[#1a1a2e] shadow-lg'
+                                    : 'text-slate-500 dark:text-gray-400 hover:text-[#1a1a2e] dark:hover:text-white'
                                     }`}
                             >
                                 {cat}
@@ -102,7 +102,7 @@ export default function TrainingSection() {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ delay: idx * 0.1 }}
-                            className="bg-white rounded-[2.5rem] border border-[#7B2CFF] shadow-[0_15px_40px_rgba(0,0,0,0.04)] overflow-hidden group hover:shadow-[0_25px_60px_rgba(107,70,229,0.08)] transition-all duration-500 flex flex-col"
+                            className="bg-white dark:bg-gray-900 rounded-[2.5rem] border border-[#7B2CFF] shadow-[0_15px_40px_rgba(0,0,0,0.04)] overflow-hidden group hover:shadow-[0_25px_60px_rgba(107,70,229,0.08)] transition-all duration-500 flex flex-col"
                         >
                             {/* Card Content Top */}
                             <div className="p-8 pb-4 space-y-6 grow">
@@ -111,12 +111,12 @@ export default function TrainingSection() {
                                         {program.category}
                                     </span>
                                     <div className="flex items-center gap-1">
-                                        <span className="text-sm   text-slate-900">{program.rating}</span>
+                                        <span className="text-sm   text-slate-900 dark:text-white">{program.rating}</span>
                                         <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
                                     </div>
                                 </div>
 
-                                <h3 className="text-[22px] font-semibold text-[#1a1a2e] leading-[1.2] group-hover:text-[#6B46E5] transition-colors">
+                                <h3 className="text-[22px] font-semibold text-[#1a1a2e] dark:text-white leading-[1.2] group-hover:text-[#6B46E5] transition-colors">
                                     {program.title}
                                 </h3>
 
@@ -124,22 +124,22 @@ export default function TrainingSection() {
                                     <button className="flex-1 bg-[#310E3F] text-white py-3 rounded-full text-sm font-bold hover:bg-[#6B46E5] transition-colors">
                                         Enroll Now
                                     </button>
-                                    <button className="flex-1 border-2 border-[#310E3F] text-[#310E3F] py-3 rounded-full text-sm font-bold hover:border-[#6B46E5] hover:text-[#6B46E5] transition-all">
+                                    <button className="flex-1 border-2 border-[#310E3F] dark:border-purple-400 text-[#310E3F] dark:text-purple-400 py-3 rounded-full text-sm font-bold hover:border-[#6B46E5] dark:hover:border-purple-300 hover:text-[#6B46E5] dark:hover:text-purple-300 transition-all">
                                         Learn More
                                     </button>
                                 </div>
 
-                                <div className="flex items-center justify-between pt-4 border-t border-gray-50 text-slate-400">
+                                <div className="flex items-center justify-between pt-4 border-t border-gray-50 dark:border-gray-800 text-slate-400 dark:text-gray-500">
                                     <div className="flex flex-col items-center gap-1">
                                         <BookOpen size={18} />
                                         <span className="text-[11px] font-bold uppercase tracking-tighter">{program.lessons} lessons</span>
                                     </div>
-                                    <div className="w-px h-8 bg-gray-100" />
+                                    <div className="w-px h-8 bg-gray-100 dark:bg-gray-800" />
                                     <div className="flex flex-col items-center gap-1">
                                         <BarChart2 size={18} />
                                         <span className="text-[11px] font-bold uppercase tracking-tighter">{program.level}</span>
                                     </div>
-                                    <div className="w-px h-8 bg-gray-100" />
+                                    <div className="w-px h-8 bg-gray-100 dark:bg-gray-800" />
                                     <div className="flex flex-col items-center gap-1">
                                         <Calendar size={18} />
                                         <span className="text-[11px] font-bold uppercase tracking-tighter">{program.duration}</span>
@@ -164,7 +164,7 @@ export default function TrainingSection() {
 
                 {/* View All Button */}
                 <div className="flex justify-center">
-                    <button className="group flex items-center gap-3 bg-[#1a1a2e] text-white px-10 py-3 rounded-full font-bold text-lg hover:bg-[#6B46E5] transition-all hover:shadow-2xl active:scale-95">
+                    <button className="group flex items-center gap-3 bg-[#1a1a2e] dark:bg-white text-white dark:text-[#1a1a2e] px-10 py-3 rounded-full font-bold text-lg hover:bg-[#6B46E5] dark:hover:bg-gray-200 transition-all hover:shadow-2xl active:scale-95">
                         View All
                         <div className="w-7 h-7 bg-white/10 rounded-full flex items-center justify-center transition-transform group-hover:translate-x-1">
                             <ArrowRight className="w-4 h-4" />

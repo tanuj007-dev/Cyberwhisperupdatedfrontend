@@ -63,8 +63,8 @@ export function ValuesSection() {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <h2 className="text-3xl md:text-5xl font-bold mb-4">Our Core Values</h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
+          <h2 className="text-3xl md:text-5xl font-bold mb-4 text-gray-900 dark:text-white">Our Core Values</h2>
+          <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
             The pillars that support our mission to redefine cybersecurity for the digital age.
           </p>
         </motion.div>
@@ -81,15 +81,15 @@ export function ValuesSection() {
               key={index}
               variants={itemVariants}
               whileHover={{ y: -5, transition: { duration: 0.2 } }}
-              className="glass-panel p-8 rounded-2xl group cursor-default"
+              className="glass-panel p-8 rounded-2xl group cursor-default bg-white border border-gray-200 dark:bg-white/5 dark:border-white/10 shadow-sm dark:shadow-none"
             >
               <div
-                className={`p-3 rounded-xl bg-white/5 w-fit mb-6 group-hover:scale-110 transition-transform duration-300 ${value.color}`}
+                className={`p-3 rounded-xl bg-gray-100 dark:bg-white/5 w-fit mb-6 group-hover:scale-110 transition-transform duration-300 ${value.color}`}
               >
                 <value.icon className="w-8 h-8" />
               </div>
-              <h3 className="text-xl font-semibold mb-3">{value.title}</h3>
-              <p className="text-muted-foreground text-sm leading-relaxed">{value.description}</p>
+              <h3 className="text-xl font-semibold mb-3 text-gray-900 dark:text-white">{value.title}</h3>
+              <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">{value.description}</p>
               <div className="mt-6 flex items-center text-xs font-mono text-primary opacity-0 group-hover:opacity-100 transition-opacity">
                 <span>SYSTEM_CHECK: STABLE</span>
               </div>

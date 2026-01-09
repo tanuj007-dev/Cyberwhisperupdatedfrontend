@@ -14,7 +14,7 @@ const faqs = [
 
 export default function NeedHelp() {
     return (
-        <section className="w-full bg-white py-12 md:py-20 lg:py-24 px-4 md:px-6 lg:px-8 font-sans">
+        <section className="w-full bg-white dark:bg-black py-12 md:py-20 lg:py-24 px-4 md:px-6 lg:px-8 font-sans transition-colors duration-300">
             <div className="max-w-7xl mx-auto">
 
                 {/* Header Section */}
@@ -26,10 +26,10 @@ export default function NeedHelp() {
                             Ask & Learn
                         </span>
                     </div>
-                    <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-[42px] font-semibold text-[#1a1a2e] tracking-tight leading-tight">
+                    <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-[42px] font-semibold text-[#1a1a2e] dark:text-white tracking-tight leading-tight">
                         Need Help? Start Here First
                     </h2>
-                    <p className="text-slate-500 text-sm sm:text-base md:text-lg font-medium max-w-3xl mx-auto leading-relaxed px-2">
+                    <p className="text-slate-500 dark:text-gray-400 text-sm sm:text-base md:text-lg font-medium max-w-3xl mx-auto leading-relaxed px-2">
                         Find answers to the most common questions about our cybersecurity courses
                     </p>
                 </div>
@@ -43,12 +43,12 @@ export default function NeedHelp() {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ delay: idx * 0.05 }}
-                            className="group flex items-start sm:items-center gap-3 md:gap-4 p-4 md:p-6 bg-[#F9F8FF] border border-[#7B2CFF]/30 hover:border-[#7B2CFF] rounded-xl md:rounded-2xl hover:bg-white hover:shadow-xl hover:shadow-purple-500/5 transition-all duration-300 cursor-pointer"
+                            className="group flex items-start sm:items-center gap-3 md:gap-4 p-4 md:p-6 bg-[#F9F8FF] dark:bg-gray-900 border border-[#7B2CFF]/30 hover:border-[#7B2CFF] rounded-xl md:rounded-2xl hover:bg-white dark:hover:bg-gray-800 hover:shadow-xl hover:shadow-purple-500/5 transition-all duration-300 cursor-pointer"
                         >
-                            <div className="shrink-0 bg-[#D6BDFF78] rounded-full p-1 text-[#7B2CFF] group-hover:scale-110 transition-transform mt-0.5 sm:mt-0">
+                            <div className="shrink-0 bg-[#D6BDFF78] dark:bg-purple-900/40 rounded-full p-1 text-[#7B2CFF] dark:text-purple-300 group-hover:scale-110 transition-transform mt-0.5 sm:mt-0">
                                 <CheckCircle2 className="w-5 h-5 md:w-6 md:h-6 opacity-80" />
                             </div>
-                            <span className="text-[#1a1a2e] text-sm sm:text-[15px] md:text-base font-medium leading-snug">
+                            <span className="text-[#1a1a2e] dark:text-gray-200 text-sm sm:text-[15px] md:text-base font-medium leading-snug">
                                 {faq}
                             </span>
                         </motion.div>

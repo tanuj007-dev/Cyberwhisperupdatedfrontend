@@ -9,7 +9,8 @@ import cyberLab2 from "./assets/cyber_lab_2.webp"
 import cyberLab3 from "./assets/cyber_lab_3.webp"
 import cyberLab4 from "./assets/cyber_lab_4.webp"
 
-import bgGrid from "./assets/bggrid.webp"
+import Particles from './Particles';
+import gridImage from './assets/grid.webp';
 
 const CAROUSEL_IMAGES = [
   { img: cyberLab1, title: 'Cyber Lab' },
@@ -48,29 +49,62 @@ export default function ServiceHero() {
   }, [])
 
   return (
-    <div className="relative w-full min-h-[500px] md:min-h-[600px] bg-white overflow-hidden py-12 md:py-16 lg:py-24 font-sans border-b border-gray-100">
-      {/* Dynamic Background Image */}
-      <div className="absolute inset-0 pointer-events-none opacity-[0.05] z-0">
+    <div className="relative w-full min-h-[500px] md:min-h-[600px] bg-white dark:bg-black overflow-hidden py-12 md:py-16 lg:py-24 font-sans border-b border-gray-100 dark:border-gray-800 transition-colors duration-300">
+      {/* Background Grid Image */}
+      <div className="absolute inset-0 pointer-events-none opacity-30">
         <Image
-          src={bgGrid}
+          src={gridImage}
           alt="Background Grid"
           fill
-          className="object-cover"
+          className="object-cover dark:opacity-30 opacity-10 inverted-grid"
           priority
         />
       </div>
+      <div className="absolute inset-0 pointer-events-none opacity-30 block dark:hidden mix-blend-multiply bg-grid-slate-200" />
 
-      {/* Background Dot Pattern */}
-      <div className="absolute inset-0 z-0 opacity-[0.03] pointer-events-none"
-        style={{
-          backgroundImage: `radial-gradient(#6b46e5 0.5px, transparent 0.5px)`,
-          backgroundSize: '24px 24px'
-        }}
-      />
+      {/* OGL Particles Background */}
+      <div className="absolute inset-0 pointer-events-none z-0">
+        <Particles
+          particleColors={['#ffffff', '#a855f7', '#6366f1']}
+          particleCount={300}
+          particleSpread={10}
+          speed={0.1}
+          particleBaseSize={100}
+          moveParticlesOnHover={true}
+          alphaParticles={false}
+          disableRotation={false}
+          className="opacity-60 dark:opacity-80"
+        />
+      </div>
 
-      {/* Decorative Gradients */}
-      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-purple-300/30 blur-[140px] rounded-full -translate-y-1/2 translate-x-1/3 pointer-events-none z-0" />
-      <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-purple-300/40 blur-[140px] rounded-full translate-y-1/3 -translate-x-1/4 pointer-events-none z-0" />
+      {/* Animated Beams */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {/* Horizontal Beams */}
+        <div className="absolute top-[15%] left-0 w-full h-px bg-linear-to-r from-transparent via-purple-500/40 to-transparent animate-beam-h" style={{ animationDelay: '0s', animationDuration: '6s' }}></div>
+        <div className="absolute top-[35%] left-0 w-full h-px bg-linear-to-r from-transparent via-blue-500/40 to-transparent animate-beam-h" style={{ animationDelay: '2s', animationDuration: '8s' }}></div>
+        <div className="absolute top-[55%] left-0 w-full h-px bg-linear-to-r from-transparent via-purple-400/40 to-transparent animate-beam-h" style={{ animationDelay: '4s', animationDuration: '10s' }}></div>
+        <div className="absolute top-[85%] left-0 w-full h-px bg-linear-to-r from-transparent via-blue-400/30 to-transparent animate-beam-h" style={{ animationDelay: '6s', animationDuration: '12s' }}></div>
+
+        {/* Vertical Beams */}
+        <div className="absolute top-0 left-[20%] w-px h-full bg-linear-to-b from-transparent via-purple-500/40 to-transparent animate-beam-v" style={{ animationDelay: '1s', animationDuration: '9s' }}></div>
+        <div className="absolute top-0 left-[45%] w-px h-full bg-linear-to-b from-transparent via-blue-500/40 to-transparent animate-beam-v" style={{ animationDelay: '3s', animationDuration: '11s' }}></div>
+        <div className="absolute top-0 left-[75%] w-px h-full bg-linear-to-b from-transparent via-purple-400/40 to-transparent animate-beam-v" style={{ animationDelay: '5s', animationDuration: '13s' }}></div>
+        <div className="absolute top-0 left-[92%] w-px h-full bg-linear-to-b from-transparent via-blue-400/30 to-transparent animate-beam-v" style={{ animationDelay: '7s', animationDuration: '15s' }}></div>
+      </div>
+
+      {/* Ambient Glows - Adjusted for Light Mode */}
+      {/* Intense Purple Glow behind B2B area - Opacity reduced in light mode */}
+      <div className="absolute top-[5%] right-[20%] w-[600px] h-[600px] bg-[#6d28d9]/25 blur-[120px] rounded-full pointer-events-none animate-pulse-slow opacity-10 dark:opacity-100"></div>
+
+      {/* Hot center spot for the purple glow */}
+      <div className="absolute top-[15%] right-[25%] w-[300px] h-[300px] bg-[#a855f7]/20 blur-[80px] rounded-full pointer-events-none opacity-20 dark:opacity-100"></div>
+
+      {/* Bottom Left Deep Purple/Indigo wash */}
+      <div className="absolute bottom-[-15%] left-[-10%] w-[800px] h-[800px] bg-[#4c1d95]/30 blur-[130px] rounded-full pointer-events-none opacity-10 dark:opacity-100"></div>
+      <div className="absolute bottom-0 left-0 w-full h-full bg-linear-to-tr from-[#1e1b4b]/10 via-transparent to-transparent pointer-events-none opacity-20 dark:opacity-100"></div>
+
+      {/* Overall subtle vignette - Only for dark mode */}
+      <div className="absolute inset-0 bg-radial-gradient from-transparent to-[#02000d]/60 pointer-events-none hidden dark:block"></div>
 
       <div className="container mx-auto px-4 md:px-6 relative z-10 max-w-7xl">
         <div className="flex flex-col lg:flex-row items-center justify-between gap-8 md:gap-12 lg:gap-0">
@@ -90,8 +124,8 @@ export default function ServiceHero() {
               />
 
               {/* Content */}
-              <div className="relative inline-flex items-center   gap-2 md:gap-4 px-4 md:px-8 py-2 rounded-full bg-[#EBDFFF] text-[#6932E2] shadow-sm">
-                <span className="text-[10px] md:text-[12px] font-black uppercase tracking-widest bg-white text-black px-2 md:px-3 py-1 rounded-2xl">
+              <div className="relative inline-flex items-center   gap-2 md:gap-4 px-4 md:px-8 py-2 rounded-full bg-[#EBDFFF] dark:bg-purple-900/30 text-[#6932E2] dark:text-purple-300 shadow-sm">
+                <span className="text-[10px] md:text-[12px] font-black uppercase tracking-widest bg-white dark:bg-gray-800 text-black dark:text-white px-2 md:px-3 py-1 rounded-2xl">
                   New
                 </span>
                 <span className="text-xs md:text-sm">Registrations are now open!</span>
@@ -116,14 +150,14 @@ opacity: 0.8,
 
             {/* Main Heading */}
             <div className="space-y-2  animate-in fade-in slide-in-from-left duration-1000">
-              <h1 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-slate-900 tracking-tight leading-tight">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-slate-900 dark:text-white tracking-tight leading-tight">
                 Master<span className="text-[#6B46E5]"> Cybersecurity</span> <br className="hidden sm:block" />
                 <span className="sm:inline block">From Scratch</span>
               </h1>
             </div>
 
             {/* Description */}
-            <p className="text-slate-500 text-sm sm:text-base md:text-lg lg:text-xl font-normal leading-relaxed max-w-[600px] animate-in fade-in slide-in-from-left duration-1000 mx-auto lg:mx-0">
+            <p className="text-slate-500 dark:text-slate-400 text-sm sm:text-base md:text-lg lg:text-xl font-normal leading-relaxed max-w-[600px] animate-in fade-in slide-in-from-left duration-1000 mx-auto lg:mx-0">
               From AI-powered threat detection to immersive Cyber Range training, we safeguard your digital future so you can focus on what you do best.
             </p>
 
@@ -135,17 +169,17 @@ opacity: 0.8,
                   <GoArrowRight size={20} />
                 </div>
               </button>
-              <button className="px-8 md:px-10 py-3 rounded-full border-2 border-[#310E3F] text-[#310E3F] font-bold text-base md:text-lg transition-all hover:border-slate-400 hover:text-slate-900 active:scale-95 w-full sm:w-auto">
+              <button className="px-8 md:px-10 py-3 rounded-full border-2 border-[#310E3F] dark:border-purple-500 text-[#310E3F] dark:text-purple-400 font-bold text-base md:text-lg transition-all hover:border-slate-400 dark:hover:border-purple-300 hover:text-slate-900 dark:hover:text-white active:scale-95 w-full sm:w-auto">
                 See Curriculum
               </button>
             </div>
 
             {/* Bottom Indicators */}
-            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3 md:gap-6 pt-6 text-[#310E3F] tracking-widest text-base md:text-xl">
+            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3 md:gap-6 pt-6 text-[#310E3F] dark:text-purple-300 tracking-widest text-base md:text-xl">
               <span>Learn</span>
-              <span className="text-3xl md:text-5xl text-[#310E3F]">•</span>
+              <span className="text-3xl md:text-5xl text-[#310E3F] dark:text-purple-300">•</span>
               <span>Simulate</span>
-              <span className="text-3xl md:text-5xl text-[#310E3F]">•</span>
+              <span className="text-3xl md:text-5xl text-[#310E3F] dark:text-purple-300">•</span>
               <span>Win</span>
             </div>
           </div>
@@ -165,7 +199,7 @@ opacity: 0.8,
                 {ALL_IMAGES.map((item, idx) => (
                   <div
                     key={idx}
-                    className="flex-none w-[200px] sm:w-[240px] md:w-[280px] lg:w-[320px] aspect-[3/4.5] rounded-2xl md:rounded-[3rem] overflow-hidden bg-white border border-gray-100 transition-transform duration-500 hover:-translate-y-4 hover:shadow-purple-200/50"
+                    className="flex-none w-[200px] sm:w-[240px] md:w-[280px] lg:w-[320px] aspect-[3/4.5] rounded-2xl md:rounded-[3rem] overflow-hidden bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 transition-transform duration-500 hover:-translate-y-4 hover:shadow-purple-200/50"
                   >
                     <Image
                       src={item.img}

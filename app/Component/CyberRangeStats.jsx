@@ -39,9 +39,9 @@ const StatCounter = ({ end, suffix = '', label }) => {
 
 const CyberRangeStats = () => {
     return (
-        <section className="py-12 md:py-20 bg-linear-to-br from-gray-50 to-gray-100 px-4 md:px-8">
+        <section className="py-12 md:py-20 bg-linear-to-br from-secondary to-muted px-4 md:px-8 transition-colors duration-300">
             <div className="max-w-7xl mx-auto">
-                <div className="bg-white rounded-[2.5rem] overflow-hidden shadow-xl border border-gray-100">
+                <div className="bg-card rounded-[2.5rem] overflow-hidden shadow-xl border border-border">
                     <div className="grid lg:grid-cols-2 gap-0 items-stretch">
 
                         {/* Left Side: Content & Stats */}
@@ -49,14 +49,14 @@ const CyberRangeStats = () => {
                             <div className="space-y-4">
                                 <div className="flex items-center gap-3">
                                     <div className="w-4 h-4 bg-[#6B46E5] shadow-[3px_3px_6px_rgba(107,70,229,0.45)]"></div>
-                                    <span className="text-xs md:text-sm font-semibold text-[#1a1a2e] uppercase tracking-widest">
+                                    <span className="text-xs md:text-sm font-semibold text-foreground uppercase tracking-widest">
                                         INDUSTRIES AND LEARNERS SERVED
                                     </span>
                                 </div>
-                                <h2 className="text-3xl md:text-4xl font-semibold text-gray-900 leading-tight tracking-tight">
+                                <h2 className="text-3xl md:text-4xl font-semibold text-foreground leading-tight tracking-tight">
                                     Hands-On Cybersecurity at Scale<br />
                                 </h2>
-                                <p className="text-gray-500 text-sm md:text-[15px] font-semibold leading-relaxed max-w-lg">
+                                <p className="text-muted-foreground text-sm md:text-[15px] font-semibold leading-relaxed max-w-lg">
                                     From classrooms to cyber ranges, we support learners and organizations with practical labs, simulations, and real-world security scenarios.
                                 </p>
                             </div>
@@ -72,7 +72,7 @@ const CyberRangeStats = () => {
 
                         {/* Right Side: Single Main Image */}
                         <div className="relative order-1 lg:order-2 h-[300px] md:h-[400px] lg:h-auto min-h-0 lg:min-h-full">
-                            <div className="absolute inset-4 sm:inset-6 lg:inset-8 overflow-hidden rounded-3xl md:rounded-4xl shadow-2xl border border-gray-100">
+                            <div className="absolute inset-4 sm:inset-6 lg:inset-8 overflow-hidden rounded-3xl md:rounded-4xl shadow-2xl border border-border">
                                 <Image
                                     src={mainImg}
                                     alt="Cyber Range Main Action"

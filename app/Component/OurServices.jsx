@@ -40,7 +40,7 @@ export default function OurServices() {
     }, [words.length]);
 
     return (
-        <section className="relative w-full bg-white py-12 md:py-20 lg:py-32 overflow-hidden font-sans">
+        <section className="relative w-full bg-white dark:bg-black py-12 md:py-20 lg:py-32 overflow-hidden font-sans transition-colors duration-300">
             <div className="container mx-auto px-4 sm:px-6 max-w-7xl">
                 <div className="flex flex-col lg:flex-row items-center justify-between gap-10 md:gap-16 lg:gap-20">
 
@@ -49,13 +49,13 @@ export default function OurServices() {
                         {/* Tag Badge */}
                         <div className="flex items-center gap-3 animate-fade-in">
                             <div className="w-4 h-4 bg-[#6B46E5] rounded-sm shadow-[0_0_10px_rgba(107,70,229,0.3)]"></div>
-                            <span className="text-sm font-black text-[#1a1a2e] uppercase tracking-[0.2em]">
+                            <span className="text-sm font-black text-[#1a1a2e] dark:text-white uppercase tracking-[0.2em]">
                                 OUR SERVICES
                             </span>
                         </div>
 
                         {/* Main Heading */}
-                        <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-[49px] font-semibold text-[#1a1a2e] tracking-tight leading-tight">
+                        <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-[49px] font-semibold text-[#1a1a2e] dark:text-white tracking-tight leading-tight">
                             Unlock Cyber Resilience <br className="hidden md:block" />
                             with <span className="text-[#6B46E5]">Cyber Whisper</span>
                         </h2>
@@ -69,8 +69,8 @@ export default function OurServices() {
                                 <span
                                     key={index}
                                     className={`transition-colors duration-150 ${index < activeWords
-                                        ? "text-slate-900"
-                                        : "text-slate-400"
+                                        ? "text-slate-900 dark:text-gray-100"
+                                        : "text-slate-400 dark:text-gray-600"
                                         }`}
                                 >
                                     {word}{" "}

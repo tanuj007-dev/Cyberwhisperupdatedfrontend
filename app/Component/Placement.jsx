@@ -57,7 +57,7 @@ const students = [
 
 export default function Placement() {
     return (
-        <section className="w-full py-10 md:py-20 bg-[#FBF9FF] font-sans overflow-hidden">
+        <section className="w-full py-10 md:py-20 bg-[#FBF9FF] dark:bg-black font-sans overflow-hidden transition-colors duration-300">
             <div className="max-w-[1400px] mx-auto px-4 md:px-8">
 
                 {/* Header */}
@@ -66,7 +66,7 @@ export default function Placement() {
                         <div className="w-4 h-4 md:w-5 md:h-5 bg-[#7B2CFF] rounded-[4px] shadow-sm"></div>
                         <span className="text-xs md:text-sm font-bold text-gray-700 uppercase tracking-widest">SUCCESS STORIES</span>
                     </div>
-                    <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-[#1a1a2e]">
+                    <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-[#1a1a2e] dark:text-white">
                         Our Recent Placement Stories
                     </h2>
                 </div>
@@ -80,7 +80,7 @@ export default function Placement() {
                             whileInView={{ opacity: 1, scale: 1 }}
                             viewport={{ once: true }}
                             transition={{ delay: idx * 0.05, duration: 0.4 }}
-                            className="flex flex-col items-center justify-between p-2 md:p-3 rounded-2xl border border-[#7B2CFF]/20 hover:border-[#7B2CFF] shadow-sm hover:shadow-md transition-all h-[160px] md:h-[180px] bg-white group cursor-default"
+                            className="flex flex-col items-center justify-between p-2 md:p-3 rounded-2xl border border-[#7B2CFF]/20 dark:border-purple-900/50 hover:border-[#7B2CFF] dark:hover:border-purple-500 shadow-sm hover:shadow-md transition-all h-[160px] md:h-[180px] bg-white dark:bg-gray-900 group cursor-default"
                         >
                             {/* Profile Image */}
                             <div className="relative w-12 h-12 md:w-14 md:h-14 rounded-full overflow-hidden mb-2 border-2 group-hover:border-purple-200 transition-colors shrink-0">
@@ -94,12 +94,12 @@ export default function Placement() {
 
                             {/* Info */}
                             <div className="text-center mb-1 w-full px-1">
-                                <h3 className="text-[10px] md:text-[11px] font-bold text-[#1a1a2e] leading-tight mb-0.5 truncate">{student.name}</h3>
-                                <p className="text-[9px] md:text-[10px] text-gray-500 font-medium truncate">{student.role}</p>
+                                <h3 className="text-[10px] md:text-[11px] font-bold text-[#1a1a2e] dark:text-white leading-tight mb-0.5 truncate">{student.name}</h3>
+                                <p className="text-[9px] md:text-[10px] text-gray-500 dark:text-gray-400 font-medium truncate">{student.role}</p>
                             </div>
 
                             {/* Company Logo Area  */}
-                            <div className="mt-auto pt-1.5 border-t border-gray-50 w-full flex justify-center items-center h-8 relative shrink-0">
+                            <div className="mt-auto pt-1.5 border-t border-gray-50 dark:border-gray-800 w-full flex justify-center items-center h-8 relative shrink-0">
                                 <div className="relative w-16 h-5 md:w-20 md:h-6">
                                     <Image
                                         src={student.companyLogo}
@@ -115,9 +115,9 @@ export default function Placement() {
 
                 {/* View All Button */}
                 <div className="flex justify-center">
-                    <button className="flex items-center gap-3 bg-[#26103A] text-white pl-6 pr-2 py-2.5 md:pl-8 md:pr-2 md:py-3 rounded-full font-bold text-sm md:text-base hover:bg-[#7B3FE4] transition-all duration-300 hover:shadow-xl active:scale-95 group">
+                    <button className="flex items-center gap-3 bg-[#26103A] dark:bg-white text-white dark:text-[#26103A] pl-6 pr-2 py-2.5 md:pl-8 md:pr-2 md:py-3 rounded-full font-bold text-sm md:text-base hover:bg-[#7B3FE4] dark:hover:bg-gray-200 transition-all duration-300 hover:shadow-xl active:scale-95 group">
                         View All
-                        <span className="w-7 h-7 md:w-8 md:h-8 bg-white rounded-full flex items-center justify-center text-[#26103A] group-hover:scale-110 transition-transform">
+                        <span className="w-7 h-7 md:w-8 md:h-8 bg-white dark:bg-[#26103A] rounded-full flex items-center justify-center text-[#26103A] dark:text-white group-hover:scale-110 transition-transform">
                             <ArrowRight size={14} className="md:w-4 md:h-4" />
                         </span>
                     </button>

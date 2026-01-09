@@ -13,8 +13,8 @@ export default function NewsletterSignup() {
   };
 
   return (
-    <div className="py-8 md:py-14 bg-gray-50 flex items-center justify-center p-4">
-      <div className="w-full max-w-5xl bg-gradient-to-br from-[#7c4dff] to-[#6932E2] rounded-3xl p-6 md:p-10 relative overflow-hidden shadow-2xl">
+    <div className="py-8 md:py-14 bg-background flex items-center justify-center p-4 transition-colors duration-300">
+      <div className="w-full max-w-5xl bg-linear-to-br from-[#7c4dff] to-[#6932E2] rounded-3xl p-6 md:p-10 relative overflow-hidden shadow-2xl">
 
         {/* Wave Background Image */}
         <div

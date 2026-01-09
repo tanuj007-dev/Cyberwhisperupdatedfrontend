@@ -26,20 +26,20 @@ const partners = [
 
 export default function TrustedAlleid() {
     return (
-        <section className="w-full py-10 md:py-16 bg-white overflow-hidden font-sans">
+        <section className="w-full py-10 md:py-16 bg-white dark:bg-black overflow-hidden font-sans transition-colors duration-300">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 text-center mb-8 md:mb-12">
                 <span className="text-xs md:text-sm font-bold text-gray-500 uppercase tracking-widest block mb-1.5 md:mb-3">
                     TRUSTED ALLIES IN PROGRESS
                 </span>
-                <h2 className="text-2xl pt-2 sm:text-3xl md:text-4xl font-bold text-[#1a1a2e]">
+                <h2 className="text-2xl pt-2 sm:text-3xl md:text-4xl font-bold text-[#1a1a2e] dark:text-white">
                     Our Valued Global Learning Partners
                 </h2>
             </div>
 
             <div className="relative w-full overflow-hidden px-0 md:px-6">
                 {/* Gradient Masks for fading effect */}
-                <div className="absolute top-0 left-0 h-full w-12 sm:w-20 md:w-40 bg-linear-to-r from-white to-transparent z-10 pointer-events-none" />
-                <div className="absolute top-0 right-0 h-full w-12 sm:w-20 md:w-40 bg-linear-to-l from-white to-transparent z-10 pointer-events-none" />
+                <div className="absolute top-0 left-0 h-full w-12 sm:w-20 md:w-40 bg-linear-to-r from-white dark:from-black to-transparent z-10 pointer-events-none" />
+                <div className="absolute top-0 right-0 h-full w-12 sm:w-20 md:w-40 bg-linear-to-l from-white dark:from-black to-transparent z-10 pointer-events-none" />
 
                 {/* Carousel Track */}
                 <div className="flex gap-8 sm:gap-16 md:gap-24 animate-partner-scroll w-max items-center">

@@ -50,7 +50,7 @@ export function StatsSection() {
                 {stat.value}
                 {stat.prefix}
               </div>
-              <div className="text-muted-foreground text-sm md:text-base uppercase tracking-widest font-medium">
+              <div className="text-gray-600 dark:text-gray-400 text-sm md:text-base uppercase tracking-widest font-medium">
                 {stat.label}
               </div>
               <div className="h-0.5 w-0 group-hover:w-full bg-primary/50 mx-auto mt-4 transition-all duration-500" />

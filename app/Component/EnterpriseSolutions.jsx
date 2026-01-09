@@ -27,7 +27,7 @@ export default function EnterpriseSolutions() {
     };
 
     return (
-        <section className="bg-white py-12 px-6 md:px-12 font-sans overflow-hidden">
+        <section className="bg-background py-12 px-6 md:px-12 font-sans overflow-hidden transition-colors duration-300">
             <div className="max-w-6xl mx-auto">
                 <div className="grid lg:grid-cols-2 gap-8 items-center">
 
@@ -36,17 +36,17 @@ export default function EnterpriseSolutions() {
                         {/* Badge */}
                         <div className="flex items-center gap-2">
                             <div className="w-5 h-5 bg-[#6b46e5] rounded-md shadow-[0_0_10px_rgba(107,70,229,0.4)]"></div>
-                            <span className="text-[15px] font-semibold text-[#1a1a2e] uppercase tracking-[0.15em]">
+                            <span className="text-[15px] font-semibold text-foreground uppercase tracking-[0.15em]">
                                 OUR WORK IN ACTION
                             </span>
                         </div>
 
                         {/* Title & Description */}
                         <div className="space-y-3">
-                            <h2 className="text-2xl md:text-[25px] font-semibold text-[#1a1a2e]  tracking-tight">
+                            <h2 className="text-2xl md:text-[25px] font-semibold text-foreground  tracking-tight">
                                 Inside Cyber Whisper: Training, Labs & Live Events
                             </h2>
-                            <p className="text-gray-500 text-[15px] font-medium max-w-lg leading-relaxed">
+                            <p className="text-muted-foreground text-[15px] font-medium max-w-lg leading-relaxed">
                                 A look at our workshops, cyber range sessions, hands-on labs, and competitive learning environments.
                             </p>
                         </div>
@@ -59,17 +59,17 @@ export default function EnterpriseSolutions() {
                                     onClick={() => setActiveTab(index)}
                                     className={`group flex items-center justify-between rounded-xl px-6 py-3.5 transition-all duration-300 cursor-pointer border shadow-sm hover:shadow-lg hover:-translate-y-0.5
                                         ${activeTab === index
-                                            ? 'bg-[#6b46e5] border-[#6b46e5] text-white'
-                                            : 'bg-[#f6f1ff] border-[#6b46e5]/5 hover:border-[#6b46e5]/20 text-[#6b46e5]'
+                                            ? 'bg-primary border-primary text-primary-foreground'
+                                            : 'bg-secondary border-primary/5 hover:border-primary/20 text-primary'
                                         }`}
                                 >
-                                    <span className={`font-medium text-[15px] transition-colors ${activeTab === index ? 'text-white' : 'text-[#6b46e5] group-hover:text-[#6b46e5]'}`}>
+                                    <span className={`font-medium text-[15px] transition-colors ${activeTab === index ? 'text-primary-foreground' : 'text-primary group-hover:text-primary'}`}>
                                         {/* Adjusted hover text color to be consistent or just keep it simeple */}
                                         {item}
                                     </span>
-                                    <div className={`w-7 h-7 rounded-full flex items-center justify-center transition-all ${activeTab === index ? 'bg-white/20 opacity-100' : 'bg-white/50 opacity-0 group-hover:opacity-100'
+                                    <div className={`w-7 h-7 rounded-full flex items-center justify-center transition-all ${activeTab === index ? 'bg-primary-foreground/20 opacity-100' : 'bg-primary/10 opacity-0 group-hover:opacity-100'
                                         }`}>
-                                        <svg className={`w-4 h-4 ${activeTab === index ? 'text-white' : 'text-[#6b46e5]'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <svg className={`w-4 h-4 ${activeTab === index ? 'text-primary-foreground' : 'text-primary'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7-7 7" />
                                         </svg>
                                     </div>

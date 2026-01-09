@@ -61,7 +61,7 @@ const hotspots = [
 
 export default function CyberThreatLandscape() {
     return (
-        <section className="relative w-full bg-white py-4 md:py-8 px-4 md:px-6 overflow-hidden font-sans">
+        <section className="relative w-full bg-background py-4 md:py-8 px-4 md:px-6 overflow-hidden font-sans transition-colors duration-300">
 
             {/* Background Layer: footer-bg.webp */}
             <div className="absolute inset-0 z-0 pointer-events-none opacity-[0.05]">
@@ -84,13 +84,13 @@ export default function CyberThreatLandscape() {
                     <div className="flex items-center justify-center gap-3 mb-4">
                         <div className="w-3 h-3 bg-[#6B46E5] shadow-[3px_3px_6px_rgba(107,70,229,0.45)]"></div>
 
-                        <span className="text-lg md:text-xl font-semibold text-[#1a1a2e] tracking-tight">
+                        <span className="text-lg md:text-xl font-semibold text-foreground tracking-tight">
                             Cyber Attacks Don't Stop. Training Shouldn't Either
                         </span>
                     </div>
 
                     {/* Description */}
-                    <p className="max-w-4xl text-gray-500 text-sm md:text-base font-medium leading-[1.6] mb-0">
+                    <p className="max-w-4xl text-muted-foreground text-sm md:text-base font-medium leading-[1.6] mb-0">
                         Cyber attacks happen globally every minute. From ransomware and phishing to advanced persistent threats, modern attacks move fast and cross borders. Understanding how these attacks work is the first step to defending against them.
                     </p>
                 </div>
@@ -247,41 +247,41 @@ export default function CyberThreatLandscape() {
                 {/* Animated Marquee Section - Overlaid on Map Bottom Area */}
                 <div className="w-full relative z-20 -mt-16 md:-mt-24 lg:-mt-32 overflow-hidden pb-8">
                     {/* Gradient overlays for fade effect - subtle and blending */}
-                    <div className="absolute left-0 top-0 bottom-8 w-16 md:w-32 bg-linear-to-r from-white via-white/80 to-transparent z-10 pointer-events-none"></div>
-                    <div className="absolute right-0 top-0 bottom-8 w-16 md:w-32 bg-linear-to-l from-white via-white/80 to-transparent z-10 pointer-events-none"></div>
+                    <div className="absolute left-0 top-0 bottom-8 w-16 md:w-32 bg-linear-to-r from-background via-background/80 to-transparent z-10 pointer-events-none"></div>
+                    <div className="absolute right-0 top-0 bottom-8 w-16 md:w-32 bg-linear-to-l from-background via-background/80 to-transparent z-10 pointer-events-none"></div>
 
                     {/* Marquee Container */}
                     <div className="flex gap-4 sm:gap-6 md:gap-8 lg:gap-12 animate-marquee whitespace-nowrap py-4 items-center">
                         {/* First set of items */}
                         <div className="flex gap-4 sm:gap-6 md:gap-8 lg:gap-12 items-center">
-                            <div className="flex items-center gap-2 sm:gap-3 px-4 sm:px-5 py-2 sm:py-2.5 md:px-6 md:py-3 bg-white/50 backdrop-blur-sm border border-purple-200/50 shadow-lg rounded-full">
+                            <div className="flex items-center gap-2 sm:gap-3 px-4 sm:px-5 py-2 sm:py-2.5 md:px-6 md:py-3 bg-white/50 dark:bg-black/50 backdrop-blur-sm border border-purple-200/50 dark:border-purple-800/50 shadow-lg rounded-full">
                                 <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.6)]"></span>
-                                <span className="text-xs sm:text-sm md:text-base font-bold text-slate-800">2.3M+ Attacks Blocked Daily</span>
+                                <span className="text-xs sm:text-sm md:text-base font-bold text-slate-800 dark:text-slate-200">2.3M+ Attacks Blocked Daily</span>
                             </div>
 
-                            <div className="flex items-center gap-2 sm:gap-3 px-4 sm:px-5 py-2 sm:py-2.5 md:px-6 md:py-3 bg-white/50 backdrop-blur-sm border border-indigo-200/50 shadow-lg rounded-full">
+                            <div className="flex items-center gap-2 sm:gap-3 px-4 sm:px-5 py-2 sm:py-2.5 md:px-6 md:py-3 bg-white/50 dark:bg-black/50 backdrop-blur-sm border border-indigo-200/50 dark:border-indigo-800/50 shadow-lg rounded-full">
                                 <span className="w-2 h-2 bg-purple-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.6)]"></span>
-                                <span className="text-xs sm:text-sm md:text-base font-bold text-slate-800">99.9% Threat Detection Rate</span>
+                                <span className="text-xs sm:text-sm md:text-base font-bold text-slate-800 dark:text-slate-200">99.9% Threat Detection Rate</span>
                             </div>
 
-                            <div className="flex items-center gap-2 sm:gap-3 px-4 sm:px-5 py-2 sm:py-2.5 md:px-6 md:py-3 bg-white/50 backdrop-blur-sm border border-purple-200/50 shadow-lg rounded-full">
+                            <div className="flex items-center gap-2 sm:gap-3 px-4 sm:px-5 py-2 sm:py-2.5 md:px-6 md:py-3 bg-white/50 dark:bg-black/50 backdrop-blur-sm border border-purple-200/50 dark:border-purple-800/50 shadow-lg rounded-full">
                                 <span className="w-2 h-2 bg-purple-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(234,179,8,0.6)]"></span>
-                                <span className="text-xs sm:text-sm md:text-base font-bold text-slate-800">150+ Countries Protected</span>
+                                <span className="text-xs sm:text-sm md:text-base font-bold text-slate-800 dark:text-slate-200">150+ Countries Protected</span>
                             </div>
 
-                            <div className="flex items-center gap-2 sm:gap-3 px-4 sm:px-5 py-2 sm:py-2.5 md:px-6 md:py-3 bg-white/50 backdrop-blur-sm border border-indigo-200/50 shadow-lg rounded-full">
+                            <div className="flex items-center gap-2 sm:gap-3 px-4 sm:px-5 py-2 sm:py-2.5 md:px-6 md:py-3 bg-white/50 dark:bg-black/50 backdrop-blur-sm border border-indigo-200/50 dark:border-indigo-800/50 shadow-lg rounded-full">
                                 <span className="w-2 h-2 bg-purple-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(59,130,246,0.6)]"></span>
-                                <span className="text-xs sm:text-sm md:text-base font-bold text-slate-800">24/7 Real-Time Monitoring</span>
+                                <span className="text-xs sm:text-sm md:text-base font-bold text-slate-800 dark:text-slate-200">24/7 Real-Time Monitoring</span>
                             </div>
 
-                            <div className="flex items-center gap-2 sm:gap-3 px-4 sm:px-5 py-2 sm:py-2.5 md:px-6 md:py-3 bg-white/50 backdrop-blur-sm border border-purple-200/50 shadow-lg rounded-full">
+                            <div className="flex items-center gap-2 sm:gap-3 px-4 sm:px-5 py-2 sm:py-2.5 md:px-6 md:py-3 bg-white/50 dark:bg-black/50 backdrop-blur-sm border border-purple-200/50 dark:border-purple-800/50 shadow-lg rounded-full">
                                 <span className="w-2 h-2 bg-purple-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(168,85,247,0.6)]"></span>
-                                <span className="text-xs sm:text-sm md:text-base font-bold text-slate-800">5000+ Pros Trained</span>
+                                <span className="text-xs sm:text-sm md:text-base font-bold text-slate-800 dark:text-slate-200">5000+ Pros Trained</span>
                             </div>
 
-                            <div className="flex items-center gap-2 sm:gap-3 px-4 sm:px-5 py-2 sm:py-2.5 md:px-6 md:py-3 bg-white/50 backdrop-blur-sm border border-indigo-200/50 shadow-lg rounded-full">
+                            <div className="flex items-center gap-2 sm:gap-3 px-4 sm:px-5 py-2 sm:py-2.5 md:px-6 md:py-3 bg-white/50 dark:bg-black/50 backdrop-blur-sm border border-indigo-200/50 dark:border-indigo-800/50 shadow-lg rounded-full">
                                 <span className="w-2 h-2 bg-purple-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(249,115,22,0.6)]"></span>
-                                <span className="text-xs sm:text-sm md:text-base font-bold text-slate-800">Zero-Day Response</span>
+                                <span className="text-xs sm:text-sm md:text-base font-bold text-slate-800 dark:text-slate-200">Zero-Day Response</span>
                             </div>
                         </div>
 

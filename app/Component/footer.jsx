@@ -6,7 +6,7 @@ import { MapPin, Phone, Mail } from "lucide-react"
 
 export default function Footer() {
   return (
-    <footer className="relative w-full bg-white pt-12 pb-8 md:pt-24 md:pb-12 px-6 font-sans overflow-hidden">
+    <footer className="relative w-full bg-background pt-12 pb-8 md:pt-24 md:pb-12 px-6 font-sans overflow-hidden border-t transition-colors duration-300">
 
       {/* Background Image - Optimized with next/image or fill */}
       <div className="absolute inset-0 z-0 pointer-events-none opacity-05">
@@ -35,7 +35,7 @@ export default function Footer() {
               </div>
             </div>
 
-            <p className="text-[#333333] text-sm md:text-[18px] leading-[1.6] max-w-[400px] mb-4 md:mb-6">
+            <p className="text-muted-foreground text-sm md:text-[18px] leading-[1.6] max-w-[400px] mb-4 md:mb-6">
               Cyber Whisper builds cyber-ranges where teams attack, defend, and master skills risk-free.
             </p>
 
@@ -66,7 +66,7 @@ export default function Footer() {
 
           {/* Middle Section: Company */}
           <div className="sm:col-span-1 lg:col-span-2">
-            <h3 className="text-lg md:text-xl font-bold text-[#1a1a2e] mb-4 md:mb-8 tracking-tight relative inline-block">
+            <h3 className="text-lg md:text-xl font-bold text-foreground mb-4 md:mb-8 tracking-tight relative inline-block">
               Company
             </h3>
             <ul className="space-y-3 md:space-y-4 text-sm md:text-[16px] font-medium text-slate-600">
@@ -81,7 +81,7 @@ export default function Footer() {
 
           {/* Middle Section: Resources & Legal */}
           <div className="sm:col-span-1 lg:col-span-2">
-            <h3 className="text-lg md:text-xl font-bold text-[#1a1a2e] mb-4 md:mb-8 tracking-tight relative inline-block">
+            <h3 className="text-lg md:text-xl font-bold text-foreground mb-4 md:mb-8 tracking-tight relative inline-block">
               Support
             </h3>
             <ul className="space-y-3 md:space-y-4 text-sm md:text-[16px] font-medium text-slate-600">
@@ -94,10 +94,10 @@ export default function Footer() {
 
           {/* Right Section: Our Office */}
           <div className="sm:col-span-2 lg:col-span-3">
-            <h3 className="text-lg md:text-xl font-bold text-[#1a1a2e] mb-4 md:mb-8 tracking-tight relative inline-block">
+            <h3 className="text-lg md:text-xl font-bold text-foreground mb-4 md:mb-8 tracking-tight relative inline-block">
               Our Office
             </h3>
-            <div className="space-y-4 md:space-y-6 text-sm md:text-[16px] font-medium text-slate-600 leading-relaxed">
+            <div className="space-y-4 md:space-y-6 text-sm md:text-[16px] font-medium text-muted-foreground leading-relaxed">
               <div className="flex gap-4">
                 <MapPin className="w-5 h-5 text-[#6b46e5] shrink-0 mt-1" />
                 <p>62-A, 3rd Floor, Suraj Nagar, Delhi – 110033</p>
@@ -116,7 +116,7 @@ export default function Footer() {
 
         {/* Bottom Copyright */}
         <div className="mt-8 md:mt-16 pt-6 md:pt-8 border-t border-slate-100 flex flex-col md:flex-row items-center justify-center gap-4">
-          <p className="text-slate-500 font-medium text-xs md:text-sm text-center">
+          <p className="text-muted-foreground font-medium text-xs md:text-sm text-center">
             © {new Date().getFullYear()} Cyber Whisper. All Rights Reserved
           </p>
 

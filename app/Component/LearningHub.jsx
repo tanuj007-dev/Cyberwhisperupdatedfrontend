@@ -4,11 +4,11 @@ import { motion } from 'framer-motion';
 
 import { TbShieldCheckered } from "react-icons/tb";
 const FeatureCard = ({ title, description, align = 'left' }) => (
-    <div className={`w-full md:max-w-[320px] ${align === 'right' ? 'text-center md:text-right' : align === 'left' ? 'text-center md:text-left' : 'text-center'} pointer-events-auto bg-white/50 backdrop-blur-sm p-4 rounded-xl md:bg-transparent md:p-0`}>
-        <h3 className="text-[#090B21] font-semibold text-lg md:text-xl mb-2 md:mb-3 leading-tight tracking-tight uppercase font-sans">
+    <div className={`w-full md:max-w-[320px] ${align === 'right' ? 'text-center md:text-right' : align === 'left' ? 'text-center md:text-left' : 'text-center'} pointer-events-auto bg-white/50 dark:bg-black/50 backdrop-blur-sm p-4 rounded-xl md:bg-transparent md:p-0`}>
+        <h3 className="text-foreground font-semibold text-lg md:text-xl mb-2 md:mb-3 leading-tight tracking-tight uppercase font-sans">
             {title}
         </h3>
-        <p className="text-gray-600 text-sm md:text-[15px] leading-[1.6] font-medium">
+        <p className="text-muted-foreground text-sm md:text-[15px] leading-[1.6] font-medium">
             {description}
         </p>
     </div>
@@ -47,7 +47,7 @@ const AnimatedPath = ({ d, delay = 0 }) => (
 
 export default function LearningHub() {
     return (
-        <section className="relative w-full bg-white py-12 md:py-24 px-4 md:px-6 overflow-hidden font-sans">
+        <section className="relative w-full bg-background py-12 md:py-24 px-4 md:px-6 overflow-hidden font-sans transition-colors duration-300">
 
             {/* Background Corner Gradients */}
             <div className="absolute top-0 left-0 w-[600px] h-[600px] bg-purple-600/10 rounded-full blur-[120px] -translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
@@ -66,16 +66,16 @@ export default function LearningHub() {
                 {/* Header Section */}
                 <div className="flex items-center justify-center gap-2 md:gap-3 mb-4 md:mb-8">
                     <div className="w-4 h-4 md:w-5 md:h-5 bg-[#6b46e5] rounded shadow-[0_0_10px_rgba(107,70,229,0.3)]"></div>
-                    <span className="text-xs md:text-[15px] font-semibold tracking-[0.2em] text-[#1a1a2e] uppercase">
+                    <span className="text-xs md:text-[15px] font-semibold tracking-[0.2em] text-foreground uppercase">
                         Cyber Range Highlight
                     </span>
                 </div>
 
-                <h2 className="text-3xl md:text-4xl lg:text-5xl font-semibold text-[#1a1a2e] mb-4 md:mb-6 text-center tracking-tight">
+                <h2 className="text-3xl md:text-4xl lg:text-5xl font-semibold text-foreground mb-4 md:mb-6 text-center tracking-tight">
                     Stay Connected, Keep Training
                 </h2>
 
-                <p className="max-w-3xl text-gray-500 text-base md:text-lg lg:text-xl leading-[1.7] mb-12 md:mb-24 text-center px-4">
+                <p className="max-w-3xl text-muted-foreground text-base md:text-lg lg:text-xl leading-[1.7] mb-12 md:mb-24 text-center px-4">
                     A unified cyber range where learners and teams simulate attacks, investigate threats, and practice real-world defence workflows.
                 </p>
 
@@ -106,9 +106,9 @@ export default function LearningHub() {
                                 whileInView={{ scale: 1, opacity: 1 }}
                                 transition={{ duration: 1, ease: "easeOut" }}
                                 viewport={{ once: true }}
-                                className="w-28 h-28 md:w-32 md:h-32 bg-white rounded-[2.5rem] shadow-[0_15px_60px_rgba(107,70,229,0.2)] flex items-center justify-center border border-purple-50 group hover:scale-105 transition-transform duration-500"
+                                className="w-28 h-28 md:w-32 md:h-32 bg-card rounded-[2.5rem] shadow-[0_15px_60px_rgba(107,70,229,0.2)] flex items-center justify-center border border-purple-50 dark:border-purple-900 group hover:scale-105 transition-transform duration-500"
                             >
-                                <div className="w-20 h-20 bg-linear-to-br from-purple-50 to-white rounded-3xl flex items-center justify-center text-[#6b46e5]">
+                                <div className="w-20 h-20 bg-linear-to-br from-purple-50 to-background rounded-3xl flex items-center justify-center text-[#6b46e5]">
                                     <TbShieldCheckered size={44} strokeWidth={2} />
                                 </div>
 
@@ -182,8 +182,8 @@ export default function LearningHub() {
                             {/* Vertical connection line */}
                             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[200px] w-0.5 h-[400px] bg-linear-to-b from-transparent via-purple-300/50 to-transparent -z-10"></div>
 
-                            <div className="w-24 h-24 bg-white rounded-4xl shadow-[0_15px_60px_rgba(107,70,229,0.2)] flex items-center justify-center border border-purple-50">
-                                <div className="w-16 h-16 bg-linear-to-br from-purple-50 to-white rounded-2xl flex items-center justify-center text-[#6b46e5]">
+                            <div className="w-24 h-24 bg-card rounded-4xl shadow-[0_15px_60px_rgba(107,70,229,0.2)] flex items-center justify-center border border-purple-50 dark:border-purple-900">
+                                <div className="w-16 h-16 bg-linear-to-br from-purple-50 to-background rounded-2xl flex items-center justify-center text-[#6b46e5]">
                                     <TbShieldCheckered size={36} strokeWidth={2} />
                                 </div>
                             </div>
