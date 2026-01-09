@@ -4,15 +4,15 @@ import Image from 'next/image';
 import { Phone } from 'lucide-react';
 
 // Use existing assets
-import lab1 from './assets/work5.png';
-import lab2 from './assets/work6.png';
-import lab3 from './assets/work7.png';
-import lab4 from './assets/work8.png';
-import event1 from './assets/work1.png';
-import event2 from './assets/work2.png';
-import event3 from './assets/work3.png';
-import event4 from './assets/work4.png';
-import footerBg from './assets/footer-bg.png';
+import lab1 from './assets/work5.webp';
+import lab2 from './assets/work6.webp';
+import lab3 from './assets/work7.webp';
+import lab4 from './assets/work8.webp';
+import event1 from './assets/work1.webp';
+import event2 from './assets/work2.webp';
+import event3 from './assets/work3.webp';
+import event4 from './assets/work4.webp';
+import footerBg from './assets/footer-bg.webp';
 
 const techfestImages = [event1, event2, event3, event4, event1, event2, event3, event4, event1, event2, event3, event4]; // Duplicated for scrolling
 const labImages = [lab1, lab2, lab3, lab4, lab1, lab2, lab3, lab4, lab1, lab2, lab3, lab4]; // Duplicated for scrolling
@@ -94,7 +94,7 @@ export default function HelpCenter() {
                             />
 
                             {/* Inner Content */}
-                            <div className="relative bg-white rounded-xl p-4 sm:p-5 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4 h-full w-full">
+                            <div className="relative bg-white rounded-xl p-4 sm:p-5 shadow-sm flex flex-row items-center justify-between gap-4 h-full w-full">
                                 <div className="flex items-center gap-3 md:gap-4">
                                     <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-purple-50 flex items-center justify-center text-[#6B46E5] shrink-0">
                                         <Phone className="w-5 h-5 md:w-6 md:h-6" />

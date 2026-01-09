@@ -10,14 +10,14 @@ const TrustedByBest = () => {
 
     // Logo data - matching the defense organizations from the screenshot
     const logos = [
-        { id: 1, name: 'Indian Air Force', image: '/logos/iaf.png' },
-        { id: 2, name: 'Indian Navy', image: '/logos/navy.png' },
-        { id: 3, name: 'NCC', image: '/logos/ncc.png' },
-        { id: 4, name: 'BSF', image: '/logos/bsf.png' },
-        { id: 5, name: 'Indian Army', image: '/logos/army.png' },
-        { id: 6, name: 'NSG', image: '/logos/nsg.png' },
-        { id: 7, name: 'Prime Minister Office', image: '/logos/pmo.png' },
-        { id: 8, name: 'G20', image: '/logos/g20.png' },
+        { id: 1, name: 'Indian Air Force', image: '/logos/iaf.webp' },
+        { id: 2, name: 'Indian Navy', image: '/logos/navy.webp' },
+        { id: 3, name: 'NCC', image: '/logos/ncc.webp' },
+        { id: 4, name: 'BSF', image: '/logos/bsf.webp' },
+        { id: 5, name: 'Indian Army', image: '/logos/army.webp' },
+        { id: 6, name: 'NSG', image: '/logos/nsg.webp' },
+        { id: 7, name: 'Prime Minister Office', image: '/logos/pmo.webp' },
+        { id: 8, name: 'G20', image: '/logos/g20.webp' },
     ];
 
     // Responsive logos per slide

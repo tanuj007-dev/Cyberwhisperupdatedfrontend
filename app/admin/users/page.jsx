@@ -26,15 +26,22 @@ const UserList = () => {
         last_name: '',
         email: '',
         phone: '',
-        role_id: '3',
+        role: 'USER',
         status: 'active',
         is_instructor: false,
         title: '',
         address: '',
-        biography: ''
+        biography: '',
+        linkedin_url: '',
+        github_url: '',
+        profile_image_url: '',
+        password: '',
+        skills: []
     });
     const [toast, setToast] = useState({ isVisible: false, message: '', type: 'success' });
     const [errors, setErrors] = useState({});
+    const [imageUploading, setImageUploading] = useState(false);
+    const [imagePreview, setImagePreview] = useState('');
 
     const itemsPerPage = 10;
 
@@ -66,6 +73,94 @@ const UserList = () => {
         setTimeout(() => setToast({ isVisible: false, message: '', type: 'success' }), 3000);
     };
 
+    const handleImageUpload = async (file) => {
+        if (!file.type.startsWith('image/')) {
+            showToast('Please select a valid image file', 'error');
+            return;
+        }
+
+        if (file.size > 5 * 1024 * 1024) {
+            showToast('Image size must be less than 5MB', 'error');
+            return;
+        }
+
+        setImageUploading(true);
+
+        try {
+            const formDataUpload = new FormData();
+            formDataUpload.append('profile', file);
+
+            console.log('=== Image Upload Started ===');
+            console.log('File:', {
+                name: file.name,
+                size: file.size,
+                type: file.type
+            });
+            console.log('Upload URL:', `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/upload-profile`);
+
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/users/upload-profile`, {
+                method: 'POST',
+                body: formDataUpload,
+                mode: 'cors',
+                credentials: 'include',
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
+
+            console.log('Response Status:', response.status);
+            console.log('Response Headers:', Object.fromEntries(response.headers.entries()));
+
+            const responseText = await response.text();
+            console.log('Response Body:', responseText);
+
+            if (!response.ok) {
+                throw new Error(`Upload failed: ${response.status} - ${responseText}`);
+            }
+
+            let data;
+            try {
+                data = JSON.parse(responseText);
+            } catch (e) {
+                console.error('Failed to parse response:', e);
+                throw new Error('Invalid response format from server');
+            }
+
+            console.log('Parsed Response:', data);
+
+            // Try multiple possible response formats
+            const imageUrl = data.data?.profile_image_url || 
+                           data.profile_image_url || 
+                           data.url ||
+                           data.data?.url ||
+                           data.message ||
+                           data.file_url ||
+                           data.data?.file_url;
+            
+            if (!imageUrl) {
+                console.warn('No image URL found in response. Full response:', data);
+                throw new Error('No image URL received from server');
+            }
+
+            console.log('Final Image URL:', imageUrl);
+            setFormData(prev => {
+                const updated = { ...prev, profile_image_url: imageUrl };
+                console.log('Updated FormData:', updated);
+                return updated;
+            });
+            setImagePreview(imageUrl);
+            showToast('Image uploaded successfully', 'success');
+            console.log('=== Image Upload Completed ===');
+        } catch (error) {
+            console.error('=== Image Upload Error ===');
+            console.error('Error:', error.message);
+            console.error('Full Error:', error);
+            showToast(`Image upload failed: ${error.message}`, 'error');
+        } finally {
+            setImageUploading(false);
+        }
+    };
+
     const handleOpenAdd = () => {
         setEditMode(false);
         setFormData({
@@ -73,13 +168,19 @@ const UserList = () => {
             last_name: '',
             email: '',
             phone: '',
-            role_id: '3',
+            role: 'USER',
             status: 'active',
             is_instructor: false,
             title: '',
             address: '',
-            biography: ''
+            biography: '',
+            linkedin_url: '',
+            github_url: '',
+            profile_image_url: '',
+            password: '',
+            skills: []
         });
+        setImagePreview('');
         setErrors({});
         setAddEditModalOpen(true);
     };
@@ -92,13 +193,19 @@ const UserList = () => {
             last_name: user.last_name,
             email: user.email,
             phone: user.phone || '',
-            role_id: String(user.role_id),
-            status: user.status,
-            is_instructor: user.is_instructor,
+            role: user.role || 'USER',
+            status: user.status || 'active',
+            is_instructor: user.is_instructor || false,
             title: user.title || '',
             address: user.address || '',
-            biography: user.biography || ''
+            biography: user.biography || '',
+            linkedin_url: user.linkedin_url || '',
+            github_url: user.github_url || '',
+            profile_image_url: user.profile_image_url || '',
+            password: '',
+            skills: user.skills || []
         });
+        setImagePreview(user.profile_image_url || '');
         setErrors({});
         setAddEditModalOpen(true);
     };
@@ -113,30 +220,40 @@ const UserList = () => {
         return Object.keys(newErrors).length === 0;
     };
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         if (!validateForm()) return;
 
         const userData = {
-            ...formData,
-            role_id: parseInt(formData.role_id)
+            ...formData
         };
 
-        if (editMode) {
-            updateUser(selectedUser.id, userData);
-            showToast('User updated successfully', 'success');
-        } else {
-            addUser(userData);
-            showToast('User created successfully', 'success');
+        try {
+            if (editMode) {
+                await updateUser(selectedUser.id, userData);
+                showToast('User updated successfully', 'success');
+            } else {
+                await addUser(userData);
+                showToast('User created successfully', 'success');
+            }
+            setAddEditModalOpen(false);
+        } catch (error) {
+            const errorMessage = error?.message || 'Error saving user';
+            showToast(errorMessage, 'error');
+            console.error('Submit error:', error);
         }
-
-        setAddEditModalOpen(false);
     };
 
-    const handleDelete = () => {
-        deleteUser(selectedUser.id);
-        setDeleteModalOpen(false);
-        setSelectedUser(null);
-        showToast('User deleted successfully', 'success');
+    const handleDelete = async () => {
+        try {
+            await deleteUser(selectedUser.id);
+            setDeleteModalOpen(false);
+            setSelectedUser(null);
+            showToast('User deleted successfully', 'success');
+        } catch (error) {
+            const errorMessage = error?.message || 'Error deleting user';
+            showToast(errorMessage, 'error');
+            console.error('Delete error:', error);
+        }
     };
 
     const handleView = (user) => {
@@ -216,7 +333,7 @@ const UserList = () => {
                                 placeholder="Search users..."
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
-                                className="w-full pl-11 pr-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                                className="w-full pl-11 pr-4 py-2.5 border border-gray-300 text-black rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-transparent"
                             />
                         </div>
                     </div>
@@ -225,7 +342,7 @@ const UserList = () => {
                     <select
                         value={filterRole}
                         onChange={(e) => setFilterRole(e.target.value)}
-                        className="px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-transparent bg-white"
+                        className="px-4 py-2.5 border border-gray-300 text-black  rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-transparent bg-white"
                     >
                         <option value="">All Roles</option>
                         <option value="1">Admin</option>
@@ -238,7 +355,7 @@ const UserList = () => {
                     <select
                         value={filterInstructor}
                         onChange={(e) => setFilterInstructor(e.target.value)}
-                        className="px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-transparent bg-white"
+                        className="px-4 py-2.5 border border-gray-300 text-black  rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-transparent bg-white"
                     >
                         <option value="">All Users</option>
                         <option value="yes">Instructors Only</option>
@@ -249,7 +366,7 @@ const UserList = () => {
                     <select
                         value={filterStatus}
                         onChange={(e) => setFilterStatus(e.target.value)}
-                        className="px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-transparent bg-white"
+                        className="px-4 py-2.5 border border-gray-300 text-black  rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-transparent bg-white"
                     >
                         <option value="">All Status</option>
                         <option value="active">Active</option>
@@ -283,9 +400,17 @@ const UserList = () => {
                                 <tr key={user.id} className="hover:bg-gray-50/50 transition-colors">
                                     <td className="px-6 py-4">
                                         <div className="flex items-center gap-3">
-                                            <div className="w-10 h-10 bg-gradient-to-br from-violet-500 to-purple-600 rounded-xl flex items-center justify-center text-white font-semibold text-sm">
-                                                {user.first_name[0]}{user.last_name[0]}
-                                            </div>
+                                            {user.profile_image_url ? (
+                                                <img
+                                                    src={user.profile_image_url}
+                                                    alt={`${user.first_name} ${user.last_name}`}
+                                                    className="w-10 h-10 object-cover rounded-xl border border-gray-200"
+                                                />
+                                            ) : (
+                                                <div className="w-10 h-10 bg-gradient-to-br from-violet-500 to-purple-600 rounded-xl flex items-center justify-center text-white font-semibold text-sm">
+                                                    {user.first_name[0]}{user.last_name[0]}
+                                                </div>
+                                            )}
                                             <div>
                                                 <p className="font-semibold text-gray-900">
                                                     {user.first_name} {user.last_name}
@@ -311,7 +436,12 @@ const UserList = () => {
                                         </Badge>
                                     </td>
                                     <td className="px-6 py-4 text-sm text-gray-600">
-                                        {new Date(user.date_added).toLocaleDateString()}
+                                        {user.created_at
+                                            ? new Date(user.created_at).toLocaleDateString()
+                                            : user.date_added
+                                            ? new Date(user.date_added).toLocaleDateString()
+                                            : 'N/A'
+                                        }
                                     </td>
                                     <td className="px-6 py-4">
                                         <div className="flex items-center justify-center gap-1">
@@ -411,7 +541,7 @@ const UserList = () => {
                             label="First Name"
                             value={formData.first_name}
                             onChange={(e) => setFormData({ ...formData, first_name: e.target.value })}
-                            placeholder="John"
+                            placeholder="Enter first name"
                             required
                             error={errors.first_name}
                         />
@@ -419,7 +549,7 @@ const UserList = () => {
                             label="Last Name"
                             value={formData.last_name}
                             onChange={(e) => setFormData({ ...formData, last_name: e.target.value })}
-                            placeholder="Doe"
+                            placeholder="Enter last name"
                             required
                             error={errors.last_name}
                         />
@@ -431,7 +561,7 @@ const UserList = () => {
                             type="email"
                             value={formData.email}
                             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                            placeholder="john@example.com"
+                            placeholder="Enter email address"
                             required
                             error={errors.email}
                         />
@@ -439,7 +569,7 @@ const UserList = () => {
                             label="Phone"
                             value={formData.phone}
                             onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                            placeholder="+1 234 567 8900"
+                            placeholder="Enter phone number"
                         />
                     </div>
 
@@ -447,14 +577,13 @@ const UserList = () => {
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">Role <span className="text-red-500">*</span></label>
                             <select
-                                value={formData.role_id}
-                                onChange={(e) => setFormData({ ...formData, role_id: e.target.value })}
-                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                                value={formData.role}
+                                onChange={(e) => setFormData({ ...formData, role: e.target.value })}
+                                className="w-full px-4 py-2 border text-black border-gray-300 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent"
                             >
-                                <option value="1">Admin</option>
-                                <option value="2">Editor</option>
-                                <option value="3">Author</option>
-                                <option value="4">Guest</option>
+                                <option value="USER">Student</option>
+                                <option value="INSTRUCTOR">Instructor</option>
+                                <option value="ADMIN">Admin</option>
                             </select>
                         </div>
                         <div>
@@ -462,7 +591,7 @@ const UserList = () => {
                             <select
                                 value={formData.status}
                                 onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                                className="w-full px-4 py-2 border text-black border-gray-300 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent"
                             >
                                 <option value="active">Active</option>
                                 <option value="inactive">Inactive</option>
@@ -484,6 +613,108 @@ const UserList = () => {
                         placeholder="City, Country"
                     />
 
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Profile Image</label>
+                        <div
+                            onDragOver={(e) => {
+                                e.preventDefault();
+                                e.currentTarget.classList.add('bg-violet-50', 'border-violet-500');
+                            }}
+                            onDragLeave={(e) => {
+                                e.currentTarget.classList.remove('bg-violet-50', 'border-violet-500');
+                            }}
+                            onDrop={(e) => {
+                                e.preventDefault();
+                                e.currentTarget.classList.remove('bg-violet-50', 'border-violet-500');
+                                const files = e.dataTransfer.files;
+                                if (files.length > 0) {
+                                    handleImageUpload(files[0]);
+                                }
+                            }}
+                            className="relative border-2 border-dashed border-gray-300 rounded-lg p-8 text-center cursor-pointer transition-colors hover:border-violet-500 hover:bg-violet-50"
+                        >
+                            <input
+                                type="file"
+                                accept="image/*"
+                                onChange={(e) => {
+                                    if (e.target.files?.[0]) {
+                                        handleImageUpload(e.target.files[0]);
+                                    }
+                                }}
+                                className="absolute inset-0 w-full h-full cursor-pointer opacity-0"
+                            />
+                            
+                            {imagePreview ? (
+                                <div className="space-y-3">
+                                    <div className="flex justify-center">
+                                        <img
+                                            src={imagePreview}
+                                            alt="Preview"
+                                            className="h-32 w-32 object-cover rounded-lg border border-gray-200"
+                                        />
+                                    </div>
+                                    <div className="text-sm text-gray-600">
+                                        <p className="font-medium">Image uploaded successfully</p>
+                                        <p className="text-xs text-gray-500 mt-1">Drag to replace or click to choose</p>
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="space-y-2">
+                                    <svg className="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                                        <path d="M28 8H12a4 4 0 00-4 4v20a4 4 0 004 4h24a4 4 0 004-4V20m-14-8l6 6m-6-6v12" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                        <circle cx="20" cy="24" r="3" strokeWidth="2" />
+                                    </svg>
+                                    <div className="text-sm text-gray-600">
+                                        <p className="font-medium">Drag and drop your image here</p>
+                                        <p className="text-xs text-gray-500">or click to select (max 5MB)</p>
+                                    </div>
+                                </div>
+                            )}
+                            
+                            {imageUploading && (
+                                <div className="absolute inset-0 bg-white bg-opacity-75 rounded-lg flex items-center justify-center">
+                                    <div className="text-center">
+                                        <div className="animate-spin inline-block w-8 h-8 border-4 border-violet-200 border-t-violet-600 rounded-full"></div>
+                                        <p className="text-sm text-gray-600 mt-2">Uploading...</p>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Biography</label>
+                        <textarea
+                            value={formData.biography}
+                            onChange={(e) => setFormData({ ...formData, biography: e.target.value })}
+                            placeholder="Enter user biography or professional background"
+                            rows="4"
+                            className="w-full px-4 py-2 border text-black border-gray-300 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent resize-none"
+                        />
+                    </div>
+
+                    <Input
+                        label="LinkedIn URL"
+                        value={formData.linkedin_url}
+                        onChange={(e) => setFormData({ ...formData, linkedin_url: e.target.value })}
+                        placeholder="https://linkedin.com/in/username"
+                    />
+
+                    <Input
+                        label="GitHub URL"
+                        value={formData.github_url}
+                        onChange={(e) => setFormData({ ...formData, github_url: e.target.value })}
+                        placeholder="https://github.com/username"
+                    />
+
+                    <Input
+                        label="Password"
+                        type="password"
+                        value={formData.password}
+                        onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                        placeholder={editMode ? "Leave blank to keep current password" : "Enter password"}
+                    />
+
                     <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-xl">
                         <input
                             type="checkbox"
@@ -495,7 +726,7 @@ const UserList = () => {
                         <label htmlFor="is_instructor" className="text-sm text-gray-700">
                             <span className="font-medium">Mark as Instructor</span>
                             <span className="block text-gray-500">Enable if this user can create and manage courses</span>
-                        </label>
+                        </label>    
                     </div>
                 </div>
             </Modal>
@@ -528,9 +759,17 @@ const UserList = () => {
                 {viewUser && (
                     <div className="space-y-4">
                         <div className="flex items-center gap-4 pb-4 border-b">
-                            <div className="w-20 h-20 bg-gradient-to-br from-violet-500 to-purple-600 rounded-2xl flex items-center justify-center text-white font-bold text-2xl">
-                                {viewUser.first_name[0]}{viewUser.last_name[0]}
-                            </div>
+                            {viewUser.profile_image_url ? (
+                                <img
+                                    src={viewUser.profile_image_url}
+                                    alt={`${viewUser.first_name} ${viewUser.last_name}`}
+                                    className="w-20 h-20 object-cover rounded-2xl border-2 border-gray-200"
+                                />
+                            ) : (
+                                <div className="w-20 h-20 bg-gradient-to-br from-violet-500 to-purple-600 rounded-2xl flex items-center justify-center text-white font-bold text-2xl">
+                                    {viewUser.first_name[0]}{viewUser.last_name[0]}
+                                </div>
+                            )}
                             <div>
                                 <h3 className="text-xl font-bold text-gray-900">{viewUser.first_name} {viewUser.last_name}</h3>
                                 <p className="text-gray-600">{viewUser.title || 'No title'}</p>
@@ -578,14 +817,39 @@ const UserList = () => {
                             </div>
                         )}
 
+                        {/* {viewUser.profile_image_url && (
+                            <div>
+                                <label className="block text-sm font-semibold text-gray-700 mb-2">Profile Image</label>
+                                <img
+                                    src={viewUser.profile_image_url}
+                                    alt={`${viewUser.first_name} ${viewUser.last_name}`}
+                                    className="w-full max-w-sm h-auto rounded-lg border border-gray-200 object-cover"
+                                />
+                            </div>
+                        )} */}
+
                         <div className="grid grid-cols-2 gap-4 pt-4 border-t">
                             <div>
                                 <label className="block text-sm font-semibold text-gray-700 mb-1">Date Added</label>
-                                <p className="text-sm text-gray-600">{new Date(viewUser.date_added).toLocaleString()}</p>
+                                <p className="text-sm text-gray-600">
+                                    {viewUser.created_at 
+                                        ? new Date(viewUser.created_at).toLocaleString() 
+                                        : viewUser.date_added
+                                        ? new Date(viewUser.date_added).toLocaleString()
+                                        : 'N/A'
+                                    }
+                                </p>
                             </div>
                             <div>
                                 <label className="block text-sm font-semibold text-gray-700 mb-1">Last Modified</label>
-                                <p className="text-sm text-gray-600">{new Date(viewUser.last_modified).toLocaleString()}</p>
+                                <p className="text-sm text-gray-600">
+                                    {viewUser.updated_at 
+                                        ? new Date(viewUser.updated_at).toLocaleString() 
+                                        : viewUser.last_modified
+                                        ? new Date(viewUser.last_modified).toLocaleString()
+                                        : 'N/A'
+                                    }
+                                </p>
                             </div>
                         </div>
                     </div>

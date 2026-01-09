@@ -1,10 +1,10 @@
 "use client"
 import React from 'react';
 import Image from 'next/image';
-import Enterprise1 from './assets/Enterprises/1758821366664.jpg';
-import Enterprise2 from './assets/Enterprises/IMG_20250228_112127.jpg';
-import Enterprise3 from './assets/Enterprises/IMG_20250228_120104.jpg';
-import Enterprise4 from './assets/Enterprises/EnterpriseAction4.jpg';
+import Enterprise1 from './assets/Enterprises/1758821366664.webp';
+import Enterprise2 from './assets/Enterprises/IMG_20250228_112127.webp';
+import Enterprise3 from './assets/Enterprises/IMG_20250228_120104.webp';
+import Enterprise4 from './assets/Enterprises/EnterpriseAction4.webp';
 
 export default function EnterpriseSolutions() {
     const [activeTab, setActiveTab] = React.useState(0);

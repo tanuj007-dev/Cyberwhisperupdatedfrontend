@@ -3,12 +3,12 @@ import React from 'react';
 import Image from 'next/image';
 
 // Placeholder imports - In a real scenario, these would be the specific partner logos
-// User should replace these with: ec_council.png, offsec.png, redhat.png, cisco.png, comptia.png
-import p1 from './assets/ec.png';
-import p2 from './assets/off.png';
-import p3 from './assets/redhat.png';
-import p4 from './assets/cisco.png';
-import p5 from './assets/comptia.png';
+// User should replace these with: ec_council.webp, offsec.webp, redhat.webp, cisco.webp, comptia.webp
+import p1 from './assets/ec.webp';
+import p2 from './assets/off.webp';
+import p3 from './assets/redhat.webp';
+import p4 from './assets/cisco.webp';
+import p5 from './assets/comptia.webp';
 
 const partners = [
     { name: 'EC-Council', logo: p1 },

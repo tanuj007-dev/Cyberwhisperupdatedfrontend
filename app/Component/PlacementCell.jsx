@@ -3,7 +3,7 @@ import React from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { Phone, Mail } from 'lucide-react';
-import workImg from './assets/companies.png'; // Placeholder for the companies grid image
+import workImg from './assets/companies.webp'; // Placeholder for the companies grid image
 
 export default function PlacementCell() {
     return (

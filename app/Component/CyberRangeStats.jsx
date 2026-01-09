@@ -3,7 +3,7 @@
 import React, { useRef } from 'react';
 import Image from 'next/image';
 import { motion, useInView, useSpring, useTransform } from 'framer-motion';
-import mainImg from './assets/ctf-poster.png';
+import mainImg from './assets/ctf-poster.webp';
 
 const StatCounter = ({ end, suffix = '', label }) => {
     const ref = useRef(null);

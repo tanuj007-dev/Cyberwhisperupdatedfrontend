@@ -47,6 +47,16 @@ export default function TestimonialsSection() {
   const [currentIndex, setCurrentIndex] = useState(testimonials.length);
   const [isPaused, setIsPaused] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    handleResize(); // Check on mount
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const nextSlide = useCallback(() => {
     setIsTransitioning(true);
@@ -133,12 +143,12 @@ export default function TestimonialsSection() {
             <div
               className="flex transition-transform duration-700 ease-in-out"
               style={{
-                transform: `translateX(-${(currentIndex) * (100 / 3)}%)`,
+                transform: `translateX(-${currentIndex * (isMobile ? 100 : 100 / 3)}%)`,
                 transitionProperty: isTransitioning ? 'transform' : 'none'
               }}
             >
               {extendedTestimonials.map((testimonial, i) => {
-                const isCenter = i === currentIndex + 1;
+                const isCenter = isMobile ? i === currentIndex : i === currentIndex + 1;
 
                 return (
                   <div

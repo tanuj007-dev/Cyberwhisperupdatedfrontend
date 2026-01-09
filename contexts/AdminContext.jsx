@@ -2,7 +2,6 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { mockBlogs } from '@/data/mockBlogs';
-import { mockUsers } from '@/data/mockUsers';
 import { mockCategories } from '@/data/mockCategories';
 import { mockTags } from '@/data/mockTags';
 import { mockMedia, mockSiteSettings } from '@/data/mockMedia';
@@ -27,15 +26,61 @@ export const AdminProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // Initialize data from mock files
-        setBlogs(mockBlogs);
-        setUsers(mockUsers);
-        setCategories(mockCategories);
-        setTags(mockTags);
-        setMedia(mockMedia);
-        setSiteSettings(mockSiteSettings);
-        setLoading(false);
+        const initializeData = async () => {
+            try {
+                // Initialize static data from mock files
+                setBlogs(mockBlogs);
+                setCategories(mockCategories);
+                setTags(mockTags);
+                setMedia(mockMedia);
+                setSiteSettings(mockSiteSettings);
+
+                // Fetch users from API
+                await fetchUsers();
+            } catch (error) {
+                console.error('Error initializing admin data:', error);
+                setLoading(false);
+            }
+        };
+
+        initializeData();
     }, []);
+
+    // Fetch users from API
+    const fetchUsers = async () => {
+        try {
+            const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3031';
+            console.log('Fetching users from API:', `${apiUrl}/api/users`);
+            
+            const response = await fetch(`${apiUrl}/api/users?page=1&limit=1000`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                credentials: 'include',
+                mode: 'cors'
+            });
+            
+            console.log('Fetch users response status:', response.status);
+            
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error('Fetch error response:', errorText);
+                throw new Error(`Failed to fetch users: ${response.status}`);
+            }
+            const data = await response.json();
+            // Handle both array response and paginated response
+            const usersList = Array.isArray(data) ? data : data.users || data.data || [];
+            console.log('Users fetched successfully:', usersList.length, 'users');
+            setUsers(usersList);
+            setLoading(false);
+        } catch (error) {
+            console.error('Error fetching users:', error.message);
+            setUsers([]);
+            setLoading(false);
+        }
+    };
 
     // Blog CRUD operations
     const addBlog = (blog) => {
@@ -71,32 +116,135 @@ export const AdminProvider = ({ children }) => {
     };
 
     // User CRUD operations
-    const addUser = (user) => {
-        const newUser = {
-            ...user,
-            id: Math.max(...users.map(u => u.id), 0) + 1,
-            date_added: new Date().toISOString(),
-            last_modified: new Date().toISOString(),
-            wishlist: [],
-            payment_keys: null,
-            verification_code: null,
-            temp: null,
-            sessions: []
-        };
-        setUsers([...users, newUser]);
-        return newUser;
+    const addUser = async (user) => {
+        try {
+            const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3031';
+            const payload = {
+                first_name: user.first_name,
+                last_name: user.last_name,
+                email: user.email,
+                phone: user.phone || '',
+                password: user.password || 'TempPass@123',
+                title: user.title || '',
+                address: user.address || '',
+                biography: user.biography || '',
+                linkedin_url: user.linkedin_url || '',
+                github_url: user.github_url || '',
+                role: user.role === 'INSTRUCTOR' || user.is_instructor ? 'INSTRUCTOR' : 'USER',
+                is_instructor: user.is_instructor || false,
+                profile_image_url: user.profile_image_url || '',
+                skills: user.skills || []
+            };
+
+            console.log('Creating user with payload:', payload);
+
+            const response = await fetch(`${apiUrl}/api/users`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(payload),
+                credentials: 'include',
+                mode: 'cors'
+            });
+
+            console.log('Create user response status:', response.status);
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error('Error response from server:', errorText);
+                throw new Error(`Failed to create user: ${response.status} - ${errorText}`);
+            }
+
+            const newUser = await response.json();
+            console.log('User created successfully:', newUser);
+            // Refresh user list from API
+            await fetchUsers();
+            return newUser;
+        } catch (error) {
+            console.error('Error adding user:', error.message);
+            throw error;
+        }
     };
 
-    const updateUser = (id, updatedUser) => {
-        setUsers(users.map(user =>
-            user.id === id
-                ? { ...user, ...updatedUser, last_modified: new Date().toISOString() }
-                : user
-        ));
+    const updateUser = async (id, updatedUser) => {
+        try {
+            const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3031';
+            const payload = {
+                first_name: updatedUser.first_name,
+                last_name: updatedUser.last_name,
+                email: updatedUser.email,
+                phone: updatedUser.phone || '',
+                title: updatedUser.title || '',
+                address: updatedUser.address || '',
+                biography: updatedUser.biography || '',
+                linkedin_url: updatedUser.linkedin_url || '',
+                github_url: updatedUser.github_url || '',
+                role: updatedUser.role === 'INSTRUCTOR' || updatedUser.is_instructor ? 'INSTRUCTOR' : 'USER',
+                is_instructor: updatedUser.is_instructor || false,
+                profile_image_url: updatedUser.profile_image_url || '',
+                skills: updatedUser.skills || []
+            };
+
+            console.log('Updating user', id, 'with payload:', payload);
+
+            const response = await fetch(`${apiUrl}/api/users/${id}/update`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(payload),
+                credentials: 'include',
+                mode: 'cors'
+            });
+
+            console.log('Update user response status:', response.status);
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error('Error response from server:', errorText);
+                throw new Error(`Failed to update user: ${response.status} - ${errorText}`);
+            }
+
+            // Refresh user list from API
+            await fetchUsers();
+        } catch (error) {
+            console.error('Error updating user:', error.message);
+            throw error;
+        }
     };
 
-    const deleteUser = (id) => {
-        setUsers(users.filter(user => user.id !== id));
+    const deleteUser = async (id) => {
+        try {
+            const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3031';
+            console.log('Deleting user:', id);
+
+            const response = await fetch(`${apiUrl}/api/users/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                credentials: 'include',
+                mode: 'cors'
+            });
+
+            console.log('Delete user response status:', response.status);
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error('Error response from server:', errorText);
+                throw new Error(`Failed to delete user: ${response.status} - ${errorText}`);
+            }
+
+            // Refresh user list from API
+            await fetchUsers();
+        } catch (error) {
+            console.error('Error deleting user:', error.message);
+            throw error;
+        }
     };
 
     // Category CRUD operations
@@ -175,7 +323,31 @@ export const AdminProvider = ({ children }) => {
 
     // Helper functions
     const getBlogById = (blog_id) => blogs.find(blog => blog.blog_id === blog_id);
-    const getUserById = (id) => users.find(user => user.id === id);
+    
+    const getUserById = async (id) => {
+        try {
+            const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3031';
+            const response = await fetch(`${apiUrl}/api/users/${id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                credentials: 'include',
+                mode: 'cors'
+            });
+            if (!response.ok) {
+                throw new Error('Failed to fetch user');
+            }
+            const user = await response.json();
+            return user;
+        } catch (error) {
+            console.error('Error fetching user by ID:', error);
+            // Fallback to local state
+            return users.find(user => user.id === id);
+        }
+    };
+    
     const getCategoryById = (id) => categories.find(category => category.id === id);
     const getTagById = (id) => tags.find(tag => tag.id === id);
     const getMediaById = (id) => media.find(item => item.id === id);

@@ -7,7 +7,7 @@ export default function AdminPage() {
     const router = useRouter();
 
     useEffect(() => {
-        router.push('/admin/dashboard');
+        router.push('/admin/blogs');
     }, [router]);
 
     return (

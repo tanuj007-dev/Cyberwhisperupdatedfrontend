@@ -7,7 +7,7 @@ import { FaFacebook, FaLinkedin, FaInstagram, FaXTwitter } from 'react-icons/fa6
 import { FaQuoteLeft } from 'react-icons/fa'
 
 // Assets
-import featuredImg from '../../Component/assets/cyber_lab_1.png'
+import featuredImg from '../../Component/assets/cyber_lab_1.webp'
 
 export default function BlogPostDetail({ params }) {
     // In a real app, you'd fetch based on params.slug

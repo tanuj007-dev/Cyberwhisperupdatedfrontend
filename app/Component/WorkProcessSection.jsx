@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import footerBg from './assets/footer-bg.png';
+import footerBg from './assets/footer-bg.webp';
 
 const processes = [
   { id: '01', step: 'Step 01', heading: 'Understand the Requirement', description: 'We start by understanding your goals—training, SOC readiness, workshops, or cyber range usage.' },

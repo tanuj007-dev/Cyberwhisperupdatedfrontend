@@ -1,8 +1,8 @@
 "use client"
 import React from 'react';
 import Image from 'next/image';
-import mapImg from "./assets/map-transparent.png";
-import footerBg from "./assets/footer-bg.png";
+import mapImg from "./assets/map-transparent.webp";
+import footerBg from "./assets/footer-bg.webp";
 
 // Extensive attack line routes for a busy, global look
 const attackRoutes = [
@@ -63,7 +63,7 @@ export default function CyberThreatLandscape() {
     return (
         <section className="relative w-full bg-white py-4 md:py-8 px-4 md:px-6 overflow-hidden font-sans">
 
-            {/* Background Layer: footer-bg.png */}
+            {/* Background Layer: footer-bg.webp */}
             <div className="absolute inset-0 z-0 pointer-events-none opacity-[0.05]">
                 <Image
                     src={footerBg}
@@ -126,7 +126,7 @@ export default function CyberThreatLandscape() {
                             </defs>
 
                             {/* Render attack lines */}
-                            {attackRoutes.map(route => {
+                            {attackRoutes.map((route, index) => {
                                 const dx = route.to.x - route.from.x;
                                 const dy = route.to.y - route.from.y;
                                 const distance = Math.sqrt(dx * dx + dy * dy);
@@ -139,8 +139,11 @@ export default function CyberThreatLandscape() {
                                 const path = `M ${route.from.x} ${route.from.y} Q ${midX} ${midY} ${route.to.x} ${route.to.y}`;
                                 const duration = (2.5 + (distance / 30)) / route.speed;
 
+                                // Hide every 3rd line on mobile to improve performance
+                                const mobileVisibilityClass = index % 3 === 0 ? "hidden md:block" : "";
+
                                 return (
-                                    <g key={route.id}>
+                                    <g key={route.id} className={mobileVisibilityClass}>
                                         {/* Static ultra-thin trail */}
                                         <path
                                             d={path}
@@ -160,7 +163,7 @@ export default function CyberThreatLandscape() {
                                             strokeLinecap="round"
                                             strokeDasharray="4 60"
                                             strokeOpacity="0.6"
-                                            filter="url(#lineGlow)"
+                                            className="glow-effect"
                                         >
                                             <animate
                                                 attributeName="stroke-dashoffset"
@@ -176,7 +179,7 @@ export default function CyberThreatLandscape() {
                                             r="0.3"
                                             fill={route.color}
                                             opacity="0.9"
-                                            filter="url(#lineGlow)"
+                                            className="glow-effect"
                                         >
                                             <animateMotion
                                                 dur={`${duration}s`}
@@ -233,7 +236,7 @@ export default function CyberThreatLandscape() {
                                         cy={spot.y}
                                         r={spot.r * 0.4}
                                         fill="#8b5cf6"
-                                        filter="url(#lineGlow)"
+                                        className="glow-effect"
                                     />
                                 </g>
                             ))}
@@ -244,8 +247,8 @@ export default function CyberThreatLandscape() {
                 {/* Animated Marquee Section - Overlaid on Map Bottom Area */}
                 <div className="w-full relative z-20 -mt-16 md:-mt-24 lg:-mt-32 overflow-hidden pb-8">
                     {/* Gradient overlays for fade effect - subtle and blending */}
-                    <div className="absolute left-0 top-0 bottom-8 w-16 md:w-32 bg-gradient-to-r from-white via-white/80 to-transparent z-10 pointer-events-none"></div>
-                    <div className="absolute right-0 top-0 bottom-8 w-16 md:w-32 bg-gradient-to-l from-white via-white/80 to-transparent z-10 pointer-events-none"></div>
+                    <div className="absolute left-0 top-0 bottom-8 w-16 md:w-32 bg-linear-to-r from-white via-white/80 to-transparent z-10 pointer-events-none"></div>
+                    <div className="absolute right-0 top-0 bottom-8 w-16 md:w-32 bg-linear-to-l from-white via-white/80 to-transparent z-10 pointer-events-none"></div>
 
                     {/* Marquee Container */}
                     <div className="flex gap-4 sm:gap-6 md:gap-8 lg:gap-12 animate-marquee whitespace-nowrap py-4 items-center">
@@ -318,7 +321,7 @@ export default function CyberThreatLandscape() {
                 </div>
             </div>
 
-            {/* CSS Animation for Marquee */}
+            {/* CSS Animation for Marquee & Glow Optimizations */}
             <style jsx>{`
                 @keyframes marquee {
                     0% {
@@ -335,6 +338,16 @@ export default function CyberThreatLandscape() {
                 
                 .animate-marquee:hover {
                     animation-play-state: paused;
+                }
+
+                /* Only apply expensive SVG filters on non-mobile devices */
+                .glow-effect {
+                    filter: none;
+                }
+                @media (min-width: 768px) {
+                    .glow-effect {
+                        filter: url(#lineGlow);
+                    }
                 }
             `}</style>
         </section>

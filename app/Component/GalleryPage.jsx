@@ -1,68 +1,64 @@
 "use client";
 import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ZoomIn, Grid3X3, LayoutGrid, Camera, Award, Users, Monitor, Shield, Zap, ChevronLeft, ChevronRight } from 'lucide-react';
 import { FaLinkedinIn, FaYoutube, FaTwitter, FaInstagram, FaFacebookF } from 'react-icons/fa6';
-
-gsap.registerPlugin(ScrollTrigger);
 
 // Gallery data with categories
 const galleryData = [
     {
         id: 1,
-        src: '/gallery_cyber_training.png',
+        src: '/gallery_cyber_training.webp',
         title: 'Cybersecurity Training Lab',
         category: 'training',
         description: 'State-of-the-art training environment with holographic displays and AI-powered threat simulations.',
     },
     {
         id: 2,
-        src: '/gallery_team_collab.png',
+        src: '/gallery_team_collab.webp',
         title: 'Expert Team Collaboration',
         category: 'team',
         description: 'Our elite cybersecurity experts working together in our futuristic command center.',
     },
     {
         id: 3,
-        src: '/gallery_workshop.png',
+        src: '/gallery_workshop.webp',
         title: 'Interactive Workshops',
         category: 'workshop',
         description: 'Hands-on learning sessions with cutting-edge VR and holographic technology.',
     },
     {
         id: 4,
-        src: '/gallery_awards.png',
+        src: '/gallery_awards.webp',
         title: 'Award Ceremonies',
         category: 'events',
         description: 'Celebrating excellence in cybersecurity at our prestigious award events.',
     },
     {
         id: 5,
-        src: '/gallery_pentest_lab.png',
+        src: '/gallery_pentest_lab.webp',
         title: 'Penetration Testing Lab',
         category: 'training',
         description: 'Red team operations facility for advanced offensive security training.',
     },
     {
         id: 6,
-        src: '/gallery_conference.png',
+        src: '/gallery_conference.webp',
         title: 'Global Conferences',
         category: 'events',
         description: 'Keynote presentations featuring industry thought leaders and innovations.',
     },
     {
         id: 7,
-        src: '/gallery_soc_center.png',
+        src: '/gallery_soc_center.webp',
         title: 'Security Operations Center',
         category: 'facilities',
         description: '24/7 SOC monitoring center with real-time global threat intelligence.',
     },
     {
         id: 8,
-        src: '/gallery_ctf_event.png',
+        src: '/gallery_ctf_event.webp',
         title: 'CTF Competitions',
         category: 'events',
         description: 'Competitive capture-the-flag events testing cybersecurity skills.',
@@ -99,6 +95,7 @@ export default function GalleryPage() {
         ? galleryData
         : galleryData.filter(img => img.category === selectedCategory);
 
+    // GSAP animations removed
     // Generate particles on client-side only to avoid SSR mismatch
     useEffect(() => {
         const generatedParticles = Array.from({ length: 20 }, (_, i) => ({
@@ -108,164 +105,6 @@ export default function GalleryPage() {
         }));
         setParticles(generatedParticles);
     }, []);
-
-    useEffect(() => {
-        const ctx = gsap.context(() => {
-            // Hero section animations
-            gsap.fromTo(
-                '.hero-title',
-                { opacity: 0, y: 100, scale: 0.9 },
-                {
-                    opacity: 1,
-                    y: 0,
-                    scale: 1,
-                    duration: 1.2,
-                    ease: 'power4.out',
-                }
-            );
-
-            gsap.fromTo(
-                '.hero-subtitle',
-                { opacity: 0, y: 50 },
-                {
-                    opacity: 1,
-                    y: 0,
-                    duration: 1,
-                    delay: 0.3,
-                    ease: 'power3.out',
-                }
-            );
-
-            gsap.fromTo(
-                '.hero-badge',
-                { opacity: 0, scale: 0 },
-                {
-                    opacity: 1,
-                    scale: 1,
-                    duration: 0.8,
-                    delay: 0.6,
-                    ease: 'back.out(1.7)',
-                }
-            );
-
-            // Floating particles animation
-            gsap.to('.floating-particle', {
-                y: 'random(-20, 20)',
-                x: 'random(-15, 15)',
-                rotation: 'random(-180, 180)',
-                duration: 'random(3, 6)',
-                repeat: -1,
-                yoyo: true,
-                ease: 'sine.inOut',
-                stagger: {
-                    each: 0.2,
-                    from: 'random',
-                },
-            });
-
-            // Category filters animation
-            gsap.fromTo(
-                '.category-btn',
-                { opacity: 0, y: 30 },
-                {
-                    opacity: 1,
-                    y: 0,
-                    duration: 0.6,
-                    stagger: 0.1,
-                    scrollTrigger: {
-                        trigger: '.category-container',
-                        start: 'top 80%',
-                    },
-                }
-            );
-
-            // Gallery grid items with scroll trigger
-            gsap.fromTo(
-                '.gallery-item',
-                {
-                    opacity: 0,
-                    y: 80,
-                    scale: 0.8,
-                    rotationY: 15,
-                },
-                {
-                    opacity: 1,
-                    y: 0,
-                    scale: 1,
-                    rotationY: 0,
-                    duration: 0.8,
-                    stagger: {
-                        each: 0.15,
-                        from: 'start',
-                    },
-                    scrollTrigger: {
-                        trigger: galleryGridRef.current,
-                        start: 'top 75%',
-                        end: 'bottom 20%',
-                        toggleActions: 'play none none reverse',
-                    },
-                }
-            );
-
-            // Stats counter animation
-            gsap.fromTo(
-                '.stat-item',
-                { opacity: 0, y: 50, scale: 0.5 },
-                {
-                    opacity: 1,
-                    y: 0,
-                    scale: 1,
-                    duration: 0.7,
-                    stagger: 0.15,
-                    ease: 'back.out(1.5)',
-                    scrollTrigger: {
-                        trigger: statsRef.current,
-                        start: 'top 80%',
-                    },
-                }
-            );
-
-            // Parallax effect on scroll
-            gsap.to('.parallax-bg', {
-                yPercent: 30,
-                ease: 'none',
-                scrollTrigger: {
-                    trigger: heroRef.current,
-                    start: 'top top',
-                    end: 'bottom top',
-                    scrub: true,
-                },
-            });
-
-            // Horizontal scroll for mobile gallery preview
-            gsap.to('.scroll-indicator', {
-                x: 10,
-                repeat: -1,
-                yoyo: true,
-                duration: 0.8,
-                ease: 'power1.inOut',
-            });
-
-        }, containerRef);
-
-        return () => ctx.revert();
-    }, []);
-
-    // Re-animate gallery items when category changes
-    useEffect(() => {
-        gsap.fromTo(
-            '.gallery-item',
-            { opacity: 0, y: 40, scale: 0.9 },
-            {
-                opacity: 1,
-                y: 0,
-                scale: 1,
-                duration: 0.5,
-                stagger: 0.08,
-                ease: 'power2.out',
-            }
-        );
-    }, [selectedCategory]);
 
     const openLightbox = (image, index) => {
         setSelectedImage(image);

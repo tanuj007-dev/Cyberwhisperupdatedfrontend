@@ -8,19 +8,19 @@ const pillars = [
     icon: Target,
     title: "Our Mission",
     desc: "To empower businesses with robust cybersecurity solutions, ensuring data integrity, privacy & resilience.",
-    image: "/approach_mission.png"
+    image: "/approach_mission.webp"
   },
   {
     icon: Lightbulb,
     title: "Our Vision",
     desc: "To be the global leader in autonomous cyber defense, setting the standard for digital safety.",
-    image: "/approach_vision.png"
+    image: "/approach_vision.webp"
   },
   {
     icon: ShieldCheck,
     title: "Our Values",
     desc: "Integrity, innovation, and relentless protection form the core of every solution we build.",
-    image: "/approach_values.png"
+    image: "/approach_values.webp"
   },
 ]
 

@@ -4,9 +4,9 @@ import Image from 'next/image'
 import { motion } from 'framer-motion'
 
 // Using existing assets
-import okayAsset from './assets/icon-park_okay.png'
-import mapAsset from './assets/world.png'
-import remindAsset from './assets/env.png'
+import okayAsset from './assets/icon-park_okay.webp'
+import mapAsset from './assets/world.webp'
+import remindAsset from './assets/env.webp'
 
 const essentialCards = [
     {

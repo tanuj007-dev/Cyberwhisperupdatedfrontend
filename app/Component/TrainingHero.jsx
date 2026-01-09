@@ -6,8 +6,8 @@ import { FaDownload, FaWhatsapp, FaCalendarAlt, FaLanguage, FaGlobe } from 'reac
 // Assuming the image will be placed in assets
 // For now using the generated path directly or a placeholder if path is tricky
 import { IoLogoWhatsapp } from "react-icons/io";
-import heroImg from './assets/lock.jpg';
-import crackImg from './assets/crack.png';
+import heroImg from './assets/lock.webp';
+import crackImg from './assets/crack.webp';
 import { FiDownload } from "react-icons/fi";
 export default function TrainingHero() {
     return (
@@ -22,7 +22,7 @@ export default function TrainingHero() {
             <div className="absolute top-0 right-0 w-[300px] md:w-[500px] h-[300px] md:h-[500px] bg-purple-200/40 rounded-full blur-[60px] md:blur-[100px] -z-10 translate-x-1/2 -translate-y-1/2"></div>
             <div className="absolute bottom-0 left-0 w-[250px] md:w-[400px] h-[250px] md:h-[400px] bg-indigo-100/30 rounded-full blur-[50px] md:blur-[80px] -z-10 -translate-x-1/2 translate-y-1/2"></div>
 
-            <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-2 gap-10 lg:gap-12 items-center">
+            <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-12 items-center">
 
                 {/* Left Content */}
                 <motion.div
@@ -32,7 +32,7 @@ export default function TrainingHero() {
                     className="flex flex-col space-y-6 md:space-y-8"
                 >
                     {/* Admission Badge */}
-                    <div className="relative w-fit flex rounded-full p-[2px] overflow-hidden group">
+                    <div className="relative w-fit flex rounded-full p-[2px] mt-4 md:mt-0 overflow-hidden group mx-auto md:mx-0">
                         {/* Moving Border Animation */}
                         <div
                             className="absolute inset-0 rounded-full"
@@ -68,7 +68,7 @@ export default function TrainingHero() {
 
                     {/* Title */}
                     <div className="relative">
-                        <h1 className="text-3xl sm:text-4xl md:text-[48px] font-semibold text-[#1a1a2e] leading-tight md:leading-[1.1] tracking-tight">
+                        <h1 className="text-3xl sm:text-4xl md:text-[48px] font-semibold text-[#1a1a2e] leading-tight md:leading-[1.1] tracking-tight text-center md:text-left">
                             1 Year Cyber Security Diploma <br className="hidden md:block" />
                             Training <span className="text-[#6B46E5] relative inline-block">
                                 Expert AI Skills
@@ -80,7 +80,7 @@ export default function TrainingHero() {
                     </div>
 
                     {/* Partner Section */}
-                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 py-2">
+                    <div className="flex flex-col sm:flex-row items-center sm:items-center justify-center sm:justify-start gap-3 sm:gap-4 py-2">
                         <span className="text-gray-900 text-base md:text-lg">Get Premium Subscription of</span>
                         <div className="flex items-center gap-2 px-3 py-1.5 md:px-4 md:py-2 bg-gray-50 rounded-xl border border-gray-100">
                             <Image src={crackImg} alt="Crack The Lab" className="h-6 md:h-8 w-auto object-contain" />
@@ -88,34 +88,34 @@ export default function TrainingHero() {
                     </div>
 
                     {/* Info Row */}
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-6 py-4 border-y border-gray-100 items-start md:items-center">
-                        <div className="flex items-center gap-3 group">
+                    <div className="grid grid-cols-3 gap-2 md:gap-6 py-4 border-y border-gray-100 items-start md:items-center">
+                        <div className="flex flex-col items-center md:flex-row md:items-center gap-2 md:gap-3 group text-center md:text-left">
                             <div className="w-8 h-8 md:w-10 md:h-10 rounded-xl bg-purple-50 flex items-center justify-center text-[#6B46E5] group-hover:bg-[#6B46E5] group-hover:text-white transition-colors duration-300 shrink-0">
                                 <FaCalendarAlt className="text-sm md:text-base" />
                             </div>
                             <div className="flex flex-col">
-                                <span className="text-[10px] md:text-xs text-gray-400 font-semibold uppercase tracking-wider">Duration</span>
-                                <span className="text-[#1a1a2e] font-semibold text-sm md:text-base">12 Months</span>
+                                <span className="text-[9px] md:text-xs text-gray-400 font-semibold uppercase tracking-wider">Duration</span>
+                                <span className="text-[#1a1a2e] font-semibold text-xs md:text-base">12 Months</span>
                             </div>
                         </div>
 
-                        <div className="flex items-center gap-3 group">
+                        <div className="flex flex-col items-center md:flex-row md:items-center gap-2 md:gap-3 group text-center md:text-left">
                             <div className="w-8 h-8 md:w-10 md:h-10 rounded-xl bg-purple-50 flex items-center justify-center text-[#6B46E5] group-hover:bg-[#6B46E5] group-hover:text-white transition-colors duration-300 shrink-0">
                                 <FaLanguage className="text-sm md:text-base" />
                             </div>
                             <div className="flex flex-col">
-                                <span className="text-[10px] md:text-xs text-gray-400 font-semibold uppercase tracking-wider">Language</span>
-                                <span className="text-[#1a1a2e] font-semibold text-sm md:text-base">Hindi | English</span>
+                                <span className="text-[9px] md:text-xs text-gray-400 font-semibold uppercase tracking-wider">Language</span>
+                                <span className="text-[#1a1a2e] font-semibold text-xs md:text-base">Hindi | English</span>
                             </div>
                         </div>
 
-                        <div className="flex items-center gap-3 group col-span-2 md:col-span-1">
+                        <div className="flex flex-col items-center md:flex-row md:items-center gap-2 md:gap-3 group text-center md:text-left">
                             <div className="w-8 h-8 md:w-10 md:h-10 rounded-xl bg-purple-50 flex items-center justify-center text-[#6B46E5] group-hover:bg-[#6B46E5] group-hover:text-white transition-colors duration-300 shrink-0">
                                 <FaGlobe className="text-sm md:text-base" />
                             </div>
                             <div className="flex flex-col">
-                                <span className="text-[10px] md:text-xs text-gray-400 font-semibold uppercase tracking-wider">Mode</span>
-                                <span className="text-[#1a1a2e] font-semibold text-sm md:text-base">Online | Offline</span>
+                                <span className="text-[9px] md:text-xs text-gray-400 font-semibold uppercase tracking-wider">Mode</span>
+                                <span className="text-[#1a1a2e] font-semibold text-xs md:text-base">Online | Offline</span>
                             </div>
                         </div>
                     </div>
@@ -144,7 +144,7 @@ export default function TrainingHero() {
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 1, delay: 0.2 }}
-                    className="relative flex justify-center items-center mt-10 lg:mt-0"
+                    className="relative flex justify-center items-center mt-6 lg:mt-0"
                 >
                     {/* Decorative Background Elements */}
                     <div className="absolute -z-10 w-[120%] h-[120%] bg-white rounded-full"></div>

@@ -18,7 +18,7 @@ export function AboutVision() {
             {/* Image Stack inspired by reference */}
             <div className="relative z-10 rounded-3xl overflow-hidden border border-white/10 shadow-2xl transition-transform duration-700 group-hover:scale-[1.02] aspect-video">
               <Image
-                src="/cyber_security_center_high_tech_1767456060967.png"
+                src="/cyber_security_center_high_tech_1767456060967.webp"
                 alt="Cyber Security Operations"
                 fill
                 className="object-cover grayscale group-hover:grayscale-0 transition-all duration-1000"
@@ -32,7 +32,7 @@ export function AboutVision() {
               transition={{ delay: 0.3, duration: 0.8 }}
               className="absolute -bottom-8 -right-8 w-64 h-64 rounded-3xl overflow-hidden border-8 border-[#030014] shadow-2xl z-20 hidden md:block group-hover:translate-x-1 group-hover:translate-y-1 transition-transform duration-700"
             >
-              <Image src="/cyber_code_matrix_1767456122911.png" alt="Digital Shield" fill className="object-cover" />
+              <Image src="/cyber_code_matrix_1767456122911.webp" alt="Digital Shield" fill className="object-cover" />
               <div className="absolute inset-0 bg-primary/10 mix-blend-overlay" />
             </motion.div>
             <div className="absolute -top-10 -left-10 w-40 h-40 bg-primary/30 blur-[80px] rounded-full animate-pulse-slow" />
@@ -96,18 +96,18 @@ export function AboutVision() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.4, duration: 0.6 }}
-              className="flex flex-col sm:flex-row items-center gap-6 pt-2"
+              className="flex flex-row items-center justify-between sm:justify-start gap-2 sm:gap-6 pt-2"
             >
-              <div className="flex items-center gap-4 group cursor-pointer p-2 rounded-2xl hover:bg-white/5 transition-all">
-                <div className="w-14 h-14 rounded-full bg-primary flex items-center justify-center text-white group-hover:scale-105 transition-transform shadow-[0_0_25px_rgba(168,85,247,0.4)]">
-                  <Phone className="w-6 h-6" />
+              <div className="flex items-center gap-2 sm:gap-4 group cursor-pointer p-2 rounded-2xl hover:bg-white/5 transition-all">
+                <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-full bg-primary flex items-center justify-center text-white group-hover:scale-105 transition-transform shadow-[0_0_25px_rgba(168,85,247,0.4)]">
+                  <Phone className="w-5 h-5 sm:w-6 sm:h-6" />
                 </div>
                 <div>
-                  <p className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">Expert Support</p>
-                  <p className="text-lg   text-white hover:text-primary transition-colors">+91 9220946887</p>
+                  <p className="text-[9px] sm:text-[10px] text-gray-500 font-bold uppercase tracking-wider">Expert Support</p>
+                  <p className="text-sm sm:text-lg text-white hover:text-primary transition-colors">+91 9220946887</p>
                 </div>
               </div>
-              <button className="py-4 px-12 rounded-full bg-primary text-white  font-semibold uppercase tracking-widest text-xs hover:bg-primary/90 transition-all hover:scale-105 shadow-[0_0_30px_rgba(168,85,247,0.3)]">
+              <button className="py-3 px-6 sm:py-4 sm:px-12 rounded-full bg-primary text-white font-semibold uppercase tracking-widest text-[10px] sm:text-xs hover:bg-primary/90 transition-all hover:scale-105 shadow-[0_0_30px_rgba(168,85,247,0.3)]">
                 Get Started
               </button>
             </motion.div>

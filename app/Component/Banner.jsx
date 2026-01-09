@@ -3,9 +3,9 @@ import React from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { FaStar } from 'react-icons/fa';
-import bannerLock from './assets/banner-lock.png';
-import bannerAnalyst from './assets/banner-analyst.png';
-import pathImg from './assets/path.png';
+import bannerLock from './assets/banner-lock.webp';
+import bannerAnalyst from './assets/banner-analyst.webp';
+import pathImg from './assets/path.webp';
 
 export default function Banner() {
     return (

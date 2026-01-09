@@ -143,13 +143,13 @@ const useAnimationLoop = (trackRef, targetVelocity, seqWidth, seqHeight, isHover
 };
 
 const defaultLogos = [
-  { src: '/Component/assets/1.png', alt: 'Logo 1' },
-  { src: '/Component/assets/2.png', alt: 'Logo 2' },
-  { src: '/Component/assets/3.png', alt: 'Logo 3' },
-  { src: '/Component/assets/4.png', alt: 'Logo 4' },
-  { src: '/Component/assets/5.png', alt: 'Logo 5' },
-  { src: '/Component/assets/6.png', alt: 'Logo 6' },
-  { src: '/Component/assets/7.png', alt: 'Logo 7' }
+  { src: '/Component/assets/1.webp', alt: 'Logo 1' },
+  { src: '/Component/assets/2.webp', alt: 'Logo 2' },
+  { src: '/Component/assets/3.webp', alt: 'Logo 3' },
+  { src: '/Component/assets/4.webp', alt: 'Logo 4' },
+  { src: '/Component/assets/5.webp', alt: 'Logo 5' },
+  { src: '/Component/assets/6.webp', alt: 'Logo 6' },
+  { src: '/Component/assets/7.webp', alt: 'Logo 7' }
 ];
 
 export const LogoLoop = memo(

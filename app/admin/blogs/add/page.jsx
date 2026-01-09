@@ -266,15 +266,20 @@ const AddBlog = () => {
                     onToggle={toggleSection}
                 >
                     <div className="space-y-5">
-                        <Input
-                            label="Title"
-                            name="title"
-                            value={formData.title}
-                            onChange={handleChange}
-                            placeholder="Enter blog title"
-                            required
-                            error={errors.title}
-                        />
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                                Blog Title (H1) <span className="text-red-500">*</span>
+                            </label>
+                            <input
+                                type="text"
+                                name="title"
+                                value={formData.title}
+                                onChange={handleChange}
+                                placeholder="Enter blog title"
+                                className="w-full px-0 py-3 text-4xl font-bold text-gray-900 border-0 border-b-2 border-gray-300 focus:outline-none focus:border-violet-500 focus:ring-0 bg-transparent placeholder-gray-400"
+                            />
+                            {errors.title && <p className="text-sm text-red-600 mt-1">{errors.title}</p>}
+                        </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
@@ -541,7 +546,7 @@ const AddBlog = () => {
                         <RichTextEditor
                             value={formData.description}
                             onChange={handleChange}
-                            placeholder="Write your blog content here... (Supports Markdown)"
+                            placeholder="   blog content here... (Supports Markdown)"
                             rows={16}
                             error={errors.description}
                         />

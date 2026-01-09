@@ -3,7 +3,7 @@ import React from 'react'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
-import pathBg from "./assets/path.png"
+import pathBg from "./assets/path.webp"
 export default function FreeTrial() {
     return (
         <section className="w-full py-8 md:py-16 px-4 md:px-6 font-sans">

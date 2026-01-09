@@ -78,7 +78,7 @@ const ViewBlog = () => {
             {/* Main Content Card */}
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
                 {/* Banner Image */}
-                <div className="relative h-64 md:h-80">
+                {/* <div className="relative h-64 md:h-80">
                     <img
                         src={blog.banner || blog.thumbnail}
                         alt={blog.title}
@@ -90,7 +90,7 @@ const ViewBlog = () => {
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
 
                     {/* Status & Popular badges */}
-                    <div className="absolute top-4 left-4 flex gap-2">
+                {/* <div className="absolute top-4 left-4 flex gap-2">
                         <Badge variant={blog.status === 'active' ? 'success' : 'danger'} className="shadow-lg">
                             {blog.status === 'active' ? 'Published' : 'Draft'}
                         </Badge>
@@ -100,7 +100,7 @@ const ViewBlog = () => {
                             </span>
                         )}
                     </div>
-                </div>
+                </div> */}  
 
                 {/* Content */}
                 <div className="p-8">
@@ -138,12 +138,12 @@ const ViewBlog = () => {
                             })}</span>
                         </div>
 
-                        <div className="flex items-center gap-2 text-gray-600">
+                        {/* <div className="flex items-center gap-2 text-gray-600">
                             <div className="p-1.5 bg-pink-100 rounded-lg">
                                 <Heart size={16} className="text-pink-600" />
                             </div>
                             <span className="font-semibold">{blog.likes} likes</span>
-                        </div>
+                    </div> */}
 
                         {blog.readingTime && (
                             <div className="flex items-center gap-2 text-gray-600">
@@ -196,56 +196,58 @@ const ViewBlog = () => {
             </div>
 
             {/* Developer Info Panel - Hidden by default, toggle with button */}
-            {showDevInfo && (
-                <div className="bg-gray-900 rounded-2xl p-6 text-white">
-                    <div className="flex items-center gap-2 mb-4">
-                        <Info size={20} className="text-violet-400" />
-                        <h3 className="text-lg font-semibold">Developer Information</h3>
-                        <span className="ml-auto text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">For API Integration</span>
+            {
+                showDevInfo && (
+                    <div className="bg-gray-900 rounded-2xl p-6 text-white">
+                        <div className="flex items-center gap-2 mb-4">
+                            <Info size={20} className="text-violet-400" />
+                            <h3 className="text-lg font-semibold">Developer Information</h3>
+                            <span className="ml-auto text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">For API Integration</span>
+                        </div>
+                        <p className="text-gray-400 text-sm mb-4">
+                            This data is what you would receive from your API. Use these field names when integrating with your backend.
+                        </p>
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            <div className="bg-gray-800 p-3 rounded-lg">
+                                <p className="text-xs text-gray-400 mb-1">blog_id</p>
+                                <p className="text-sm font-mono text-emerald-400">{blog.blog_id}</p>
+                            </div>
+                            <div className="bg-gray-800 p-3 rounded-lg">
+                                <p className="text-xs text-gray-400 mb-1">user_id</p>
+                                <p className="text-sm font-mono text-emerald-400">{blog.user_id}</p>
+                            </div>
+                            <div className="bg-gray-800 p-3 rounded-lg">
+                                <p className="text-xs text-gray-400 mb-1">blog_category_id</p>
+                                <p className="text-sm font-mono text-emerald-400">{blog.blog_category_id}</p>
+                            </div>
+                            <div className="bg-gray-800 p-3 rounded-lg">
+                                <p className="text-xs text-gray-400 mb-1">status</p>
+                                <p className="text-sm font-mono text-emerald-400">{blog.status}</p>
+                            </div>
+                            <div className="bg-gray-800 p-3 rounded-lg">
+                                <p className="text-xs text-gray-400 mb-1">is_popular</p>
+                                <p className="text-sm font-mono text-emerald-400">{blog.is_popular ? 'true' : 'false'}</p>
+                            </div>
+                            <div className="bg-gray-800 p-3 rounded-lg">
+                                <p className="text-xs text-gray-400 mb-1">likes</p>
+                                <p className="text-sm font-mono text-emerald-400">{blog.likes}</p>
+                            </div>
+                            <div className="bg-gray-800 p-3 rounded-lg col-span-2">
+                                <p className="text-xs text-gray-400 mb-1">added_date</p>
+                                <p className="text-sm font-mono text-emerald-400">{blog.added_date}</p>
+                            </div>
+                            <div className="bg-gray-800 p-3 rounded-lg col-span-2">
+                                <p className="text-xs text-gray-400 mb-1">thumbnail</p>
+                                <p className="text-sm font-mono text-emerald-400 truncate">{blog.thumbnail}</p>
+                            </div>
+                            <div className="bg-gray-800 p-3 rounded-lg col-span-2">
+                                <p className="text-xs text-gray-400 mb-1">banner</p>
+                                <p className="text-sm font-mono text-emerald-400 truncate">{blog.banner}</p>
+                            </div>
+                        </div>
                     </div>
-                    <p className="text-gray-400 text-sm mb-4">
-                        This data is what you would receive from your API. Use these field names when integrating with your backend.
-                    </p>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        <div className="bg-gray-800 p-3 rounded-lg">
-                            <p className="text-xs text-gray-400 mb-1">blog_id</p>
-                            <p className="text-sm font-mono text-emerald-400">{blog.blog_id}</p>
-                        </div>
-                        <div className="bg-gray-800 p-3 rounded-lg">
-                            <p className="text-xs text-gray-400 mb-1">user_id</p>
-                            <p className="text-sm font-mono text-emerald-400">{blog.user_id}</p>
-                        </div>
-                        <div className="bg-gray-800 p-3 rounded-lg">
-                            <p className="text-xs text-gray-400 mb-1">blog_category_id</p>
-                            <p className="text-sm font-mono text-emerald-400">{blog.blog_category_id}</p>
-                        </div>
-                        <div className="bg-gray-800 p-3 rounded-lg">
-                            <p className="text-xs text-gray-400 mb-1">status</p>
-                            <p className="text-sm font-mono text-emerald-400">{blog.status}</p>
-                        </div>
-                        <div className="bg-gray-800 p-3 rounded-lg">
-                            <p className="text-xs text-gray-400 mb-1">is_popular</p>
-                            <p className="text-sm font-mono text-emerald-400">{blog.is_popular ? 'true' : 'false'}</p>
-                        </div>
-                        <div className="bg-gray-800 p-3 rounded-lg">
-                            <p className="text-xs text-gray-400 mb-1">likes</p>
-                            <p className="text-sm font-mono text-emerald-400">{blog.likes}</p>
-                        </div>
-                        <div className="bg-gray-800 p-3 rounded-lg col-span-2">
-                            <p className="text-xs text-gray-400 mb-1">added_date</p>
-                            <p className="text-sm font-mono text-emerald-400">{blog.added_date}</p>
-                        </div>
-                        <div className="bg-gray-800 p-3 rounded-lg col-span-2">
-                            <p className="text-xs text-gray-400 mb-1">thumbnail</p>
-                            <p className="text-sm font-mono text-emerald-400 truncate">{blog.thumbnail}</p>
-                        </div>
-                        <div className="bg-gray-800 p-3 rounded-lg col-span-2">
-                            <p className="text-xs text-gray-400 mb-1">banner</p>
-                            <p className="text-sm font-mono text-emerald-400 truncate">{blog.banner}</p>
-                        </div>
-                    </div>
-                </div>
-            )}
+                )
+            }
 
             {/* Style for prose content */}
             <style jsx global>{`
@@ -276,7 +278,7 @@ const ViewBlog = () => {
                 .prose a { color: #7c3aed; text-decoration: underline; }
                 .prose img { max-width: 100%; height: auto; border-radius: 0.5rem; margin: 0.75rem 0; }
             `}</style>
-        </div>
+        </div >
     );
 };
 

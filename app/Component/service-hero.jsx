@@ -4,12 +4,12 @@ import { motion, useAnimationFrame, useMotionValue } from 'framer-motion'
 import Image from 'next/image'
 import { GoArrowRight } from "react-icons/go";
 // Import assets
-import cyberLab1 from "./assets/cyber_lab_1.png"
-import cyberLab2 from "./assets/cyber_lab_2.png"
-import cyberLab3 from "./assets/cyber_lab_3.png"
-import cyberLab4 from "./assets/cyber_lab_4.png"
+import cyberLab1 from "./assets/cyber_lab_1.webp"
+import cyberLab2 from "./assets/cyber_lab_2.webp"
+import cyberLab3 from "./assets/cyber_lab_3.webp"
+import cyberLab4 from "./assets/cyber_lab_4.webp"
 
-import bgGrid from "./assets/bggrid.png"
+import bgGrid from "./assets/bggrid.webp"
 
 const CAROUSEL_IMAGES = [
   { img: cyberLab1, title: 'Cyber Lab' },
@@ -78,7 +78,7 @@ export default function ServiceHero() {
           {/* Left Side: Content Area */}
           <div className="w-full lg:w-[55%] space-y-6 md:space-y-8 animate-in fade-in slide-in-from-left duration-1000 text-center lg:text-left">
             {/* New Badge */}
-            <div className="relative inline-flex rounded-full p-[2px] overflow-hidden mt-10 md:mt-0">
+            <div className="relative inline-flex rounded-full p-[2px]  overflow-hidden mt-10 md:mt-0">
               {/* Moving Border */}
               <div
                 className="absolute inset-0 rounded-full"

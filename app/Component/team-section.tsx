@@ -10,31 +10,31 @@ const team = [
     name: "SARAH",
     fullName: "Sarah Chen",
     role: "Chief Security Officer",
-    image: "/team_sarah_1767456208869.png",
+    image: "/team_sarah_1767456208869.webp",
   },
   {
     name: "MARCUS",
     fullName: "Marcus Thorne",
     role: "Lead Architect",
-    image: "/team_marcus_1767456277100.png",
+    image: "/team_marcus_1767456277100.webp",
   },
   {
     name: "ELENA",
     fullName: "Elena Rodriguez",
     role: "Threat Analyst",
-    image: "/team_elena_1767456350560.png",
+    image: "/team_elena_1767456350560.webp",
   },
   {
     name: "DAVID",
     fullName: "David Kim",
     role: "Head of Research",
-    image: "/team_david_1767456376612.png",
+    image: "/team_david_1767456376612.webp",
   },
   {
     name: "AI-CO",
     fullName: "AI Core 1.0",
     role: "Autonomous Defense",
-    image: "/team_aico_1767456426160.png",
+    image: "/team_aico_1767456426160.webp",
   },
 ]
 

@@ -6,12 +6,12 @@ import { motion } from 'framer-motion'
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi'
 
 // Import relevant assets
-import img1 from '../Component/assets/cyber_lab_1.png'
-import img2 from '../Component/assets/cyber_lab_2.png'
-import img3 from '../Component/assets/cyber_lab_3.png'
-import img4 from '../Component/assets/cyber_lab_4.png'
-import img5 from '../Component/assets/card1.png'
-import img6 from '../Component/assets/course-hero-img.png'
+import img1 from '../Component/assets/cyber_lab_1.webp'
+import img2 from '../Component/assets/cyber_lab_2.webp'
+import img3 from '../Component/assets/cyber_lab_3.webp'
+import img4 from '../Component/assets/cyber_lab_4.webp'
+import img5 from '../Component/assets/card1.webp'
+import img6 from '../Component/assets/course-hero-img.webp'
 
 const BLOG_POSTS = [
     {

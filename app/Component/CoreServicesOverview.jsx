@@ -5,12 +5,12 @@ import { motion } from 'framer-motion'
 import { ArrowLeft, ArrowRight } from 'lucide-react'
 
 // Using existing assets that match the visual style
-import mapAsset from './assets/map.png'
-import remindAsset from './assets/remind.png'
-import pcAsset from './assets/pc.png'
-import defenceAsset from './assets/map.png'
-import offAsset from './assets/remind.png'
-import auditAsset from './assets/pc.png'
+import mapAsset from './assets/map.webp'
+import remindAsset from './assets/remind.webp'
+import pcAsset from './assets/pc.webp'
+import defenceAsset from './assets/map.webp'
+import offAsset from './assets/remind.webp'
+import auditAsset from './assets/pc.webp'
 
 const services = [
     {
@@ -116,9 +116,23 @@ export default function CoreServicesOverview() {
                 {/* Services Slider */}
                 <div className="relative mb-12 overflow-hidden px-4">
                     <motion.div
-                        className="flex"
+                        className="flex cursor-grab active:cursor-grabbing will-change-transform"
                         animate={{ x: `-${currentIndex * (100 / visibleCards)}%` }}
                         transition={{ duration: 0.5, ease: "easeInOut" }}
+                        drag="x"
+                        dragConstraints={{ left: 0, right: 0 }}
+                        dragElastic={0.2}
+                        onDragEnd={(e, { offset, velocity }) => {
+                            const swipe = Math.abs(offset.x) * velocity.x;
+                            const swipeConfidenceThreshold = 10000;
+
+                            // If swipe is strong enough
+                            if (swipe < -swipeConfidenceThreshold) {
+                                nextSlide();
+                            } else if (swipe > swipeConfidenceThreshold) {
+                                prevSlide();
+                            }
+                        }}
                     >
                         {services.map((service, idx) => (
                             <div
@@ -133,15 +147,8 @@ export default function CoreServicesOverview() {
                                     transition={{ delay: idx * 0.1 }}
                                     className="relative p-[2px] rounded-[2.5rem] overflow-hidden group h-full"
                                 >
-                                    {/* Moving Border Animation */}
-                                    <div
-                                        className="absolute inset-0 rounded-[2.5rem]"
-                                        style={{
-                                            background: "linear-gradient(90deg, #6932E2, #EBDFFF, #6932E2)",
-                                            backgroundSize: "200% 100%",
-                                            animation: "borderMove 3s linear infinite",
-                                        }}
-                                    />
+                                    {/* Moving Border Animation - Optimized for Mobile */}
+                                    <div className="absolute inset-0 rounded-[2.5rem] border-gradient-anim" />
 
                                     {/* Card Content */}
                                     <div className="relative bg-white rounded-[calc(2.5rem-2px)] p-6 md:p-10 shadow-[0_20px_50px_rgba(0,0,0,0.03)] flex flex-col items-start text-left min-h-[400px] md:min-h-[500px] h-full z-10">
@@ -195,6 +202,18 @@ export default function CoreServicesOverview() {
 
             {/* Keyframes for the border animation */}
             <style jsx>{`
+                .border-gradient-anim {
+                    background: linear-gradient(90deg, #6932E2, #EBDFFF, #6932E2);
+                    background-size: 200% 100%;
+                }
+                
+                /* Only animate on desktop/tablets to save battery/performance on mobile */
+                @media (min-width: 768px) {
+                    .border-gradient-anim {
+                        animation: borderMove 3s linear infinite;
+                    }
+                }
+
                 @keyframes borderMove {
                     0% {
                         background-position: 0% 50%;

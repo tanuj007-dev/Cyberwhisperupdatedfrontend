@@ -1,6 +1,5 @@
 "use client"
 import React from 'react';
-import { motion } from 'framer-motion';
 import Image from 'next/image';
 
 export default function WeServe() {
@@ -14,19 +13,12 @@ export default function WeServe() {
       <div className="container mx-auto px-4 md:px-6 max-w-7xl relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center">
 
-          {/* Left Column: Cyber City Illustration */}
-          <div className="lg:col-span-6 relative flex items-center justify-center">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9, x: -30 }}
-              whileInView={{ opacity: 1, scale: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 1, ease: "easeOut" }}
-              className="relative w-full aspect-square max-w-[550px]"
-            >
-              <div className="absolute inset-0 bg-[#4FB7C1]/5 blur-3xl rounded-full animate-pulse-slow" />
+          <div className="lg:col-span-6 relative flex items-center justify-center animate-fade-in-left">
+            <div className="relative w-full aspect-square max-w-[550px]">
+              <div className="absolute inset-0 bg-[#4FB7C1]/5 blur-3xl rounded-full" />
               <div className="relative w-full h-full rounded-[3rem] overflow-hidden border border-white/10 shadow-[0_0_50px_rgba(79,183,193,0.15)] group">
                 <Image
-                  src="/cyber_city_industries.png"
+                  src="/cyber_city_industries.webp"
                   alt="Industries We Serve Illustration"
                   fill
                   className="object-cover transition-transform duration-1000 group-hover:scale-105"
@@ -34,26 +26,13 @@ export default function WeServe() {
                 />
                 {/* Overlay to blend with dark bg */}
                 <div className="absolute inset-0 bg-linear-to-t from-[#030014]/60 via-transparent to-transparent pointer-events-none" />
-
-                {/* Decorative scanning line */}
-                <motion.div
-                  animate={{ top: ['0%', '100%', '0%'] }}
-                  transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-                  className="absolute left-0 right-0 h-px bg-linear-to-r from-transparent via-[#4FB7C1]/50 to-transparent z-20 pointer-events-none"
-                />
               </div>
-            </motion.div>
+            </div>
           </div>
 
           {/* Right Column: Content */}
           <div className="lg:col-span-6">
-            <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-              className="space-y-8"
-            >
+            <div className="space-y-8 animate-fade-in-right">
               <div className="space-y-6">
                 {/* Purple Label */}
                 <div className="flex items-center gap-3">
@@ -93,7 +72,7 @@ export default function WeServe() {
                   </button>
                 </div>
               </div>
-            </motion.div>
+            </div>
           </div>
 
         </div>

@@ -5,9 +5,9 @@ import { motion } from 'framer-motion'
 import { Star, BookOpen, BarChart2, Calendar, ArrowRight } from 'lucide-react'
 
 // Import assets
-import thumb1 from './assets/cyber_lab_1.png'
-import thumb2 from './assets/cyber_lab_2.png'
-import thumb3 from './assets/cyber_lab_3.png'
+import thumb1 from './assets/cyber_lab_1.webp'
+import thumb2 from './assets/cyber_lab_2.webp'
+import thumb3 from './assets/cyber_lab_3.webp'
 
 const categories = [
     'Programming', 'CISCO', 'Red Hat', 'CompTIA', 'Microsoft Azure', 'Cybersecurity'

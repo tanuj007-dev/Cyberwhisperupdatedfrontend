@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { ArrowRight } from 'lucide-react';
-import newsletterBg from './assets/path.png';
+import newsletterBg from './assets/path.webp';
 
 export default function NewsletterSignup() {
   const [email, setEmail] = useState('');

@@ -1,7 +1,7 @@
 "use client"
 import React from 'react'
 import { motion } from 'framer-motion'
-import logo from './assets/logo.png'
+import logo from './assets/logo.webp'
 import Image from 'next/image'
 
 const stairsAnimation = {

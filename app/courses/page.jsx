@@ -4,7 +4,7 @@ import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { Star, BookOpen, BarChart2, Calendar, ChevronLeft, ChevronRight } from 'lucide-react'
 import Link from 'next/link'
-import thumb1 from '../Component/assets/cyber_lab_1.png'
+import thumb1 from '../Component/assets/cyber_lab_1.webp'
 
 const defaultImage = thumb1
 

@@ -1,4 +1,4 @@
-import pathImg from "./assets/path.png";
+import pathImg from "./assets/path.webp";
 
 export default function TrainingPrograms() {
   return (

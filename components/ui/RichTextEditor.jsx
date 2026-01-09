@@ -4,7 +4,7 @@ import { useRef, useCallback, useEffect, useState } from 'react';
 import {
     Bold, Italic, Underline, List, ListOrdered,
     AlignLeft, AlignCenter, AlignRight, Quote, Code,
-    Link as LinkIcon, Image as ImageIcon, Heading1, Heading2,
+    Link as LinkIcon, Image as ImageIcon, Heading1, Heading2, Heading3, Heading4, Heading5, Heading6,
     Strikethrough, Undo, Redo, Eraser, Type
 } from 'lucide-react';
 
@@ -228,10 +228,10 @@ const RichTextEditor = ({ value, onChange, placeholder = "Write your content her
             onClick={onClick}
             disabled={disabled}
             className={`p-2 rounded-lg transition-all ${danger
-                    ? 'text-red-600 hover:bg-red-50 hover:text-red-700'
-                    : active
-                        ? 'bg-violet-100 text-violet-700 shadow-sm'
-                        : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
+                ? 'text-red-600 hover:bg-red-50 hover:text-red-700'
+                : active
+                    ? 'bg-violet-100 text-violet-700 shadow-sm'
+                    : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
                 } ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
             title={title}
         >
@@ -314,6 +314,30 @@ const RichTextEditor = ({ value, onChange, placeholder = "Write your content her
                     title="Heading 2 - Click again to remove"
                     onClick={() => toggleHeading(2)}
                     active={isHeadingActive(2)}
+                />
+                <ToolbarButton
+                    icon={Heading3}
+                    title="Heading 3 - Click again to remove"
+                    onClick={() => toggleHeading(3)}
+                    active={isHeadingActive(3)}
+                />
+                <ToolbarButton
+                    icon={Heading4}
+                    title="Heading 4 - Click again to remove"
+                    onClick={() => toggleHeading(4)}
+                    active={isHeadingActive(4)}
+                />
+                <ToolbarButton
+                    icon={Heading5}
+                    title="Heading 5 - Click again to remove"
+                    onClick={() => toggleHeading(5)}
+                    active={isHeadingActive(5)}
+                />
+                <ToolbarButton
+                    icon={Heading6}
+                    title="Heading 6 - Click again to remove"
+                    onClick={() => toggleHeading(6)}
+                    active={isHeadingActive(6)}
                 />
 
                 <Divider />
@@ -449,6 +473,25 @@ const RichTextEditor = ({ value, onChange, placeholder = "Write your content her
                     font-weight: 600;
                     margin: 0.5rem 0;
                     color: #374151;
+                }
+                [contenteditable] h4 {
+                    font-size: 1.125rem;
+                    font-weight: 600;
+                    margin: 0.5rem 0;
+                    color: #4b5563;
+                }
+                [contenteditable] h5 {
+                    font-size: 1rem;
+                    font-weight: 600;
+                    margin: 0.5rem 0;
+                    color: #4b5563;
+                }
+                [contenteditable] h6 {
+                    font-size: 0.875rem;
+                    font-weight: 600;
+                    margin: 0.5rem 0;
+                    color: #6b7280;
+                    text-transform: uppercase;
                 }
                 [contenteditable] p {
                     margin: 0.5rem 0;

@@ -36,28 +36,8 @@ const Dashboard = () => {
             change: '+8%',
             changeType: 'increase'
         },
-        {
-            name: 'Drafts',
-            value: stats.draftBlogs,
-            icon: PenLine,
-            gradient: 'from-amber-500 to-orange-500',
-            bgGradient: 'from-amber-500/10 to-orange-500/10',
-            iconBg: 'bg-amber-500/10',
-            iconColor: 'text-amber-600',
-            change: '-3%',
-            changeType: 'decrease'
-        },
-        {
-            name: 'Active Users',
-            value: stats.activeUsers,
-            icon: Users,
-            gradient: 'from-violet-500 to-purple-600',
-            bgGradient: 'from-violet-500/10 to-purple-600/10',
-            iconBg: 'bg-violet-500/10',
-            iconColor: 'text-violet-600',
-            change: '+15%',
-            changeType: 'increase'
-        }
+
+
     ];
 
     const quickStats = [
@@ -107,10 +87,10 @@ const Dashboard = () => {
                                     <stat.icon className={stat.iconColor} size={24} />
                                 </div>
                                 <div className={`flex items-center gap-1 text-xs font-semibold px-2 py-1 rounded-full ${stat.changeType === 'increase'
-                                        ? 'text-emerald-700 bg-emerald-50'
-                                        : stat.changeType === 'decrease'
-                                            ? 'text-rose-700 bg-rose-50'
-                                            : 'text-gray-600 bg-gray-100'
+                                    ? 'text-emerald-700 bg-emerald-50'
+                                    : stat.changeType === 'decrease'
+                                        ? 'text-rose-700 bg-rose-50'
+                                        : 'text-gray-600 bg-gray-100'
                                     }`}>
                                     {stat.changeType === 'increase' ? (
                                         <ArrowUpRight size={14} />
@@ -195,9 +175,9 @@ const Dashboard = () => {
                         {popularBlogs.map((blog, index) => (
                             <div key={blog.blog_id} className="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 transition-colors">
                                 <div className={`flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm ${index === 0 ? 'bg-gradient-to-br from-amber-400 to-yellow-500 text-white' :
-                                        index === 1 ? 'bg-gradient-to-br from-slate-300 to-slate-400 text-white' :
-                                            index === 2 ? 'bg-gradient-to-br from-amber-600 to-orange-700 text-white' :
-                                                'bg-gray-100 text-gray-600'
+                                    index === 1 ? 'bg-gradient-to-br from-slate-300 to-slate-400 text-white' :
+                                        index === 2 ? 'bg-gradient-to-br from-amber-600 to-orange-700 text-white' :
+                                            'bg-gray-100 text-gray-600'
                                     }`}>
                                     {index + 1}
                                 </div>

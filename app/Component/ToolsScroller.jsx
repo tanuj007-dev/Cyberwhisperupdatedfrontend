@@ -5,36 +5,36 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 
 // Import assets
-import tool1 from './assets/1.png';
-import tool2 from './assets/2.png';
-import tool3 from './assets/3.png';
-import tool4 from './assets/4.png';
-import tool5 from './assets/5.png';
-import tool6 from './assets/6.png';
-import tool7 from './assets/7.png';
-import unnamed from './assets/2249-unnamed.pngS.jpg';
-import hash from './assets/5461df8fd2fe783981b0180332821184b729980e.png';
-import opensearch from './assets/opensearch-logo-png_seeklogo-406743.png';
-import sentinel from './assets/Microsoft-Sentinel-1.jpg';
-import images_jpg from './assets/images.jpg';
-import virustotal from './assets/Virustotal_logo_pixelalign.png';
-import opencti from './assets/OpenCTI.png';
+import tool1 from './assets/1.webp';
+import tool2 from './assets/2.webp';
+import tool3 from './assets/3.webp';
+import tool4 from './assets/4.webp';
+import tool5 from './assets/5.webp';
+import tool6 from './assets/6.webp';
+import tool7 from './assets/7.webp';
+import unnamed from './assets/2249-unnamed.pngS.webp';
+import hash from './assets/5461df8fd2fe783981b0180332821184b729980e.webp';
+import opensearch from './assets/opensearch-logo-png_seeklogo-406743.webp';
+import sentinel from './assets/Microsoft-Sentinel-1.webp';
+import images_jpg from './assets/images.jpg.webp';
+import virustotal from './assets/Virustotal_logo_pixelalign.webp';
+import opencti from './assets/OpenCTI.webp';
 import mitre from './assets/5bfdce88cd3820f7c5c21e02_mitre.webp';
-import id8625 from './assets/86256065.png';
-import suricata from './assets/Suricata_logo_600x600-1.png';
+import id8625 from './assets/86256065.webp';
+import suricata from './assets/Suricata_logo_600x600-1.webp';
 import logo_webp from './assets/logo.webp';
-import images_png from './assets/images.png';
-import yara from './assets/Yara_logo.svg.png';
-import images_1_png from './assets/images (1).png';
-import images_1_jpg from './assets/images (1).jpg';
-import burp from './assets/burp_suite_proxies_e6501bcb84.png';
-import images_2_png from './assets/images (2).png';
-import images_4_png from './assets/images (4).png';
+import images_png from './assets/images.png.webp';
+import yara from './assets/Yara_logo.svg.webp';
+import images_1_png from './assets/images (1).png.webp';
+import images_1_jpg from './assets/images (1).jpg.webp';
+import burp from './assets/burp_suite_proxies_e6501bcb84.webp';
+import images_2_png from './assets/images (2).png.webp';
+import images_4_png from './assets/images (4).webp';
 import aws from './assets/kisspng-amazon-web-services-logo-cloud-computing-amazon-co-logoaws-1-itnext-summit-1713897597915.webp';
-import azure from './assets/Microsoft-Azure-Logo.png';
+import azure from './assets/Microsoft-Azure-Logo.webp';
 import terraform from './assets/terraform-icon-tew8r4clf5ocvoyj0o05j.webp';
-import images_2_jpg from './assets/images (2).jpg';
-import kubernetes from './assets/png-clipart-white-and-blue-ship-wheel-illustration-kubernetes-logo-icons-logos-emojis-tech-companies.png';
+import images_2_jpg from './assets/images (2).jpg.webp';
+import kubernetes from './assets/png-clipart-white-and-blue-ship-wheel-illustration-kubernetes-logo-icons-logos-emojis-tech-companies.webp';
 
 const ToolsScroller = () => {
     const tools = [
@@ -95,7 +95,7 @@ const ToolsScroller = () => {
                         x: {
                             repeat: Infinity,
                             repeatType: "loop",
-                            duration: 80,
+                            duration: 100,
                             ease: "linear",
                         }
                     }}

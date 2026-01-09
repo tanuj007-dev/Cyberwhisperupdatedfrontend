@@ -2,13 +2,13 @@
 import Image from 'next/image';
 import { Shield, Briefcase, MousePointer2, Search } from 'lucide-react';
 import { MdOutlineElectricBolt } from "react-icons/md";
-import path from "./assets/path.png";
+import path from "./assets/path.webp";
 import { GrWorkshop } from "react-icons/gr";
 export default function WorkshopSection() {
     return (
         <section className="relative py-12 sm:py-16 md:py-20 lg:py-24 px-4 sm:px-6 md:px-8 lg:px-12 bg-white overflow-hidden font-sans">
 
-            {/* Background Image Layer (path.png) */}
+            {/* Background Image Layer (path.webp) */}
             <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 z-0 pointer-events-none opacity-100 select-none min-h-screen">
                 <Image
                     src={path}

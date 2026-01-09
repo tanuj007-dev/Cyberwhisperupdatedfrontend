@@ -4,11 +4,11 @@ import Image from 'next/image'
 import { motion } from 'framer-motion'
 
 // Using existing assets
-import okayAsset from './assets/mynaui_briefcase.png'
-import pcAsset from './assets/remind.png'
-import img1Asset from './assets/Group.png'
-import img2Asset from './assets/undraw_term-sheet_70lo 1.png'
-import pathAsset from './assets/undraw_term-sheet_70lo 1.png'
+import okayAsset from './assets/mynaui_briefcase.webp'
+import pcAsset from './assets/remind.webp'
+import img1Asset from './assets/Group.webp'
+import img2Asset from './assets/undraw_term-sheet_70lo 1.webp'
+import pathAsset from './assets/undraw_term-sheet_70lo 1.webp'
 
 const careerCards = [
     {

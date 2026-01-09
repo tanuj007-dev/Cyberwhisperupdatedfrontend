@@ -1,7 +1,7 @@
 export const mockMedia = [
     {
         id: 1,
-        name: 'cybersecurity-hero.jpg',
+        name: 'cybersecurity-hero.webp',
         url: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800',
         thumbnail: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=200',
         type: 'image/jpeg',
@@ -13,7 +13,7 @@ export const mockMedia = [
     },
     {
         id: 2,
-        name: 'hacking-terminal.jpg',
+        name: 'hacking-terminal.webp',
         url: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=800',
         thumbnail: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=200',
         type: 'image/jpeg',
@@ -25,7 +25,7 @@ export const mockMedia = [
     },
     {
         id: 3,
-        name: 'network-security.jpg',
+        name: 'network-security.webp',
         url: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800',
         thumbnail: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=200',
         type: 'image/jpeg',
@@ -37,7 +37,7 @@ export const mockMedia = [
     },
     {
         id: 4,
-        name: 'data-protection.jpg',
+        name: 'data-protection.webp',
         url: 'https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=800',
         thumbnail: 'https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=200',
         type: 'image/jpeg',
@@ -49,7 +49,7 @@ export const mockMedia = [
     },
     {
         id: 5,
-        name: 'ethical-hacking.jpg',
+        name: 'ethical-hacking.webp',
         url: 'https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?w=800',
         thumbnail: 'https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?w=200',
         type: 'image/jpeg',
@@ -61,7 +61,7 @@ export const mockMedia = [
     },
     {
         id: 6,
-        name: 'cyber-attack.jpg',
+        name: 'cyber-attack.webp',
         url: 'https://images.unsplash.com/photo-1504639725590-34d0984388bd?w=800',
         thumbnail: 'https://images.unsplash.com/photo-1504639725590-34d0984388bd?w=200',
         type: 'image/jpeg',
@@ -73,7 +73,7 @@ export const mockMedia = [
     },
     {
         id: 7,
-        name: 'security-audit.jpg',
+        name: 'security-audit.webp',
         url: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800',
         thumbnail: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=200',
         type: 'image/jpeg',
@@ -85,7 +85,7 @@ export const mockMedia = [
     },
     {
         id: 8,
-        name: 'malware-detection.jpg',
+        name: 'malware-detection.webp',
         url: 'https://images.unsplash.com/photo-1510511459019-5dda7724fd87?w=800',
         thumbnail: 'https://images.unsplash.com/photo-1510511459019-5dda7724fd87?w=200',
         type: 'image/jpeg',
@@ -97,7 +97,7 @@ export const mockMedia = [
     },
     {
         id: 9,
-        name: 'cloud-security.jpg',
+        name: 'cloud-security.webp',
         url: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800',
         thumbnail: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=200',
         type: 'image/jpeg',
@@ -109,7 +109,7 @@ export const mockMedia = [
     },
     {
         id: 10,
-        name: 'password-security.jpg',
+        name: 'password-security.webp',
         url: 'https://images.unsplash.com/photo-1614064641938-3bbee52942c7?w=800',
         thumbnail: 'https://images.unsplash.com/photo-1614064641938-3bbee52942c7?w=200',
         type: 'image/jpeg',
@@ -121,7 +121,7 @@ export const mockMedia = [
     },
     {
         id: 11,
-        name: 'iot-security.jpg',
+        name: 'iot-security.webp',
         url: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=800',
         thumbnail: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=200',
         type: 'image/jpeg',
@@ -133,7 +133,7 @@ export const mockMedia = [
     },
     {
         id: 12,
-        name: 'firewall-protection.jpg',
+        name: 'firewall-protection.webp',
         url: 'https://images.unsplash.com/photo-1573164713988-8665fc963095?w=800',
         thumbnail: 'https://images.unsplash.com/photo-1573164713988-8665fc963095?w=200',
         type: 'image/jpeg',

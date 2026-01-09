@@ -4,9 +4,9 @@ import Image from 'next/image'
 import { motion } from 'framer-motion'
 
 // Using existing assets
-import okayAsset from './assets/streamline-plump_star-medal.png'
-import asset1 from './assets/undraw_visionary-technology_f6b3 1.png'
-import asset2 from './assets/Group (1).png'
+import okayAsset from './assets/streamline-plump_star-medal.webp'
+import asset1 from './assets/undraw_visionary-technology_f6b3 1.webp'
+import asset2 from './assets/Group (1).webp'
 
 const skillCards = [
     {

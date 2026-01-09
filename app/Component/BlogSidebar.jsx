@@ -5,9 +5,9 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 
 // Reusing the same image assets
-import img1 from './assets/cyber_lab_1.png'
-import img2 from './assets/cyber_lab_2.png'
-import img3 from './assets/cyber_lab_3.png'
+import img1 from './assets/cyber_lab_1.webp'
+import img2 from './assets/cyber_lab_2.webp'
+import img3 from './assets/cyber_lab_3.webp'
 
 const LATEST_ARTICLES = [
     {

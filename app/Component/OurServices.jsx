@@ -1,7 +1,7 @@
 "use client"
 import React from 'react'
 import Image from 'next/image'
-import pcImage from './assets/pc.png'
+import pcImage from './assets/pc.webp'
 import { useRef, useState, useEffect } from 'react';
 export default function OurServices() {
     const ref = useRef(null);

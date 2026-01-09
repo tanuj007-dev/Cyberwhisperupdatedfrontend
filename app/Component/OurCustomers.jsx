@@ -6,14 +6,20 @@ import Image from 'next/image';
 
 // Import customer logos
 import drdo from './assets/drdo-logo-hd.webp';
-import nfsu from './assets/National_Forensic_Sciences_University_Logo.png';
+import nfsu from './assets/National_Forensic_Sciences_University_Logo.webp';
 import mha from './assets/Ministry_of_Home_Affairs_India.svg';
-import bsf from './assets/BSF_Logo.png';
+import bsf from './assets/BSF_Logo.webp';
 import delhiUni from './assets/aazqsu2va.webp';
 import cgc from './assets/CGC_Landran_Logo_1080.avif';
 
 const OurCustomers = () => {
     const customers = [
+        { image: drdo, name: 'DRDO' },
+        { image: nfsu, name: 'National Forensic Sciences University' },
+        { image: mha, name: 'Ministry of Home Affairs' },
+        { image: bsf, name: 'Border Security Force' },
+        { image: delhiUni, name: 'University of Delhi' },
+        { image: cgc, name: 'CGC Landran' },
         { image: drdo, name: 'DRDO' },
         { image: nfsu, name: 'National Forensic Sciences University' },
         { image: mha, name: 'Ministry of Home Affairs' },
@@ -52,7 +58,7 @@ const OurCustomers = () => {
                         x: {
                             repeat: Infinity,
                             repeatType: "loop",
-                            duration: 80,
+                            duration: 15,
                             ease: "linear",
                         }
                     }}

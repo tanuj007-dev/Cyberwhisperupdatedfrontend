@@ -1,6 +1,6 @@
 import Image from "next/image"
-import footerBg from "./assets/footer-bg.png";
-import logo from "./assets/logo.png";
+import footerBg from "./assets/footer-bg.webp";
+import logo from "./assets/logo.webp";
 import { FaLinkedinIn, FaYoutube } from "react-icons/fa6"
 import { MapPin, Phone, Mail } from "lucide-react"
 

@@ -18,12 +18,12 @@ const AddUser = () => {
         address: '',
         password: '',
         skills: [],
-        social_links: { twitter: '', linkedin: '', github: '' },
         biography: '',
-        role_id: 3,
-        status: 'active',
+        linkedin_url: '',
+        github_url: '',
+        profile_image_url: '',
+        role: 'USER',
         is_instructor: false,
-        image: '',
         title: ''
     });
 
@@ -43,10 +43,11 @@ const AddUser = () => {
     };
 
     const handleSocialLinkChange = (platform, value) => {
-        setFormData({
-            ...formData,
-            social_links: { ...formData.social_links, [platform]: value }
-        });
+        if (platform === 'linkedin') {
+            setFormData({ ...formData, linkedin_url: value });
+        } else if (platform === 'github') {
+            setFormData({ ...formData, github_url: value });
+        }
     };
 
     const addSkill = () => {
@@ -81,7 +82,7 @@ const AddUser = () => {
         return Object.keys(newErrors).length === 0;
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         if (!validateForm()) {
@@ -90,16 +91,20 @@ const AddUser = () => {
         }
 
         const userData = {
-            ...formData,
-            role_id: parseInt(formData.role_id)
+            ...formData
         };
 
-        addUser(userData);
-        showToast('User created successfully!', 'success');
+        try {
+            await addUser(userData);
+            showToast('User created successfully!', 'success');
 
-        setTimeout(() => {
-            router.push('/admin/users');
-        }, 1500);
+            setTimeout(() => {
+                router.push('/admin/users');
+            }, 1500);
+        } catch (error) {
+            showToast('Error creating user', 'error');
+            console.error(error);
+        }
     };
 
     const showToast = (message, type = 'success') => {
@@ -198,10 +203,10 @@ const AddUser = () => {
 
                         <Input
                             label="Profile Image URL"
-                            name="image"
-                            value={formData.image}
+                            name="profile_image_url"
+                            value={formData.profile_image_url}
                             onChange={handleChange}
-                            placeholder="https://example.com/image.jpg"
+                            placeholder="https://example.com/image.webp"
                         />
                     </div>
                 </Card>
@@ -256,23 +261,16 @@ const AddUser = () => {
                 <Card title="Social Links">
                     <div className="space-y-4">
                         <Input
-                            label="Twitter URL"
-                            name="twitter"
-                            value={formData.social_links.twitter}
-                            onChange={(e) => handleSocialLinkChange('twitter', e.target.value)}
-                            placeholder="https://twitter.com/username"
-                        />
-                        <Input
                             label="LinkedIn URL"
-                            name="linkedin"
-                            value={formData.social_links.linkedin}
+                            name="linkedin_url"
+                            value={formData.linkedin_url}
                             onChange={(e) => handleSocialLinkChange('linkedin', e.target.value)}
                             placeholder="https://linkedin.com/in/username"
                         />
                         <Input
                             label="GitHub URL"
-                            name="github"
-                            value={formData.social_links.github}
+                            name="github_url"
+                            value={formData.github_url}
                             onChange={(e) => handleSocialLinkChange('github', e.target.value)}
                             placeholder="https://github.com/username"
                         />
@@ -282,14 +280,33 @@ const AddUser = () => {
                 {/* Role & Permissions */}
                 <Card title="Role & Permissions">
                     <div className="space-y-4">
-                        <Select
-                            label="Role"
-                            name="role_id"
-                            value={formData.role_id}
-                            onChange={handleChange}
-                            options={roleOptions}
-                            required
-                        />
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">Role</label>
+                            <div className="flex gap-4">
+                                <label className="flex items-center gap-2 cursor-pointer">
+                                    <input
+                                        type="radio"
+                                        name="role"
+                                        value="USER"
+                                        checked={formData.role === 'USER'}
+                                        onChange={handleChange}
+                                        className="w-4 h-4 text-blue-600"
+                                    />
+                                    <span className="text-sm">User</span>
+                                </label>
+                                <label className="flex items-center gap-2 cursor-pointer">
+                                    <input
+                                        type="radio"
+                                        name="role"
+                                        value="INSTRUCTOR"
+                                        checked={formData.role === 'INSTRUCTOR'}
+                                        onChange={handleChange}
+                                        className="w-4 h-4 text-blue-600"
+                                    />
+                                    <span className="text-sm">Instructor</span>
+                                </label>
+                            </div>
+                        </div>
 
                         <Toggle
                             label="Is Instructor"
@@ -297,34 +314,6 @@ const AddUser = () => {
                             checked={formData.is_instructor}
                             onChange={handleChange}
                         />
-
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>
-                            <div className="flex gap-4">
-                                <label className="flex items-center gap-2 cursor-pointer">
-                                    <input
-                                        type="radio"
-                                        name="status"
-                                        value="active"
-                                        checked={formData.status === 'active'}
-                                        onChange={handleChange}
-                                        className="w-4 h-4 text-blue-600"
-                                    />
-                                    <span className="text-sm">Active</span>
-                                </label>
-                                <label className="flex items-center gap-2 cursor-pointer">
-                                    <input
-                                        type="radio"
-                                        name="status"
-                                        value="inactive"
-                                        checked={formData.status === 'inactive'}
-                                        onChange={handleChange}
-                                        className="w-4 h-4 text-blue-600"
-                                    />
-                                    <span className="text-sm">Inactive</span>
-                                </label>
-                            </div>
-                        </div>
                     </div>
                 </Card>
 

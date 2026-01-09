@@ -18,12 +18,25 @@ const EditUser = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const user = getUserById(parseInt(params.id));
-        if (user) {
-            setFormData(user);
-        }
-        setLoading(false);
-    }, [params.id]);
+        const loadUser = async () => {
+            setLoading(true);
+            try {
+                const user = await getUserById(parseInt(params.id));
+                if (user) {
+                    setFormData(user);
+                } else {
+                    showToast('User not found', 'error');
+                }
+            } catch (error) {
+                console.error('Error loading user:', error);
+                showToast('Error loading user', 'error');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        loadUser();
+    }, [params.id, getUserById]);
 
     const handleChange = (e) => {
         const { name, value, checked, type } = e.target;
@@ -37,10 +50,11 @@ const EditUser = () => {
     };
 
     const handleSocialLinkChange = (platform, value) => {
-        setFormData({
-            ...formData,
-            social_links: { ...formData.social_links, [platform]: value }
-        });
+        if (platform === 'linkedin') {
+            setFormData({ ...formData, linkedin_url: value });
+        } else if (platform === 'github') {
+            setFormData({ ...formData, github_url: value });
+        }
     };
 
     const addSkill = () => {
@@ -74,7 +88,7 @@ const EditUser = () => {
         return Object.keys(newErrors).length === 0;
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         if (!validateForm()) {
@@ -83,16 +97,20 @@ const EditUser = () => {
         }
 
         const userData = {
-            ...formData,
-            role_id: parseInt(formData.role_id)
+            ...formData
         };
 
-        updateUser(formData.id, userData);
-        showToast('User updated successfully!', 'success');
+        try {
+            await updateUser(formData.id, userData);
+            showToast('User updated successfully!', 'success');
 
-        setTimeout(() => {
-            router.push('/admin/users');
-        }, 1500);
+            setTimeout(() => {
+                router.push('/admin/users');
+            }, 1500);
+        } catch (error) {
+            showToast('Error updating user', 'error');
+            console.error(error);
+        }
     };
 
     const showToast = (message, type = 'success') => {
@@ -187,8 +205,8 @@ const EditUser = () => {
 
                         <Input
                             label="Profile Image URL"
-                            name="image"
-                            value={formData.image}
+                            name="profile_image_url"
+                            value={formData.profile_image_url || ''}
                             onChange={handleChange}
                         />
                     </div>
@@ -239,21 +257,15 @@ const EditUser = () => {
                 <Card title="Social Links">
                     <div className="space-y-4">
                         <Input
-                            label="Twitter URL"
-                            name="twitter"
-                            value={formData.social_links?.twitter || ''}
-                            onChange={(e) => handleSocialLinkChange('twitter', e.target.value)}
-                        />
-                        <Input
                             label="LinkedIn URL"
-                            name="linkedin"
-                            value={formData.social_links?.linkedin || ''}
+                            name="linkedin_url"
+                            value={formData.linkedin_url || ''}
                             onChange={(e) => handleSocialLinkChange('linkedin', e.target.value)}
                         />
                         <Input
                             label="GitHub URL"
-                            name="github"
-                            value={formData.social_links?.github || ''}
+                            name="github_url"
+                            value={formData.github_url || ''}
                             onChange={(e) => handleSocialLinkChange('github', e.target.value)}
                         />
                     </div>
@@ -262,14 +274,33 @@ const EditUser = () => {
                 {/* Role & Permissions */}
                 <Card title="Role & Permissions">
                     <div className="space-y-4">
-                        <Select
-                            label="Role"
-                            name="role_id"
-                            value={formData.role_id}
-                            onChange={handleChange}
-                            options={roleOptions}
-                            required
-                        />
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">Role</label>
+                            <div className="flex gap-4">
+                                <label className="flex items-center gap-2 cursor-pointer">
+                                    <input
+                                        type="radio"
+                                        name="role"
+                                        value="USER"
+                                        checked={formData.role === 'USER'}
+                                        onChange={handleChange}
+                                        className="w-4 h-4 text-blue-600"
+                                    />
+                                    <span className="text-sm">User</span>
+                                </label>
+                                <label className="flex items-center gap-2 cursor-pointer">
+                                    <input
+                                        type="radio"
+                                        name="role"
+                                        value="INSTRUCTOR"
+                                        checked={formData.role === 'INSTRUCTOR'}
+                                        onChange={handleChange}
+                                        className="w-4 h-4 text-blue-600"
+                                    />
+                                    <span className="text-sm">Instructor</span>
+                                </label>
+                            </div>
+                        </div>
 
                         <Toggle
                             label="Is Instructor"
@@ -277,34 +308,6 @@ const EditUser = () => {
                             checked={formData.is_instructor}
                             onChange={handleChange}
                         />
-
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>
-                            <div className="flex gap-4">
-                                <label className="flex items-center gap-2 cursor-pointer">
-                                    <input
-                                        type="radio"
-                                        name="status"
-                                        value="active"
-                                        checked={formData.status === 'active'}
-                                        onChange={handleChange}
-                                        className="w-4 h-4 text-blue-600"
-                                    />
-                                    <span className="text-sm">Active</span>
-                                </label>
-                                <label className="flex items-center gap-2 cursor-pointer">
-                                    <input
-                                        type="radio"
-                                        name="status"
-                                        value="inactive"
-                                        checked={formData.status === 'inactive'}
-                                        onChange={handleChange}
-                                        className="w-4 h-4 text-blue-600"
-                                    />
-                                    <span className="text-sm">Inactive</span>
-                                </label>
-                            </div>
-                        </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t">
                             <div>

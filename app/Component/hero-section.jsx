@@ -2,10 +2,10 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import gridImage from './assets/grid.png';
-import Particles from './Particles';
-import h1 from './assets/h1.png';
-import h2 from './assets/h2.png';
+import gridImage from './assets/grid.webp';
+// import Particles from './Particles';
+import h1 from './assets/h1.webp';
+import h2 from './assets/h2.webp';
 import { motion } from 'framer-motion';
 import { GoArrowRight } from "react-icons/go";
 export default function HeroSection() {
@@ -59,8 +59,8 @@ function HeroLayout() {
         />
       </div>
 
-      {/* OGL Particles Background */}
-      <div className="absolute inset-0 pointer-events-none z-0">
+      {/* OGL Particles Background - Removed for performance */}
+      {/* <div className="absolute inset-0 pointer-events-none z-0">
         <Particles
           particleColors={['#ffffff', '#a855f7', '#6366f1']}
           particleCount={250}
@@ -72,7 +72,7 @@ function HeroLayout() {
           disableRotation={false}
           className="opacity-40"
         />
-      </div>
+      </div> */}
 
       {/* Animated Beams */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -89,7 +89,7 @@ function HeroLayout() {
         <div className="absolute top-0 left-[92%] w-px h-full bg-linear-to-b from-transparent via-blue-400/30 to-transparent animate-beam-v" style={{ animationDelay: '7s', animationDuration: '15s' }}></div>
 
         {/* Grid Sparks - Client Side Only to avoid Hydration Error */}
-        <Sparks />
+        {/* <Sparks /> */}
       </div>
 
       {/* Ambient Glows - Same to same as reference */}
@@ -114,9 +114,9 @@ function HeroLayout() {
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="lg:w-[60%] flex flex-col justify-start text-center lg:text-left pt-10 lg:pt-0"
+          className="lg:w-[60%] flex flex-col justify-start text-center lg:text-left pt-0 lg:pt-6"
         >
-          <div className="space-y-6 md:space-y-8  mt-6">
+          <div className="space-y-5 md:space-y-8 mt-0 lg:mt-6">
             {/* New Badge */}
             <div className="relative inline-flex rounded-full p-[2px] overflow-hidden">
               {/* Moving Border */}
@@ -162,7 +162,6 @@ function HeroLayout() {
                 Cyber Defenders
               </span>
             </motion.h1>
-
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}

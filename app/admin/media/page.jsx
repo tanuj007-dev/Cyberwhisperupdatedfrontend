@@ -394,14 +394,14 @@ const MediaLibrary = () => {
                         label="Image URL"
                         value={uploadData.url}
                         onChange={(e) => setUploadData({ ...uploadData, url: e.target.value })}
-                        placeholder="https://example.com/image.jpg"
+                        placeholder="https://example.com/image.webp"
                         required
                     />
                     <Input
                         label="File Name"
                         value={uploadData.name}
                         onChange={(e) => setUploadData({ ...uploadData, name: e.target.value })}
-                        placeholder="my-image.jpg"
+                        placeholder="my-image.webp"
                     />
                     <Input
                         label="Alt Text"

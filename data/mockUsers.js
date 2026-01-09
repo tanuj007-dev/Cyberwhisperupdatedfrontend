@@ -23,7 +23,7 @@ export const mockUsers = [
         verification_code: null,
         status: "active",
         is_instructor: true,
-        image: "/images/users/john-doe.jpg",
+        image: "/images/users/john-doe.webp",
         temp: null,
         sessions: []
     },
@@ -50,7 +50,7 @@ export const mockUsers = [
         verification_code: null,
         status: "active",
         is_instructor: true,
-        image: "/images/users/sarah-johnson.jpg",
+        image: "/images/users/sarah-johnson.webp",
         temp: null,
         sessions: []
     },
@@ -77,7 +77,7 @@ export const mockUsers = [
         verification_code: null,
         status: "active",
         is_instructor: false,
-        image: "/images/users/mike-chen.jpg",
+        image: "/images/users/mike-chen.webp",
         temp: null,
         sessions: []
     },
@@ -105,7 +105,7 @@ export const mockUsers = [
         verification_code: null,
         status: "active",
         is_instructor: true,
-        image: "/images/users/emily-rodriguez.jpg",
+        image: "/images/users/emily-rodriguez.webp",
         temp: null,
         sessions: []
     },
@@ -132,7 +132,7 @@ export const mockUsers = [
         verification_code: null,
         status: "inactive",
         is_instructor: false,
-        image: "/images/users/david-kim.jpg",
+        image: "/images/users/david-kim.webp",
         temp: null,
         sessions: []
     }

@@ -2,8 +2,8 @@
 import React from 'react';
 import Image from 'next/image';
 import { Check } from 'lucide-react';
-import pathImg from './assets/path.png';
-import logo from './assets/craw.png'; // Assuming this is the Craw Security logo
+import pathImg from './assets/path.webp';
+import logo from './assets/craw.webp'; // Assuming this is the Craw Security logo
 
 export default function Craw() {
     return (

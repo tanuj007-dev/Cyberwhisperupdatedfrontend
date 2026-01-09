@@ -9,7 +9,7 @@ const teamMembers = [
     {
         name: "Sarah",
         role: "Hacking Specialist",
-        image: "/team_sarah_1767456208869.png",
+        image: "/team_sarah_1767456208869.webp",
         socials: {
             globe: "#",
             facebook: "#",
@@ -20,7 +20,7 @@ const teamMembers = [
     {
         name: "Alex",
         role: "Attack Specialist",
-        image: "/team_marcus_1767456277100.png",
+        image: "/team_marcus_1767456277100.webp",
         socials: {
             globe: "#",
             facebook: "#",
@@ -31,7 +31,7 @@ const teamMembers = [
     {
         name: "John",
         role: "Operation Manager",
-        image: "/team_elena_1767456350560.png",
+        image: "/team_elena_1767456350560.webp",
         socials: {
             globe: "#",
             facebook: "#",
@@ -42,7 +42,7 @@ const teamMembers = [
     {
         name: "David",
         role: "Defence Specialist",
-        image: "/team_sarah_1767456208869.png",
+        image: "/team_sarah_1767456208869.webp",
         socials: {
             globe: "#",
             facebook: "#",

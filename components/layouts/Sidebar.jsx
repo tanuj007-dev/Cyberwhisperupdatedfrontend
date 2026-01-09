@@ -23,11 +23,11 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
     const [blogMenuOpen, setBlogMenuOpen] = useState(true);
 
     const menuItems = [
-        {
-            name: 'Dashboard',
-            icon: LayoutDashboard,
-            path: '/admin/dashboard'
-        },
+        /* {
+             name: 'Dashboard',
+             icon: LayoutDashboard,
+             path: '/admin/dashboard'
+         },*/
         {
             name: 'Blogs',
             icon: FileText,
@@ -42,26 +42,26 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             icon: FolderOpen,
             path: '/admin/categories'
         },
-        {
+        /*{
             name: 'Tags',
             icon: Tags,
             path: '/admin/tags'
-        },
+        },*/
         {
             name: 'Users',
             icon: Users,
             path: '/admin/users'
         },
-        {
+        /*{
             name: 'Media Library',
             icon: ImageIcon,
             path: '/admin/media'
-        },
-        {
+        },*/
+        /*{
             name: 'Settings',
             icon: Settings,
             path: '/admin/settings'
-        }
+        }*/
     ];
 
     const isActive = (path) => pathname === path;
@@ -84,7 +84,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             >
                 {/* Logo Section */}
                 <div className="h-20 flex items-center justify-between px-6 border-b border-slate-700/50 bg-slate-900/50">
-                    <Link href="/admin/dashboard" className="flex items-center gap-3 group">
+                    <Link href="/admin/blogs" className="flex items-center gap-3 group">
                         <div className="w-10 h-10 bg-gradient-to-br from-violet-500 via-purple-500 to-fuchsia-500 rounded-xl flex items-center justify-center transform group-hover:scale-110 group-hover:rotate-3 transition-all shadow-lg shadow-purple-500/30">
                             <Shield className="w-5 h-5 text-white" />
                         </div>

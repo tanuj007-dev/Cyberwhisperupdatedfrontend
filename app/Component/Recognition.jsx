@@ -4,10 +4,10 @@ import React from 'react';
 
 export default function Recognition() {
     const awards = [
-        { id: 1, year: '2021', label: 'ATC Circle of Excellence', image: '/awards/award-2021.png' },
-        { id: 2, year: '2023', label: 'ATC Circle of Excellence', image: '/awards/award-2023.png' },
-        { id: 3, year: '2021', label: 'ATC Circle of Excellence', image: '/awards/award-2021-2.png' },
-        { id: 4, year: '2023', label: 'ATC Circle of Excellence', image: '/awards/award-2023-2.png' },
+        { id: 1, year: '2021', label: 'ATC Circle of Excellence', image: '/awards/award-2021.webp' },
+        { id: 2, year: '2023', label: 'ATC Circle of Excellence', image: '/awards/award-2023.webp' },
+        { id: 3, year: '2021', label: 'ATC Circle of Excellence', image: '/awards/award-2021-2.webp' },
+        { id: 4, year: '2023', label: 'ATC Circle of Excellence', image: '/awards/award-2023-2.webp' },
     ];
 
     return (

@@ -4,9 +4,9 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 
 // Using suitable existing assets as placeholders for the learning modes
-import imgClassroom from './assets/work5.png'; // Looks like a lab/classroom
-import imgOnline from './assets/work2.png';    // Looks like working on laptop
-import imgCorporate from './assets/work1.png'; // Looks like a group/workshop
+import imgClassroom from './assets/work5.webp'; // Looks like a lab/classroom
+import imgOnline from './assets/work2.webp';    // Looks like working on laptop
+import imgCorporate from './assets/work1.webp'; // Looks like a group/workshop
 
 const modes = [
     {
