@@ -2,6 +2,7 @@
 import React from 'react';
 import Image from 'next/image';
 import serverImage from './assets/Untitled design (5).png';
+import Particles from './Particles';
 
 const BackgroundAnimations = () => {
     return (
@@ -28,6 +29,21 @@ export default function B2BHero() {
     return (
         <section className="relative min-h-[90vh] md:min-h-screen bg-gray-50 dark:bg-[#150833] text-gray-900 dark:text-[#FFFDFF] flex items-center justify-center p-6 md:p-12 overflow-hidden font-sans transition-colors duration-300">
             <BackgroundAnimations />
+
+            {/* OGL Particles Background */}
+            <div className="absolute inset-0 pointer-events-none z-0">
+                <Particles
+                    particleColors={['#ffffff', '#a855f7', '#6366f1']}
+                    particleCount={300}
+                    particleSpread={10}
+                    speed={0.1}
+                    particleBaseSize={100}
+                    moveParticlesOnHover={true}
+                    alphaParticles={false}
+                    disableRotation={false}
+                    className="opacity-60 dark:opacity-80"
+                />
+            </div>
 
             <div className="relative z-10 max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-12 lg:gap-20 items-center mt-16 md:mt-0">
 

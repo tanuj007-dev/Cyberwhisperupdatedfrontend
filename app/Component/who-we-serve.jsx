@@ -25,7 +25,7 @@ export default function WeServe() {
                   priority
                 />
                 {/* Overlay to blend with dark bg */}
-                <div className="absolute inset-0 bg-linear-to-t from-[#030014]/60 via-transparent to-transparent pointer-events-none" />
+                <div className="absolute inset-0 bg-linear-to-t from-[#0E0429]/60 via-transparent to-transparent pointer-events-none" />
               </div>
             </div>
           </div>

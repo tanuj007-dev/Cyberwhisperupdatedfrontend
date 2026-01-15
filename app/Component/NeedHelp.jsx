@@ -1,68 +1,114 @@
 "use client"
-import React from 'react'
-import { motion } from 'framer-motion'
-import { CheckCircle2, ArrowRight } from 'lucide-react'
+import React, { useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { Plus, Minus, MessageSquare, ArrowRight, ShieldCheck, HelpCircle } from 'lucide-react'
 
 const faqs = [
-    "Which course is best ethical hacking or cyber security?",
-    "Is this course aligned with CEH or other certifications?",
-    "How much does a CEH exam cost?",
-    "Is ethical hacking legal?",
-    "Which hacker has the highest salary?",
-    "Can I work as a freelancer or bug bounty hunter after.."
+    {
+        question: "Do you provide services on-site and remote?",
+        answer: "Yes—delivery can be on-site, remote, or hybrid depending on scope."
+    },
+    {
+        question: "Can we start with a pilot before a full engagement?",
+        answer: "Yes—many clients begin with a small assessment or cyber range pilot and then scale."
+    },
+    {
+        question: "Do you customize cyber range scenarios for our environment?",
+        answer: "Yes—scenarios can be aligned to your tools, log sources, and top risks."
+    },
+    {
+        question: "What do you need from us to start?",
+        answer: "A short scope call, point of contact, and access requirements. We share a clear onboarding checklist after the first call."
+    }
 ]
 
 export default function NeedHelp() {
+    const [openIndex, setOpenIndex] = useState(null)
+
     return (
-        <section className="w-full bg-white dark:bg-black py-12 md:py-20 lg:py-24 px-4 md:px-6 lg:px-8 font-sans transition-colors duration-300">
-            <div className="max-w-7xl mx-auto">
+        <section className="w-full bg-[#F9F8FF] dark:bg-[#170A2D] py-12 md:py-24 px-4 overflow-hidden relative transition-colors duration-300">
+            {/* Cyber Grid Background Effect - Adapted for both themes */}
+            <div className="absolute inset-0 bg-[linear-gradient(rgba(107,70,229,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(107,70,229,0.05)_1px,transparent_1px)] dark:bg-[linear-gradient(rgba(123,44,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(123,44,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px] opacity-100 pointer-events-none"></div>
 
+            {/* Ambient Glow */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-purple-500/10 dark:bg-purple-900/20 blur-[120px] rounded-full pointer-events-none"></div>
+
+            <div className="max-w-6xl mx-auto relative z-10">
                 {/* Header Section */}
-                <div className="text-center mb-10 md:mb-16 space-y-3 md:space-y-4">
-                    <div className="flex items-center justify-center gap-2">
-                        <div className="w-3 h-3 md:w-4 md:h-4 bg-[#6B46E5] shadow-[3px_3px_6px_rgba(107,70,229,0.45)]"></div>
+                <div className="text-center mb-16 space-y-4">
+                    <motion.div
+                        initial={{ opacity: 0, y: -10 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-100/50 dark:bg-purple-900/30 border border-purple-200 dark:border-purple-500/30 text-purple-600 dark:text-purple-300 text-xs font-semibold tracking-wider uppercase mb-2"
+                    >
+                        <ShieldCheck className="w-3 h-3 text-purple-600 dark:text-purple-400" />
+                        <span>Support & Ops</span>
+                    </motion.div>
 
-                        <span className="text-xs md:text-[15px] text-black font-bold uppercase tracking-wider">
-                            Ask & Learn
-                        </span>
-                    </div>
-                    <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-[42px] font-semibold text-[#1a1a2e] dark:text-white tracking-tight leading-tight">
-                        Need Help? Start Here First
+                    <h2 className="text-3xl md:text-5xl font-bold text-gray-900 dark:text-white tracking-tight">
+                        Need Help? <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-600 dark:from-purple-400 dark:to-cyan-400">Start Here First</span>
                     </h2>
-                    <p className="text-slate-500 dark:text-gray-400 text-sm sm:text-base md:text-lg font-medium max-w-3xl mx-auto leading-relaxed px-2">
-                        Find answers to the most common questions about our cybersecurity courses
+                    <p className="text-slate-600 dark:text-slate-400 max-w-2xl mx-auto text-sm md:text-base leading-relaxed">
+                        Clear answers to streamline your engagement. No ambiguity, just execution.
                     </p>
                 </div>
 
                 {/* FAQ Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 md:gap-6 mb-10 md:mb-16">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6">
                     {faqs.map((faq, idx) => (
                         <motion.div
                             key={idx}
-                            initial={{ opacity: 0, y: 10 }}
+                            initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
-                            transition={{ delay: idx * 0.05 }}
-                            className="group flex items-start sm:items-center gap-3 md:gap-4 p-4 md:p-6 bg-[#F9F8FF] dark:bg-gray-900 border border-[#7B2CFF]/30 hover:border-[#7B2CFF] rounded-xl md:rounded-2xl hover:bg-white dark:hover:bg-gray-800 hover:shadow-xl hover:shadow-purple-500/5 transition-all duration-300 cursor-pointer"
+                            transition={{ delay: idx * 0.1 }}
+                            onClick={() => setOpenIndex(openIndex === idx ? null : idx)}
+                            className={`group relative p-6 rounded-xl border transition-all duration-300 cursor-pointer overflow-hidden backdrop-blur-sm
+                                ${openIndex === idx
+                                    ? 'bg-purple-50 dark:bg-purple-900/20 border-purple-300 dark:border-purple-500/50 shadow-lg shadow-purple-500/5 dark:shadow-[0_0_20px_rgba(123,44,255,0.15)]'
+                                    : 'bg-white/80 dark:bg-[#1E123599] border-gray-200 dark:border-white/5 hover:border-purple-400/50 dark:hover:border-purple-500/30 hover:bg-white dark:hover:bg-[#251A40]'
+                                }
+                            `}
                         >
-                            <div className="shrink-0 bg-[#D6BDFF78] dark:bg-purple-900/40 rounded-full p-1 text-[#7B2CFF] dark:text-purple-300 group-hover:scale-110 transition-transform mt-0.5 sm:mt-0">
-                                <CheckCircle2 className="w-5 h-5 md:w-6 md:h-6 opacity-80" />
+                            {/* Card Glow Gradient on Hover */}
+                            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+
+                            <div className="flex items-start gap-4">
+                                <div className={`mt-1 shrink-0 w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300
+                                    ${openIndex === idx ? 'bg-purple-600 text-white shadow-lg shadow-purple-600/30' : 'bg-purple-100 dark:bg-[#2A1F45] text-purple-600 dark:text-slate-400 group-hover:text-purple-600 dark:group-hover:text-purple-400'}
+                                `}>
+                                    <HelpCircle className="w-4 h-4" />
+                                </div>
+
+                                <div className="flex-1">
+                                    <div className="flex items-start justify-between gap-4">
+                                        <h3 className={`font-semibold text-lg leading-snug transition-colors duration-300 ${openIndex === idx ? 'text-gray-900 dark:text-white' : 'text-gray-800 dark:text-slate-200 group-hover:text-purple-700 dark:group-hover:text-purple-100'}`}>
+                                            {faq.question}
+                                        </h3>
+                                        <div className={`shrink-0 transition-transform duration-300 ${openIndex === idx ? 'rotate-180' : 'rotate-0'}`}>
+                                            {openIndex === idx ? <Minus className="w-5 h-5 text-purple-600 dark:text-purple-400" /> : <Plus className="w-5 h-5 text-slate-400 dark:text-slate-500 group-hover:text-purple-600 dark:group-hover:text-purple-400" />}
+                                        </div>
+                                    </div>
+
+                                    <AnimatePresence>
+                                        {openIndex === idx && (
+                                            <motion.div
+                                                initial={{ height: 0, opacity: 0 }}
+                                                animate={{ height: "auto", opacity: 1 }}
+                                                exit={{ height: 0, opacity: 0 }}
+                                                transition={{ duration: 0.2, ease: "easeInOut" }}
+                                                className="overflow-hidden"
+                                            >
+                                                <p className="pt-3 text-slate-600 dark:text-slate-400 leading-relaxed text-sm md:text-[15px] border-t border-purple-100 dark:border-white/5 mt-4">
+                                                    {faq.answer}
+                                                </p>
+                                            </motion.div>
+                                        )}
+                                    </AnimatePresence>
+                                </div>
                             </div>
-                            <span className="text-[#1a1a2e] dark:text-gray-200 text-sm sm:text-[15px] md:text-base font-medium leading-snug">
-                                {faq}
-                            </span>
                         </motion.div>
                     ))}
-                </div>
-
-                {/* View All Button */}
-                <div className="flex justify-center">
-                    <button className="group relative flex items-center justify-center gap-2 md:gap-3 bg-[#310E3F] text-white px-6 md:px-10 py-2.5 md:py-3 rounded-full font-bold text-sm md:text-lg hover:bg-[#6B46E5] transition-all hover:shadow-2xl active:scale-95 w-full sm:w-auto">
-                        View All
-                        <div className="w-6 h-6 md:w-7 md:h-7 bg-white rounded-full flex items-center justify-center transition-transform group-hover:translate-x-1 shrink-0">
-                            <ArrowRight className="w-3 h-3 md:w-4 md:h-4 text-[#310E3F]" />
-                        </div>
-                    </button>
                 </div>
 
             </div>

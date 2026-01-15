@@ -3,6 +3,7 @@ import Image from 'next/image';
 import logo from './assets/logo.png'
 import { useState } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useEnquiry } from '../context/EnquiryContext';
 import { useTheme } from '../context/ThemeContext';
 import { Sun, Moon } from 'lucide-react';
@@ -11,6 +12,17 @@ export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { openEnquiry } = useEnquiry();
   const { theme, toggleTheme } = useTheme();
+  const pathname = usePathname();
+
+  const handleScrollToTop = (e, href) => {
+    if (pathname === href) {
+      e.preventDefault();
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    }
+  };
 
   const navigationLinks = [
     { name: 'Home', href: '/' },
@@ -31,7 +43,7 @@ export default function Header() {
 
             {/* Logo Section */}
             <div className="flex items-center space-x-2">
-              <Link href="/">
+              <Link href="/" onClick={(e) => handleScrollToTop(e, '/')}>
                 {/* Logo Image */}
                 <Image
                   src={logo}
@@ -49,6 +61,7 @@ export default function Header() {
                 <Link
                   key={link.name}
                   href={link.href}
+                  onClick={(e) => handleScrollToTop(e, link.href)}
                   className="text-[16px] font-medium text-gray-700 transition-colors duration-200 hover:text-purple-600 focus:text-purple-600 focus:outline-none font-sans"
                 >
                   {link.name}
@@ -60,7 +73,7 @@ export default function Header() {
             <div className="hidden md:flex items-center space-x-4">
               <button
                 onClick={toggleTheme}
-                className="p-2 rounded-full text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                className="p-2 rounded-full text-gray-700 hover:bg-gray-100 transition-colors"
                 aria-label="Toggle Theme"
               >
                 {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
@@ -116,7 +129,10 @@ export default function Header() {
                       key={link.name}
                       href={link.href}
                       className="text-[16px] font-medium text-gray-700 transition-colors duration-200 hover:text-purple-600 focus:text-purple-600 focus:outline-none font-sans"
-                      onClick={() => setIsMenuOpen(false)}
+                      onClick={(e) => {
+                        setIsMenuOpen(false);
+                        handleScrollToTop(e, link.href);
+                      }}
                     >
                       {link.name}
                     </Link>
@@ -128,7 +144,7 @@ export default function Header() {
                         // Keep menu open to allow seeing change or close it? usually close it or keep it.
                         // Let's keep it simple.
                       }}
-                      className="flex items-center justify-center gap-2 w-full rounded-full border border-gray-200 dark:border-gray-700 px-6 py-3 text-[16px] font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+                      className="flex items-center justify-center gap-2 w-full rounded-full border border-gray-200 px-6 py-3 text-[16px] font-medium text-gray-700 hover:bg-gray-50 transition-colors"
                     >
                       {theme === 'dark' ? <><Sun size={20} /> Light Mode</> : <><Moon size={20} /> Dark Mode</>}
                     </button>

@@ -4,6 +4,7 @@ import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { Star, BookOpen, BarChart2, Calendar, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
+import { safeFetch, mockData } from '@/app/utils/safeFetch'
 
 // Import assets
 import thumb1 from './assets/cyber_lab_1.webp'
@@ -35,8 +36,9 @@ export default function CourseSection() {
     const fetchCategories = async () => {
         setCategoriesLoading(true)
         try {
+            const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3031';
             const response = await fetch(
-                '/api/courses/categories',
+                `${apiUrl}/api/courses/categories`,
                 {
                     method: 'GET',
                     headers: {
@@ -59,7 +61,7 @@ export default function CourseSection() {
                 setActiveCategory(fetchedCategories[0])
             }
         } catch (err) {
-            console.error('Error fetching categories:', err)
+            console.warn('Backend unavailable, using fallback categories:', err.message)
             // Fallback categories
             const fallbackCategories = ['Programming', 'CISCO', 'Red Hat', 'CompTIA', 'Microsoft Azure', 'Cybersecurity']
             setCategories(fallbackCategories)
@@ -73,8 +75,9 @@ export default function CourseSection() {
         setLoading(true)
         setError(null)
         try {
+            const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3031';
             const response = await fetch(
-                `/api/courses/category/${category.toLowerCase()}?page=1&limit=10`,
+                `${apiUrl}/api/courses/category/${category.toLowerCase()}?page=1&limit=10`,
                 {
                     method: 'GET',
                     headers: {
@@ -102,8 +105,8 @@ export default function CourseSection() {
 
             setCourses(processedCourses)
         } catch (err) {
-            console.error('Error fetching courses:', err)
-            setError(err.message)
+            console.warn('Backend unavailable for courses, showing empty state:', err.message)
+            // Don't set error state to avoid red error messages
             setCourses([])
         } finally {
             setLoading(false)
@@ -244,10 +247,10 @@ export default function CourseSection() {
                                 </h3>
 
                                 <div className="flex items-center gap-3">
-                                    <button className="flex-1 bg-[#310E3F] text-white py-3 rounded-full text-sm font-bold hover:bg-[#6B46E5] transition-colors">
+                                    <button className="flex-1 bg-[#310E3F] text-white py-3 rounded-full text-sm font-bold hover:bg-[#6B46E5] transition-colors dark:bg-white dark:text-[#310E3F] dark:hover:bg-gray-200">
                                         Enroll Now
                                     </button>
-                                    <button className="flex-1 border-2 border-[#310E3F] text-[#310E3F] py-3 rounded-full text-sm font-bold hover:border-[#6B46E5] hover:text-[#6B46E5] transition-all">
+                                    <button className="flex-1 border-2 border-[#310E3F] text-[#310E3F] py-3 rounded-full text-sm font-bold hover:border-[#6B46E5] hover:text-[#6B46E5] transition-all dark:border-white dark:text-white dark:hover:border-gray-200 dark:hover:text-gray-200">
                                         Learn More
                                     </button>
                                 </div>

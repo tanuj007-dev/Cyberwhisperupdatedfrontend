@@ -111,7 +111,7 @@ function HeroLayout({ isVideoOpen, setIsVideoOpen }) {
               />
 
               {/* Content */}
-              <div className="relative inline-flex items-center gap-4 px-6 md:px-8 py-2 rounded-full bg-[#030014] backdrop-blur-md text-white shadow-sm">
+              <div className="relative inline-flex items-center gap-4 px-6 md:px-8 py-2 rounded-full bg-[#170A2D] backdrop-blur-md text-white shadow-sm">
 
                 <span className="text-xs md:text-sm font-medium text-purple-200 tracking-wider uppercase">
                   Next Generation Cybersecurity
@@ -243,9 +243,9 @@ function HeroLayout({ isVideoOpen, setIsVideoOpen }) {
                 <Image
                   src={h1}
                   alt="B2B Icon"
-                  width={200}
-                  height={200}
-                  className="absolute -top-20 -left-20 w-[180px] h-[180px] transition-transform group-hover:scale-110 duration-500 z-20"
+                  width={250}
+                  height={250}
+                  className="absolute -top-26 -left-32 w-[250px] h-[250px] transition-transform group-hover:scale-110 duration-500 z-20"
                 />
                 <div className="pt-4 ml-8">
                   <h2 className="text-[#1e293b] font-bold text-lg mb-2">B2B </h2>
@@ -268,9 +268,9 @@ function HeroLayout({ isVideoOpen, setIsVideoOpen }) {
                 <Image
                   src={h2}
                   alt="B2C Icon"
-                  width={200}
-                  height={200}
-                  className="absolute -top-24 -left-20 w-[180px] h-[180px] transition-transform group-hover:scale-110 duration-500 z-20"
+                  width={250}
+                  height={250}
+                  className="absolute -top-26 -left-32 w-[250px] h-[250px] transition-transform group-hover:scale-110 duration-500 z-20"
                 />
                 <div className="pt-4 ml-8">
                   <h2 className="text-[#1e293b] font-bold text-lg mb-2"> B2C  </h2>
@@ -304,8 +304,8 @@ function HeroLayout({ isVideoOpen, setIsVideoOpen }) {
                 <div>
                   <h2 className="text-[#1e293b] font-bold text-base mb-1">B2B</h2>
                   <h2 className="text-[#1e293b] font-bold text-sm mb-2 leading-tight">Train Teams Test Defences Improve Readiness</h2>
-                  <p className="text-[#64748b] text-xs leading-snug mb-3 font-medium hidden xs:block">
-                    Prepare your security teams using immersive cyber range simulations...
+                  <p className="text-[#64748b] text-xs leading-snug mb-3 font-medium">
+                    Prepare your security teams using immersive cyber range simulations, intelligent investigation workflows, and hands-on training.
                   </p>
                   <Link href="/b2b">
                     <div className="text-[#7c3aed] font-bold text-xs flex items-center gap-2 cursor-pointer border-t border-gray-100 pt-2 whitespace-nowrap">
@@ -329,8 +329,8 @@ function HeroLayout({ isVideoOpen, setIsVideoOpen }) {
                 <div>
                   <h2 className="text-[#1e293b] font-bold text-base mb-1">B2C</h2>
                   <h2 className="text-[#1e293b] font-bold text-sm mb-2 leading-tight">Learn Security Build Skills Launch Careers</h2>
-                  <p className="text-[#64748b] text-xs leading-snug mb-3 font-medium hidden xs:block">
-                    Prepare students and early professionals with structured cybersecurity training...
+                  <p className="text-[#64748b] text-xs leading-snug mb-3 font-medium">
+                    Prepare students and early professionals with structured cybersecurity training, certification-aligned programs, and real-world SOC programs.
                   </p>
                   <Link href="/training">
                     <div className="text-[#6366f1] font-bold text-xs flex items-center gap-2 cursor-pointer border-t border-gray-100 pt-2 whitespace-nowrap">

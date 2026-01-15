@@ -1,7 +1,7 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
-import { Phone } from 'lucide-react';
+import { Phone, Loader2, CheckCircle, AlertCircle } from 'lucide-react';
 
 // Use existing assets
 import lab1 from './assets/work5.webp';
@@ -18,6 +18,66 @@ const techfestImages = [event1, event2, event3, event4, event1, event2, event3, 
 const labImages = [lab1, lab2, lab3, lab4, lab1, lab2, lab3, lab4, lab1, lab2, lab3, lab4]; // Duplicated for scrolling
 
 export default function HelpCenter() {
+    const [formData, setFormData] = useState({
+        name: '',
+        phone: '',
+        email: '',
+        subject: 'Free Demo Request',
+        message: 'I would like to request a free demo of your cybersecurity training programs.'
+    });
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [submitStatus, setSubmitStatus] = useState(null); // 'success' | 'error' | null
+    const [errorMessage, setErrorMessage] = useState('');
+
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setIsSubmitting(true);
+        setSubmitStatus(null);
+        setErrorMessage('');
+
+        try {
+            const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3031';
+            const response = await fetch(`${apiUrl}/api/quotes`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            });
+
+            if (!response.ok) {
+                throw new Error(`Failed to submit: ${response.statusText}`);
+            }
+
+            const data = await response.json();
+            console.log('Demo request submitted successfully:', data);
+
+            setSubmitStatus('success');
+            setFormData({
+                name: '',
+                phone: '',
+                email: '',
+                subject: 'Free Demo Request',
+                message: 'I would like to request a free demo of your cybersecurity training programs.'
+            });
+
+            // Reset success message after 5 seconds
+            setTimeout(() => {
+                setSubmitStatus(null);
+            }, 5000);
+        } catch (error) {
+            console.error('Error submitting demo request:', error);
+            setSubmitStatus('error');
+            setErrorMessage(error.message || 'Failed to submit request. Please try again.');
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
     return (
         <section className="w-full py-12 md:py-20 bg-[#FBF9FF] dark:bg-black overflow-hidden font-sans relative transition-colors duration-300">
             <div className="absolute inset-0 z-0 opacity-10 pointer-events-none"
@@ -109,32 +169,68 @@ export default function HelpCenter() {
                         <div className="relative bg-white dark:bg-gray-900 rounded-3xl md:rounded-4xl p-6 md:p-8 shadow-[0_10px_40px_rgba(107,70,229,0.1)] border-2 border-[#6B46E5]">
                             <h3 className="text-xl md:text-2xl font-bold text-[#1a1a2e] dark:text-white mb-6 md:mb-8 text-center md:text-left">Get Free Demo Now</h3>
 
-                            <form className="space-y-4 md:space-y-5">
+                            <form onSubmit={handleSubmit} className="space-y-4 md:space-y-5">
                                 <div>
                                     <input
                                         type="text"
+                                        name="name"
+                                        value={formData.name}
+                                        onChange={handleChange}
                                         placeholder="Name *"
-                                        className="w-full px-4 py-3 md:px-5 md:py-4 rounded-xl bg-[#F8F9FD] dark:bg-gray-800 border border-gray-100 dark:border-gray-700 text-[#1a1a2e] dark:text-white placeholder-gray-400 dark:placeholder-gray-500 text-sm md:text-base focus:outline-none focus:border-[#6B46E5] focus:ring-1 focus:ring-[#6B46E5] transition-all"
+                                        required
+                                        disabled={isSubmitting}
+                                        className="w-full px-4 py-3 md:px-5 md:py-4 rounded-xl bg-[#F8F9FD] dark:bg-gray-800 border border-gray-100 dark:border-gray-700 text-[#1a1a2e] dark:text-white placeholder-gray-400 dark:placeholder-gray-500 text-sm md:text-base focus:outline-none focus:border-[#6B46E5] focus:ring-1 focus:ring-[#6B46E5] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                                     />
                                 </div>
                                 <div>
                                     <input
                                         type="tel"
+                                        name="phone"
+                                        value={formData.phone}
+                                        onChange={handleChange}
                                         placeholder="Phone *"
-                                        className="w-full px-4 py-3 md:px-5 md:py-4 rounded-xl bg-[#F8F9FD] dark:bg-gray-800 border border-gray-100 dark:border-gray-700 text-[#1a1a2e] dark:text-white placeholder-gray-400 dark:placeholder-gray-500 text-sm md:text-base focus:outline-none focus:border-[#6B46E5] focus:ring-1 focus:ring-[#6B46E5] transition-all"
+                                        required
+                                        disabled={isSubmitting}
+                                        className="w-full px-4 py-3 md:px-5 md:py-4 rounded-xl bg-[#F8F9FD] dark:bg-gray-800 border border-gray-100 dark:border-gray-700 text-[#1a1a2e] dark:text-white placeholder-gray-400 dark:placeholder-gray-500 text-sm md:text-base focus:outline-none focus:border-[#6B46E5] focus:ring-1 focus:ring-[#6B46E5] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                                     />
                                 </div>
                                 <div>
                                     <input
                                         type="email"
+                                        name="email"
+                                        value={formData.email}
+                                        onChange={handleChange}
                                         placeholder="Email *"
-                                        className="w-full px-4 py-3 md:px-5 md:py-4 rounded-xl bg-[#F8F9FD] dark:bg-gray-800 border border-gray-100 dark:border-gray-700 text-[#1a1a2e] dark:text-white placeholder-gray-400 dark:placeholder-gray-500 text-sm md:text-base focus:outline-none focus:border-[#6B46E5] focus:ring-1 focus:ring-[#6B46E5] transition-all"
+                                        required
+                                        disabled={isSubmitting}
+                                        className="w-full px-4 py-3 md:px-5 md:py-4 rounded-xl bg-[#F8F9FD] dark:bg-gray-800 border border-gray-100 dark:border-gray-700 text-[#1a1a2e] dark:text-white placeholder-gray-400 dark:placeholder-gray-500 text-sm md:text-base focus:outline-none focus:border-[#6B46E5] focus:ring-1 focus:ring-[#6B46E5] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                                     />
                                 </div>
 
+                                {/* Success Message */}
+                                {submitStatus === 'success' && (
+                                    <div className="flex items-center gap-2 p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-xl text-green-800 dark:text-green-300">
+                                        <CheckCircle className="w-5 h-5 shrink-0" />
+                                        <span className="text-sm font-medium">Thank you! We'll contact you soon for your free demo.</span>
+                                    </div>
+                                )}
+
+                                {/* Error Message */}
+                                {submitStatus === 'error' && (
+                                    <div className="flex items-center gap-2 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl text-red-800 dark:text-red-300">
+                                        <AlertCircle className="w-5 h-5 shrink-0" />
+                                        <span className="text-sm">{errorMessage}</span>
+                                    </div>
+                                )}
+
                                 <div className="pt-2">
-                                    <button type="submit" className="w-full bg-[#1D0B2E] dark:bg-purple-700 text-white font-bold py-3 md:py-4 rounded-full text-sm md:text-base hover:bg-[#6B46E5] dark:hover:bg-purple-600 transition-all shadow-lg active:scale-95">
-                                        Submit
+                                    <button
+                                        type="submit"
+                                        disabled={isSubmitting || submitStatus === 'success'}
+                                        className="w-full bg-[#1D0B2E] dark:bg-purple-700 text-white font-bold py-3 md:py-4 rounded-full text-sm md:text-base hover:bg-[#6B46E5] dark:hover:bg-purple-600 transition-all shadow-lg active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2"
+                                    >
+                                        {isSubmitting && <Loader2 className="w-5 h-5 animate-spin" />}
+                                        {isSubmitting ? 'Submitting...' : submitStatus === 'success' ? 'Submitted!' : 'Submit'}
                                     </button>
                                 </div>
                             </form>

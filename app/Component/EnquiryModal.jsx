@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X } from 'lucide-react';
+import { X, Loader2, CheckCircle, AlertCircle } from 'lucide-react';
 import { useEnquiry } from '../context/EnquiryContext';
 
 export default function EnquiryModal() {
@@ -10,20 +10,55 @@ export default function EnquiryModal() {
         name: '',
         email: '',
         phone: '',
+        subject: '',
         message: ''
     });
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [submitStatus, setSubmitStatus] = useState(null); // 'success' | 'error' | null
+    const [errorMessage, setErrorMessage] = useState('');
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('Form submitted:', formData);
-        // Add logic to send data to backend or API
-        closeEnquiry();
-        setFormData({ name: '', email: '', phone: '', message: '' });
-        alert("Thank you for your enquiry! We will get back to you soon.");
+        setIsSubmitting(true);
+        setSubmitStatus(null);
+        setErrorMessage('');
+
+        try {
+            const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3031';
+            const response = await fetch(`${apiUrl}/api/quotes`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            });
+
+            if (!response.ok) {
+                throw new Error(`Failed to submit: ${response.statusText}`);
+            }
+
+            const data = await response.json();
+            console.log('Form submitted successfully:', data);
+
+            setSubmitStatus('success');
+            setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
+
+            // Close modal after 2 seconds
+            setTimeout(() => {
+                closeEnquiry();
+                setSubmitStatus(null);
+            }, 2000);
+        } catch (error) {
+            console.error('Error submitting form:', error);
+            setSubmitStatus('error');
+            setErrorMessage(error.message || 'Failed to submit enquiry. Please try again.');
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
@@ -70,7 +105,8 @@ export default function EnquiryModal() {
                                         required
                                         value={formData.name}
                                         onChange={handleChange}
-                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all"
+                                        disabled={isSubmitting}
+                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all disabled:bg-gray-100 disabled:cursor-not-allowed"
                                         placeholder="John Doe"
                                     />
                                 </div>
@@ -84,7 +120,8 @@ export default function EnquiryModal() {
                                         required
                                         value={formData.email}
                                         onChange={handleChange}
-                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all"
+                                        disabled={isSubmitting}
+                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all disabled:bg-gray-100 disabled:cursor-not-allowed"
                                         placeholder="john@example.com"
                                     />
                                 </div>
@@ -97,8 +134,24 @@ export default function EnquiryModal() {
                                         name="phone"
                                         value={formData.phone}
                                         onChange={handleChange}
-                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all"
+                                        disabled={isSubmitting}
+                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all disabled:bg-gray-100 disabled:cursor-not-allowed"
                                         placeholder="+1 (555) 000-0000"
+                                    />
+                                </div>
+
+                                <div>
+                                    <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-1">Subject</label>
+                                    <input
+                                        type="text"
+                                        id="subject"
+                                        name="subject"
+                                        required
+                                        value={formData.subject}
+                                        onChange={handleChange}
+                                        disabled={isSubmitting}
+                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all disabled:bg-gray-100 disabled:cursor-not-allowed"
+                                        placeholder="e.g., Web Development Course"
                                     />
                                 </div>
 
@@ -111,16 +164,43 @@ export default function EnquiryModal() {
                                         required
                                         value={formData.message}
                                         onChange={handleChange}
-                                        className="w-full px-4 py-2 border text-black border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all resize-none"
+                                        disabled={isSubmitting}
+                                        className="w-full px-4 py-2 border text-black border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all resize-none disabled:bg-gray-100 disabled:cursor-not-allowed"
                                         placeholder="Briefly describe your project or needs..."
                                     ></textarea>
                                 </div>
 
+                                {/* Success Message */}
+                                {submitStatus === 'success' && (
+                                    <motion.div
+                                        initial={{ opacity: 0, y: -10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        className="flex items-center gap-2 p-3 bg-green-50 border border-green-200 rounded-lg text-green-800"
+                                    >
+                                        <CheckCircle className="w-5 h-5" />
+                                        <span className="text-sm font-medium">Thank you! We'll get back to you soon.</span>
+                                    </motion.div>
+                                )}
+
+                                {/* Error Message */}
+                                {submitStatus === 'error' && (
+                                    <motion.div
+                                        initial={{ opacity: 0, y: -10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-lg text-red-800"
+                                    >
+                                        <AlertCircle className="w-5 h-5" />
+                                        <span className="text-sm">{errorMessage}</span>
+                                    </motion.div>
+                                )}
+
                                 <button
                                     type="submit"
-                                    className="w-full bg-[#310E3F] text-white font-semibold py-3 rounded-lg hover:bg-purple-900 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                                    disabled={isSubmitting || submitStatus === 'success'}
+                                    className="w-full bg-[#310E3F] text-white font-semibold py-3 rounded-lg hover:bg-purple-900 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2"
                                 >
-                                    Submit Enquiry
+                                    {isSubmitting && <Loader2 className="w-5 h-5 animate-spin" />}
+                                    {isSubmitting ? 'Submitting...' : submitStatus === 'success' ? 'Submitted!' : 'Submit Enquiry'}
                                 </button>
                             </form>
                         </div>

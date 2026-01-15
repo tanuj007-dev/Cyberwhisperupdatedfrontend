@@ -122,16 +122,65 @@ const AddBlog = () => {
         }
     }, [errors]);
 
-    const handleImageChange = useCallback((e) => {
+    const handleImageChange = useCallback(async (e) => {
         const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                const imageUrl = reader.result;
-                setThumbnailPreview(imageUrl);
-                setFormData(prev => ({ ...prev, thumbnail: imageUrl }));
-            };
-            reader.readAsDataURL(file);
+        if (!file) return;
+
+        // Validate file type
+        if (!file.type.startsWith('image/')) {
+            showToast('Please select an image file', 'error');
+            return;
+        }
+
+        // Validate file size (max 10MB)
+        if (file.size > 10 * 1024 * 1024) {
+            showToast('Image size must be less than 10MB', 'error');
+            return;
+        }
+
+        try {
+            showToast('Uploading image...', 'info');
+
+            // Create FormData for backend upload
+            const formDataUpload = new FormData();
+            formDataUpload.append('thumbnail', file);
+
+            // Upload to backend API - use current server
+            const baseUrl = typeof window !== 'undefined' 
+                ? `http://${window.location.hostname}:${window.location.port}`
+                : 'http://localhost:3001';
+            const response = await fetch(`${baseUrl}/api/blogs/upload-thumbnail`, {
+                method: 'POST',
+                body: formDataUpload
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Failed to upload image');
+            }
+
+            const data = await response.json();
+            console.log('Upload response:', data);
+
+            // Get the URL from the response
+            const imageUrl = data.url || data.thumbnail_url || data.data?.url;
+
+            if (!imageUrl) {
+                throw new Error('No image URL received from server');
+            }
+
+            // Update form data with the uploaded image URL
+            setThumbnailPreview(imageUrl);
+            setFormData(prev => ({
+                ...prev,
+                thumbnail: imageUrl,
+                banner: imageUrl // Using same image for banner as well
+            }));
+
+            showToast('Image uploaded successfully!', 'success');
+        } catch (error) {
+            console.error('Error uploading image:', error);
+            showToast('Failed to upload image. Please try again.', 'error');
         }
     }, []);
 
@@ -161,46 +210,82 @@ const AddBlog = () => {
         return Object.keys(newErrors).length === 0;
     };
 
-    const handleSubmit = (status = 'draft') => {
+    const handleSubmit = async (status = 'draft') => {
         if (!validateForm()) {
             showToast('Please fill in all required fields', 'error');
             return;
         }
 
-        const blogData = {
-            title: formData.title,
-            slug: formData.slug,
-            blog_category_id: parseInt(formData.blog_category_id),
-            user_id: parseInt(formData.user_id),
-            keywords: formData.selectedTags.map(id => tags.find(t => t.id === id)?.name).join(', '),
-            description: formData.description,
-            thumbnail: formData.thumbnail || 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800',
-            banner: formData.thumbnail || 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=1200',
-            is_popular: formData.is_popular,
-            status: status === 'publish' ? 'active' : 'inactive',
-            // Extended fields
-            shortDescription: formData.shortDescription,
-            readingTime: formData.readingTime,
-            imageAltText: formData.imageAltText,
-            imageCaption: formData.imageCaption,
-            publishDate: formData.publishDate,
-            visibility: formData.visibility,
-            seoTitle: formData.seoTitle,
-            seoDescription: formData.seoDescription,
-            focusKeyword: formData.focusKeyword,
-            canonicalUrl: formData.canonicalUrl,
-            metaRobots: formData.metaRobots,
-            allowComments: formData.allowComments,
-            showOnHomepage: formData.showOnHomepage,
-            pinPost: formData.pinPost
-        };
+        try {
+            // Prepare blog data for API
+            const blogData = {
+                title: formData.title,
+                slug: formData.slug,
+                category_id: parseInt(formData.blog_category_id),
+                author_id: parseInt(formData.user_id),
+                description: formData.description, // Main content
+                keywords: formData.selectedTags.map(id => tags.find(t => t.id === id)?.name).join(', '),
+                short_description: formData.shortDescription,
+                reading_time: formData.readingTime || '5 min read',
+                thumbnail_url: formData.thumbnail || '',
+                banner_url: formData.banner || '', // Empty as per requirement
+                image_alt_text: formData.imageAltText || formData.title,
+                image_caption: formData.imageCaption,
+                is_popular: formData.is_popular,
+                status: status === 'publish' ? 'ACTIVE' : 'DRAFT', // ACTIVE for published
+                visibility: formData.visibility.toUpperCase(),
+                seo_title: formData.seoTitle || formData.title,
+                seo_description: formData.seoDescription || formData.shortDescription,
+                focus_keyword: formData.focusKeyword,
+                meta_robots: formData.metaRobots.toUpperCase(),
+                allow_comments: formData.allowComments,
+                show_on_homepage: formData.showOnHomepage,
+                is_sticky: formData.pinPost
+            };
 
-        addBlog(blogData);
-        showToast(status === 'publish' ? 'Blog published successfully!' : 'Blog saved as draft!', 'success');
+            // Show loading state
+            showToast('Saving blog post...', 'info');
 
-        setTimeout(() => {
-            router.push('/admin/blogs');
-        }, 1500);
+            // Call API - use current server
+            const baseUrl = typeof window !== 'undefined' 
+                ? `http://${window.location.hostname}:${window.location.port}`
+                : 'http://localhost:3001';
+            const response = await fetch(`${baseUrl}/api/blogs`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(blogData),
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Failed to create blog post');
+            }
+
+            const result = await response.json();
+            console.log('Blog created successfully:', result);
+
+            // Also add to AdminContext for local state management
+            addBlog({
+                ...blogData,
+                id: result.data.id,
+                status: status === 'publish' ? 'active' : 'inactive'
+            });
+
+            showToast(
+                status === 'publish' ? 'Blog published successfully!' : 'Blog saved as draft!',
+                'success'
+            );
+
+            setTimeout(() => {
+                router.push('/admin/blogs');
+            }, 1500);
+
+        } catch (error) {
+            console.error('Error creating blog:', error);
+            showToast(error.message || 'Failed to create blog post', 'error');
+        }
     };
 
     const showToast = (message, type = 'success') => {
@@ -208,16 +293,25 @@ const AddBlog = () => {
         setTimeout(() => setToast({ isVisible: false, message: '', type: 'success' }), 3000);
     };
 
-    const categoryOptions = categories
+    // Debug logging
+    console.log('Users from AdminContext:', users);
+    console.log('Categories from AdminContext:', categories);
+
+    const categoryOptions = (categories || [])
         .filter(c => c.status === 'active')
         .map(c => ({ value: c.id, label: c.name }));
 
-    const userOptions = users
-        .filter(u => u.status === 'active')
+    const userOptions = (users || [])
+        .filter(u => !u.status || u.status === 'active' || u.status === 'ACTIVE')
         .map(u => ({
             value: u.id,
-            label: `${u.first_name} ${u.last_name} ${u.is_instructor ? '(Instructor)' : ''}`
+            label: `${u.first_name} ${u.last_name}${u.is_instructor ? ' (Instructor)' : ''}`
         }));
+
+    console.log('Category Options:', categoryOptions);
+    console.log('User Options:', userOptions);
+    console.log('Total users:', users?.length);
+    console.log('User options count:', userOptions.length);
 
     return (
         <div className="max-w-5xl mx-auto space-y-6">

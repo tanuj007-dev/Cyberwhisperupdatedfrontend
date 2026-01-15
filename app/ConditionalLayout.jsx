@@ -16,7 +16,7 @@ const NewsletterSignup = dynamic(() => import("./Component/NewsletterSignup"), {
   ssr: true,
 });
 
-const WhatsAppButton = dynamic(() => import("./Component/WhatsAppButton"), {
+const WhatsAppPopup = dynamic(() => import("./Component/WhatsAppPopup"), {
   loading: () => null,
   ssr: false,
 });
@@ -27,17 +27,17 @@ const EnquiryModal = dynamic(() => import("./Component/EnquiryModal"), {
 });
 
 export default function ConditionalLayout({ children }) {
-    const pathname = usePathname();
-    const isAdminRoute = pathname?.startsWith('/admin');
+  const pathname = usePathname();
+  const isAdminRoute = pathname?.startsWith('/admin');
 
-    return (
-        <EnquiryProvider>
-            {!isAdminRoute && <Header />}
-            {children}
-            {!isAdminRoute && <WhatsAppButton />}
-            {!isAdminRoute && <NewsletterSignup />}
-            {!isAdminRoute && <Footer />}
-            <EnquiryModal />
-        </EnquiryProvider>
-    );
+  return (
+    <EnquiryProvider>
+      {!isAdminRoute && <Header />}
+      {children}
+      {!isAdminRoute && <WhatsAppPopup />}
+      {!isAdminRoute && <NewsletterSignup />}
+      {!isAdminRoute && <Footer />}
+      <EnquiryModal />
+    </EnquiryProvider>
+  );
 }

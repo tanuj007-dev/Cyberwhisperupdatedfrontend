@@ -112,7 +112,7 @@ export default function ServiceHero() {
           {/* Left Side: Content Area */}
           <div className="w-full lg:w-[55%] space-y-6 md:space-y-8 animate-in fade-in slide-in-from-left duration-1000 text-center lg:text-left">
             {/* New Badge */}
-            <div className="relative inline-flex rounded-full p-[2px]  overflow-hidden mt-10 md:mt-0">
+            <div className="relative inline-flex rounded-full p-[2px] mt-16 md:mt-0 overflow-hidden">
               {/* Moving Border */}
               <div
                 className="absolute inset-0 rounded-full"
@@ -124,63 +124,65 @@ export default function ServiceHero() {
               />
 
               {/* Content */}
-              <div className="relative inline-flex items-center   gap-2 md:gap-4 px-4 md:px-8 py-2 rounded-full bg-[#EBDFFF] dark:bg-purple-900/30 text-[#6932E2] dark:text-purple-300 shadow-sm">
-                <span className="text-[10px] md:text-[12px] font-black uppercase tracking-widest bg-white dark:bg-gray-800 text-black dark:text-white px-2 md:px-3 py-1 rounded-2xl">
-                  New
+              <div className="relative inline-flex items-center gap-4 px-6 md:px-8 py-2 rounded-full bg-[#170A2D] backdrop-blur-md text-white shadow-sm">
+
+                <span className="text-xs md:text-sm font-medium text-purple-200 tracking-wider uppercase">
+                  Cybersecurity Services + Cyber Range
                 </span>
-                <span className="text-xs md:text-sm">Registrations are now open!</span>
               </div>
 
               {/* Keyframes */}
               <style jsx>{`
-    @keyframes borderMove {
-      0% {
-        background-position: 0% 50%;
-      }
-      100% {
-        background-position: 200% 50%;
-        filter: "blur(2px)",
-opacity: 0.8,
-
-      }
-    }
-  `}</style>
+                @keyframes borderMove {
+                  0% {
+                    background-position: 0% 50%;
+                  }
+                  100% {
+                    background-position: 200% 50%;
+                  }
+                }
+              `}</style>
             </div>
-
-
             {/* Main Heading */}
             <div className="space-y-2  animate-in fade-in slide-in-from-left duration-1000">
               <h1 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-slate-900 dark:text-white tracking-tight leading-tight">
-                Master<span className="text-[#6B46E5]"> Cybersecurity</span> <br className="hidden sm:block" />
-                <span className="sm:inline block">From Scratch</span>
+                We Don’t Just Talk <span className="text-[#6B46E5]"> Cybersecurity</span> <br className="hidden sm:block" />
+                <span className="sm:inline block">We Build Cyber Defenders</span>
               </h1>
             </div>
 
             {/* Description */}
-            <p className="text-slate-500 dark:text-slate-400 text-sm sm:text-base md:text-lg lg:text-xl font-normal leading-relaxed max-w-[600px] animate-in fade-in slide-in-from-left duration-1000 mx-auto lg:mx-0">
-              From AI-powered threat detection to immersive Cyber Range training, we safeguard your digital future so you can focus on what you do best.
-            </p>
+            {/* Description */}
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.6, duration: 0.6 }}
+              className="text-slate-500 dark:text-slate-400 text-sm sm:text-base md:text-lg lg:text-xl font-normal leading-relaxed max-w-[600px] mx-auto lg:mx-0"
+            >
+              From <span className="text-gray-900 dark:text-white font-semibold">SOC deployment</span> and <span className="text-gray-900 dark:text-white font-semibold">managed monitoring</span> to <span className="text-[#a855f7] font-semibold">cyber range simulations</span>, <span className="text-gray-900 dark:text-white font-semibold">threat intelligence</span>, and <span className="text-gray-900 dark:text-white font-semibold">VAPT</span> — Cyber Whisper helps teams detect faster, respond smarter, and stay ready.
+            </motion.p>
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center lg:justify-start gap-3 md:gap-5 animate-in fade-in slide-in-from-left duration-1000 w-full sm:w-auto">
-              <button className="flex items-center justify-center gap-3 bg-[#310E3F] text-white px-8 md:px-10 py-3 rounded-full font-bold text-base md:text-lg hover:scale-105 hover:bg-[#6B46E5] transition-all hover:shadow-2xl active:scale-95 group w-full sm:w-auto">
-                Enroll Now
+              <button className="flex items-center justify-center gap-3 bg-[#310E3F] text-white px-8 md:px-10 py-3 rounded-full font-bold text-base md:text-lg hover:scale-105 hover:bg-[#6B46E5] transition-all hover:shadow-2xl active:scale-95 group w-full sm:w-auto border-2 border-[#310E3F] dark:border-purple-500">
+                Get a Quote
                 <div className="w-6 h-6 rounded-full bg-white flex text-[#310E3F] items-center justify-center transition-transform group-hover:translate-x-1">
                   <GoArrowRight size={20} />
                 </div>
               </button>
               <button className="px-8 md:px-10 py-3 rounded-full border-2 border-[#310E3F] dark:border-purple-500 text-[#310E3F] dark:text-purple-400 font-bold text-base md:text-lg transition-all hover:border-slate-400 dark:hover:border-purple-300 hover:text-slate-900 dark:hover:text-white active:scale-95 w-full sm:w-auto">
-                See Curriculum
+                Book a Cyber Range Demo
               </button>
             </div>
 
             {/* Bottom Indicators */}
-            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3 md:gap-6 pt-6 text-[#310E3F] dark:text-purple-300 tracking-widest text-base md:text-xl">
-              <span>Learn</span>
-              <span className="text-3xl md:text-5xl text-[#310E3F] dark:text-purple-300">•</span>
-              <span>Simulate</span>
-              <span className="text-3xl md:text-5xl text-[#310E3F] dark:text-purple-300">•</span>
-              <span>Win</span>
+            <div className="flex flex-nowrap items-center justify-center lg:justify-start gap-2 md:gap-6 pt-6 text-[#310E3F] dark:text-purple-300 tracking-tight text-[10px] sm:text-base md:text-base lg:text-lg whitespace-nowrap">
+              <span>Practical</span>
+              <span className="text-2xl md:text-5xl text-[#310E3F] dark:text-purple-300">•</span>
+              <span>Outcome-driven</span>
+              <span className="text-2xl md:text-5xl text-[#310E3F] dark:text-purple-300">•</span>
+              <span>Built by practitioners</span>
             </div>
           </div>
 
@@ -190,7 +192,7 @@ opacity: 0.8,
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-purple-200/40 blur-[120px] rounded-full z-0 pointer-events-none" />
 
             {/* Horizontal view but cards are vertical */}
-            <div className="relative z-10 overflow-hidden -mx-4 sm:-mx-10 md:-mx-20 lg:mx-0">
+            <div className="relative z-10 overflow-hidden -mx-4 sm:-mx-10 md:-mx-20 lg:mx-0 [mask-image:linear-gradient(to_right,transparent,black_5%,black_95%,transparent)]">
               <motion.div
                 ref={containerRef}
                 style={{ x }}
@@ -199,7 +201,7 @@ opacity: 0.8,
                 {ALL_IMAGES.map((item, idx) => (
                   <div
                     key={idx}
-                    className="flex-none w-[200px] sm:w-[240px] md:w-[280px] lg:w-[320px] aspect-[3/4.5] rounded-2xl md:rounded-[3rem] overflow-hidden bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 transition-transform duration-500 hover:-translate-y-4 hover:shadow-purple-200/50"
+                    className="flex-none w-[200px] sm:w-[240px] md:w-[280px] lg:w-[320px] aspect-[3/4.5] rounded-2xl md:rounded-[1.5rem] overflow-hidden bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 transition-transform duration-500 hover:-translate-y-4 hover:shadow-purple-200/50"
                   >
                     <Image
                       src={item.img}

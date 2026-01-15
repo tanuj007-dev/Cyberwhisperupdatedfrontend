@@ -57,7 +57,7 @@ export default function TeamSpecialists() {
     const [hoveredId, setHoveredId] = useState<number | null>(null)
 
     return (
-        <section className="py-24 bg-white dark:bg-[#030014] relative overflow-hidden transition-colors duration-300">
+        <section className="py-24 bg-white dark:bg-[#0E0429] relative overflow-hidden transition-colors duration-300">
             {/* Subtle Background Glow */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[600px] bg-purple-50/50 dark:bg-purple-900/10 blur-[120px] rounded-full pointer-events-none" />
 

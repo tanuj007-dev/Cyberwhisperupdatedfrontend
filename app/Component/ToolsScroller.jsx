@@ -38,92 +38,184 @@ import kubernetes from './assets/png-clipart-white-and-blue-ship-wheel-illustrat
 
 const ToolsScroller = () => {
     const tools = [
-        { image: tool1 },
-        { image: tool2 },
-        { image: tool3 },
-        { image: tool4 },
-        { image: tool5 },
-        { image: tool6 },
-        { image: tool7 },
-        { image: unnamed },
-        { image: hash },
-        { image: opensearch },
-        { image: sentinel },
-        { image: images_jpg },
-        { image: virustotal },
-        { image: opencti },
-        { image: mitre },
-        { image: id8625 },
-        { image: suricata },
-        { image: logo_webp },
-        { image: images_png },
-        { image: yara },
-        { image: images_1_png },
-        { image: images_1_jpg },
-        { image: burp },
-        { image: images_2_png },
-        { image: images_4_png },
-        { image: aws },
-        { image: azure },
-        { image: terraform },
-        { image: images_2_jpg },
-        { image: kubernetes }
+        { image: tool1, name: "Tool 1" },
+        { image: tool2, name: "Tool 2" },
+        { image: tool3, name: "Tool 3" },
+        { image: tool4, name: "Tool 4" },
+        { image: tool5, name: "Tool 5" },
+        { image: tool6, name: "Tool 6" },
+        { image: tool7, name: "Tool 7" },
+        { image: unnamed, name: "Tool 8" },
+        { image: hash, name: "Hash" },
+        { image: opensearch, name: "OpenSearch" },
+        { image: sentinel, name: "Sentinel" },
+        { image: images_jpg, name: "Tool 12" },
+        { image: virustotal, name: "VirusTotal" },
+        { image: opencti, name: "OpenCTI" },
+        { image: mitre, name: "MITRE" },
+        { image: id8625, name: "Tool 16" },
+        { image: suricata, name: "Suricata" },
+        { image: logo_webp, name: "Logo" },
+        { image: images_png, name: "Tool 19" },
+        { image: yara, name: "YARA" },
+        { image: images_1_png, name: "Tool 21" },
+        { image: images_1_jpg, name: "Tool 22" },
+        { image: burp, name: "Burp Suite" },
+        { image: images_2_png, name: "Tool 24" },
+        { image: images_4_png, name: "Tool 25" },
+        { image: aws, name: "AWS" },
+        { image: azure, name: "Azure" },
+        { image: terraform, name: "Terraform" },
+        { image: images_2_jpg, name: "Tool 29" },
+        { image: kubernetes, name: "Kubernetes" }
     ];
 
-    // Double the array for seamless looping
-    const scrollingTools = [...tools, ...tools, ...tools];
-
     return (
-        <section className="py-12 md:py-16 bg-background overflow-hidden font-sans transition-colors duration-300">
+        <section className="py-12 md:py-20 bg-background overflow-hidden font-sans transition-colors duration-300">
             <div className="container mx-auto px-6 max-w-7xl">
-                <div className="text-center mb-8 md:mb-12">
-                    <h2 className="text-4xl md:text-[50px] text-foreground font-semibold   tracking-tight mb-4 uppercase">
+                <div className="text-center mb-10 md:mb-16">
+                    <motion.h2
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6, ease: "easeOut" }}
+                        className="text-4xl md:text-[50px] font-semibold tracking-tight mb-4 uppercase bg-linear-to-r from-primary via-foreground to-primary bg-clip-text text-transparent"
+                    >
                         TOOLS & FRAMEWORKS
-                    </h2>
-                    <p className="text-muted-foreground text-lg    font-medium max-w-3xl mx-auto">
+                    </motion.h2>
+                    <motion.p
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
+                        className="text-muted-foreground text-lg font-medium max-w-3xl mx-auto"
+                    >
                         Powered by industry-standard tools and cutting-edge technologies to deliver the most realistic training environments.
-                    </p>
+                    </motion.p>
                 </div>
             </div>
 
-            <div className="relative flex overflow-hidden py-6">
-                <motion.div
-                    animate={{
-                        x: ["0%", "-33.33%"]
-                    }}
-                    transition={{
-                        x: {
-                            repeat: Infinity,
-                            repeatType: "loop",
-                            duration: 100,
-                            ease: "linear",
-                        }
-                    }}
-                    className="flex gap-4 md:gap-8 whitespace-nowrap"
-                >
-                    {scrollingTools.map((tool, i) => (
-                        <div
-                            key={i}
-                            className="flex-none p-6 md:p-8 rounded-3xl md:rounded-4xl bg-card shadow-lg border border-border flex flex-col items-center justify-center min-w-[160px] md:min-w-[240px] group transition-all duration-300 hover:border-primary/50 hover:shadow-primary/10"
-                        >
-                            <div className="w-16 h-16 md:w-24 md:h-24 flex items-center justify-center group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
-                                <Image
-                                    src={tool.image}
-                                    alt="Cyber Tool"
-                                    width={100}
-                                    height={100}
-                                    className="w-full h-full object-contain filter grayscale group-hover:grayscale-0 transition-all duration-500"
-                                />
+            {/* Infinite Scroll Container */}
+            <div className="relative w-full overflow-hidden py-8 md:py-10">
+                <div className="scroll-container">
+                    {/* First set of logos */}
+                    <div className="scroll-content">
+                        {tools.map((tool, i) => (
+                            <div
+                                key={`original-${i}`}
+                                className="tool-card group"
+                            >
+                                <div className="relative w-16 h-16 md:w-20 md:h-20 flex items-center justify-center">
+                                    <div className="absolute inset-0 rounded-full bg-primary/15 opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-lg" />
+                                    <Image
+                                        src={tool.image}
+                                        alt={tool.name}
+                                        width={80}
+                                        height={80}
+                                        className="w-full h-full object-contain md:grayscale group-hover:grayscale-0 transition-all duration-300 group-hover:scale-110 relative z-10"
+                                        loading="lazy"
+                                    />
+                                </div>
                             </div>
+                        ))}
+                    </div>
+                    {/* Duplicate set for seamless loop */}
+                    <div className="scroll-content" aria-hidden="true">
+                        {tools.map((tool, i) => (
+                            <div
+                                key={`duplicate-${i}`}
+                                className="tool-card group"
+                            >
+                                <div className="relative w-16 h-16 md:w-20 md:h-20 flex items-center justify-center">
+                                    <div className="absolute inset-0 rounded-full bg-primary/15 opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-lg" />
+                                    <Image
+                                        src={tool.image}
+                                        alt={tool.name}
+                                        width={80}
+                                        height={80}
+                                        className="w-full h-full object-contain md:grayscale group-hover:grayscale-0 transition-all duration-300 group-hover:scale-110 relative z-10"
+                                        loading="lazy"
+                                    />
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
 
-                        </div>
-                    ))}
-                </motion.div>
-
-                {/* Left/Right Overlays for smooth fade */}
-                <div className="absolute top-0 bottom-0 left-0 w-32 bg-linear-to-r from-background to-transparent z-10" />
-                <div className="absolute top-0 bottom-0 right-0 w-32 bg-linear-to-l from-background to-transparent z-10" />
+                {/* Gradient overlays */}
+                <div className="absolute top-0 bottom-0 left-0 w-32 md:w-40 bg-linear-to-r from-background via-background/80 to-transparent z-20 pointer-events-none" />
+                <div className="absolute top-0 bottom-0 right-0 w-32 md:w-40 bg-linear-to-l from-background via-background/80 to-transparent z-20 pointer-events-none" />
             </div>
+
+            <style jsx>{`
+                .scroll-container {
+                    display: flex;
+                    width: max-content;
+                    animation: scroll 60s linear infinite;
+                    will-change: transform;
+                }
+
+                .scroll-container:hover {
+                    animation-play-state: paused;
+                }
+
+                .scroll-content {
+                    display: flex;
+                    gap: 1.5rem;
+                }
+
+                @media (min-width: 768px) {
+                    .scroll-content {
+                        gap: 2.5rem;
+                    }
+                }
+
+                .tool-card {
+                    flex-shrink: 0;
+                    padding: 1.5rem;
+                    border-radius: 1rem;
+                    background: linear-gradient(135deg, var(--card) 0%, var(--card-foreground)/5 100%);
+                    border: 1px solid var(--border);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    min-width: 140px;
+                    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                    cursor: pointer;
+                }
+
+                @media (min-width: 768px) {
+                    .tool-card {
+                        padding: 2rem;
+                        border-radius: 1.5rem;
+                        min-width: 190px;
+                    }
+                }
+
+                .tool-card:hover {
+                    transform: translateY(-8px);
+                    border-color: var(--primary);
+                    box-shadow: 0 10px 30px -10px var(--primary);
+                }
+
+                @keyframes scroll {
+                    0% {
+                        transform: translateX(0);
+                    }
+                    100% {
+                        transform: translateX(-50%);
+                    }
+                }
+
+                /* Smooth hardware acceleration */
+                .scroll-container,
+                .tool-card,
+                .tool-card img {
+                    transform: translateZ(0);
+                    backface-visibility: hidden;
+                    perspective: 1000px;
+                }
+            `}</style>
         </section>
     );
 };

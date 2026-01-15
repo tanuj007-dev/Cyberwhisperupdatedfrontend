@@ -46,7 +46,7 @@ export function ApproachSection() {
   }
 
   return (
-    <section className="py-16 bg-[#F8F9FA] dark:bg-[#030014] relative transition-colors duration-300">
+    <section className="py-16 bg-[#F8F9FA] dark:bg-[#170A2D] relative transition-colors duration-300">
       <div className="w-full max-w-7xl mx-auto px-4 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -56,7 +56,7 @@ export function ApproachSection() {
           className="text-center max-w-5xl mx-auto mb-12 space-y-4"
         >
           <span className="text-[#6F2DFF] font-black uppercase tracking-[0.3em] text-[15px]">Our Strategy</span>
-          <h2 className="text-3xl md:text-[50px] text-[#030014] dark:text-white font-semibold tracking-tighter">
+          <h2 className="text-3xl md:text-[50px] text-[#170A2D] dark:text-white font-semibold tracking-tighter">
             Strengthening security, <span className="text-[#6F2DFF]  ">your future</span>
           </h2>
         </motion.div>
@@ -80,11 +80,11 @@ export function ApproachSection() {
                 src={pillar.image}
                 alt={pillar.title}
                 fill
-                className="object-cover transition-transform duration-700 group-hover:scale-110"
+                className="object-cover transition-transform duration-700 md:group-hover:scale-110"
               />
 
-              {/* Dark Overlay - Initial State */}
-              <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/30 to-transparent transition-opacity duration-500 group-hover:opacity-100" />
+              {/* Light Overlay on mobile for text readability, Dark overlay on desktop */}
+              <div className="absolute inset-0 bg-linear-to-t from-black/40 to-transparent md:from-black/80 md:via-black/30 transition-opacity duration-500 md:group-hover:opacity-100" />
 
               {/* Icon Container - Floating */}
               <div className="absolute top-6 left-6 z-20">
@@ -101,18 +101,18 @@ export function ApproachSection() {
                   </h3>
 
                   <div className="overflow-hidden">
-                    <p className="text-white/90 leading-relaxed text-sm translate-y-12 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 delay-75 italic">
+                    <p className="text-white/90 leading-relaxed text-sm md:translate-y-12 md:opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 delay-75 italic">
                       {pillar.desc}
                     </p>
                   </div>
 
-                  {/* Decorative line reveal */}
-                  <div className="w-0 h-1 bg-[#6F2DFF] group-hover:w-full transition-all duration-700 rounded-full" />
+                  {/* Decorative line reveal - only on desktop */}
+                  <div className="w-0 h-1 bg-[#6F2DFF] md:group-hover:w-full transition-all duration-700 rounded-full" />
                 </div>
               </div>
 
-              {/* Subtle tech border glow */}
-              <div className="absolute inset-0 border-2 border-[#6F2DFF]/0 group-hover:border-[#6F2DFF]/50 rounded-4xl transition-all duration-500 pointer-events-none" />
+              {/* Subtle tech border glow - only on desktop */}
+              <div className="absolute inset-0 border-2 border-[#6F2DFF]/0 md:group-hover:border-[#6F2DFF]/50 rounded-4xl transition-all duration-500 pointer-events-none" />
             </motion.div>
           ))}
         </motion.div>

@@ -5,27 +5,27 @@ import { motion } from 'framer-motion'
 
 // Using existing assets
 import okayAsset from './assets/streamline-plump_star-medal.webp'
-import asset1 from './assets/undraw_visionary-technology_f6b3 1.webp'
-import asset2 from './assets/Group (1).webp'
+import socAsset from './assets/managed_soc_center_realistic_1768461677370.png'
+import complianceAsset from './assets/compliance_navigator_digital_realistic_1768461706632.png'
 
 const skillCards = [
     {
         badge: 'Book a Threat Readiness Call',
         title: '24 × 7 Managed SOC',
         description: 'Our analysts watch your telemetry all day, every day, so you don’t have to. AI-driven correlation, human threat hunting, and two-minute escalation mean incidents are contained before they make the news.',
-        image: asset1
+        image: socAsset
     },
     {
         badge: 'Start a Free Gap Assessment',
         title: 'Compliance Navigator',
         description: 'GDPR, ISO 27001, PCI DSS pick your acronym. Our automated evidence collection and policy templates audit prep from months to days, all while tightening real security.',
-        image: asset2
+        image: complianceAsset
     }
 ]
 
 export default function SkillLevels() {
     return (
-        <section className="relative w-full bg-white dark:bg-black py-24 px-6 overflow-hidden font-sans transition-colors duration-300">
+        <section id="skill-levels" className="relative w-full bg-white dark:bg-black py-24 px-6 overflow-hidden font-sans transition-colors duration-300">
             {/* Decorative Gradients */}
             <div className="absolute top-0 left-0 w-[600px] h-[600px] bg-purple-300/20 blur-[140px] rounded-full -translate-y-1/3 -translate-x-1/3 pointer-events-none z-0" />
             <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-purple-300/30 blur-[140px] rounded-full translate-y-1/3 translate-x-1/3 pointer-events-none z-0" />

@@ -15,7 +15,7 @@ export function AboutHero() {
           priority
           className="object-cover opacity-40 mix-blend-overlay"
         />
-        <div className="absolute inset-0 bg-linear-to-b from-white/20 via-white/50 to-white dark:from-[#030014]/20 dark:via-[#030014]/50 dark:to-[#030014] z-10" />
+        <div className="absolute inset-0 bg-linear-to-b from-white/20 via-white/50 to-white dark:from-[#0E0429]/20 dark:via-[#0E0429]/50 dark:to-[#0E0429] z-10" />
       </div>
 
       {/* Ambient Glows */}
@@ -31,7 +31,7 @@ export function AboutHero() {
           className="relative inline-flex rounded-full p-px overflow-hidden mb-4 md:mb-8"
         >
           <div className="absolute inset-0 bg-linear-to-r from-primary via-white to-primary animate-border-rotate opacity-50" />
-          <div className="relative px-4 py-1.5 md:px-6 md:py-2 rounded-full bg-white/80 dark:bg-[#030014] backdrop-blur-md text-primary text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] shadow-sm dark:shadow-none">
+          <div className="relative px-4 py-1.5 md:px-6 md:py-2 rounded-full bg-white/80 dark:bg-[#0E0429] backdrop-blur-md text-primary text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] shadow-sm dark:shadow-none">
             Empowering Cyber Defenders
           </div>
         </motion.div>

@@ -14,7 +14,7 @@ export default function AboutThemeWrapper({ children }) {
 
     return (
         <div className="transition-colors duration-300">
-            <div className="bg-white dark:bg-[#030014] min-h-screen transition-colors duration-300 relative">
+            <div className="bg-white dark:bg-[#0E0429] min-h-screen transition-colors duration-300 relative">
                 {children}
             </div>
         </div>

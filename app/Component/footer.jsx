@@ -35,7 +35,7 @@ export default function Footer() {
               </div>
             </div>
 
-            <p className="text-muted-foreground text-sm md:text-[18px] leading-[1.6] max-w-[400px] mb-4 md:mb-6">
+            <p className="text-muted-foreground dark:text-gray-400 text-sm md:text-[18px] leading-[1.6] max-w-[400px] mb-4 md:mb-6">
               Cyber Whisper builds cyber-ranges where teams attack, defend, and master skills risk-free.
             </p>
 
@@ -69,7 +69,7 @@ export default function Footer() {
             <h3 className="text-lg md:text-xl font-bold text-foreground mb-4 md:mb-8 tracking-tight relative inline-block">
               Company
             </h3>
-            <ul className="space-y-3 md:space-y-4 text-sm md:text-[16px] font-medium text-slate-600">
+            <ul className="space-y-3 md:space-y-4 text-sm md:text-[16px] font-medium text-slate-600 dark:text-gray-400">
               <li><a href="/" className="hover:text-[#6b46e5] hover:translate-x-1 transition-all inline-block">Home</a></li>
               <li><a href="/about" className="hover:text-[#6b46e5] hover:translate-x-1 transition-all inline-block">About Us</a></li>
               <li><a href="/services" className="hover:text-[#6b46e5] hover:translate-x-1 transition-all inline-block">Our Services</a></li>
@@ -84,7 +84,7 @@ export default function Footer() {
             <h3 className="text-lg md:text-xl font-bold text-foreground mb-4 md:mb-8 tracking-tight relative inline-block">
               Support
             </h3>
-            <ul className="space-y-3 md:space-y-4 text-sm md:text-[16px] font-medium text-slate-600">
+            <ul className="space-y-3 md:space-y-4 text-sm md:text-[16px] font-medium text-slate-600 dark:text-gray-400">
               <li><a href="/refund-policy" className="hover:text-[#6b46e5] hover:translate-x-1 transition-all inline-block">Refund Policy</a></li>
               <li><a href="/privacy-policy" className="hover:text-[#6b46e5] hover:translate-x-1 transition-all inline-block">Privacy Policy</a></li>
               <li><a href="/terms-of-service" className="hover:text-[#6b46e5] hover:translate-x-1 transition-all inline-block">Terms & Conditions</a></li>
@@ -97,7 +97,7 @@ export default function Footer() {
             <h3 className="text-lg md:text-xl font-bold text-foreground mb-4 md:mb-8 tracking-tight relative inline-block">
               Our Office
             </h3>
-            <div className="space-y-4 md:space-y-6 text-sm md:text-[16px] font-medium text-muted-foreground leading-relaxed">
+            <div className="space-y-4 md:space-y-6 text-sm md:text-[16px] font-medium text-muted-foreground dark:text-gray-400 leading-relaxed">
               <div className="flex gap-4">
                 <MapPin className="w-5 h-5 text-[#6b46e5] shrink-0 mt-1" />
                 <p>62-A, 3rd Floor, Suraj Nagar, Delhi – 110033</p>
@@ -116,7 +116,7 @@ export default function Footer() {
 
         {/* Bottom Copyright */}
         <div className="mt-8 md:mt-16 pt-6 md:pt-8 border-t border-slate-100 flex flex-col md:flex-row items-center justify-center gap-4">
-          <p className="text-muted-foreground font-medium text-xs md:text-sm text-center">
+          <p className="text-muted-foreground dark:text-gray-500 font-medium text-xs md:text-sm text-center">
             © {new Date().getFullYear()} Cyber Whisper. All Rights Reserved
           </p>
 

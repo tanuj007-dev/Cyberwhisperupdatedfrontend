@@ -23,14 +23,14 @@ export function AboutVision() {
                 fill
                 className="object-cover grayscale group-hover:grayscale-0 transition-all duration-1000"
               />
-              <div className="absolute inset-0 bg-linear-to-t from-white via-transparent to-transparent dark:from-[#030014] opacity-60" />
+              <div className="absolute inset-0 bg-linear-to-t from-white via-transparent to-transparent dark:from-[#0E0429] opacity-60" />
             </div>
             <motion.div
               initial={{ opacity: 0, scale: 0.8 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ delay: 0.3, duration: 0.8 }}
-              className="absolute -bottom-8 -right-8 w-64 h-64 rounded-3xl overflow-hidden border-8 border-white dark:border-[#030014] shadow-2xl z-20 hidden md:block group-hover:translate-x-1 group-hover:translate-y-1 transition-transform duration-700"
+              className="absolute -bottom-8 -right-8 w-64 h-64 rounded-3xl overflow-hidden border-8 border-white dark:border-[#0E0429] shadow-2xl z-20 hidden md:block group-hover:translate-x-1 group-hover:translate-y-1 transition-transform duration-700"
             >
               <Image src="/cyber_code_matrix_1767456122911.webp" alt="Digital Shield" fill className="object-cover" />
               <div className="absolute inset-0 bg-primary/10 mix-blend-overlay" />

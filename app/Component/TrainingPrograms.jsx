@@ -1,8 +1,8 @@
 "use client"
 import React from 'react';
 import Image from 'next/image';
-import img1 from "./assets/img1.webp";
-import img2 from "./assets/img2.webp";
+import img1 from "./assets/c1.webp";
+import img2 from "./assets/c2.webp";
 import path from "./assets/path.webp";
 export default function TrainingPrograms() {
     return (
@@ -64,15 +64,15 @@ export default function TrainingPrograms() {
                         <div className="flex flex-row justify-between sm:justify-center items-center gap-2 sm:gap-x-12 text-white/90 font-bold text-[10px] sm:text-xs md:text-base animate-fade-in-up delay-300 w-full sm:w-auto">
                             <div className="flex flex-col sm:flex-row items-center gap-2 bg-white/10 sm:bg-transparent px-2 py-3 sm:p-0 rounded-xl sm:rounded-none backdrop-blur-sm sm:backdrop-blur-none border border-white/10 sm:border-none flex-1 sm:flex-none h-full justify-center">
                                 <div className="hidden sm:block w-2 h-2 bg-white rounded-full"></div>
-                                <span className="text-center sm:text-left leading-snug">Hands<br className="sm:hidden" />On<br className="sm:hidden" />Learning</span>
+                                <span className="text-center sm:text-left leading-snug">Hands<br className="sm:hidden" /> On<br className="sm:hidden" /> Learning</span>
                             </div>
                             <div className="flex flex-col sm:flex-row items-center gap-2 bg-white/10 sm:bg-transparent px-2 py-3 sm:p-0 rounded-xl sm:rounded-none backdrop-blur-sm sm:backdrop-blur-none border border-white/10 sm:border-none flex-1 sm:flex-none h-full justify-center">
                                 <div className="hidden sm:block w-2 h-2 bg-white rounded-full"></div>
-                                <span className="text-center sm:text-left leading-snug">Industry<br className="sm:hidden" />Aligned<br className="sm:hidden" />Programs</span>
+                                <span className="text-center sm:text-left leading-snug">Industry<br className="sm:hidden" /> Aligned<br className="sm:hidden" /> Programs</span>
                             </div>
                             <div className="flex flex-col sm:flex-row items-center gap-2 bg-white/10 sm:bg-transparent px-2 py-3 sm:p-0 rounded-xl sm:rounded-none backdrop-blur-sm sm:backdrop-blur-none border border-white/10 sm:border-none flex-1 sm:flex-none h-full justify-center">
                                 <div className="hidden sm:block w-2 h-2 bg-white rounded-full"></div>
-                                <span className="text-center sm:text-left leading-snug">Guided<br className="sm:hidden" />By<br className="sm:hidden" />Practitioners</span>
+                                <span className="text-center sm:text-left leading-snug">Guided<br className="sm:hidden" /> By<br className="sm:hidden" /> Practitioners</span>
                             </div>
                         </div>
                     </div>

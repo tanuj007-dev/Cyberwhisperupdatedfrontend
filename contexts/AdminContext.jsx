@@ -5,6 +5,7 @@ import { mockBlogs } from '@/data/mockBlogs';
 import { mockCategories } from '@/data/mockCategories';
 import { mockTags } from '@/data/mockTags';
 import { mockMedia, mockSiteSettings } from '@/data/mockMedia';
+import { mockUsers } from '@/data/mockUsers';
 
 const AdminContext = createContext();
 
@@ -35,7 +36,7 @@ export const AdminProvider = ({ children }) => {
                 setMedia(mockMedia);
                 setSiteSettings(mockSiteSettings);
 
-                // Fetch users from API
+                // Fetch users from API, fallback to mock data
                 await fetchUsers();
             } catch (error) {
                 console.error('Error initializing admin data:', error);
@@ -50,34 +51,42 @@ export const AdminProvider = ({ children }) => {
     const fetchUsers = async () => {
         try {
             const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3031';
-            console.log('Fetching users from API:', `${apiUrl}/api/users`);
-            
+            console.log('Fetching users from API:', `${apiUrl}/api/users?page=1&limit=1000`);
+
             const response = await fetch(`${apiUrl}/api/users?page=1&limit=1000`, {
                 method: 'GET',
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                },
-                credentials: 'include',
-                mode: 'cors'
+                    'Content-Type': 'application/json'
+                }
             });
-            
+
             console.log('Fetch users response status:', response.status);
-            
+
             if (!response.ok) {
-                const errorText = await response.text();
-                console.error('Fetch error response:', errorText);
                 throw new Error(`Failed to fetch users: ${response.status}`);
             }
-            const data = await response.json();
-            // Handle both array response and paginated response
-            const usersList = Array.isArray(data) ? data : data.users || data.data || [];
-            console.log('Users fetched successfully:', usersList.length, 'users');
+            const result = await response.json();
+            console.log('Full users API response:', result);
+
+            // Handle API response structure: { success: true, data: [...] }
+            let usersList = [];
+
+            if (result.success && result.data) {
+                usersList = Array.isArray(result.data) ? result.data : [result.data];
+            } else if (Array.isArray(result)) {
+                usersList = result;
+            } else if (result.users) {
+                usersList = result.users;
+            }
+
+            console.log('Users fetched successfully from API:', usersList.length, 'users');
             setUsers(usersList);
             setLoading(false);
         } catch (error) {
-            console.error('Error fetching users:', error.message);
-            setUsers([]);
+            console.error('Error fetching users from API:', error.message);
+            console.log('Falling back to mock users data');
+            // Fallback to mock users
+            setUsers(mockUsers);
             setLoading(false);
         }
     };
@@ -323,7 +332,7 @@ export const AdminProvider = ({ children }) => {
 
     // Helper functions
     const getBlogById = (blog_id) => blogs.find(blog => blog.blog_id === blog_id);
-    
+
     const getUserById = async (id) => {
         try {
             const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3031';
@@ -347,7 +356,7 @@ export const AdminProvider = ({ children }) => {
             return users.find(user => user.id === id);
         }
     };
-    
+
     const getCategoryById = (id) => categories.find(category => category.id === id);
     const getTagById = (id) => tags.find(tag => tag.id === id);
     const getMediaById = (id) => media.find(item => item.id === id);

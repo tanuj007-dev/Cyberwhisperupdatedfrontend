@@ -5,8 +5,8 @@ import { motion } from 'framer-motion'
 
 // Using existing assets
 import okayAsset from './assets/icon-park_okay.webp'
-import mapAsset from './assets/world.webp'
-import remindAsset from './assets/env.webp'
+import mapAsset from './assets/cyber_range_map_realistic_1768461852311.png'
+import remindAsset from './assets/strategic_consulting_blueprint_realistic_1768461878616.png'
 
 const essentialCards = [
     {
@@ -25,7 +25,7 @@ const essentialCards = [
 
 export default function Essentials() {
     return (
-        <section className="relative w-full bg-white dark:bg-black py-24 px-6 overflow-hidden font-sans transition-colors duration-300">
+        <section id="essentials" className="relative w-full bg-white dark:bg-black py-24 px-6 overflow-hidden font-sans transition-colors duration-300">
             {/* Decorative Gradients */}
             <div className="absolute top-0 left-0 w-[600px] h-[600px] bg-purple-300/30 blur-[140px] rounded-full -translate-y-1/3 -translate-x-1/3 pointer-events-none z-0" />
             <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-purple-300/30 blur-[140px] rounded-full translate-y-1/3 translate-x-1/3 pointer-events-none z-0" />

@@ -42,7 +42,7 @@ export function TeamSection() {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(0)
 
   return (
-    <section className="relative min-h-[80vh] bg-[#030014] py-24 overflow-hidden flex flex-col items-center justify-center">
+    <section className="relative min-h-[80vh] bg-[#0E0429] py-24 overflow-hidden flex flex-col items-center justify-center">
       {/* Background Text Container with Fixed Height to Prevent Layout Shift */}
       <div className="absolute inset-0 flex items-center justify-center w-full h-full pointer-events-none z-0 overflow-hidden">
         <AnimatePresence mode="wait">
@@ -112,7 +112,7 @@ export function TeamSection() {
                       initial={{ scale: 0, opacity: 0 }}
                       animate={{ scale: 1, opacity: 1 }}
                       exit={{ scale: 0, opacity: 0 }}
-                      className="absolute -top-3 -right-3 w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white z-40 border-2 border-[#030014]"
+                      className="absolute -top-3 -right-3 w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white z-40 border-2 border-[#0E0429]"
                     >
                       <ArrowUpRight className="w-4 h-4 stroke-[3px]" />
                     </motion.div>

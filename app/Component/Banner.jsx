@@ -50,7 +50,7 @@ export default function Banner() {
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.8, ease: "easeOut" }}
-                    className="relative w-full bg-[#8B5CF6] rounded-4xl md:rounded-[2.5rem] p-6 sm:p-10 md:p-12 overflow-hidden shadow-2xl shadow-purple-200"
+                    className="relative w-full bg-[#8B5CF6] dark:bg-[#1a0f3a] rounded-4xl md:rounded-[2.5rem] p-6 sm:p-10 md:p-12 overflow-hidden shadow-2xl shadow-purple-200 dark:shadow-none dark:border dark:border-purple-500/20"
                 >
                     {/* Background Texture Layers */}
                     <div className="absolute inset-0 z-0 opacity-50 mix-blend-overlay pointer-events-none">

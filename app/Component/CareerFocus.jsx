@@ -5,41 +5,41 @@ import { motion } from 'framer-motion'
 
 // Using existing assets
 import okayAsset from './assets/mynaui_briefcase.webp'
-import pcAsset from './assets/remind.webp'
-import img1Asset from './assets/Group.webp'
-import img2Asset from './assets/undraw_term-sheet_70lo 1.webp'
-import pathAsset from './assets/undraw_term-sheet_70lo 1.webp'
+import workshopAsset from './assets/workshop_keyboard_cyber_realistic_1768461443143.png'
+import mentorshipAsset from './assets/mentorship_collaboration_cyber_realistic_1768461459740.png'
+import cyberRangeAsset from './assets/cyber_range_network_3d_render_1768461480085.png'
+import simulationAsset from './assets/digital_forensics_lab_3d_render_1768461501466.png'
 
 const careerCards = [
     {
         badge: 'See Upcoming Dates',
         title: 'Hands-On Workshops',
         description: 'One-day and multi-week bootcamps that swap slide decks for keyboard time. From "SIEM Zero-to-Hero" to "Red-Team Ops," every workshop ends with a certifiable capstone exercise.',
-        image: pcAsset
+        image: workshopAsset
     },
     {
         badge: 'Find Your Mentor',
         title: '1-to-1 Mentorship',
         description: 'Bridge the theory-to-practice gap with personal guidance from industry veterans. Perfect for SOC analysts, DevSecOps engineers, or managers stepping into cybersecurity leadership.',
-        image: img1Asset
+        image: mentorshipAsset
     },
     {
         badge: 'Launch a test attack',
         title: 'Immersive Cyber Range',
         description: 'Spin up live, enterprise-grade networks riddled with APTs, DDoS storms exploits then practice neutralizing them in a safe sandbox. Every scenario is mapped to MITRE ATT&CK and scored so your team sees instant skill gains',
-        image: img2Asset
+        image: cyberRangeAsset
     },
     {
         badge: 'Launch a test attack',
-        title: 'Immersive Cyber Range',
+        title: 'Advanced Threat Labs',
         description: 'Dive into advanced threat simulation labs. Practice real-world incident response and forensic analysis in a controlled environment to sharpen your enterprise defense skills.',
-        image: pathAsset
+        image: simulationAsset
     }
 ]
 
 export default function CareerFocus() {
     return (
-        <section className="relative w-full bg-white dark:bg-black py-24 px-6 overflow-hidden font-sans transition-colors duration-300">
+        <section id="career-focus" className="relative w-full bg-white dark:bg-black py-24 px-6 overflow-hidden font-sans transition-colors duration-300">
             {/* Decorative Gradients */}
             <div className="absolute top-0 left-0 w-[600px] h-[600px] bg-purple-300/20 blur-[140px] rounded-full -translate-y-1/3 -translate-x-1/3 pointer-events-none z-0" />
             <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-purple-300/30 blur-[140px] rounded-full translate-y-1/3 translate-x-1/3 pointer-events-none z-0" />

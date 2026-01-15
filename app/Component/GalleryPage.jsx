@@ -9,63 +9,68 @@ import GalleryThemeWrapper from './GalleryThemeWrapper';
 import Particles from './Particles';
 
 // Gallery data with categories
+// Imported Gallery Images
+import img1 from './assets/gallery/WhatsApp Image 2026-01-10 at 3.49.06 PM (1).webp';
+import img2 from './assets/gallery/WhatsApp Image 2026-01-10 at 3.49.06 PM (4).webp';
+import img3 from './assets/gallery/WhatsApp Image 2026-01-10 at 3.49.06 PM (6).webp';
+import img4 from './assets/gallery/WhatsApp Image 2026-01-10 at 3.49.06 PM (8).webp';
+import img5 from './assets/gallery/WhatsApp Image 2026-01-10 at 3.49.06 PM (10).webp';
+import img6 from './assets/gallery/WhatsApp Image 2026-01-10 at 3.49.06 PM (12).webp';
+import img7 from './assets/gallery/WhatsApp Image 2026-01-10 at 3.49.06 PM (15).webp';
+import img8 from './assets/gallery/WhatsApp Image 2026-01-12 at 6.34.45 PM (1).webp';
+import img9 from './assets/gallery/WhatsApp Image 2026-01-12 at 6.34.47 PM.webp';
+import img10 from './assets/gallery/WhatsApp Image 2026-01-12 at 6.34.48 PM.webp';
+import img11 from './assets/gallery/WhatsApp Image 2026-01-12 at 6.34.49 PM.webp';
+import img12 from './assets/gallery/WhatsApp Image 2026-01-12 at 6.34.50 PM.webp';
+
+const customImages = [img1, img2, img3, img4, img5, img6, img7, img8, img9, img10, img11, img12];
+
+const categoriesList = ['training', 'team', 'workshop', 'events', 'facilities'];
+
+const titles = {
+    training: 'Advanced Security Training',
+    team: 'Elite Team Operations',
+    workshop: 'Hands-on Cyber Workshop',
+    events: 'Global Cyber Summit',
+    facilities: 'State-of-the-Art Facility'
+};
+
+const descriptions = {
+    training: 'Immersive training scenarios designed to test reaction times and strategic thinking.',
+    team: 'Collaborative efforts by our top-tier security analysts tackling complex threats.',
+    workshop: 'Interactive sessions focusing on latest vulnerability assessment techniques.',
+    events: 'Highlights from our major industry conferences and community gatherings.',
+    facilities: 'A glimpse into our secure operations centers and technology labs.'
+};
+
+// Gallery data with categories
 const galleryData = [
-    {
-        id: 1,
-        src: '/gallery_cyber_training.webp',
-        title: 'Cybersecurity Training Lab',
-        category: 'training',
-        description: 'State-of-the-art training environment with holographic displays and AI-powered threat simulations.',
-    },
-    {
-        id: 2,
-        src: '/gallery_team_collab.webp',
-        title: 'Expert Team Collaboration',
-        category: 'team',
-        description: 'Our elite cybersecurity experts working together in our futuristic command center.',
-    },
-    {
-        id: 3,
-        src: '/gallery_workshop.webp',
-        title: 'Interactive Workshops',
-        category: 'workshop',
-        description: 'Hands-on learning sessions with cutting-edge VR and holographic technology.',
-    },
-    {
-        id: 4,
-        src: '/gallery_awards.webp',
-        title: 'Award Ceremonies',
-        category: 'events',
-        description: 'Celebrating excellence in cybersecurity at our prestigious award events.',
-    },
-    {
-        id: 5,
-        src: '/gallery_pentest_lab.webp',
-        title: 'Penetration Testing Lab',
-        category: 'training',
-        description: 'Red team operations facility for advanced offensive security training.',
-    },
-    {
-        id: 6,
-        src: '/gallery_conference.webp',
-        title: 'Global Conferences',
-        category: 'events',
-        description: 'Keynote presentations featuring industry thought leaders and innovations.',
-    },
-    {
-        id: 7,
-        src: '/gallery_soc_center.webp',
-        title: 'Security Operations Center',
-        category: 'facilities',
-        description: '24/7 SOC monitoring center with real-time global threat intelligence.',
-    },
-    {
-        id: 8,
-        src: '/gallery_ctf_event.webp',
-        title: 'CTF Competitions',
-        category: 'events',
-        description: 'Competitive capture-the-flag events testing cybersecurity skills.',
-    },
+    // Add custom images first
+    ...customImages.map((src, i) => {
+        const id = i + 1;
+        const category = categoriesList[i % categoriesList.length];
+        return {
+            id: `custom-${id}`,
+            src: src,
+            title: `${titles[category]} Highlights`,
+            category: category,
+            description: descriptions[category],
+        };
+    }),
+    // Generate placeholders (optional: can be reduced or removed if not needed, keeping for bulk)
+    ...Array.from({ length: 18 }, (_, i) => {
+        const id = i + 1;
+        const category = categoriesList[(id - 1) % categoriesList.length];
+        const ext = id === 15 ? 'png' : 'jpg';
+
+        return {
+            id: id,
+            src: `/gallery/gallery-${id}.${ext}`,
+            title: `${titles[category]} ${Math.ceil(id / 5)}`,
+            category: category,
+            description: descriptions[category],
+        };
+    })
 ];
 
 const categories = [
@@ -183,7 +188,7 @@ export default function GalleryPage() {
                     </div>
 
                     {/* Bottom gradient fade */}
-                    <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white dark:from-[#030014] to-transparent transition-colors duration-300" />
+                    <div className="absolute bottom-0 left-0 right-0 h-32 bg-linear-to-t from-white dark:from-[#170A2D] to-transparent transition-colors duration-300" />
                 </section>
 
 
@@ -242,7 +247,7 @@ export default function GalleryPage() {
                                             />
 
                                             {/* Overlay */}
-                                            <div className="absolute inset-0 bg-gradient-to-t from-[#030014] via-[#030014]/20 to-transparent opacity-60 group-hover:opacity-90 transition-opacity duration-500" />
+                                            <div className="absolute inset-0 bg-gradient-to-t from-[#0E0429] via-[#0E0429]/20 to-transparent opacity-60 group-hover:opacity-90 transition-opacity duration-500" />
 
                                             {/* Scan line effect */}
                                             <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
@@ -261,14 +266,14 @@ export default function GalleryPage() {
                                                     </span>
 
                                                     {/* Title */}
-                                                    <h3 className="text-xl font-bold text-white mb-2 group-hover:text-purple-200 transition-colors">
+                                                    <h3 className=" text-lg md:text-xl  font-bold text-white mb-2 group-hover:text-purple-200 transition-colors">
                                                         {image.title}
                                                     </h3>
 
-                                                    {/* Description - hidden until hover */}
-                                                    <p className="text-sm text-gray-400 opacity-0 group-hover:opacity-100 transition-all duration-500 line-clamp-2">
+                                                    {/* Description - hidden on mobile, shown on desktop hover */}
+                                                    {/* <p className="hidden md:block text-sm text-gray-400 opacity-0 group-hover:opacity-100 transition-all duration-500 line-clamp-2">
                                                         {image.description}
-                                                    </p>
+                                                    </p> */}
                                                 </div>
 
                                                 {/* Zoom icon */}
@@ -296,7 +301,7 @@ export default function GalleryPage() {
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
-                            className="fixed inset-0 z-50 flex items-center justify-center bg-white/95 dark:bg-[#030014]/95 backdrop-blur-xl p-4"
+                            className="fixed inset-0 z-50 flex items-center justify-center bg-white/95 dark:bg-[#0E0429]/95 backdrop-blur-xl p-4"
                             onClick={closeLightbox}
                         >
                             {/* Close button */}

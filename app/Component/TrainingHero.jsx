@@ -195,7 +195,7 @@ export default function TrainingHero() {
                     className="relative flex justify-center items-center mt-6 lg:mt-0"
                 >
                     {/* Decorative Background Elements */}
-                    <div className="absolute -z-10 w-[120%] h-[120%] bg-white rounded-full"></div>
+
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] md:w-[400px] h-[300px] md:h-[400px] bg-purple-500/10 blur-[60px] md:blur-[80px] rounded-full -z-10 animate-pulse"></div>
 
                     {/* Dynamic Particles/Dots */}

@@ -1,7 +1,7 @@
 "use client"
 import React from 'react';
 import Image from 'next/image';
-import mapImg from "./assets/map-transparent.webp";
+import mapImg from "./assets/c2afcf94-e678-4aa2-8ceb-a6d37be4443e.png";
 import footerBg from "./assets/footer-bg.webp";
 
 // Extensive attack line routes for a busy, global look

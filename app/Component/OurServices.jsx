@@ -8,7 +8,7 @@ export default function OurServices() {
     const [activeWords, setActiveWords] = useState(0);
 
     const text =
-        "Real-world labs, round-the-clock defense, and expert guidance everything you need to outsmart tomorrow’s threats.";
+        "We help organizations build security capabilities that work in the real world. Our approach combines continuous monitoring, realistic simulations, and actionable reporting — so your team is prepared for modern threats.";
 
     const words = text.split(" ");
 

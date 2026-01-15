@@ -15,12 +15,14 @@ import {
     X,
     ChevronDown,
     Image as ImageIcon,
-    Shield
+    Shield,
+    Calendar
 } from 'lucide-react';
 
 const Sidebar = ({ isOpen, setIsOpen }) => {
     const pathname = usePathname();
     const [blogMenuOpen, setBlogMenuOpen] = useState(true);
+    const [batchMenuOpen, setBatchMenuOpen] = useState(true);
 
     const menuItems = [
         /* {
@@ -35,6 +37,15 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             submenu: [
                 { name: 'All Blogs', icon: List, path: '/admin/blogs' },
                 { name: 'Add Blog', icon: PlusCircle, path: '/admin/blogs/add' }
+            ]
+        },
+        {
+            name: 'Batches',
+            icon: Calendar,
+            hasSubmenu: true,
+            submenu: [
+                { name: 'All Batches', icon: List, path: '/admin/batches' },
+                { name: 'Add Batch', icon: PlusCircle, path: '/admin/batches/add' }
             ]
         },
         {
@@ -112,7 +123,10 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                                 {item.hasSubmenu ? (
                                     <>
                                         <button
-                                            onClick={() => setBlogMenuOpen(!blogMenuOpen)}
+                                            onClick={() => {
+                                                if (item.name === 'Blogs') setBlogMenuOpen(!blogMenuOpen);
+                                                if (item.name === 'Batches') setBatchMenuOpen(!batchMenuOpen);
+                                            }}
                                             className={`w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all group ${isParentActive(item.submenu)
                                                 ? 'bg-gradient-to-r from-violet-600/20 to-purple-600/20 text-white'
                                                 : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
@@ -129,10 +143,16 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                                             </div>
                                             <ChevronDown
                                                 size={16}
-                                                className={`transition-transform text-slate-400 ${blogMenuOpen ? 'rotate-180' : ''}`}
+                                                className={`transition-transform text-slate-400 ${(item.name === 'Blogs' && blogMenuOpen) ||
+                                                        (item.name === 'Batches' && batchMenuOpen)
+                                                        ? 'rotate-180' : ''
+                                                    }`}
                                             />
                                         </button>
-                                        <div className={`overflow-hidden transition-all duration-300 ${blogMenuOpen ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0'}`}>
+                                        <div className={`overflow-hidden transition-all duration-300 ${(item.name === 'Blogs' && blogMenuOpen) ||
+                                                (item.name === 'Batches' && batchMenuOpen)
+                                                ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0'
+                                            }`}>
                                             <ul className="mt-2 ml-4 pl-4 border-l border-slate-700 space-y-1">
                                                 {item.submenu.map((subItem) => (
                                                     <li key={subItem.name}>
