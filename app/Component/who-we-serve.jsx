@@ -1,5 +1,6 @@
 "use client"
 import React from 'react';
+import { motion } from 'framer-motion';
 import Image from 'next/image';
 
 export default function WeServe() {
@@ -26,6 +27,72 @@ export default function WeServe() {
                 />
                 {/* Overlay to blend with dark bg */}
                 <div className="absolute inset-0 bg-linear-to-t from-[#0E0429]/60 via-transparent to-transparent pointer-events-none" />
+
+                {/* Active Monitoring Radar Effect */}
+                <div className="absolute inset-0 z-10 pointer-events-none flex items-center justify-center">
+
+                  {/* Dynamic Radar Sweep Gradient */}
+                  <motion.div
+                    className="absolute inset-0 rounded-full"
+                    style={{
+                      background: "conic-gradient(from 180deg at 50% 50%, transparent 0deg, rgba(34, 211, 238, 0.1) 60deg, transparent 120deg)"
+                    }}
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+                  />
+
+                  {/* Rotating Cross-Beams */}
+                  <motion.div
+                    className="absolute w-full h-[1px] bg-gradient-to-r from-transparent via-cyan-400/60 to-transparent"
+                    animate={{ rotate: 360, opacity: [0.3, 0.8, 0.3] }}
+                    transition={{
+                      rotate: { duration: 10, repeat: Infinity, ease: "linear" },
+                      opacity: { duration: 2, repeat: Infinity, ease: "easeInOut" }
+                    }}
+                  />
+                  <motion.div
+                    className="absolute w-[1px] h-full bg-gradient-to-b from-transparent via-purple-400/60 to-transparent"
+                    animate={{ rotate: -360, opacity: [0.3, 0.8, 0.3] }}
+                    transition={{
+                      rotate: { duration: 15, repeat: Infinity, ease: "linear" },
+                      opacity: { duration: 3, repeat: Infinity, ease: "easeInOut" }
+                    }}
+                  />
+
+                  {/* Rotating Dashed Ring */}
+                  <motion.div
+                    className="absolute w-[95%] h-[95%] border border-dashed border-cyan-400/20 rounded-full"
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                  />
+
+                  {/* Counter-Rotating Inner Ring */}
+                  <motion.div
+                    className="absolute w-[75%] h-[75%] border border-dotted border-purple-400/30 rounded-full"
+                    animate={{ rotate: -360 }}
+                    transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+                  />
+
+                  {/* Expanding Radar Pulses */}
+                  {[0, 1].map((i) => (
+                    <motion.div
+                      key={i}
+                      className="absolute bg-cyan-400/5 border border-cyan-400/30 rounded-full"
+                      initial={{ width: "10%", height: "10%", opacity: 0 }}
+                      animate={{
+                        width: ["10%", "110%"],
+                        height: ["10%", "110%"],
+                        opacity: [0, 0.3, 0]
+                      }}
+                      transition={{
+                        duration: 3,
+                        repeat: Infinity,
+                        ease: "easeOut",
+                        delay: i * 1.5,
+                      }}
+                    />
+                  ))}
+                </div>
               </div>
             </div>
           </div>

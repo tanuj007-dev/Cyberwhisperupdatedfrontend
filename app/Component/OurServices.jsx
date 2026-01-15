@@ -45,7 +45,7 @@ export default function OurServices() {
                 <div className="flex flex-col lg:flex-row items-center justify-between gap-10 md:gap-16 lg:gap-20">
 
                     {/* Left Content Column */}
-                    <div className="w-full lg:w-1/2 flex flex-col items-start text-left space-y-6 md:space-y-8 order-2 lg:order-1 animate-in fade-in slide-in-from-left duration-1000">
+                    <div className="w-full lg:w-1/2 flex flex-col items-start text-left space-y-6 md:space-y-2 order-2 lg:order-1 animate-in fade-in slide-in-from-left duration-1000">
                         {/* Tag Badge */}
                         <div className="flex items-center gap-3 animate-fade-in">
                             <div className="w-4 h-4 bg-[#6B46E5] rounded-sm shadow-[0_0_10px_rgba(107,70,229,0.3)]"></div>
@@ -63,7 +63,7 @@ export default function OurServices() {
                         {/* Description Paragraph */}
                         <p
                             ref={ref}
-                            className="text-base sm:text-lg md:text-xl font-medium leading-relaxed max-w-[550px]"
+                            className="text-base sm:text-lg md:text-xl font-medium leading-snug max-w-[550px]"
                         >
                             {words.map((word, index) => (
                                 <span
@@ -77,6 +77,27 @@ export default function OurServices() {
                                 </span>
                             ))}
                         </p>
+
+                        <ul className="space-y-3 mt-2 max-w-[600px]">
+                            <li className="flex items-start gap-3">
+                                <span className="mt-2 h-1.5 w-1.5 rounded-full bg-[#6B46E5] flex-shrink-0" />
+                                <span className="text-base sm:text-lg text-slate-700 dark:text-gray-300 font-medium leading-normal">
+                                    SOC-ready processes: triage → investigation → response → reporting
+                                </span>
+                            </li>
+                            <li className="flex items-start gap-3">
+                                <span className="mt-2 h-1.5 w-1.5 rounded-full bg-[#6B46E5] flex-shrink-0" />
+                                <span className="text-base sm:text-lg text-slate-700 dark:text-gray-300 font-medium leading-normal">
+                                    Cyber Range exercises to validate detection and response safely
+                                </span>
+                            </li>
+                            <li className="flex items-start gap-3">
+                                <span className="mt-2 h-1.5 w-1.5 rounded-full bg-[#6B46E5] flex-shrink-0" />
+                                <span className="text-base sm:text-lg text-slate-700 dark:text-gray-300 font-medium leading-normal">
+                                    Actionable insights: reduce noise, improve visibility, strengthen readiness
+                                </span>
+                            </li>
+                        </ul>
                         {/* Optional CTA or List could go here if needed later, but following the image for now */}
                     </div>
 

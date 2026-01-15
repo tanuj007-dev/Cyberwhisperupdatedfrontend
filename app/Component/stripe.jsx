@@ -83,20 +83,20 @@ export default function Stripe() {
     return (
         <nav className="sticky top-[72px] z-40 w-full bg-white/90 dark:bg-black/90 backdrop-blur-md border-y border-gray-100 dark:border-gray-800 py-3 font-sans transition-all duration-300 shadow-sm">
             <div className="container mx-auto px-6 max-w-7xl">
-                <div className="flex flex-col sm:flex-row items-center justify-between gap-6 sm:gap-4 text-[15px]">
+                <div className="flex flex-row items-center justify-between gap-4 text-[15px]">
 
-                    {/* Label Section */}
-                    <div className="flex items-center gap-2">
+                    {/* Label Section - Hidden on mobile */}
+                    <div className="hidden md:flex items-center gap-2">
                         <span className="font-bold text-[#1a1a2e] dark:text-white whitespace-nowrap uppercase tracking-wider text-xs md:text-sm">Explore Categories:</span>
                     </div>
 
                     {/* Nav Links Section */}
-                    <div className="flex items-center gap-2 bg-gray-100 dark:bg-gray-900/50 p-1.5 rounded-full overflow-x-auto scrollbar-hide w-full sm:w-auto">
+                    <div className="flex items-center justify-between sm:justify-start gap-2 bg-gray-100 dark:bg-gray-900/50 p-1.5 rounded-full overflow-x-auto scrollbar-hide w-full sm:w-auto">
                         {categories.map((cat) => (
                             <button
                                 key={cat.id}
                                 onClick={() => scrollToSection(cat.id)}
-                                className={`relative px-5 py-2 rounded-full text-sm font-semibold transition-colors duration-200 z-10 whitespace-nowrap ${activeTab === cat.id ? 'text-white' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                                className={`relative px-3 md:px-5 py-2 rounded-full text-xs md:text-sm font-semibold transition-colors duration-200 z-10 whitespace-nowrap flex-1 md:flex-none text-center ${activeTab === cat.id ? 'text-white' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                                     }`}
                             >
                                 {cat.label}

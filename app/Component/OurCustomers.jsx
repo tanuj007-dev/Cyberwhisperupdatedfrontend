@@ -36,7 +36,7 @@ const OurCustomers = () => {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.6, ease: "easeOut" }}
-                        className="text-4xl md:text-[50px] text-foreground font-semibold tracking-tight mb-4"
+                        className="text-4xl md:text-[50px] text-foreground font-semibold tracking-tight mb-4  bg-linear-to-r from-primary via-foreground to-primary bg-clip-text text-transparent"
                     >
                         Our Customers
                     </motion.h2>
@@ -119,11 +119,13 @@ const OurCustomers = () => {
                 .scroll-content-reverse {
                     display: flex;
                     gap: 1.5rem;
+                    padding-right: 1.5rem;
                 }
 
                 @media (min-width: 768px) {
                     .scroll-content-reverse {
                         gap: 2.5rem;
+                        padding-right: 2.5rem;
                     }
                 }
 

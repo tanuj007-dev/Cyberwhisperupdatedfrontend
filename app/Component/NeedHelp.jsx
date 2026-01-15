@@ -46,7 +46,7 @@ export default function NeedHelp() {
                     </motion.div>
 
                     <h2 className="text-3xl md:text-5xl font-bold text-gray-900 dark:text-white tracking-tight">
-                        Need Help? <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-600 dark:from-purple-400 dark:to-cyan-400">Start Here First</span>
+                        Need Help? <span className="text-transparent bg-clip-text bg-purple-600">Start Here First</span>
                     </h2>
                     <p className="text-slate-600 dark:text-slate-400 max-w-2xl mx-auto text-sm md:text-base leading-relaxed">
                         Clear answers to streamline your engagement. No ambiguity, just execution.
