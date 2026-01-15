@@ -28,7 +28,7 @@ export const metadata = {
     description: "Advanced cybersecurity training, B2B solutions, and cyber range services",
     keywords: "cybersecurity, training, penetration testing, cyber range",
     viewport: "width=device-width, initial-scale=1, maximum-scale=5",
-    themeColor: "#000000",
+    themeColor: "#ffffff",
     manifest: "/manifest.json",
     openGraph: {
         type: "website",

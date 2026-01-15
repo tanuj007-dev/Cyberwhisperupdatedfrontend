@@ -100,7 +100,7 @@ export default function TestimonialsSection() {
             viewport={{ once: true }}
             className="inline-flex items-center gap-2 mb-4"
           >
-            <div className="w-3 h-3 bg-white rounded-sm shadow-[0_0_15px_rgba(255,255,255,0.4)]"></div>
+                                   <div className="w-3 h-3 md:w-4 md:h-4 bg-white  shadow-[0_0_15px_rgba(255,255,255,0.4)]"></div>
             <span className="text-white text-xs font-bold uppercase tracking-[0.2em]">TESTIMONIALS</span>
           </motion.div>
           <motion.h2

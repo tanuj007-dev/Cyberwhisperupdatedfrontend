@@ -89,7 +89,6 @@ export default function CoreServicesOverview() {
         // Estimate clickable move distance (roughly one card width + gap)
         // Desktop: 320px + 24px = 344px
         // Mobile: 280px + 16px = 296px
-        // We'll use a conservative flexible value or just measure relative to screen
         const moveAmount = window.innerWidth < 768 ? 300 : 350;
 
         let newX = direction === 'next' ? currentX - moveAmount : currentX + moveAmount;
@@ -101,9 +100,9 @@ export default function CoreServicesOverview() {
 
         animate(x, newX, {
             type: "spring",
-            stiffness: 300,
-            damping: 30,
-            mass: 1
+            stiffness: 400,
+            damping: 40,
+            mass: 0.8
         });
     };
 
@@ -127,13 +126,10 @@ export default function CoreServicesOverview() {
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5 }}
-                        className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-gray-200 dark:bg-white/5 dark:border-white/10 backdrop-blur-sm shadow-sm dark:shadow-none"
+                        className="inline-flex items-center gap-2 px-3 py-1  "
                     >
-                        <span className="relative flex h-2 w-2">
-                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
-                            <span className="relative inline-flex rounded-full h-2 w-2 bg-purple-500"></span>
-                        </span>
-                        <span className="text-xs font-semibold text-gray-800 dark:text-purple-200 tracking-wider uppercase">
+                        <div className="w-3 h-3 md:w-4 md:h-4 bg-[#6B46E5] shadow-[3px_3px_6px_rgba(107,70,229,0.45)]"></div>
+                        <span className="text-[15px] font-semibold text-gray-800 dark:text-purple-200 tracking-wider uppercase">
                             Core Capabilities
                         </span>
                     </motion.div>
@@ -163,39 +159,35 @@ export default function CoreServicesOverview() {
                     <motion.div
                         ref={carouselRef}
                         className="cursor-grab active:cursor-grabbing overflow-hidden outline-none"
+                        style={{ touchAction: 'pan-y' }}
                     >
                         <motion.div
                             drag="x"
                             dragConstraints={{ right: 0, left: -width }}
-                            dragElastic={0.1}
-                            // Optimized for smoother feel on both touch and mouse
-                            dragTransition={{ power: 0.15, timeConstant: 250, bounceStiffness: 100, bounceDamping: 20 }}
+                            dragElastic={0.05}
+                            dragTransition={{ bounceStiffness: 600, bounceDamping: 20 }}
                             style={{ x }}
                             whileTap={{ cursor: "grabbing" }}
-                            className="flex gap-4 md:gap-6 py-4 px-2 items-stretch"
+                            className="flex gap-3 md:gap-6 py-4 px-1 md:px-2 items-stretch"
                         >
                             {services.map((service, idx) => (
                                 <motion.div
                                     key={idx}
-                                    className="relative min-w-[280px] md:min-w-[320px] rounded-2xl p-[1px] group/card h-auto select-none"
+                                    className="relative min-w-[calc(100vw-3rem)] md:min-w-[320px] rounded-2xl p-[1px] group/card h-auto select-none pointer-events-auto"
                                     initial={{ opacity: 0, scale: 0.9 }}
                                     whileInView={{ opacity: 1, scale: 1 }}
                                     viewport={{ once: true }}
                                     transition={{ duration: 0.4, delay: idx * 0.1 }}
                                 >
-                                    {/* Neon Gradient Border */}
-                                    <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-gray-200 via-white to-transparent dark:from-white/20 dark:via-white/5 dark:to-transparent opacity-50 group-hover/card:opacity-100 transition-opacity duration-500" />
-                                    <div
-                                        className="absolute inset-0 rounded-2xl opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 blur-md"
-                                        style={{ background: `linear-gradient(to bottom, ${service.color}40, transparent)` }}
-                                    />
+                                    {/* Simplified Border - No blur during interaction */}
+                                    <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-gray-200 via-white to-transparent dark:from-white/20 dark:via-white/5 dark:to-transparent opacity-50 group-hover/card:opacity-100 transition-opacity duration-300" />
 
-                                    {/* Card Content */}
-                                    <div className="relative h-full bg-white/80 dark:bg-[#0F0720]/90 backdrop-blur-xl rounded-2xl p-5 md:p-6 flex flex-col items-center text-center border border-gray-100 dark:border-white/5 overflow-hidden justify-between shadow-sm dark:shadow-none">
+                                    {/* Card Content - Solid backgrounds for performance */}
+                                    <div className="relative h-full bg-white dark:bg-[#0F0720] rounded-2xl p-5 md:p-6 flex flex-col items-center text-center border border-gray-100 dark:border-white/5 overflow-hidden justify-between shadow-lg dark:shadow-none">
 
-                                        {/* Top glow effect */}
+                                        {/* Simplified glow - no blur */}
                                         <div
-                                            className="absolute -top-10 -right-10 w-32 h-32 rounded-full blur-[60px] opacity-20 group-hover/card:opacity-40 transition-opacity duration-500"
+                                            className="absolute -top-10 -right-10 w-32 h-32 rounded-full opacity-10 group-hover/card:opacity-20 transition-opacity duration-300"
                                             style={{ background: service.color }}
                                         />
 
@@ -203,19 +195,19 @@ export default function CoreServicesOverview() {
                                         <div className="w-full flex flex-col items-center">
                                             {/* Badge */}
                                             <div className="w-full flex justify-between items-start mb-4">
-                                                <span className="px-2 py-1 rounded-md text-[10px] uppercase font-bold tracking-wider bg-gray-100 text-gray-700 border border-gray-200 dark:bg-white/5 dark:text-gray-300 dark:border-white/5 group-hover/card:border-white/20 transition-colors">
+                                                <span className="px-2 py-1 rounded-md text-[10px] uppercase font-bold tracking-wider bg-gray-100 text-gray-700 border border-gray-200 dark:bg-white/5 dark:text-gray-300 dark:border-white/5 transition-colors">
                                                     {service.badge}
                                                 </span>
-                                                <Zap className="w-4 h-4 text-gray-400 dark:text-gray-600 group-hover/card:text-purple-600 dark:group-hover/card:text-white transition-colors" />
+                                                <Zap className="w-4 h-4 text-gray-400 dark:text-gray-600 transition-colors" />
                                             </div>
 
-                                            {/* 3D Icon - Slightly Smaller for Compactness */}
-                                            <div className="relative w-28 h-28 md:w-32 md:h-32 mb-4 group-hover/card:scale-110 transition-transform duration-500 ease-out">
+                                            {/* 3D Icon */}
+                                            <div className="relative w-28 h-28 md:w-32 md:h-32 mb-4 transition-transform duration-300 group-hover/card:scale-105">
                                                 <Image
                                                     src={service.image}
                                                     alt={service.title}
                                                     fill
-                                                    className="object-contain drop-shadow-[0_0_15px_rgba(0,0,0,0.1)] dark:drop-shadow-[0_0_15px_rgba(255,255,255,0.1)]"
+                                                    className="object-contain"
                                                 />
                                             </div>
                                         </div>
@@ -228,14 +220,13 @@ export default function CoreServicesOverview() {
                                             >
                                                 {service.title}
                                             </h3>
-                                            {/* Full Text - No Line Clamp */}
-                                            <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed mb-5 group-hover/card:text-gray-800 dark:group-hover/card:text-gray-300 text-center">
+                                            <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed mb-5 text-center">
                                                 {service.description}
                                             </p>
 
                                             <button
                                                 onClick={openEnquiry}
-                                                className="w-full py-2.5 rounded-lg bg-gray-50 border border-gray-200 text-gray-900 shadow-sm dark:shadow-none dark:bg-white/5 dark:border-white/10 text-xs font-semibold dark:text-white group-hover/card:bg-gray-100 dark:group-hover/card:bg-white/10 flex items-center justify-center gap-1 transition-all group-hover/card:gap-2 hover:border-purple-200 dark:hover:border-white/20"
+                                                className="w-full py-2.5 rounded-lg bg-gray-50 border border-gray-200 text-gray-900 shadow-sm dark:shadow-none dark:bg-white/5 dark:border-white/10 text-xs font-semibold dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 flex items-center justify-center gap-1 transition-all hover:gap-2 hover:border-purple-200 dark:hover:border-white/20"
                                             >
                                                 Enquire Now
                                                 <MessageCircle className="w-3 h-3" />
