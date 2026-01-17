@@ -18,7 +18,7 @@ export default function GalleryThemeWrapper({ children }) {
     }, []);
 
     if (!mounted) {
-        return <div className="min-h-screen bg-[#170A2D]" />;
+        return <div className="min-h-screen bg-[#1B0D37]" />;
     }
 
     return (

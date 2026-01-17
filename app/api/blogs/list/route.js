@@ -38,6 +38,17 @@ export async function GET(request) {
         // Sort by created_at descending (newest first)
         blogs = blogs.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
 
+        // Map blog fields to match frontend expectations
+        blogs = blogs.map(blog => ({
+            ...blog,
+            image: blog.banner_url || blog.thumbnail_url || blog.image, // Map banner_url to image
+            description: blog.short_description || blog.content?.substring(0, 200) || '',
+            excerpt: blog.short_description || blog.content?.substring(0, 150) || '',
+            date: blog.published_at || blog.created_at,
+            author: blog.author_name || 'CyberWhisper Team',
+            category: blog.category_name || 'Cybersecurity'
+        }));
+
         // Calculate pagination
         const total = blogs.length;
         const startIndex = (page - 1) * limit;

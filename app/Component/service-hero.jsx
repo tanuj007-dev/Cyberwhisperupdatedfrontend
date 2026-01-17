@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { motion, useAnimationFrame, useMotionValue } from 'framer-motion'
 import Image from 'next/image'
 import { GoArrowRight } from "react-icons/go";
+import { useEnquiry } from '../context/EnquiryContext';
 // Import assets
 import cyberLab1 from "./assets/cyber_lab_1.webp"
 import cyberLab2 from "./assets/cyber_lab_2.webp"
@@ -23,6 +24,7 @@ const CAROUSEL_IMAGES = [
 const ALL_IMAGES = [...CAROUSEL_IMAGES, ...CAROUSEL_IMAGES, ...CAROUSEL_IMAGES]
 
 export default function ServiceHero() {
+  const { openEnquiry } = useEnquiry();
   const containerRef = useRef(null)
   const [containerWidth, setContainerWidth] = useState(0)
   const x = useMotionValue(0)
@@ -124,7 +126,7 @@ export default function ServiceHero() {
               />
 
               {/* Content */}
-              <div className="relative inline-flex items-center gap-4 px-6 md:px-8 py-2 rounded-full bg-[#170A2D] backdrop-blur-md text-white shadow-sm">
+              <div className="relative inline-flex items-center gap-4 px-6 md:px-8 py-2 rounded-full bg-[#1B0D37] backdrop-blur-md text-white shadow-sm">
 
                 <span className="text-xs md:text-sm font-medium text-purple-200 tracking-wider uppercase">
                   Cybersecurity Services + Cyber Range
@@ -165,7 +167,9 @@ export default function ServiceHero() {
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center lg:justify-start gap-3 md:gap-5 animate-in fade-in slide-in-from-left duration-1000 w-full sm:w-auto">
-              <button className="flex items-center justify-center gap-3 bg-[#310E3F] text-white px-8 md:px-10 py-3 rounded-full font-bold text-base md:text-lg hover:scale-105 hover:bg-[#6B46E5] transition-all hover:shadow-2xl active:scale-95 group w-full sm:w-auto border-2 border-[#310E3F] dark:border-purple-500">
+              <button
+                onClick={openEnquiry}
+                className="flex items-center justify-center gap-3 bg-[#310E3F] text-white px-8 md:px-10 py-3 rounded-full font-bold text-base md:text-lg hover:scale-105 hover:bg-[#6B46E5] transition-all hover:shadow-2xl active:scale-95 group w-full sm:w-auto border-2 border-[#310E3F] dark:border-purple-500">
                 Get a Quote
                 <div className="w-6 h-6 rounded-full bg-white flex text-[#310E3F] items-center justify-center transition-transform group-hover:translate-x-1">
                   <GoArrowRight size={20} />

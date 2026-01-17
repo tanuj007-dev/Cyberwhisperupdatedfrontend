@@ -46,7 +46,7 @@ export function ApproachSection() {
   }
 
   return (
-    <section className="py-16 bg-[#F8F9FA] dark:bg-[#170A2D] relative transition-colors duration-300">
+    <section className="py-16 bg-[#F8F9FA] dark:bg-[#1B0D37] relative transition-colors duration-300">
       <div className="w-full max-w-7xl mx-auto px-4 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -56,7 +56,7 @@ export function ApproachSection() {
           className="text-center max-w-5xl mx-auto mb-12 space-y-4"
         >
           <span className="text-[#6F2DFF] font-black uppercase tracking-[0.3em] text-[15px]">Our Strategy</span>
-          <h2 className="text-3xl md:text-[50px] text-[#170A2D] dark:text-white font-semibold tracking-tighter">
+          <h2 className="text-3xl md:text-[50px] text-[#1B0D37] dark:text-white font-semibold tracking-tighter">
             Strengthening security, <span className="text-[#6F2DFF]  ">your future</span>
           </h2>
         </motion.div>

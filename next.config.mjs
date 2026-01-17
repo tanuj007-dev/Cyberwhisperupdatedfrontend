@@ -10,6 +10,10 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'images.unsplash.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'res.cloudinary.com',
+      },
     ],
     // Enable optimization
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
@@ -40,6 +44,16 @@ const nextConfig = {
   onDemandEntries: {
     maxInactiveAge: 15000,
     pagesBufferLength: 5,
+  },
+
+  // API Proxy to bypass CORS issues (only for user-related APIs)
+  async rewrites() {
+    return [
+      {
+        source: '/api/users/:path*',
+        destination: 'http://localhost:3031/api/users/:path*',
+      },
+    ];
   },
 };
 

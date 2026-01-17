@@ -2,28 +2,40 @@
 import React from 'react'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
+import { useEnquiry } from '../context/EnquiryContext'
 
 // Using existing assets
-import okayAsset from './assets/icon-park_okay.webp'
 import mapAsset from './assets/cyber_range_map_realistic_1768461852311.png'
 import remindAsset from './assets/strategic_consulting_blueprint_realistic_1768461878616.png'
+import { ShieldCheck } from 'lucide-react'
+import cardBg from './assets/essentials_bg.png'
 
 const essentialCards = [
     {
-        badge: 'Launch a test attack',
-        title: 'Immersive Cyber Range',
-        description: 'Spin up live, enterprise-grade networks riddled with APTs, DDoS storms exploits then practice neutralizing them in a safe sandbox. Every scenario is mapped to MITRE ATT&CK and scored so your team sees instant skill gains',
-        image: mapAsset
+        title: 'Cyber Range & Simulation',
+        description: 'Realistic attack simulations to test and improve your defenses in a safe environment.',
+        points: [
+            'Hands-on simulations mapped to real attacker behavior (safe & controlled)',
+            'Red vs Blue exercises + blue-team defense drills',
+            'Custom scenarios aligned to your tech stack and threat model'
+        ],
+        cta: 'Book a Demo'
     },
     {
-        badge: 'Request a Security Blueprint',
-        title: 'Strategic Cyber Consulting',
-        description: 'Road-map reviews, architecture hardening, and board-level briefings tailored to your business size, risk appetite, and budget. We translate complex security gaps into clear, prioritized action plans.',
-        image: remindAsset
+        title: 'SOC Deployment + 24×7 Managed SOC',
+        description: 'Build or upgrade your SOC, then operate it with continuous monitoring and rapid response.',
+        points: [
+            'SOC architecture + log onboarding + triage workflow',
+            'High-signal detections + tuning to reduce false positives',
+            'Investigation support with timelines, IOCs, and incident reporting'
+        ],
+        cta: 'Talk to an Expert'
     }
 ]
 
 export default function Essentials() {
+    const { openEnquiry } = useEnquiry();
+
     return (
         <section id="essentials" className="relative w-full bg-white dark:bg-black py-24 px-6 overflow-hidden font-sans transition-colors duration-300">
             {/* Decorative Gradients */}
@@ -41,21 +53,21 @@ export default function Essentials() {
                         className="space-y-6 "
                     >
                         <div className="inline-flex items-center justify-center lg:justify-start">
-                            <div className="w-12 h-12   flex items-center justify-center">
-                                <Image src={okayAsset} alt="Okay" width={50} height={50} />
+                            <div className="w-12 h-12 flex items-center justify-center">
+                                <ShieldCheck className="w-full h-full text-[#6B46E5] dark:text-white" />
                             </div>
                         </div>
                         <h2 className="text-5xl md:text-6xl font-semibold text-[#1a1a2e] dark:text-white tracking-tight">
                             Essentials
                         </h2>
                         <p className="text-slate-500 dark:text-gray-400 text-lg md:text-xl font-medium max-w-[280px] mx-auto lg:mx-0">
-                            Master everyday English basics.
+                            Core services that strengthen detection, response, and readiness.
                         </p>
                     </motion.div>
                 </div>
 
                 {/* Right Section: Cards Grid */}
-                <div className="w-full lg:w-[70%] grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="w-full lg:w-[70%] grid grid-cols-1 md:grid-cols-2 gap-5">
                     {essentialCards.map((card, idx) => (
                         <motion.div
                             key={idx}
@@ -63,11 +75,11 @@ export default function Essentials() {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ delay: idx * 0.2 }}
-                            className="relative p-[2px] rounded-[2.5rem] overflow-hidden group"
+                            className="relative p-[2px] rounded-3xl overflow-hidden group h-full"
                         >
                             {/* Moving Border Animation */}
                             <div
-                                className="absolute inset-0 rounded-[2.5rem]"
+                                className="absolute inset-0 rounded-3xl"
                                 style={{
                                     background: "linear-gradient(90deg, #6932E2, #EBDFFF, #6932E2)",
                                     backgroundSize: "200% 100%",
@@ -76,26 +88,51 @@ export default function Essentials() {
                             />
 
                             {/* Card Content */}
-                            <div className="relative bg-white dark:bg-gray-900 rounded-[calc(2.5rem-2px)] p-10 shadow-[0_30px_60px_rgba(0,0,0,0.02)] flex flex-col items-start text-left h-full z-10 transition-all duration-500 group-hover:shadow-[0_40px_80px_rgba(107,70,229,0.05)]">
-                                <span className="bg-[#EFEEFF] text-[#6B46E5] px-4 py-1.5 rounded-md text-[13px] font-bold mb-6">
-                                    {card.badge}
-                                </span>
+                            <div className="relative bg-[#F5F3FF]/95 backdrop-blur-xl dark:bg-gray-900 rounded-[calc(1.5rem-2px)] p-8 shadow-[0_30px_60px_rgba(0,0,0,0.02)] flex flex-col items-start text-left h-full z-10 transition-all duration-500 group-hover:shadow-[0_40px_80px_rgba(107,70,229,0.05)] overflow-hidden">
 
-                                <h3 className="text-[22px] font-semibold text-[#1a1a2e] dark:text-white mb-5 tracking-tight group-hover:text-[#6B46E5] transition-colors">
-                                    {card.title}
-                                </h3>
+                                {/* Background Image with Overlay */}
+                                <div className="absolute inset-0 z-0 opacity-20 dark:opacity-50 pointer-events-none mix-blend-multiply dark:mix-blend-normal">
+                                    <Image src={cardBg} alt="Background" className="w-full h-full object-cover" />
+                                </div>
+                                <div className="absolute inset-0 z-0 bg-gradient-to-br from-white/60 to-white/30 dark:from-black/60 dark:to-transparent pointer-events-none" />
 
-                                <p className="text-slate-500 dark:text-gray-400 text-[14px] leading font-medium mb-12">
-                                    {card.description}
-                                </p>
+                                <div className="relative z-10 w-full flex flex-col h-full">
+                                    {/* Chip */}
+                                    <div className="mb-4">
+                                        <span className="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider bg-[#DCD6F7] text-[#4c1d95] border border-[#6B46E5]/20 dark:bg-[#6B46E5]/20 dark:text-purple-300 dark:border-[#6B46E5]/20 shadow-sm">
+                                            For Organizations
+                                        </span>
+                                    </div>
 
-                                <div className="mt-auto w-full flex justify-center">
-                                    <div className="relative w-full aspect-16/10 bg-[#EDE2FF33] dark:bg-purple-900/20 flex items-center justify-center">
-                                        <Image
-                                            src={card.image}
-                                            alt={card.title}
-                                            className="object-contain transition-transform duration-700 group-hover:scale-110"
-                                        />
+                                    {/* Heading */}
+                                    <h3 className="text-2xl font-bold text-[#0f0720] dark:text-white mb-3 tracking-tight group-hover:text-[#6B46E5] transition-colors">
+                                        {card.title}
+                                    </h3>
+
+                                    {/* Small Paragraph */}
+                                    <p className="text-[#1a1a2e] dark:text-gray-400 text-[15px] leading-relaxed font-semibold mb-6">
+                                        {card.description}
+                                    </p>
+
+                                    {/* 3 Points */}
+                                    <ul className="space-y-3 mb-8 w-full">
+                                        {card.points.map((point, i) => (
+                                            <li key={i} className="flex items-start gap-2.5">
+                                                <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-[#6B46E5] dark:bg-[#8b5cf6] shrink-0" />
+                                                <span className="text-[15px] font-bold text-[#0f0720] dark:text-gray-300">
+                                                    {point}
+                                                </span>
+                                            </li>
+                                        ))}
+                                    </ul>
+
+                                    {/* CTA Button */}
+                                    <div className="mt-auto w-full">
+                                        <button
+                                            onClick={openEnquiry}
+                                            className="w-full py-3 px-6 rounded-xl bg-[#6B46E5] hover:bg-[#5a3bc4] text-white font-semibold text-sm transition-all duration-300 shadow-lg shadow-purple-500/20 active:scale-95">
+                                            {card.cta}
+                                        </button>
                                     </div>
                                 </div>
                             </div>

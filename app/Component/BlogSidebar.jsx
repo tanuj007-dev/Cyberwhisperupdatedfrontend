@@ -1,36 +1,63 @@
 "use client"
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-
-// Reusing the same image assets
-import img1 from './assets/cyber_lab_1.webp'
-import img2 from './assets/cyber_lab_2.webp'
-import img3 from './assets/cyber_lab_3.webp'
-
-const LATEST_ARTICLES = [
-    {
-        title: "Understanding Cyber Threats in 2025",
-        image: img1,
-        slug: "top-10-cybersecurity-threats-2025",
-        date: "Jan 03, 2026"
-    },
-    {
-        title: "Ransomware Prevention Strategies",
-        image: img2,
-        slug: "ransomware-attack-strategies",
-        date: "Dec 28, 2025"
-    },
-    {
-        title: "Cloud Security Best Practices",
-        image: img3,
-        slug: "cloud-security-best-practices",
-        date: "Dec 20, 2025"
-    }
-]
+import { Loader2 } from 'lucide-react'
 
 export default function BlogSidebar() {
+    const [latestArticles, setLatestArticles] = useState([])
+    const [loading, setLoading] = useState(true)
+
+    useEffect(() => {
+        fetchLatestArticles()
+    }, [])
+
+    const fetchLatestArticles = async () => {
+        try {
+            setLoading(true)
+            const baseUrl = typeof window !== 'undefined'
+                ? `http://${window.location.hostname}:${window.location.port}`
+                : 'http://localhost:3000'
+
+            // Fetch only 3 latest articles for sidebar
+            const apiUrl = `${baseUrl}/api/blogs/list?page=1&limit=3`
+            console.log('Fetching latest articles for sidebar:', apiUrl)
+
+            const response = await fetch(apiUrl)
+
+            if (!response.ok) {
+                throw new Error(`Failed to fetch articles: ${response.statusText}`)
+            }
+
+            const result = await response.json()
+            console.log('Sidebar articles API response:', result)
+
+            // Handle API response structure
+            let articles = []
+            if (result.success && result.data) {
+                articles = Array.isArray(result.data) ? result.data : [result.data]
+            } else if (Array.isArray(result)) {
+                articles = result
+            }
+
+            setLatestArticles(articles.slice(0, 3)) // Ensure max 3 articles
+        } catch (err) {
+            console.error('Error fetching latest articles:', err)
+            // Keep empty array on error
+            setLatestArticles([])
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    // Format date helper
+    const formatDate = (dateString) => {
+        if (!dateString) return 'Recent'
+        const date = new Date(dateString)
+        return date.toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' })
+    }
+
     return (
         <aside className="w-full lg:w-80 space-y-8 sticky top-32 h-fit">
             <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
@@ -39,35 +66,57 @@ export default function BlogSidebar() {
                     Latest Articles
                 </h3>
 
-                <div className="space-y-6">
-                    {LATEST_ARTICLES.map((article, idx) => (
-                        <Link
-                            key={idx}
-                            href={`/blog/${article.slug}`}
-                            className="group flex gap-4 items-start"
-                        >
-                            <div className="relative w-20 h-20 shrink-0 rounded-xl overflow-hidden border border-slate-100">
-                                <Image
-                                    src={article.image}
-                                    alt={article.title}
-                                    fill
-                                    className="object-cover transition-transform duration-500 group-hover:scale-110"
-                                />
-                            </div>
-                            <div className="space-y-1">
-                                <h4 className="text-sm font-bold text-[#1C0F2D] group-hover:text-[#6B46E5] transition-colors line-clamp-2 leading-snug">
-                                    {article.title}
-                                </h4>
-                                <p className="text-xs text-slate-400 font-medium">
-                                    {article.date}
-                                </p>
-                            </div>
-                        </Link>
-                    ))}
-                </div>
+                {/* Loading State */}
+                {loading && (
+                    <div className="flex items-center justify-center py-8">
+                        <Loader2 className="w-6 h-6 animate-spin text-purple-600" />
+                    </div>
+                )}
+
+                {/* Articles List */}
+                {!loading && latestArticles.length > 0 && (
+                    <div className="space-y-6">
+                        {latestArticles.map((article, idx) => (
+                            <Link
+                                key={article.id || idx}
+                                href={`/blog/${article.slug}`}
+                                className="group flex gap-4 items-start"
+                            >
+                                {/* Article Image */}
+                                {article.image && (
+                                    <div className="relative w-20 h-20 shrink-0 rounded-xl overflow-hidden border border-slate-100">
+                                        <Image
+                                            src={article.image}
+                                            alt={article.title}
+                                            fill
+                                            className="object-cover transition-transform duration-500 group-hover:scale-110"
+                                        />
+                                    </div>
+                                )}
+
+                                {/* Article Info */}
+                                <div className="space-y-1 flex-1">
+                                    <h4 className="text-sm font-bold text-[#1C0F2D] group-hover:text-[#6B46E5] transition-colors line-clamp-2 leading-snug">
+                                        {article.title}
+                                    </h4>
+                                    <p className="text-xs text-slate-400 font-medium">
+                                        {formatDate(article.date || article.created_at)}
+                                    </p>
+                                </div>
+                            </Link>
+                        ))}
+                    </div>
+                )}
+
+                {/* Empty State */}
+                {!loading && latestArticles.length === 0 && (
+                    <div className="text-center py-8">
+                        <p className="text-sm text-gray-500">No articles available yet.</p>
+                    </div>
+                )}
             </div>
 
-            {/* Categories or Newsletter could go here */}
+            {/* Newsletter Section */}
             <div className="bg-[#1C0F2D] rounded-2xl p-8 text-white relative overflow-hidden group">
                 <div className="relative z-10 space-y-4">
                     <h3 className="text-xl font-bold">Secure Your Business</h3>

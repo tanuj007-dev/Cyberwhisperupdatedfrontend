@@ -91,7 +91,7 @@ export default function Batches() {
     };
 
     return (
-        <section className="relative w-full py-16 md:py-24 bg-[#FBF9FF] dark:bg-linear-to-b dark:from-[#170A2D] dark:via-[#241245] dark:to-[#170A2D] overflow-hidden font-sans transition-colors duration-300">
+        <section className="relative w-full py-16 md:py-24 bg-[#FBF9FF] dark:bg-linear-to-b dark:from-[#1B0D37] dark:via-[#241245] dark:to-[#1B0D37] overflow-hidden font-sans transition-colors duration-300">
             {/* Animated Background Elements */}
             <div className="absolute inset-0 pointer-events-none">
                 <div className="absolute top-20 left-1/4 w-[400px] h-[400px] bg-purple-300/30 dark:bg-purple-600/20 rounded-full blur-[120px] animate-pulse" />

@@ -188,7 +188,7 @@ export default function GalleryPage() {
                     </div>
 
                     {/* Bottom gradient fade */}
-                    <div className="absolute bottom-0 left-0 right-0 h-32 bg-linear-to-t from-white dark:from-[#170A2D] to-transparent transition-colors duration-300" />
+                    <div className="absolute bottom-0 left-0 right-0 h-32 bg-linear-to-t from-white dark:from-[#1B0D37] to-transparent transition-colors duration-300" />
                 </section>
 
 

@@ -42,15 +42,15 @@
 
   /* Custom colors for the cybersecurity theme */
   --color-cyber-purple: #a855f7;
-  --color-cyber-dark: #170A2D;
+  --color-cyber-dark: #1B0D37;
 }
 
 .dark {
-  --background: #170A2D;
+  --background: #1B0D37;
   --foreground: #ffffff;
   --card: #1f1235;
   --card-foreground: #ffffff;
-  --popover: #170A2D;
+  --popover: #1B0D37;
   --popover-foreground: #ffffff;
   --primary: #a855f7;
   --primary-foreground: #ffffff;
@@ -65,7 +65,7 @@
   --input: rgba(255, 255, 255, 0.1);
   --ring: #a855f7;
 
-  --sidebar: #170A2D;
+  --sidebar: #1B0D37;
   --sidebar-foreground: #ffffff;
   --sidebar-primary: #a855f7;
   --sidebar-primary-foreground: #ffffff;
@@ -344,4 +344,29 @@
 
 .animate-float-particle {
   animation: float-particle 10s linear infinite;
+}
+
+@keyframes shockwave {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.4);
+    opacity: 0.8;
+  }
+
+  70% {
+    transform: scale(1.3);
+    box-shadow: 0 0 40px 20px rgba(79, 70, 229, 0);
+    opacity: 0;
+  }
+
+  100% {
+    transform: scale(1.3);
+    opacity: 0;
+  }
+}
+
+.animate-shockwave {
+  animation: shockwave 2.5s infinite cubic-bezier(0, 0, 0.2, 1);
+  border-radius: 50%;
+  /* Ensure it's circular if simulating a point source, but for a shield image, maybe match shape or just be a glow behind */
 }

@@ -72,7 +72,7 @@ export default function WorkshopSection() {
                             {/* Icon Container */}
                             <div className="mb-4 sm:mb-5 md:mb-6 relative inline-block">
                                 <div className="absolute inset-0 bg-[#6b46e5] rounded-full blur-lg md:blur-xl opacity-20 group-hover:opacity-40 transition-opacity"></div>
-                                <div className="relative w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 bg-[#6b46e5] rounded-full flex items-center justify-center shadow-lg shadow-purple-200 transition-transform group-hover:scale-110">
+                                <div className="relative w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 bg-[#6b46e5] rounded-full flex items-center justify-center shadow-md shadow-purple-100 transition-transform group-hover:scale-110">
                                     <item.icon className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 text-white" />
                                 </div>
                             </div>

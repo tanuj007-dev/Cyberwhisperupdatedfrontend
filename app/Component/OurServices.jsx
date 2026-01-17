@@ -1,7 +1,10 @@
 "use client"
 import React from 'react'
 import Image from 'next/image'
-import pcImage from './assets/pc.webp'
+import resilienceImage from './assets/17e80ce5-64bf-4de9-a2d1-f742e5ece091 (1).png'
+import socIcon from './assets/1b9008d1-d9bd-46d8-aad6-0e8ef3620e96.png'
+import rangeIcon from './assets/78477923-fecc-4460-bec5-e17b477c7b51.png'
+import insightsIcon from './assets/service_icon_insights - Edited.png'
 import { useRef, useState, useEffect } from 'react';
 export default function OurServices() {
     const ref = useRef(null);
@@ -48,7 +51,7 @@ export default function OurServices() {
                     <div className="w-full lg:w-1/2 flex flex-col items-start text-left space-y-6 md:space-y-2 order-2 lg:order-1 animate-in fade-in slide-in-from-left duration-1000">
                         {/* Tag Badge */}
                         <div className="flex items-center gap-3 animate-fade-in">
-                            <div className="w-4 h-4 bg-[#6B46E5] rounded-sm shadow-[0_0_10px_rgba(107,70,229,0.3)]"></div>
+                            <div className="w-3 h-3 md:w-4 md:h-4 bg-[#6B46E5] shadow-[3px_3px_6px_rgba(107,70,229,0.45)]"></div>
                             <span className="text-sm font-black text-[#1a1a2e] dark:text-white uppercase tracking-[0.2em]">
                                 OUR SERVICES
                             </span>
@@ -78,21 +81,27 @@ export default function OurServices() {
                             ))}
                         </p>
 
-                        <ul className="space-y-3 mt-2 max-w-[600px]">
-                            <li className="flex items-start gap-3">
-                                <span className="mt-2 h-1.5 w-1.5 rounded-full bg-[#6B46E5] flex-shrink-0" />
+                        <ul className="space-y-6 mt-6 max-w-[600px]">
+                            <li className="flex items-center gap-4 group">
+                                <div className="relative w-12 h-12 flex-shrink-0 transition-transform duration-300 group-hover:scale-110">
+                                    <Image src={socIcon} alt="SOC Icon" className="w-full h-full object-contain" />
+                                </div>
                                 <span className="text-base sm:text-lg text-slate-700 dark:text-gray-300 font-medium leading-normal">
                                     SOC-ready processes: triage → investigation → response → reporting
                                 </span>
                             </li>
-                            <li className="flex items-start gap-3">
-                                <span className="mt-2 h-1.5 w-1.5 rounded-full bg-[#6B46E5] flex-shrink-0" />
+                            <li className="flex items-center gap-4 group">
+                                <div className="relative w-12 h-12 flex-shrink-0 transition-transform duration-300 group-hover:scale-110">
+                                    <Image src={rangeIcon} alt="Range Icon" className="w-full h-full object-contain" />
+                                </div>
                                 <span className="text-base sm:text-lg text-slate-700 dark:text-gray-300 font-medium leading-normal">
                                     Cyber Range exercises to validate detection and response safely
                                 </span>
                             </li>
-                            <li className="flex items-start gap-3">
-                                <span className="mt-2 h-1.5 w-1.5 rounded-full bg-[#6B46E5] flex-shrink-0" />
+                            <li className="flex items-center gap-4 group">
+                                <div className="relative w-12 h-12 flex-shrink-0 transition-transform duration-300 group-hover:scale-110">
+                                    <Image src={insightsIcon} alt="Insights Icon" className="w-full h-full object-contain" />
+                                </div>
                                 <span className="text-base sm:text-lg text-slate-700 dark:text-gray-300 font-medium leading-normal">
                                     Actionable insights: reduce noise, improve visibility, strengthen readiness
                                 </span>
@@ -103,9 +112,15 @@ export default function OurServices() {
 
                     {/* Right Image Column */}
                     <div className="w-full lg:w-1/2 flex justify-center lg:justify-end order-1 lg:order-2 animate-in fade-in slide-in-from-right duration-1000">
-                        <div className="relative w-full max-w-[400px] md:max-w-[500px] lg:max-w-[600px]">
+                        <div className="relative w-full max-w-[400px] md:max-w-[500px] lg:max-w-[600px] flex items-center justify-center">
+                            {/* Shockwaves */}
+                            <div className="absolute inset-0 z-0">
+                                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60%] h-[60%] border border-indigo-500/30 rounded-full animate-shockwave" style={{ animationDelay: '0s' }}></div>
+                                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60%] h-[60%] border border-indigo-500/30 rounded-full animate-shockwave" style={{ animationDelay: '0.8s' }}></div>
+                                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60%] h-[60%] border border-indigo-500/30 rounded-full animate-shockwave" style={{ animationDelay: '1.6s' }}></div>
+                            </div>
                             <Image
-                                src={pcImage}
+                                src={resilienceImage}
                                 alt="Cyber Resilience Illustration"
                                 className="w-full h-auto object-contain select-none"
                                 priority

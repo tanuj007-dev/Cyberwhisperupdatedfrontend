@@ -139,7 +139,6 @@ export const AdminProvider = ({ children }) => {
                 biography: user.biography || '',
                 linkedin_url: user.linkedin_url || '',
                 github_url: user.github_url || '',
-                role: user.role === 'INSTRUCTOR' || user.is_instructor ? 'INSTRUCTOR' : 'USER',
                 is_instructor: user.is_instructor || false,
                 profile_image_url: user.profile_image_url || '',
                 skills: user.skills || []
@@ -190,7 +189,6 @@ export const AdminProvider = ({ children }) => {
                 biography: updatedUser.biography || '',
                 linkedin_url: updatedUser.linkedin_url || '',
                 github_url: updatedUser.github_url || '',
-                role: updatedUser.role === 'INSTRUCTOR' || updatedUser.is_instructor ? 'INSTRUCTOR' : 'USER',
                 is_instructor: updatedUser.is_instructor || false,
                 profile_image_url: updatedUser.profile_image_url || '',
                 skills: updatedUser.skills || []

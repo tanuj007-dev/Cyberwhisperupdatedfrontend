@@ -1,112 +1,196 @@
 "use client"
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import BlogSidebar from '../../Component/BlogSidebar'
 import { FaFacebook, FaLinkedin, FaInstagram, FaXTwitter } from 'react-icons/fa6'
 import { FaQuoteLeft } from 'react-icons/fa'
-
-// Assets
-import featuredImg from '../../Component/assets/cyber_lab_1.webp'
+import { Loader2, ArrowLeft } from 'lucide-react'
+import Link from 'next/link'
 
 export default function BlogPostDetail({ params }) {
-    // In a real app, you'd fetch based on params.slug
+    const [blog, setBlog] = useState(null)
+    const [loading, setLoading] = useState(true)
+    const [error, setError] = useState(null)
+
+    useEffect(() => {
+        fetchBlogBySlug()
+    }, [params.slug])
+
+    const fetchBlogBySlug = async () => {
+        try {
+            setLoading(true)
+            const baseUrl = typeof window !== 'undefined'
+                ? `http://${window.location.hostname}:${window.location.port}`
+                : 'http://localhost:3000'
+
+            const apiUrl = `${baseUrl}/api/blogs/${params.slug}`
+            console.log('Fetching blog from API:', apiUrl)
+
+            const response = await fetch(apiUrl)
+
+            if (!response.ok) {
+                throw new Error(`Failed to fetch blog: ${response.statusText}`)
+            }
+
+            const result = await response.json()
+            console.log('Blog API response:', result)
+
+            // Handle API response structure
+            if (result.success && result.data) {
+                setBlog(result.data)
+            } else if (result.id || result.slug) {
+                setBlog(result)
+            } else {
+                throw new Error('Invalid blog data format')
+            }
+        } catch (err) {
+            console.error('Error fetching blog:', err)
+            setError(err.message)
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    // Loading State
+    if (loading) {
+        return (
+            <div className="min-h-screen bg-[#FBFAFF] pt-32 pb-20 flex items-center justify-center">
+                <div className="text-center">
+                    <Loader2 className="w-12 h-12 animate-spin text-purple-600 mx-auto mb-4" />
+                    <p className="text-gray-600">Loading blog post...</p>
+                </div>
+            </div>
+        )
+    }
+
+    // Error State
+    if (error || !blog) {
+        return (
+            <div className="min-h-screen bg-[#FBFAFF] pt-32 pb-20">
+                <div className="container mx-auto px-6 max-w-4xl">
+                    <div className="bg-white rounded-2xl p-12 text-center shadow-sm border border-gray-200">
+                        <h1 className="text-3xl font-bold text-gray-900 mb-4">Blog Post Not Found</h1>
+                        <p className="text-gray-600 mb-8">{error || 'The blog post you\'re looking for doesn\'t exist.'}</p>
+                        <Link
+                            href="/blog"
+                            className="inline-flex items-center gap-2 px-6 py-3 bg-purple-600 text-white rounded-xl hover:bg-purple-700 transition-colors"
+                        >
+                            <ArrowLeft size={20} />
+                            Back to Blog
+                        </Link>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
     return (
         <div className="min-h-screen bg-[#FBFAFF] pt-32 pb-20">
             <div className="container mx-auto px-6 max-w-7xl">
-                <div className="flex flex-col lg:flex-row gap-12">
+                {/* Back Button */}
+                <Link
+                    href="/blog"
+                    className="inline-flex items-center gap-2 text-gray-600 hover:text-purple-600 transition-colors mb-8"
+                >
+                    <ArrowLeft size={20} />
+                    Back to Blog
+                </Link>
 
+                <div className="flex flex-col lg:flex-row gap-12">
                     {/* Main Content */}
                     <div className="flex-1 space-y-8">
                         {/* Featured Image */}
-                        <motion.div
-                            initial={{ opacity: 0, y: 30 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            className="relative aspect-video rounded-3xl overflow-hidden shadow-2xl"
-                        >
-                            <Image
-                                src={featuredImg}
-                                alt="Cybersecurity Trends"
-                                fill
-                                className="object-cover"
-                                priority
-                            />
-                        </motion.div>
+                        {blog.image && (
+                            <motion.div
+                                initial={{ opacity: 0, y: 30 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                className="relative aspect-video rounded-3xl overflow-hidden shadow-2xl"
+                            >
+                                <Image
+                                    src={blog.image}
+                                    alt={blog.title}
+                                    fill
+                                    className="object-cover"
+                                    priority
+                                />
+                            </motion.div>
+                        )}
 
                         {/* Article Content */}
                         <div className="bg-white rounded-[2.5rem] p-8 md:p-12 shadow-sm border border-slate-100 space-y-8">
+                            {/* Title */}
+                            <h1 className="text-4xl md:text-5xl font-bold text-[#1C0F2D] leading-tight">
+                                {blog.title}
+                            </h1>
+
+                            {/* Meta Information */}
+                            <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 pb-6 border-b border-slate-100">
+                                {blog.author && (
+                                    <div className="flex items-center gap-2">
+                                        <span className="font-semibold">By {blog.author}</span>
+                                    </div>
+                                )}
+                                {(blog.date || blog.created_at) && (
+                                    <div className="flex items-center gap-2">
+                                        <span>•</span>
+                                        <span>{new Date(blog.date || blog.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+                                    </div>
+                                )}
+                                {blog.category && (
+                                    <div className="flex items-center gap-2">
+                                        <span>•</span>
+                                        <span className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-semibold">
+                                            {blog.category}
+                                        </span>
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Blog Content */}
                             <div className="prose prose-lg max-w-none text-slate-600 space-y-6">
-                                <p>
-                                    Cybersecurity is constantly evolving. Explore the key trends and technologies set to shape the security landscape in 2025 and beyond. Whether you're a business owner or an IT professional, understanding these trends is crucial for maintaining robust defenses against ever-growing cyber threats. Cybersecurity is constantly evolving. Explore the key trends and technologies set to shape the security landscape in 2025 and beyond.
-                                </p>
-
-                                <p>
-                                    By keeping an eye on these trends and integrating them into your cybersecurity strategies, you can stay one step ahead of cybercriminals and better your business in an increasingly interconnected world. Explore the key trends and technologies set to shape the security landscape in 2025 and beyond. From AI-driven defense systems to blockchain security, here's what you need to watch.
-                                </p>
-
-                                {/* Blue Blockquote */}
-                                <div className="bg-[#F4F7FF] border-l-4 border-[#6B46E5] p-8 rounded-2xl relative">
-                                    <FaQuoteLeft className="text-4xl text-[#6B46E5]/10 absolute top-4 left-4" />
-                                    <p className="text-[#1C0F2D] font-bold text-xl leading-relaxed relative z-10 italic">
-                                        Stay ahead of evolving threats. Contact our team of cybersecurity experts today to learn how we can help you implement the latest security technologies and protect your business in 2025 and beyond.
-                                    </p>
-                                </div>
-
-                                <p>
-                                    The cybersecurity landscape is evolving quickly, and businesses must stay proactive in adopting new technologies and strategies to combat emerging threats. From AI and machine learning to Zero Trust security and blockchain, the trends of 2025 will shape how we defend against cyber attacks and ensure the safety of our digital assets.
-                                </p>
-
-                                <h2 className="text-3xl font-extrabold text-[#1C0F2D] pt-4">Securing Your Future with Cyber Security</h2>
-
-                                <p>
-                                    In today's fast-paced digital world, cybersecurity is no longer optional—it's a necessity. "Securing Your Future with Cyber" is more than just a slogan; it's a commitment to building a resilient infrastructure that protects your business and personal data from evolving cyber threats.
-                                </p>
-
-                                {/* Bullet Points */}
-                                <ul className="space-y-4 list-none pl-0">
-                                    {[
-                                        "Proactively identify and neutralize potential threats with AI-powered tools",
-                                        "Safeguard your sensitive data with state-of-the-art encryption and secure",
-                                        "Minimize downtime and disruptions by implementing strong disaster recovery plans",
-                                        "Build a secure infrastructure that grows with your business, providing flexible cybersecurity",
-                                        "Rely on a team of cybersecurity professionals to provide ongoing support, risk assessments, and strategies"
-                                    ].map((item, i) => (
-                                        <li key={i} className="flex gap-3 items-start">
-                                            <span className="w-2 h-2 rounded-full bg-[#6B46E5] mt-2.5 shrink-0" />
-                                            <span className="font-medium">{item}</span>
-                                        </li>
-                                    ))}
-                                </ul>
-
-                                <p className="border-t border-slate-100 pt-8 italic text-sm">
-                                    Securing Your Future with Cyber is more than a slogan—it's a commitment to protecting your data and building resilience against evolving threats. With advanced cybersecurity strategies, you safeguard trust, reputation, and sustainable growth.
-                                </p>
+                                {blog.content ? (
+                                    <div dangerouslySetInnerHTML={{ __html: blog.content }} />
+                                ) : (
+                                    <p>{blog.description || blog.excerpt || 'No content available for this blog post.'}</p>
+                                )}
                             </div>
 
                             {/* Tags and Socials */}
                             <div className="pt-8 border-t border-slate-100 flex flex-col md:flex-row justify-between items-center gap-6">
-                                <div className="flex gap-3 items-center flex-wrap">
-                                    <span className="text-sm font-bold text-[#1C0F2D]">Tags:</span>
-                                    {['SafeBusiness', 'ThreatFree', 'SecureTech'].map(tag => (
-                                        <span
-                                            key={tag}
-                                            className={`px-4 py-1.5 rounded-lg text-white font-bold text-xs uppercase ${tag === 'SafeBusiness' ? 'bg-[#1C2D5A]' :
-                                                tag === 'ThreatFree' ? 'bg-[#1C3E8A]' : 'bg-[#4880FF]'
-                                                }`}
-                                        >
-                                            {tag}
-                                        </span>
-                                    ))}
-                                </div>
+                                {/* Tags */}
+                                {blog.tags && blog.tags.length > 0 && (
+                                    <div className="flex gap-3 items-center flex-wrap">
+                                        <span className="text-sm font-bold text-[#1C0F2D]">Tags:</span>
+                                        {blog.tags.map((tag, index) => (
+                                            <span
+                                                key={index}
+                                                className="px-4 py-1.5 rounded-lg bg-purple-600 text-white font-bold text-xs uppercase"
+                                            >
+                                                {tag}
+                                            </span>
+                                        ))}
+                                    </div>
+                                )}
 
+                                {/* Social Share */}
                                 <div className="flex gap-4 items-center">
-                                    {[FaFacebook, FaLinkedin, FaInstagram, FaXTwitter].map((Icon, idx) => (
-                                        <button
+                                    <span className="text-sm font-bold text-[#1C0F2D]">Share:</span>
+                                    {[
+                                        { Icon: FaFacebook, url: `https://facebook.com/sharer/sharer.php?u=${typeof window !== 'undefined' ? window.location.href : ''}` },
+                                        { Icon: FaLinkedin, url: `https://linkedin.com/sharing/share-offsite/?url=${typeof window !== 'undefined' ? window.location.href : ''}` },
+                                        { Icon: FaXTwitter, url: `https://twitter.com/intent/tweet?url=${typeof window !== 'undefined' ? window.location.href : ''}` },
+                                        { Icon: FaInstagram, url: '#' }
+                                    ].map(({ Icon, url }, idx) => (
+                                        <a
                                             key={idx}
+                                            href={url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
                                             className="w-10 h-10 rounded-lg bg-[#F4F7FF] text-[#1C2D5A] flex items-center justify-center hover:bg-[#6B46E5] hover:text-white transition-all transform hover:-translate-y-1"
                                         >
                                             <Icon size={18} />
-                                        </button>
+                                        </a>
                                     ))}
                                 </div>
                             </div>
@@ -115,7 +199,6 @@ export default function BlogPostDetail({ params }) {
 
                     {/* Sidebar */}
                     <BlogSidebar />
-
                 </div>
             </div>
         </div>

@@ -129,14 +129,14 @@ const UserList = () => {
             console.log('Parsed Response:', data);
 
             // Try multiple possible response formats
-            const imageUrl = data.data?.profile_image_url || 
-                           data.profile_image_url || 
-                           data.url ||
-                           data.data?.url ||
-                           data.message ||
-                           data.file_url ||
-                           data.data?.file_url;
-            
+            const imageUrl = data.data?.profile_image_url ||
+                data.profile_image_url ||
+                data.url ||
+                data.data?.url ||
+                data.message ||
+                data.file_url ||
+                data.data?.file_url;
+
             if (!imageUrl) {
                 console.warn('No image URL found in response. Full response:', data);
                 throw new Error('No image URL received from server');
@@ -439,8 +439,8 @@ const UserList = () => {
                                         {user.created_at
                                             ? new Date(user.created_at).toLocaleDateString()
                                             : user.date_added
-                                            ? new Date(user.date_added).toLocaleDateString()
-                                            : 'N/A'
+                                                ? new Date(user.date_added).toLocaleDateString()
+                                                : 'N/A'
                                         }
                                     </td>
                                     <td className="px-6 py-4">
@@ -574,18 +574,12 @@ const UserList = () => {
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Role <span className="text-red-500">*</span></label>
-                            <select
-                                value={formData.role}
-                                onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-                                className="w-full px-4 py-2 border text-black border-gray-300 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent"
-                            >
-                                <option value="USER">Student</option>
-                                <option value="INSTRUCTOR">Instructor</option>
-                                <option value="ADMIN">Admin</option>
-                            </select>
-                        </div>
+                        <Input
+                            label="Title / Position"
+                            value={formData.title}
+                            onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                            placeholder="Senior Developer, Content Writer, etc."
+                        />
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
                             <select
@@ -598,13 +592,6 @@ const UserList = () => {
                             </select>
                         </div>
                     </div>
-
-                    <Input
-                        label="Title / Position"
-                        value={formData.title}
-                        onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                        placeholder="Senior Developer, Content Writer, etc."
-                    />
 
                     <Input
                         label="Address"
@@ -643,7 +630,7 @@ const UserList = () => {
                                 }}
                                 className="absolute inset-0 w-full h-full cursor-pointer opacity-0"
                             />
-                            
+
                             {imagePreview ? (
                                 <div className="space-y-3">
                                     <div className="flex justify-center">
@@ -670,7 +657,7 @@ const UserList = () => {
                                     </div>
                                 </div>
                             )}
-                            
+
                             {imageUploading && (
                                 <div className="absolute inset-0 bg-white bg-opacity-75 rounded-lg flex items-center justify-center">
                                     <div className="text-center">
@@ -726,7 +713,7 @@ const UserList = () => {
                         <label htmlFor="is_instructor" className="text-sm text-gray-700">
                             <span className="font-medium">Mark as Instructor</span>
                             <span className="block text-gray-500">Enable if this user can create and manage courses</span>
-                        </label>    
+                        </label>
                     </div>
                 </div>
             </Modal>
@@ -832,22 +819,22 @@ const UserList = () => {
                             <div>
                                 <label className="block text-sm font-semibold text-gray-700 mb-1">Date Added</label>
                                 <p className="text-sm text-gray-600">
-                                    {viewUser.created_at 
-                                        ? new Date(viewUser.created_at).toLocaleString() 
+                                    {viewUser.created_at
+                                        ? new Date(viewUser.created_at).toLocaleString()
                                         : viewUser.date_added
-                                        ? new Date(viewUser.date_added).toLocaleString()
-                                        : 'N/A'
+                                            ? new Date(viewUser.date_added).toLocaleString()
+                                            : 'N/A'
                                     }
                                 </p>
                             </div>
                             <div>
                                 <label className="block text-sm font-semibold text-gray-700 mb-1">Last Modified</label>
                                 <p className="text-sm text-gray-600">
-                                    {viewUser.updated_at 
-                                        ? new Date(viewUser.updated_at).toLocaleString() 
+                                    {viewUser.updated_at
+                                        ? new Date(viewUser.updated_at).toLocaleString()
                                         : viewUser.last_modified
-                                        ? new Date(viewUser.last_modified).toLocaleString()
-                                        : 'N/A'
+                                            ? new Date(viewUser.last_modified).toLocaleString()
+                                            : 'N/A'
                                     }
                                 </p>
                             </div>

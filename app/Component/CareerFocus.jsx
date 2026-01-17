@@ -2,38 +2,36 @@
 import React from 'react'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
+import { Radar } from 'lucide-react'
 
 // Using existing assets
 import okayAsset from './assets/mynaui_briefcase.webp'
 import workshopAsset from './assets/workshop_keyboard_cyber_realistic_1768461443143.png'
 import mentorshipAsset from './assets/mentorship_collaboration_cyber_realistic_1768461459740.png'
 import cyberRangeAsset from './assets/cyber_range_network_3d_render_1768461480085.png'
-import simulationAsset from './assets/digital_forensics_lab_3d_render_1768461501466.png'
+import cardBg from './assets/essentials_bg.png'
+import techGraphic from './assets/tech_graphic.png'
 
 const careerCards = [
     {
-        badge: 'See Upcoming Dates',
-        title: 'Hands-On Workshops',
-        description: 'One-day and multi-week bootcamps that swap slide decks for keyboard time. From "SIEM Zero-to-Hero" to "Red-Team Ops," every workshop ends with a certifiable capstone exercise.',
-        image: workshopAsset
+        title: 'Threat Intelligence & Monitoring',
+        description: 'Actionable threat intel to improve triage speed and detection quality.',
+        points: [
+            'IOC monitoring & enrichment (domains/IPs/hashes)',
+            'Threat briefs relevant to your industry and geography',
+            'Detection mapping and prioritization for SOC use-cases'
+        ],
+        cta: 'Start TI Monitoring'
     },
     {
-        badge: 'Find Your Mentor',
-        title: '1-to-1 Mentorship',
-        description: 'Bridge the theory-to-practice gap with personal guidance from industry veterans. Perfect for SOC analysts, DevSecOps engineers, or managers stepping into cybersecurity leadership.',
-        image: mentorshipAsset
-    },
-    {
-        badge: 'Launch a test attack',
-        title: 'Immersive Cyber Range',
-        description: 'Spin up live, enterprise-grade networks riddled with APTs, DDoS storms exploits then practice neutralizing them in a safe sandbox. Every scenario is mapped to MITRE ATT&CK and scored so your team sees instant skill gains',
-        image: cyberRangeAsset
-    },
-    {
-        badge: 'Launch a test attack',
-        title: 'Advanced Threat Labs',
-        description: 'Dive into advanced threat simulation labs. Practice real-world incident response and forensic analysis in a controlled environment to sharpen your enterprise defense skills.',
-        image: simulationAsset
+        title: 'VAPT (Vulnerability Assessment & Penetration Testing)',
+        description: 'Identify and validate critical weaknesses before attackers do.',
+        points: [
+            'Infrastructure, web, and cloud testing (as per scope)',
+            'Validation for high-risk findings and clear exploit evidence',
+            'Prioritized remediation roadmap with optional re-test'
+        ],
+        cta: 'Request VAPT Proposal'
     }
 ]
 
@@ -47,37 +45,37 @@ export default function CareerFocus() {
             <div className="relative z-10 max-w-7xl mx-auto flex flex-col lg:flex-row gap-16">
 
                 {/* Left Section: Title & Subtext */}
-                <div className="w-full lg:w-[30%] lg:sticky lg:top-24 h-fit text-center lg:text-left">
+                <div className="w-full lg:w-[30%] lg:sticky lg:top-24 h-fit text-center lg:text-left flex flex-col items-center lg:items-start text-balance">
                     <motion.div
                         initial={{ opacity: 0, x: -20 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
-                        className="space-y-6"
+                        className="space-y-6 flex flex-col items-center lg:items-start"
                     >
-                        <div className="inline-flex items-center justify-center lg:justify-start ">
-                            <div className="w-12 h-12   flex items-center justify-center">
-                                <Image src={okayAsset} alt="Okay" width={50} height={50} />
+                        <div className="inline-flex items-center justify-center lg:justify-start">
+                            <div className="w-16 h-16 flex items-center justify-center ">
+                                <Radar className="w-10 h-10 text-[#6B46E5] dark:text-[#c084fc]" />
                             </div>
                         </div>
-                        <h2 className="text-5xl md:text-5xl font-semibold  text-[#1a1a2e] dark:text-white tracking-tight">
-                            Career Focus
+                        <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-[#1a1a2e] dark:text-white tracking-tight leading-[1.1]">
+                            Advanced Services
                         </h2>
-                        <p className="text-slate-500 dark:text-gray-400 text-lg md:text-xl font-medium max-w-[280px] mx-auto lg:mx-0">
-                            Boost work communication skills.
+                        <p className="text-slate-600 dark:text-gray-400 text-base sm:text-lg font-medium max-w-md lg:max-w-xs mx-auto lg:mx-0 leading-relaxed">
+                            Proactive security, intelligence, and testing to stay ahead of attackers.
                         </p>
                     </motion.div>
                 </div>
 
                 {/* Right Section: Cards Grid */}
-                <div className="w-full lg:w-[70%] grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="w-full lg:w-[70%] grid grid-cols-1 md:grid-cols-2 gap-5">
                     {careerCards.map((card, idx) => (
                         <motion.div
                             key={idx}
                             initial={{ opacity: 0, y: 30 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
-                            transition={{ delay: idx * 0.1 }}
-                            className="relative p-[2px] rounded-[2.5rem] overflow-hidden group"
+                            transition={{ delay: idx * 0.2 }}
+                            className="relative p-[2px] rounded-3xl overflow-hidden group h-full"
                         >
                             {/* Moving Border Animation */}
                             <div
@@ -89,27 +87,49 @@ export default function CareerFocus() {
                                 }}
                             />
 
-                            {/* Card Content */}
-                            <div className="relative bg-white dark:bg-gray-900 rounded-[calc(2.5rem-2px)] p-10 shadow-[0_30px_60px_rgba(0,0,0,0.02)] flex flex-col items-start text-left h-full z-10 transition-all duration-500 group-hover:shadow-[0_40px_80px_rgba(107,70,229,0.04)]">
-                                <span className="bg-[#EFEEFF] text-[#6B46E5] px-4 py-1.5 rounded-md text-[13px] font-bold mb-6">
-                                    {card.badge}
-                                </span>
+                            {/* Inner Card Content */}
+                            <div className="relative h-full w-full rounded-[calc(2.5rem-2px)] bg-[#F5F3FF]/95 backdrop-blur-xl dark:bg-[#0f0720] dark:bg-none overflow-hidden transition-colors duration-300">
 
-                                <h3 className="text-[22px] font-semibold text-[#1a1a2e] dark:text-white mb-5 tracking-tight group-hover:text-[#6B46E5] transition-colors">
-                                    {card.title}
-                                </h3>
+                                {/* Background Image */}
+                                <div className="absolute inset-0 z-0 opacity-20 dark:opacity-40 pointer-events-none mix-blend-multiply dark:mix-blend-normal">
+                                    <Image src={cardBg} alt="Background" className="w-full h-full object-cover" />
+                                </div>
 
-                                <p className="text-slate-500 dark:text-gray-400 text-[14px]  font-medium mb-12">
-                                    {card.description}
-                                </p>
+                                {/* Gradient Overlay for Fade */}
+                                <div className="absolute inset-0 z-0 bg-gradient-to-br from-white/60 to-white/30 dark:from-[#0f0720]/0 dark:via-[#0f0720]/40 dark:to-[#0f0720]/90 pointer-events-none" />
 
-                                <div className="mt-auto w-full flex justify-center">
-                                    <div className="relative w-full aspect-16/10 flex items-center justify-center bg-[#EDE2FF33] dark:bg-purple-900/20 rounded-2xl overflow-hidden p-4">
-                                        <Image
-                                            src={card.image}
-                                            alt={card.title}
-                                            className="object-contain   transition-transform duration-700 group-hover:scale-110"
-                                        />
+                                {/* Content */}
+                                <div className="relative z-10 flex flex-col h-full p-8 md:p-10">
+                                    {/* Chip */}
+                                    <div className="mb-6">
+                                        <span className="inline-flex items-center px-4 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-wider bg-[#DCD6F7] text-[#4c1d95] border border-[#6B46E5]/20 dark:bg-[#231242] dark:text-[#c084fc] dark:border-[#6B46E5]/30 shadow-sm">
+                                            For Organizations
+                                        </span>
+                                    </div>
+
+                                    <h3 className="text-2xl font-bold text-[#0f0720] dark:text-white mb-3 tracking-tight group-hover:text-[#6B46E5] transition-colors">
+                                        {card.title}
+                                    </h3>
+
+                                    <p className="text-[#1a1a2e] dark:text-gray-400 text-[15px] leading-relaxed font-semibold mb-6">
+                                        {card.description}
+                                    </p>
+
+                                    <ul className="space-y-3 mb-8 w-full">
+                                        {card.points.map((point, i) => (
+                                            <li key={i} className="flex items-start gap-3">
+                                                <span className="mt-2 w-1.5 h-1.5 rounded-full bg-[#6B46E5] dark:bg-[#8b5cf6] shrink-0 shadow-[0_0_10px_rgba(107,70,229,0.3)] dark:shadow-[0_0_10px_rgba(139,92,246,0.5)]" />
+                                                <span className="text-[15px] font-bold text-[#0f0720] dark:text-gray-300">
+                                                    {point}
+                                                </span>
+                                            </li>
+                                        ))}
+                                    </ul>
+
+                                    <div className="mt-auto w-full">
+                                        <button className="w-full py-3 px-6 rounded-xl bg-[#6B46E5] hover:bg-[#5a3bc4] text-white font-semibold text-sm transition-all duration-300 shadow-lg shadow-purple-500/20 active:scale-95 border border-transparent hover:border-purple-400/30">
+                                            {card.cta}
+                                        </button>
                                     </div>
                                 </div>
                             </div>

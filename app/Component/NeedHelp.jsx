@@ -26,7 +26,7 @@ export default function NeedHelp() {
     const [openIndex, setOpenIndex] = useState(null)
 
     return (
-        <section className="w-full bg-[#F9F8FF] dark:bg-[#170A2D] py-12 md:py-24 px-4 overflow-hidden relative transition-colors duration-300">
+        <section className="w-full bg-[#F9F8FF] dark:bg-[#1B0D37] py-12 md:py-24 px-4 overflow-hidden relative transition-colors duration-300">
             {/* Cyber Grid Background Effect - Adapted for both themes */}
             <div className="absolute inset-0 bg-[linear-gradient(rgba(107,70,229,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(107,70,229,0.05)_1px,transparent_1px)] dark:bg-[linear-gradient(rgba(123,44,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(123,44,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px] opacity-100 pointer-events-none"></div>
 

@@ -111,7 +111,7 @@ function HeroLayout({ isVideoOpen, setIsVideoOpen }) {
               />
 
               {/* Content */}
-              <div className="relative inline-flex items-center gap-4 px-6 md:px-8 py-2 rounded-full bg-[#170A2D] backdrop-blur-md text-white shadow-sm">
+              <div className="relative inline-flex items-center gap-4 px-6 md:px-8 py-2 rounded-full bg-[#1B0D37] backdrop-blur-md text-white shadow-sm">
 
                 <span className="text-xs md:text-sm font-medium text-purple-200 tracking-wider uppercase">
                   Next Generation Cybersecurity
