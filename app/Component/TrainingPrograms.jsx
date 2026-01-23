@@ -2,7 +2,7 @@
 import React from 'react';
 import Image from 'next/image';
 import path from "./assets/path.webp";
-const trainingVideo = "/assets/cw-video.mp4";
+const trainingVideo = "/assets/cw-video1.mp4";
 
 export default function TrainingPrograms() {
     return (
