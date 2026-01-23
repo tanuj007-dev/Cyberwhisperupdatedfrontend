@@ -41,3 +41,9 @@ yarn-error.log*
 next-env.d.ts
 
 *.zip
+
+# Large media files
+*.mp4
+*.mov
+*.avi
+*.mkv
