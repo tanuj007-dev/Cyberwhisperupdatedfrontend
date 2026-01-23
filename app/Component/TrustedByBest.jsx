@@ -3,6 +3,18 @@
 import { useState, useEffect, useRef } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
+import cyberDefence from './assets/cyberdefence.png';
+import indianAirforce from './assets/indianAirforce.png';
+import indianNavy from './assets/indianNavy.png';
+import militaryAffairs from './assets/militaryAffairs.png';
+
+import bsfLogo from './assets/BSF_Logo.webp';
+import nccLogo from './assets/gallery/Emblem_of_National_Cadet_Corps_(India).png';
+import indianArmyLogo from './assets/gallery/Indian_Army_Insignia_circular.png';
+import nsgLogo from './assets/gallery/National_security_guard_logo.png';
+import pmoLogo from './assets/gallery/Ankara_01_01_01_03Apr2023.jpg';
+import g20Logo from './assets/7e00ab54-56aa-4f8e-a340-891c54690a7c.png';
+
 const TrustedByBest = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isAutoPlaying, setIsAutoPlaying] = useState(true);
@@ -10,14 +22,16 @@ const TrustedByBest = () => {
 
     // Logo data - matching the defense organizations from the screenshot
     const logos = [
-        { id: 1, name: 'Indian Air Force', image: '/logos/iaf.webp' },
-        { id: 2, name: 'Indian Navy', image: '/logos/navy.webp' },
-        { id: 3, name: 'NCC', image: '/logos/ncc.webp' },
-        { id: 4, name: 'BSF', image: '/logos/bsf.webp' },
-        { id: 5, name: 'Indian Army', image: '/logos/army.webp' },
-        { id: 6, name: 'NSG', image: '/logos/nsg.webp' },
-        { id: 7, name: 'Prime Minister Office', image: '/logos/pmo.webp' },
-        { id: 8, name: 'G20', image: '/logos/g20.webp' },
+        { id: 1, name: 'Indian Air Force', image: indianAirforce },
+        { id: 2, name: 'Indian Navy', image: indianNavy },
+        { id: 9, name: 'Cyber Defence', image: cyberDefence },
+        { id: 10, name: 'Military Affairs', image: militaryAffairs },
+        { id: 3, name: 'NCC', image: nccLogo },
+        { id: 4, name: 'BSF', image: bsfLogo },
+        { id: 5, name: 'Indian Army', image: indianArmyLogo },
+        { id: 6, name: 'NSG', image: nsgLogo },
+        { id: 7, name: 'Prime Minister Office', image: pmoLogo },
+        { id: 8, name: 'G20', image: g20Logo },
     ];
 
     // Responsive logos per slide
@@ -80,54 +94,34 @@ const TrustedByBest = () => {
     return (
         <section className="relative py-8 md:py-12 bg-white dark:bg-black overflow-hidden transition-colors duration-300">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex flex-col md:flex-row items-center gap-6 md:gap-8 lg:gap-12">
+                <div className="flex flex-col items-center gap-8 md:gap-10">
 
-                    {/* Left Side - Text Content */}
-                    <div className="w-full md:w-[35%] space-y-3 lg:space-y-4 shrink-0 text-center md:text-left">
+                    {/* Top - Text Content */}
+                    <div className="w-full text-center space-y-3 lg:space-y-4 shrink-0">
                         {/* Badge */}
-                        <div className="inline-flex items-center gap-2 px-3 py-1 bg-purple-600 rounded">
-                            <div className="w-2.5 h-2.5 bg-white rounded-sm" />
-                            <span className="text-[10px] md:text-xs font-semibold text-white uppercase tracking-wide">
-                                Trusted by the Best
+                        <div className="flex items-center justify-center gap-3">
+                            <div className="w-3 h-3 md:w-4 md:h-4 bg-purple-600 rounded-[1px] shadow-[0_0_12px_rgba(147,51,234,0.5)]" />
+                            <span className="text-sm md:text-base font-bold text-gray-800 dark:text-gray-200 uppercase tracking-[0.25em]">
+                                Trusted By Best
                             </span>
                         </div>
 
                         {/* Heading */}
                         <div className="space-y-2">
-                            <h2 className="text-3xl sm:text-4xl md:text-[42px] lg:text-[50px] font-semibold text-black dark:text-white leading-[1.1]">
-                                Defence Staff
-                                <br />
-                                Training
+                            <h2 className="text-3xl sm:text-4xl md:text-[42px] lg:text-[50px] font-semibold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 via-purple-700 to-purple-900 dark:from-white dark:via-purple-200 dark:to-purple-400 leading-tight pb-2">
+                                Defence Staff Training
                             </h2>
-
-                            {/* Yellow Curved Underline */}
-                            <svg
-                                width="220"
-                                height="12"
-                                viewBox="0 0 220 12"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                                className="w-24 sm:w-32 md:w-40 lg:w-48 mx-auto md:mx-0"
-                            >
-                                <path
-                                    d="M2 10C50 2, 170 2, 218 10"
-                                    stroke="#FFD700"
-                                    strokeWidth="6"
-                                    strokeLinecap="round"
-                                    fill="none"
-                                />
-                            </svg>
                         </div>
                     </div>
 
-                    {/* Right Side - Logo Carousel with Navigation */}
-                    <div className="w-full md:w-[65%] relative">
+                    {/* Bottom - Logo Carousel with Navigation */}
+                    <div className="w-full max-w-7xl relative">
                         <div className="flex items-center gap-2 sm:gap-4 md:gap-6">
 
                             {/* Previous Button */}
                             <button
                                 onClick={handlePrev}
-                                className="shrink-0 w-8 h-8 md:w-10 md:h-10 rounded-full bg-purple-100 dark:bg-purple-900/30 hover:bg-purple-200 dark:hover:bg-purple-900/50 transition-all duration-300 flex items-center justify-center group hover:scale-110 active:scale-95"
+                                className="shrink-0 w-8 h-8 md:w-10 md:h-10 rounded-full bg-purple-200 dark:bg-purple-900/30 hover:bg-purple-200 dark:hover:bg-purple-900/50 transition-all duration-300 flex items-center justify-center group hover:scale-110 active:scale-95"
                                 aria-label="Previous logos"
                             >
                                 <ChevronLeft className="w-4 h-4 md:w-5 md:h-5 text-purple-600 dark:text-purple-300 group-hover:text-purple-700 transition-colors" />
@@ -151,7 +145,7 @@ const TrustedByBest = () => {
                                                     >
                                                         <div className="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 flex items-center justify-center p-1.5 transition-transform duration-300 hover:scale-110 bg-white dark:bg-white/5 rounded-full">
                                                             <img
-                                                                src={logo.image}
+                                                                src={typeof logo.image === 'string' ? logo.image : logo.image.src}
                                                                 alt={logo.name}
                                                                 className="max-w-full max-h-full object-contain transition-opacity duration-300 hover:opacity-80"
                                                                 onError={(e) => {
@@ -174,10 +168,10 @@ const TrustedByBest = () => {
                             {/* Next Button */}
                             <button
                                 onClick={handleNext}
-                                className="shrink-0 w-8 h-8 md:w-10 md:h-10 rounded-full bg-purple-600 hover:bg-purple-700 transition-all duration-300 flex items-center justify-center group hover:scale-110 active:scale-95 shadow-md shadow-purple-300/50"
+                                className="shrink-0 w-8 h-8 md:w-10 md:h-10 rounded-full bg-purple-200   transition-all duration-300 flex items-center justify-center group hover:scale-110 active:scale-95 shadow-md shadow-purple-300/50"
                                 aria-label="Next logos"
                             >
-                                <ChevronRight className="w-4 h-4 md:w-5 md:h-5 text-white transition-transform group-hover:translate-x-0.5" />
+                                <ChevronRight className="w-4 h-4 md:w-5 md:h-5 text-purple-600 transition-transform group-hover:translate-x-0.5" />
                             </button>
                         </div>
                     </div>

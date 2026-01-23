@@ -9,8 +9,8 @@ import drdo from './assets/drdo-logo-hd.webp';
 import nfsu from './assets/National_Forensic_Sciences_University_Logo.webp';
 import mha from './assets/Ministry_of_Home_Affairs_India.svg';
 import bsf from './assets/BSF_Logo.webp';
-import delhiUni from './assets/aazqsu2va.webp';
-import cgc from './assets/CGC_Landran_Logo_1080.avif';
+import delhiUni from './assets/68470838-8f33-488d-842f-21b1cedeefff.png';
+import cgc from './assets/a75d76ef-5476-494f-a4ab-15d08d05ef0a.png';
 
 const OurCustomers = () => {
     const customers = [
@@ -69,7 +69,7 @@ const OurCustomers = () => {
                                         alt={customer.name}
                                         width={140}
                                         height={140}
-                                        className="w-full h-full object-contain md:grayscale group-hover:grayscale-0 transition-all duration-300 group-hover:scale-110 relative z-10"
+                                        className="w-full h-full object-contain transition-all duration-300 group-hover:scale-110 relative z-10"
                                         loading="lazy"
                                     />
                                 </div>
@@ -90,7 +90,7 @@ const OurCustomers = () => {
                                         alt={customer.name}
                                         width={140}
                                         height={140}
-                                        className="w-full h-full object-contain md:grayscale group-hover:grayscale-0 transition-all duration-300 group-hover:scale-110 relative z-10"
+                                        className="w-full h-full object-contain transition-all duration-300 group-hover:scale-110 relative z-10"
                                         loading="lazy"
                                     />
                                 </div>

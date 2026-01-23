@@ -4,8 +4,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import gridImage from './assets/grid.webp';
 import Particles from './Particles';
-import h1 from './assets/h1.webp';
-import h2 from './assets/h2.webp';
+import b2b from './assets/b2b.png';
+import b2c from './assets/b2c.png';
 import { motion } from 'framer-motion';
 import { GoArrowRight } from "react-icons/go";
 export default function HeroSection() {
@@ -237,109 +237,53 @@ function HeroLayout({ isVideoOpen, setIsVideoOpen }) {
           {/* DESKTOP LAYOUT (Hidden on mobile/tablet) */}
           <div className="hidden lg:flex flex-col gap-10">
             {/* B2B Card Desktop */}
-            <div className="relative self-start w-full max-w-[420px] ml-40 group">
-              <div className="absolute -inset-10 bg-[#a855f7]/20 blur-[60px] rounded-full pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity"></div>
-              <div className="relative bg-white dark:bg-white p-3 rounded-[1.2rem] shadow-2xl border border-gray-100 dark:border-none">
-                <Image
-                  src={h1}
-                  alt="B2B Icon"
-                  width={250}
-                  height={250}
-                  className="absolute -top-26 -left-32 w-[250px] h-[250px] transition-transform group-hover:scale-110 duration-500 z-20"
-                />
-                <div className="pt-4 ml-8">
-                  <h2 className="text-[#1e293b] font-bold text-lg mb-2">B2B </h2>
-                  <h2 className="text-[#1e293b] font-bold text-lg mb-2 leading-tight">Train Teams Test Defences Improve Readiness</h2>
-                  <p className="text-[#64748b] text-sm leading-snug mb-3 font-medium">
-                    Prepare your security teams using immersive cyber range simulations, intelligent investigation workflows, and hands-on training.
-                  </p>
-                  <Link href="/b2b">
-                    <div className="text-[#7c3aed] font-bold text-xs sm:text-sm flex items-center gap-2 cursor-pointer border-t border-gray-100 pt-3">
-                      Explore Enterprise Solutions <span>→</span>
-                    </div>
-                  </Link>
-                </div>
-              </div>
-            </div>
+            <Link href="/b2b" className="relative self-start w-full max-w-[750px] ml-20 group">
+              <div className="absolute -inset-10 rounded-full pointer-events-none "></div>
+              <Image
+                src={b2b}
+                alt="Enterprise B2B - Train Teams Test Defences Improve Readiness"
+                width={750}
+                height={450}
+                className="w-[750px] h-[450px] hover:scale-105 duration-500 object-contain"
+              />
+            </Link>
 
             {/* B2C Card Desktop */}
-            <div className="relative self-end w-full max-w-[420px] mr-40 group">
-              <div className="relative bg-white dark:bg-white p-3 rounded-[1.2rem] shadow-2xl border border-gray-100 dark:border-none">
-                <Image
-                  src={h2}
-                  alt="B2C Icon"
-                  width={250}
-                  height={250}
-                  className="absolute -top-26 -left-32 w-[250px] h-[250px] transition-transform group-hover:scale-110 duration-500 z-20"
-                />
-                <div className="pt-4 ml-8">
-                  <h2 className="text-[#1e293b] font-bold text-lg mb-2"> B2C  </h2>
-                  <h2 className="text-[#1e293b] font-bold text-lg mb-2 leading-tight"> Learn Security Build Skills Launch Careers </h2>
-                  <p className="text-[#64748b] text-sm leading-snug mb-3 font-medium">
-                    Prepare students and early professionals with structured cybersecurity training, certification-aligned programs, and real-world SOC programs.
-                  </p>
-                  <Link href="/training">
-                    <div className="text-[#6366f1] font-bold text-xs sm:text-sm flex items-center gap-2 cursor-pointer border-t border-gray-100 pt-3">
-                      Explore Training Programs<span>→</span>
-                    </div>
-                  </Link>
-                </div>
-              </div>
-            </div>
+            <Link href="/training" className="relative self-end w-full max-w-[750px] mr-25 -mt-50 group">
+              <Image
+                src={b2c}
+                alt="Individuals B2C - Learn Security Build Skills Launch Careers"
+                width={750}
+                height={450}
+                className="w-[750px] h-[450px] hover:scale-105 duration-500 object-contain"
+              />
+            </Link>
           </div>
 
           {/* MOBILE LAYOUT (Hidden on desktop) */}
           <div className="flex lg:hidden flex-col gap-6">
             {/* B2B Card Mobile */}
-            <div className="relative w-full max-w-[500px] self-center group">
+            <Link href="/b2b" className="relative w-full max-w-[500px] self-center group">
               <div className="absolute -inset-10 bg-[#a855f7]/20 blur-[60px] rounded-full pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity"></div>
-              <div className="relative bg-white p-4 rounded-[1.2rem] shadow-2xl flex flex-row items-center gap-4">
-                <Image
-                  src={h1}
-                  alt="B2B Icon"
-                  width={100}
-                  height={100}
-                  className="w-16 h-16 relative shrink-0 transition-transform group-hover:scale-110 duration-500"
-                />
-                <div>
-                  <h2 className="text-[#1e293b] font-bold text-base mb-1">B2B</h2>
-                  <h2 className="text-[#1e293b] font-bold text-sm mb-2 leading-tight">Train Teams Test Defences Improve Readiness</h2>
-                  <p className="text-[#64748b] text-xs leading-snug mb-3 font-medium">
-                    Prepare your security teams using immersive cyber range simulations, intelligent investigation workflows, and hands-on training.
-                  </p>
-                  <Link href="/b2b">
-                    <div className="text-[#7c3aed] font-bold text-xs flex items-center gap-2 cursor-pointer border-t border-gray-100 pt-2 whitespace-nowrap">
-                      Explore Enterprise Solutions <span>→</span>
-                    </div>
-                  </Link>
-                </div>
-              </div>
-            </div>
+              <Image
+                src={b2b}
+                alt="Enterprise B2B - Train Teams Test Defences Improve Readiness"
+                width={600}
+                height={350}
+                className="w-full h-[400px] rounded-[1.2rem] shadow-2xl transition-transform group-hover:scale-105 duration-500"
+              />
+            </Link>
 
             {/* B2C Card Mobile */}
-            <div className="relative w-full max-w-[500px] self-center group">
-              <div className="relative bg-white p-4 rounded-[1.2rem] shadow-2xl flex flex-row items-center gap-4">
-                <Image
-                  src={h2}
-                  alt="B2C Icon"
-                  width={100}
-                  height={100}
-                  className="w-16 h-16 relative shrink-0 transition-transform group-hover:scale-110 duration-500"
-                />
-                <div>
-                  <h2 className="text-[#1e293b] font-bold text-base mb-1">B2C</h2>
-                  <h2 className="text-[#1e293b] font-bold text-sm mb-2 leading-tight">Learn Security Build Skills Launch Careers</h2>
-                  <p className="text-[#64748b] text-xs leading-snug mb-3 font-medium">
-                    Prepare students and early professionals with structured cybersecurity training, certification-aligned programs, and real-world SOC programs.
-                  </p>
-                  <Link href="/training">
-                    <div className="text-[#6366f1] font-bold text-xs flex items-center gap-2 cursor-pointer border-t border-gray-100 pt-2 whitespace-nowrap">
-                      Explore Training Programs<span>→</span>
-                    </div>
-                  </Link>
-                </div>
-              </div>
-            </div>
+            <Link href="/training" className="relative w-full max-w-[500px] self-center group">
+              <Image
+                src={b2c}
+                alt="Individuals B2C - Learn Security Build Skills Launch Careers"
+                width={600}
+                height={350}
+                className="w-full h-[400px] rounded-[1.2rem] shadow-2xl transition-transform group-hover:scale-105 duration-500"
+              />
+            </Link>
           </div>
 
         </div>

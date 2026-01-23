@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ZoomIn, Grid3X3, LayoutGrid, Camera, Award, Users, Monitor, Shield, Zap, ChevronLeft, ChevronRight } from 'lucide-react';
 import { FaLinkedinIn, FaYoutube, FaTwitter, FaInstagram, FaFacebookF } from 'react-icons/fa6';
-
+import ImageTrail from './ImageTrail';
 import GalleryThemeWrapper from './GalleryThemeWrapper';
 import Particles from './Particles';
 
@@ -97,10 +97,66 @@ export default function GalleryPage() {
     const [selectedCategory, setSelectedCategory] = useState('all');
     const [selectedImage, setSelectedImage] = useState(null);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const [galleryImages, setGalleryImages] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
+    // Fetch images from API
+    useEffect(() => {
+        const fetchGalleryImages = async () => {
+            try {
+                setLoading(true);
+                const response = await fetch('/api/gallery');
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch gallery images');
+                }
+
+                const data = await response.json();
+                console.log('Gallery API Response:', data);
+
+                // Handle different response structures
+                let imageArray = [];
+                if (Array.isArray(data)) {
+                    imageArray = data;
+                } else if (data.images && Array.isArray(data.images)) {
+                    imageArray = data.images;
+                } else if (data.data && Array.isArray(data.data)) {
+                    imageArray = data.data;
+                }
+
+                // Map API images to gallery format
+                const mappedImages = imageArray
+                    .filter(img => img.is_active) // Only show active images
+                    .map((img) => ({
+                        id: `api-${img.id}`,
+                        src: img.image_url || img.url,
+                        title: img.title || 'Untitled',
+                        category: img.context || 'events', // Map context to category
+                        description: img.alt_text || img.description || 'Gallery image',
+                        tags: img.tags || [],
+                        sort_order: img.sort_order || 0,
+                    }))
+                    .sort((a, b) => a.sort_order - b.sort_order); // Sort by sort_order
+
+                setGalleryImages(mappedImages);
+                setError(null);
+            } catch (err) {
+                console.error('Error fetching gallery images:', err);
+                setError(err.message);
+                setGalleryImages([]);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchGalleryImages();
+    }, []);
+
+    // Filter images by category
     const filteredImages = selectedCategory === 'all'
-        ? galleryData
-        : galleryData.filter(img => img.category === selectedCategory);
+        ? galleryImages
+        : galleryImages.filter(img => img.category === selectedCategory);
 
     const openLightbox = (image, index) => {
         setSelectedImage(image);
@@ -125,71 +181,149 @@ export default function GalleryPage() {
         <GalleryThemeWrapper>
             <div ref={containerRef} className="overflow-hidden">
 
-                {/* Hero Section */}
-                <section ref={heroRef} className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
+                {/* Hero Section - Compact & Attractive */}
+                <section ref={heroRef} className="relative min-h-[60vh] flex items-center justify-center overflow-hidden py-20">
                     {/* Animated Background */}
-                    <div className="parallax-bg absolute inset-0">
-                        {/* Grid pattern */}
-                        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(168,85,247,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(168,85,247,0.03)_1px,transparent_1px)] bg-[size:60px_60px] opacity-20 dark:opacity-100" />
+                    <div className="absolute inset-0">
+                        {/* Gradient mesh background */}
+                        <div className="absolute inset-0 bg-gradient-to-br from-purple-50 via-white to-violet-50 dark:from-[#0E0429] dark:via-[#1B0D37] dark:to-[#0E0429]" />
 
-                        {/* Gradient orbs */}
-                        <div className="absolute top-20 left-1/4 w-[600px] h-[600px] bg-gradient-to-r from-purple-600/20 to-violet-600/10 rounded-full blur-[120px] animate-pulse-slow opacity-50 dark:opacity-100" />
-                        <div className="absolute bottom-20 right-1/4 w-[500px] h-[500px] bg-gradient-to-r from-cyan-500/15 to-blue-600/10 rounded-full blur-[100px] animate-pulse-slow opacity-50 dark:opacity-100" style={{ animationDelay: '2s' }} />
-                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-full blur-[150px] opacity-50 dark:opacity-100" />
-                    </div>
+                        {/* Animated grid pattern */}
+                        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(168,85,247,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(168,85,247,0.05)_1px,transparent_1px)] bg-[size:40px_40px] opacity-30 dark:opacity-100" />
 
-                    {/* OGL Particles Background */}
-                    <div className="absolute inset-0 pointer-events-none z-0">
-                        <Particles
-                            particleColors={['#ffffff', '#a855f7', '#6366f1']}
-                            particleCount={300}
-                            particleSpread={10}
-                            speed={0.1}
-                            particleBaseSize={100}
-                            moveParticlesOnHover={true}
-                            alphaParticles={false}
-                            disableRotation={false}
-                            className="opacity-60 dark:opacity-80"
+                        {/* Floating gradient orbs */}
+                        <motion.div
+                            animate={{
+                                scale: [1, 1.2, 1],
+                                opacity: [0.3, 0.5, 0.3],
+                            }}
+                            transition={{
+                                duration: 8,
+                                repeat: Infinity,
+                                ease: "easeInOut"
+                            }}
+                            className="absolute top-10 left-1/4 w-[400px] h-[400px] bg-gradient-to-r from-purple-600/30 to-violet-600/20 rounded-full blur-[100px]"
+                        />
+                        <motion.div
+                            animate={{
+                                scale: [1, 1.3, 1],
+                                opacity: [0.2, 0.4, 0.2],
+                            }}
+                            transition={{
+                                duration: 10,
+                                repeat: Infinity,
+                                ease: "easeInOut",
+                                delay: 1
+                            }}
+                            className="absolute bottom-10 right-1/4 w-[350px] h-[350px] bg-gradient-to-r from-cyan-500/20 to-blue-600/15 rounded-full blur-[80px]"
+                        />
+
+                        {/* Animated scan lines */}
+                        <motion.div
+                            animate={{
+                                y: ['-100%', '200%']
+                            }}
+                            transition={{
+                                duration: 6,
+                                repeat: Infinity,
+                                ease: "linear"
+                            }}
+                            className="absolute left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-500/40 to-transparent"
                         />
                     </div>
 
-                    {/* Scanning lines */}
-                    <div className="absolute inset-0 pointer-events-none overflow-hidden">
-                        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-500/50 to-transparent animate-beam-h" style={{ animationDelay: '0s' }} />
-                        <div className="absolute top-1/3 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-500/30 to-transparent animate-beam-h" style={{ animationDelay: '2s' }} />
-                        <div className="absolute top-2/3 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-500/40 to-transparent animate-beam-h" style={{ animationDelay: '4s' }} />
-                    </div>
+                    {/* Content */}
+                    <div className="relative z-10 text-center px-6 max-w-5xl mx-auto">
+                        {/* Animated Badge */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.6 }}
+                            className="inline-flex items-center gap-2 mb-6 px-5 py-2.5 rounded-full bg-gradient-to-r from-purple-500/10 via-violet-500/10 to-purple-500/10 border border-purple-500/20 backdrop-blur-sm"
+                        >
+                            <motion.div
+                                animate={{
+                                    scale: [1, 1.2, 1],
+                                    opacity: [1, 0.5, 1]
+                                }}
+                                transition={{
+                                    duration: 2,
+                                    repeat: Infinity,
+                                    ease: "easeInOut"
+                                }}
+                                className="w-2 h-2 bg-gradient-to-r from-green-400 to-emerald-400 rounded-full"
+                            />
+                            <span className="text-purple-600 dark:text-purple-300 text-sm font-semibold tracking-wider uppercase">
+                                Visual Journey
+                            </span>
+                        </motion.div>
 
-                    <div className="relative z-10 text-center px-6 max-w-6xl mx-auto">
-                        {/* Badge */}
-                        <div className="hero-badge inline-flex items-center gap-3 mb-8 px-6 py-3 rounded-full bg-gradient-to-r from-purple-500/10 to-violet-500/10 border border-purple-500/20 mt-8 backdrop-blur-sm">
-                            <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-                            <span className="text-purple-300 text-sm font-semibold tracking-wider uppercase">Explore Our Journey</span>
-                        </div>
-
-                        {/* Title */}
-                        <h1 className="hero-title text-5xl md:text-7xl lg:text-8xl font-bold mb-8 leading-tight">
-                            <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-900 via-purple-600 to-purple-400 dark:from-white dark:via-purple-200 dark:to-purple-400">
+                        {/* Animated Title */}
+                        <motion.h1
+                            initial={{ opacity: 0, y: 30 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.8, delay: 0.2 }}
+                            className="text-5xl md:text-6xl lg:text-7xl font-bold mb-4 leading-tight"
+                        >
+                            <motion.span
+                                animate={{
+                                    backgroundPosition: ['0% 50%', '100% 50%', '0% 50%']
+                                }}
+                                transition={{
+                                    duration: 5,
+                                    repeat: Infinity,
+                                    ease: "linear"
+                                }}
+                                className="bg-clip-text text-transparent bg-gradient-to-r from-purple-900 via-purple-600 to-violet-600 dark:from-white dark:via-purple-200 dark:to-violet-300 bg-[length:200%_auto]"
+                            >
                                 Our Gallery
-                            </span>
-                            <br />
-                            <span className="text-3xl md:text-5xl lg:text-6xl bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-violet-400 to-cyan-400">
-                                Moments That Define Excellence
-                            </span>
-                        </h1>
+                            </motion.span>
+                        </motion.h1>
 
-                        {/* Subtitle */}
-                        <p className="hero-subtitle text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto leading-relaxed mb-12">
-                            Dive into the visual journey of Cyber Whisper — from immersive training sessions and elite team collaborations
-                            to groundbreaking conferences and award-winning achievements.
-                        </p>
+                        {/* Animated Subtitle */}
+                        <motion.p
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.8, delay: 0.4 }}
+                            className="text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto leading-relaxed mb-8"
+                        >
+                            Capturing moments of excellence, innovation, and achievement
+                        </motion.p>
 
-
+                        {/* Animated Stats */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.8, delay: 0.6 }}
+                            className="flex flex-wrap items-center justify-center gap-6 md:gap-8"
+                        >
+                            {[
+                                { value: galleryImages.length, label: 'Images', icon: Camera },
+                                { value: new Set(galleryImages.map(img => img.category)).size, label: 'Categories', icon: Grid3X3 },
+                                { value: '100%', label: 'Dynamic', icon: Zap }
+                            ].map((stat, index) => (
+                                <motion.div
+                                    key={stat.label}
+                                    initial={{ opacity: 0, scale: 0.8 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    transition={{ duration: 0.5, delay: 0.8 + index * 0.1 }}
+                                    whileHover={{ scale: 1.05 }}
+                                    className="flex items-center gap-3 px-4 py-2 rounded-xl bg-white/50 dark:bg-white/5 border border-gray-200 dark:border-white/10 backdrop-blur-sm"
+                                >
+                                    <stat.icon className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+                                    <div className="text-left">
+                                        <div className="text-xl font-bold text-gray-900 dark:text-white">{stat.value}</div>
+                                        <div className="text-xs text-gray-600 dark:text-gray-400">{stat.label}</div>
+                                    </div>
+                                </motion.div>
+                            ))}
+                        </motion.div>
                     </div>
 
                     {/* Bottom gradient fade */}
-                    <div className="absolute bottom-0 left-0 right-0 h-32 bg-linear-to-t from-white dark:from-[#1B0D37] to-transparent transition-colors duration-300" />
+                    <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-white dark:from-[#1B0D37] to-transparent" />
                 </section>
+
 
 
 
@@ -221,76 +355,111 @@ export default function GalleryPage() {
                 {/* Gallery Grid */}
                 <section className="py-16 px-6">
                     <div ref={galleryGridRef} className="max-w-7xl mx-auto">
-                        <AnimatePresence mode="wait">
-                            <motion.div
-                                key={selectedCategory}
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                exit={{ opacity: 0 }}
-                                transition={{ duration: 0.3 }}
-                                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
-                            >
-                                {filteredImages.map((image, index) => (
+                        {/* Loading State */}
+                        {loading && (
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                                {[...Array(8)].map((_, i) => (
                                     <div
-                                        key={image.id}
-                                        className={`gallery-item group relative rounded-2xl overflow-hidden cursor-pointer ${index === 0 ? 'sm:col-span-2 sm:row-span-2' : ''
-                                            }`}
-                                        onClick={() => openLightbox(image, index)}
+                                        key={i}
+                                        className={`animate-pulse rounded-2xl overflow-hidden ${i === 0 ? 'sm:col-span-2 sm:row-span-2' : ''}`}
                                     >
-                                        {/* Image container */}
-                                        <div className={`relative ${index === 0 ? 'aspect-square' : 'aspect-[4/3]'} overflow-hidden`}>
-                                            <Image
-                                                src={image.src}
-                                                alt={image.title}
-                                                fill
-                                                className="object-cover transition-transform duration-700 group-hover:scale-110"
-                                            />
-
-                                            {/* Overlay */}
-                                            <div className="absolute inset-0 bg-gradient-to-t from-[#0E0429] via-[#0E0429]/20 to-transparent opacity-60 group-hover:opacity-90 transition-opacity duration-500" />
-
-                                            {/* Scan line effect */}
-                                            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
-                                                <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-400/80 to-transparent animate-beam-h" />
-                                            </div>
-
-                                            {/* Corner glows */}
-                                            <div className="absolute top-4 right-4 w-16 h-16 bg-purple-500/30 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-
-                                            {/* Content */}
-                                            <div className="absolute inset-0 p-6 flex flex-col justify-end">
-                                                <div className="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                                                    {/* Category badge */}
-                                                    <span className="inline-block px-3 py-1 mb-3 text-xs font-semibold text-purple-300 bg-purple-500/20 rounded-full border border-purple-500/30 backdrop-blur-sm">
-                                                        {image.category.charAt(0).toUpperCase() + image.category.slice(1)}
-                                                    </span>
-
-                                                    {/* Title */}
-                                                    <h3 className=" text-lg md:text-xl  font-bold text-white mb-2 group-hover:text-purple-200 transition-colors">
-                                                        {image.title}
-                                                    </h3>
-
-                                                    {/* Description - hidden on mobile, shown on desktop hover */}
-                                                    {/* <p className="hidden md:block text-sm text-gray-400 opacity-0 group-hover:opacity-100 transition-all duration-500 line-clamp-2">
-                                                        {image.description}
-                                                    </p> */}
-                                                </div>
-
-                                                {/* Zoom icon */}
-                                                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-all duration-500 scale-50 group-hover:scale-100">
-                                                    <div className="w-16 h-16 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center">
-                                                        <ZoomIn className="w-6 h-6 text-white" />
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            {/* Border glow */}
-                                            <div className="absolute inset-0 rounded-2xl border border-white/0 group-hover:border-purple-500/50 transition-colors duration-500" />
-                                        </div>
+                                        <div className={`bg-gray-200 dark:bg-white/5 ${i === 0 ? 'aspect-square' : 'aspect-[4/3]'}`} />
                                     </div>
                                 ))}
-                            </motion.div>
-                        </AnimatePresence>
+                            </div>
+                        )}
+
+                        {/* Error State */}
+                        {error && !loading && (
+                            <div className="text-center py-12">
+                                <div className="inline-flex items-center gap-2 px-6 py-3 bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/20 rounded-full text-red-600 dark:text-red-400 mb-4">
+                                    <span className="text-sm font-medium">Failed to load gallery images</span>
+                                </div>
+                                <p className="text-gray-600 dark:text-gray-400 text-sm">Please try refreshing the page or contact support</p>
+                            </div>
+                        )}
+
+                        {/* Gallery Images */}
+                        {!loading && (
+                            <AnimatePresence mode="wait">
+                                <motion.div
+                                    key={selectedCategory}
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    exit={{ opacity: 0 }}
+                                    transition={{ duration: 0.3 }}
+                                    className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+                                >
+                                    {filteredImages.length === 0 ? (
+                                        <div className="col-span-full text-center py-12">
+                                            <Camera className="w-16 h-16 mx-auto text-gray-400 dark:text-gray-600 mb-4" />
+                                            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">No images found</h3>
+                                            <p className="text-gray-600 dark:text-gray-400">Try selecting a different category</p>
+                                        </div>
+                                    ) : (
+                                        filteredImages.map((image, index) => (
+                                            <div
+                                                key={image.id}
+                                                className={`gallery-item group relative rounded-2xl overflow-hidden cursor-pointer ${index === 0 ? 'sm:col-span-2 sm:row-span-2' : ''
+                                                    }`}
+                                                onClick={() => openLightbox(image, index)}
+                                            >
+                                                {/* Image container */}
+                                                <div className={`relative ${index === 0 ? 'aspect-square' : 'aspect-[4/3]'} overflow-hidden`}>
+                                                    <Image
+                                                        src={image.src}
+                                                        alt={image.title}
+                                                        fill
+                                                        className="object-cover transition-transform duration-700 group-hover:scale-110"
+                                                    />
+
+                                                    {/* Overlay */}
+                                                    <div className="absolute inset-0 bg-gradient-to-t from-[#0E0429] via-[#0E0429]/20 to-transparent opacity-60 group-hover:opacity-90 transition-opacity duration-500" />
+
+                                                    {/* Scan line effect */}
+                                                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+                                                        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-400/80 to-transparent animate-beam-h" />
+                                                    </div>
+
+                                                    {/* Corner glows */}
+                                                    <div className="absolute top-4 right-4 w-16 h-16 bg-purple-500/30 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+                                                    {/* Content */}
+                                                    <div className="absolute inset-0 p-6 flex flex-col justify-end">
+                                                        <div className="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                                                            {/* Category badge */}
+                                                            <span className="inline-block px-3 py-1 mb-3 text-xs font-semibold text-purple-300 bg-purple-500/20 rounded-full border border-purple-500/30 backdrop-blur-sm">
+                                                                {image.category.charAt(0).toUpperCase() + image.category.slice(1)}
+                                                            </span>
+
+                                                            {/* Title */}
+                                                            <h3 className=" text-lg md:text-xl  font-bold text-white mb-2 group-hover:text-purple-200 transition-colors">
+                                                                {image.title}
+                                                            </h3>
+
+                                                            {/* Description - hidden on mobile, shown on desktop hover */}
+                                                            {/* <p className="hidden md:block text-sm text-gray-400 opacity-0 group-hover:opacity-100 transition-all duration-500 line-clamp-2">
+                                                        {image.description}
+                                                    </p> */}
+                                                        </div>
+
+                                                        {/* Zoom icon */}
+                                                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-all duration-500 scale-50 group-hover:scale-100">
+                                                            <div className="w-16 h-16 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center">
+                                                                <ZoomIn className="w-6 h-6 text-white" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    {/* Border glow */}
+                                                    <div className="absolute inset-0 rounded-2xl border border-white/0 group-hover:border-purple-500/50 transition-colors duration-500" />
+                                                </div>
+                                            </div>
+                                        ))
+                                    )}
+                                </motion.div>
+                            </AnimatePresence>
+                        )}
                     </div>
                 </section>
 

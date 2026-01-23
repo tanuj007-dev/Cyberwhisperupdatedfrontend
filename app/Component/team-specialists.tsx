@@ -68,9 +68,9 @@ export default function TeamSpecialists() {
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="text-4xl md:text-[50px] font-semibold text-[#1C0F2D] dark:text-white leading-[1.1] max-w-7xl mx-auto tracking-tight"
+                        className="text-4xl md:text-[48px] font-semibold text-[#1C0F2D] dark:text-white leading-[1.1] max-w-7xl mx-auto tracking-tight"
                     >
-                        The minds, innovators, and problem-solvers driving our mission <span className="text-[#A855F7]">to create safer</span>
+                        The minds, innovators, and problem-solvers driving our mission <span className="text-[#A855F7]">to create safer digital ecosystems</span>
                     </motion.h2>
                 </div>
 

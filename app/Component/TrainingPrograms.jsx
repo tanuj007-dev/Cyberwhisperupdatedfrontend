@@ -2,12 +2,13 @@
 import React from 'react';
 import Image from 'next/image';
 import path from "./assets/path.webp";
+const trainingVideo = "/assets/cw-video.mp4";
 
 export default function TrainingPrograms() {
     return (
-        <section className="relative w-full bg-background py-10 md:py-16 px-3 md:px-8 overflow-hidden font-sans transition-colors duration-300">
+        <section className="relative w-full bg-background py-6 md:py-10 px-3 md:px-6 overflow-hidden font-sans transition-colors duration-300">
             <div className="max-w-7xl mx-auto">
-                <div className="relative w-full bg-[#6b46e5] rounded-[1.5rem] md:rounded-[2.5rem] p-5 md:p-16 overflow-hidden shadow-2xl isolate">
+                <div className="relative w-full bg-[#6b46e5] rounded-[1.5rem] md:rounded-[2rem] p-4 md:p-8 overflow-hidden shadow-2xl isolate">
 
                     {/* Background Pattern */}
                     <div className="absolute inset-0 opacity-40 mix-blend-overlay pointer-events-none">
@@ -20,7 +21,7 @@ export default function TrainingPrograms() {
                         />
                     </div>
 
-                    <div className="relative z-10 flex flex-col items-center text-center text-white space-y-6 md:space-y-10">
+                    <div className="relative z-10 flex flex-col items-center text-center text-white space-y-4 md:space-y-6">
                         {/* Header Section */}
                         <div className="space-y-3 md:space-y-4 max-w-4xl mx-auto">
                             <div className="inline-flex items-center gap-2 px-3 py-1 md:px-4 md:py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20">
@@ -28,13 +29,13 @@ export default function TrainingPrograms() {
                                 <span className="text-[10px] md:text-xs font-bold tracking-widest uppercase text-white/90">Training Programs</span>
                             </div>
 
-                            <h2 className="text-2xl sm:text-3xl md:text-5xl lg:text-[3.5rem] font-bold tracking-tight leading-tight">
+                            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight leading-tight">
                                 Building Cybersecurity Skills Through Real-World Training
                             </h2>
                         </div>
 
                         {/* Video Container */}
-                        <div className="relative w-full max-w-5xl mx-auto rounded-xl md:rounded-[2rem] overflow-hidden border-2 md:border-4 border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.3)] md:shadow-[0_20px_60px_rgba(0,0,0,0.3)] bg-black/20 backdrop-blur-sm group translate-y-2">
+                        <div className="relative w-full max-w-3xl mx-auto rounded-xl md:rounded-[2rem] overflow-hidden border-2 md:border-4 border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.3)] md:shadow-[0_20px_60px_rgba(0,0,0,0.3)] bg-black/20 backdrop-blur-sm group translate-y-2">
 
                             <video
                                 className="w-full h-full object-cover aspect-video"
@@ -43,13 +44,13 @@ export default function TrainingPrograms() {
                                 muted
                                 playsInline
                             >
-                                <source src="/assets/training-video.mp4" type="video/mp4" />
+                                <source src={trainingVideo} type="video/mp4" />
                                 Your browser does not support the video tag.
                             </video>
                         </div>
 
                         {/* Features - Simplified Layout */}
-                        <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-4 md:gap-12 pt-4 md:pt-6 w-full sm:w-auto">
+                        <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-3 md:gap-6 pt-2 md:pt-4 w-full sm:w-auto">
                             {[
                                 'Hands On Learning',
                                 'Industry Aligned Programs',

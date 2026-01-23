@@ -1,4 +1,4 @@
-import Banner from "../Component/Banner";
+// import Banner from "../Component/Banner";
 import TrainingHero from "../Component/TrainingHero";
 
 import TrainingSection from "../Component/TrainingSection";
@@ -8,11 +8,11 @@ import Placement from "../Component/Placement";
 
 import LearningMode from "../Component/Learningmode";
 
-import Craw from "../Component/Craw";
+// import Craw from "../Component/Craw";
 
 import TrustedAlleid from "../Component/TrustedAlleid";
 import TrustedByBest from "../Component/TrustedByBest";
-import Recognition from "../Component/Recognition";
+// import Recognition from "../Component/Recognition";
 import PlacementCell from "../Component/PlacementCell";
 
 export const metadata = {
@@ -24,16 +24,16 @@ export default function TrainingPage() {
     return (
         <main className="bg-white dark:bg-black transition-colors duration-300">
             <TrainingHero />
-            <Banner />
+            {/* <Banner /> */}
             <TrainingSection />
             <HelpCenter />
             <Batches />
             <Placement />
             <LearningMode />
-            <Craw />
+            {/* <Craw /> */}
             <TrustedAlleid />
             <TrustedByBest />
-            <Recognition />
+            {/* <Recognition /> */}
             <PlacementCell />
         </main>
     );

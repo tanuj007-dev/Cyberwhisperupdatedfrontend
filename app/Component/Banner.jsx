@@ -3,8 +3,7 @@ import React from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { FaStar } from 'react-icons/fa';
-import bannerLock from './assets/banner-lock.webp';
-import bannerAnalyst from './assets/banner-analyst.webp';
+import infosecBanner from './assets/infosec_banner.png';
 import pathImg from './assets/path.webp';
 
 export default function Banner() {
@@ -67,49 +66,26 @@ export default function Banner() {
                     <div className="absolute bottom-0 left-0 w-64 h-64 bg-black/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
 
 
-                    {/* Images Container */}
-                    <div className="relative z-10 flex flex-col md:flex-row items-center justify-center gap-6 md:gap-8 lg:gap-12 w-full">
-
-                        {/* Image 1: Lock */}
+                    {/* Single Banner Image */}
+                    <div className="relative z-10 w-full flex justify-center">
                         <motion.div
                             initial={{ opacity: 0, y: 30 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ duration: 0.6, delay: 0.2 }}
-                            whileHover={{ scale: 1.02 }}
-                            className="relative w-full md:w-1/2 aspect-16/10 bg-white/20 dark:bg-black/20 backdrop-blur-sm p-2 sm:p-3 rounded-2xl sm:rounded-[1.5rem] shadow-lg border border-white/20"
+                            whileHover={{ scale: 1.01 }}
+                            className="relative w-full aspect-[21/9] bg-white/20 dark:bg-black/20 backdrop-blur-sm p-2 sm:p-3 rounded-2xl sm:rounded-[1.5rem] shadow-lg border border-white/20"
                         >
                             <div className="relative w-full h-full rounded-xl sm:rounded-[1.2rem] overflow-hidden bg-gray-100 dark:bg-gray-800">
                                 <Image
-                                    src={bannerLock}
-                                    alt="Cyber Security Lock"
+                                    src={infosecBanner}
+                                    alt="Cyber Security Banner"
                                     fill
-                                    className="object-cover transition-transform duration-700 hover:scale-105"
+                                    className="object-cover"
                                 />
                                 <div className="absolute inset-0 bg-linear-to-t from-black/20 to-transparent" />
                             </div>
                         </motion.div>
-
-                        {/* Image 2: Analyst */}
-                        <motion.div
-                            initial={{ opacity: 0, y: 30 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.6, delay: 0.4 }}
-                            whileHover={{ scale: 1.02 }}
-                            className="relative w-full md:w-1/2 aspect-16/10 bg-white/20 dark:bg-black/20 backdrop-blur-sm p-2 sm:p-3 rounded-2xl sm:rounded-[1.5rem] shadow-lg border border-white/20"
-                        >
-                            <div className="relative w-full h-full rounded-xl sm:rounded-[1.2rem] overflow-hidden bg-gray-100 dark:bg-gray-800">
-                                <Image
-                                    src={bannerAnalyst}
-                                    alt="Cyber Security Analyst"
-                                    fill
-                                    className="object-cover transition-transform duration-700 hover:scale-105"
-                                />
-                                <div className="absolute inset-0 bg-linear-to-t from-black/20 to-transparent" />
-                            </div>
-                        </motion.div>
-
                     </div>
 
                 </motion.div>

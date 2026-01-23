@@ -7,15 +7,19 @@ import { FaFacebook, FaLinkedin, FaInstagram, FaXTwitter } from 'react-icons/fa6
 import { FaQuoteLeft } from 'react-icons/fa'
 import { Loader2, ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
+import { use } from 'react'
 
 export default function BlogPostDetail({ params }) {
+    // Unwrap the params Promise (Next.js 15+)
+    const { slug } = use(params)
+
     const [blog, setBlog] = useState(null)
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
 
     useEffect(() => {
         fetchBlogBySlug()
-    }, [params.slug])
+    }, [slug])
 
     const fetchBlogBySlug = async () => {
         try {
@@ -24,7 +28,7 @@ export default function BlogPostDetail({ params }) {
                 ? `http://${window.location.hostname}:${window.location.port}`
                 : 'http://localhost:3000'
 
-            const apiUrl = `${baseUrl}/api/blogs/${params.slug}`
+            const apiUrl = `${baseUrl}/api/blogs/${slug}`
             console.log('Fetching blog from API:', apiUrl)
 
             const response = await fetch(apiUrl)

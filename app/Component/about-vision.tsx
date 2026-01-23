@@ -5,111 +5,111 @@ import { motion } from "framer-motion"
 
 export function AboutVision() {
   return (
-    <section className="py-16  relative overflow-hidden">
-      <div className="w-full max-w-7xl mx-auto px-4 relative z-10">
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
+    <section className="py-8 md:py-12 relative overflow-hidden">
+      <div className="w-full max-w-7xl mx-auto px-4 md:px-6 relative z-10">
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+          {/* Image Section */}
           <motion.div
-            initial={{ opacity: 0, x: -50 }}
+            initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="relative group"
+            className="relative"
           >
-            {/* Image Stack inspired by reference */}
-            <div className="relative z-10 rounded-3xl overflow-hidden border border-gray-200 dark:border-white/10 shadow-2xl transition-transform duration-700 group-hover:scale-[1.02] aspect-video">
+            <div className="relative z-10 rounded-2xl overflow-hidden border border-gray-200 dark:border-white/10 shadow-xl aspect-video lg:aspect-auto lg:h-[400px]">
               <Image
                 src="/cyber_security_center_high_tech_1767456060967.webp"
                 alt="Cyber Security Operations"
                 fill
-                className="object-cover grayscale group-hover:grayscale-0 transition-all duration-1000"
+                className="object-cover transition-all duration-1000"
               />
-              <div className="absolute inset-0 bg-linear-to-t from-white via-transparent to-transparent dark:from-[#0E0429] opacity-60" />
+              <div className="absolute inset-0 bg-linear-to-t from-white via-transparent to-transparent dark:from-[#0E0429] opacity-40" />
             </div>
+
+            {/* Secondary Image - Hidden on mobile for compactness */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
+              initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ delay: 0.3, duration: 0.8 }}
-              className="absolute -bottom-8 -right-8 w-64 h-64 rounded-3xl overflow-hidden border-8 border-white dark:border-[#0E0429] shadow-2xl z-20 hidden md:block group-hover:translate-x-1 group-hover:translate-y-1 transition-transform duration-700"
+              className="absolute -bottom-4 -right-4 w-40 h-40 md:w-56 md:h-56 rounded-2xl overflow-hidden border-4 border-white dark:border-[#0E0429] shadow-2xl z-20 hidden md:block"
             >
               <Image src="/cyber_code_matrix_1767456122911.webp" alt="Digital Shield" fill className="object-cover" />
               <div className="absolute inset-0 bg-primary/10 mix-blend-overlay" />
             </motion.div>
-            <div className="absolute -top-10 -left-10 w-40 h-40 bg-primary/30 blur-[80px] rounded-full animate-pulse-slow" />
+
+            <div className="absolute -top-6 -left-6 w-32 h-32 bg-primary/20 blur-[60px] rounded-full animate-pulse-slow" />
           </motion.div>
 
-          <div className="space-y-8">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="space-y-4"
-            >
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-px bg-primary" />
-                <span className="text-primary font-semibold uppercase tracking-widest text-xs">Our Vision</span>
-              </div>
-              <h2 className="text-3xl md:text-[50px] font-semibold text-gray-900 dark:text-white leading-tight tracking-tighter">
-                Your Trusted Partner for <br />
-                <span className="text-primary  ">Cyber Defense</span>
-              </h2>
-              <p className="text-gray-600 dark:text-gray-400 text-[15px] leading-relaxed max-w-lg">
-                Cyber Whisper is dedicated to building the next generation of cyber defenders through
-                immersive simulations and cutting-edge security intelligence.
-              </p>
-            </motion.div>
-
-            <div className="grid md:grid-cols-2 gap-8 items-start">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.2, duration: 0.6 }}
-                className="space-y-4"
-              >
-                <h3 className="text-2xl font-bold text-gray-900 dark:text-white">Adaptive Security</h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-                  Dynamic threat protection that evolves with the landscape. Dynamic threat protection that evolves with the landscape.
-                </p>
-              </motion.div>
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.3, duration: 0.6 }}
-                className="space-y-4 pt-2"
-              >
-                {["Elite Threat Detection", "Zero-Trust Architecture", "Immersive Range Training"].map((item) => (
-                  <div key={item} className="flex items-center gap-4 group cursor-default">
-                    <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors shrink-0">
-                      <CheckCircle2 className="w-4 h-4 text-primary" />
-                    </div>
-                    <span className="font-bold text-gray-700 dark:text-gray-300 group-hover:text-primary dark:group-hover:text-white transition-colors text-base">{item}</span>
-                  </div>
-                ))}
-              </motion.div>
-            </div>
-
+          {/* Content Section */}
+          <div className="space-y-6 lg:max-w-xl">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: 0.4, duration: 0.6 }}
-              className="flex flex-row items-center justify-between sm:justify-start gap-2 sm:gap-6 pt-2"
+              transition={{ duration: 0.6 }}
+              className="space-y-3"
             >
-              <div className="flex items-center gap-2 sm:gap-4 group cursor-pointer p-2 rounded-2xl hover:bg-black/5 dark:hover:bg-white/5 transition-all">
-                <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-full bg-primary flex items-center justify-center text-white group-hover:scale-105 transition-transform shadow-[0_0_25px_rgba(168,85,247,0.4)]">
-                  <Phone className="w-5 h-5 sm:w-6 sm:h-6" />
-                </div>
-                <div>
-                  <p className="text-[9px] sm:text-[10px] text-gray-500 font-bold uppercase tracking-wider">Expert Support</p>
-                  <p className="text-sm sm:text-lg text-gray-900 dark:text-white hover:text-primary transition-colors">+91 9220946887</p>
-                </div>
+              <div className="flex items-center gap-3">
+                <div className="w-6 h-px bg-primary" />
+                <span className="text-primary font-bold uppercase tracking-widest text-[10px]">OUR STORY</span>
               </div>
-              <button className="py-3 px-6 sm:py-4 sm:px-12 rounded-full bg-primary text-white font-semibold uppercase tracking-widest text-[10px] sm:text-xs hover:bg-primary/90 transition-all hover:scale-105 shadow-[0_0_30px_rgba(168,85,247,0.3)]">
+              <h2 className="text-2xl md:text-4xl lg:text-[44px] font-bold text-gray-900 dark:text-white leading-[1.1] tracking-tight">
+                Your Trusted Partner for <br />
+                <span className="text-primary">Cyber Defense</span>
+              </h2>
+              <p className="text-gray-600 dark:text-gray-400 text-sm md:text-[15px] leading-relaxed">
+               Cyber Whisper is built by cybersecurity practitioners focused on outcomes, not noise. We help organizations strengthen detection and response, enable SOC teams with repeatable workflows, and train analysts using realistic labs that build true muscle memory. From advisory to implementation to training, the goal is the same: reduce risk and improve readiness.
+              </p>
+            </motion.div>
+
+            {/* Points Grid */}
+            <div className="grid sm:grid-cols-2 gap-x-6 gap-y-4">
+              {[
+                { title: "Adaptive Security", desc: "Security programs that evolve with your environment and threat landscape." },
+                { title: "Elite Threat Detection", desc: "Detection engineering and threat hunting aligned to real attacker behavior." },
+                { title: "Zero-Trust Readiness", desc: "Identity-first access controls and hardened baselines for users, devices, and workloads." },
+                { title: "Immersive Range Training", desc: "Cyber range labs and CTF exercises mapped to real SOC workflows." }
+              ].map((item, index) => (
+                <motion.div
+                  key={item.title}
+                  initial={{ opacity: 0, y: 15 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.1 * index, duration: 0.5 }}
+                  className="space-y-1 group"
+                >
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-primary shrink-0" />
+                    <span className="font-bold text-gray-900 dark:text-white text-[14px] leading-tight">{item.title}</span>
+                  </div>
+                  <p className="text-[12px] text-gray-500 dark:text-gray-400 leading-snug ml-6">
+                    {item.desc}
+                  </p>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* CTA Section */}
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.4, duration: 0.6 }}
+              className="flex flex-wrap items-center gap-4 pt-2"
+            >
+              <button className="py-3 px-14 rounded-full bg-primary text-white font-bold uppercase tracking-wider text-[11px] hover:bg-primary/90 transition-all hover:scale-105 shadow-lg shadow-primary/20 w-full sm:w-auto">
                 Get Started
               </button>
+              <div className="flex items-center gap-3 px-4 py-2 rounded-xl hover:bg-black/5 dark:hover:bg-white/5 transition-all group cursor-pointer">
+                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all">
+                  <Phone className="w-4 h-4" />
+                </div>
+                <div>
+                  <p className="text-[9px] text-gray-500 font-bold uppercase tracking-widest">Expert Support</p>
+                  <p className="text-[15px] font-bold text-gray-900 dark:text-white">Talk to an Expert</p>
+                </div>
+              </div>
             </motion.div>
           </div>
         </div>

@@ -16,25 +16,25 @@ import unnamed from './assets/2249-unnamed.pngS.webp';
 import hash from './assets/5461df8fd2fe783981b0180332821184b729980e.webp';
 import opensearch from './assets/opensearch-logo-png_seeklogo-406743.webp';
 import sentinel from './assets/Microsoft-Sentinel-1.webp';
-import images_jpg from './assets/images.jpg.webp';
+import images_jpg from './assets/cf352209-6f33-4abc-92bb-b796e286e35c.png';
 import virustotal from './assets/Virustotal_logo_pixelalign.webp';
 import opencti from './assets/OpenCTI.webp';
 import mitre from './assets/5bfdce88cd3820f7c5c21e02_mitre.webp';
-import id8625 from './assets/86256065.webp';
+import id8625 from './assets/1ff56c87-de11-4bb8-bb84-609cccd716c9.png';
 import suricata from './assets/Suricata_logo_600x600-1.webp';
 import logo_webp from './assets/logo.webp';
-import images_png from './assets/images.png.webp';
+import images_png from './assets/cf352209-6f33-4abc-92bb-b796e286e35c.png';
 import yara from './assets/Yara_logo.svg.webp';
-import images_1_png from './assets/images (1).png.webp';
-import images_1_jpg from './assets/images (1).jpg.webp';
+import images_1_png from './assets/8468d7a9-4618-40c3-9ab6-d4f6d4c1e067.png';
+import images_1_jpg from './assets/d4ced9b1-29d9-49b5-8eb8-f2380aed2555.png';
 import burp from './assets/burp_suite_proxies_e6501bcb84.webp';
-import images_2_png from './assets/images (2).png.webp';
-import images_4_png from './assets/images (4).webp';
-import aws from './assets/kisspng-amazon-web-services-logo-cloud-computing-amazon-co-logoaws-1-itnext-summit-1713897597915.webp';
+import images_2_png from './assets/4712f53c-0ddd-4302-8eeb-d5740ffbbe5f.png';
+import images_4_png from './assets/603f0073-f03a-442c-8420-4b3d5f49142c.png';
+import aws from './assets/25446cb0-2ab0-459e-bdf4-5709011dc0bc.png';
 import azure from './assets/Microsoft-Azure-Logo.webp';
 import terraform from './assets/terraform-icon-tew8r4clf5ocvoyj0o05j.webp';
-import images_2_jpg from './assets/images (2).jpg.webp';
-import kubernetes from './assets/png-clipart-white-and-blue-ship-wheel-illustration-kubernetes-logo-icons-logos-emojis-tech-companies.webp';
+import images_2_jpg from './assets/18bd6100-ee3f-4702-b597-499e0da1a9e7.png';
+import kubernetes from './assets/cb26c468-4065-4491-bfd5-1debd688366c.png';
 
 const ToolsScroller = () => {
     const tools = [
@@ -112,7 +112,7 @@ const ToolsScroller = () => {
                                         alt={tool.name}
                                         width={80}
                                         height={80}
-                                        className="w-full h-full object-contain md:grayscale group-hover:grayscale-0 transition-all duration-300 group-hover:scale-110 relative z-10"
+                                        className="w-full h-full object-contain  transition-all duration-300 group-hover:scale-110 relative z-10"
                                         loading="lazy"
                                     />
                                 </div>

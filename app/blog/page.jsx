@@ -1,20 +1,20 @@
 "use client"
 import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import BlogCard from '../Component/BlogCard'
 import BlogSidebar from '../Component/BlogSidebar'
 import { motion } from 'framer-motion'
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi'
-import { Loader2, X } from 'lucide-react'
+import { Loader2 } from 'lucide-react'
 
 export default function BlogPage() {
+    const router = useRouter()
     const [blogs, setBlogs] = useState([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
     const [currentPage, setCurrentPage] = useState(1)
     const [totalPages, setTotalPages] = useState(1)
-    const [selectedBlog, setSelectedBlog] = useState(null)
-    const [isModalOpen, setIsModalOpen] = useState(false)
     const blogsPerPage = 6
 
     useEffect(() => {
@@ -84,17 +84,9 @@ export default function BlogPage() {
     }
 
     const handleBlogClick = (blog) => {
-        setSelectedBlog(blog)
-        setIsModalOpen(true)
-        // Prevent body scroll when modal is open
-        document.body.style.overflow = 'hidden'
-    }
-
-    const handleCloseModal = () => {
-        setIsModalOpen(false)
-        setSelectedBlog(null)
-        // Restore body scroll
-        document.body.style.overflow = 'unset'
+        // Navigate to the single blog page using the slug
+        const slug = blog.slug || blog.id
+        router.push(`/blog/${slug}`)
     }
 
     return (
@@ -218,108 +210,6 @@ export default function BlogPage() {
             {/* Decorative background elements */}
             <div className="absolute top-1/4 -left-20 w-80 h-80 bg-purple-200/20 blur-[100px] rounded-full pointer-events-none -z-10" />
             <div className="absolute bottom-1/4 -right-20 w-80 h-80 bg-blue-200/20 blur-[100px] rounded-full pointer-events-none -z-10" />
-
-            {/* Blog Modal */}
-            {isModalOpen && selectedBlog && (
-                <div
-                    className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
-                    onClick={handleCloseModal}
-                >
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0.95 }}
-                        onClick={(e) => e.stopPropagation()}
-                        className="relative w-full max-w-4xl max-h-[90vh] bg-white rounded-2xl shadow-2xl overflow-hidden"
-                    >
-                        {/* Close Button */}
-                        <button
-                            onClick={handleCloseModal}
-                            className="absolute top-4 right-4 z-10 p-2 bg-white/90 hover:bg-white rounded-full shadow-lg transition-all hover:scale-110"
-                        >
-                            <X className="w-6 h-6 text-gray-700" />
-                        </button>
-
-                        {/* Scrollable Content */}
-                        <div className="overflow-y-auto max-h-[90vh] custom-scrollbar">
-                            {/* Blog Image */}
-                            {selectedBlog.image && (
-                                <div className="relative w-full h-64 md:h-96">
-                                    <Image
-                                        src={selectedBlog.image}
-                                        alt={selectedBlog.title}
-                                        fill
-                                        className="object-cover"
-                                    />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-                                </div>
-                            )}
-
-                            {/* Blog Content */}
-                            <div className="p-8 md:p-12">
-                                {/* Title */}
-                                <h1 className="text-3xl md:text-4xl font-bold text-[#1C0F2D] mb-4">
-                                    {selectedBlog.title}
-                                </h1>
-
-                                {/* Meta Information */}
-                                <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 mb-8 pb-8 border-b border-gray-200">
-                                    {selectedBlog.author && (
-                                        <div className="flex items-center gap-2">
-                                            <span className="font-semibold">By {selectedBlog.author}</span>
-                                        </div>
-                                    )}
-                                    {selectedBlog.date && (
-                                        <div className="flex items-center gap-2">
-                                            <span>•</span>
-                                            <span>{new Date(selectedBlog.date || selectedBlog.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
-                                        </div>
-                                    )}
-                                    {selectedBlog.category && (
-                                        <div className="flex items-center gap-2">
-                                            <span>•</span>
-                                            <span className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-semibold">
-                                                {selectedBlog.category}
-                                            </span>
-                                        </div>
-                                    )}
-                                </div>
-
-                                {/* Blog Content */}
-                                <div className="prose prose-lg max-w-none">
-                                    {selectedBlog.content ? (
-                                        <div
-                                            className="text-gray-700 leading-relaxed space-y-4"
-                                            dangerouslySetInnerHTML={{ __html: selectedBlog.content }}
-                                        />
-                                    ) : (
-                                        <p className="text-gray-700 leading-relaxed">
-                                            {selectedBlog.description || selectedBlog.excerpt || 'No content available for this blog post.'}
-                                        </p>
-                                    )}
-                                </div>
-
-                                {/* Tags */}
-                                {selectedBlog.tags && selectedBlog.tags.length > 0 && (
-                                    <div className="mt-8 pt-8 border-t border-gray-200">
-                                        <h3 className="text-sm font-semibold text-gray-900 mb-3">Tags</h3>
-                                        <div className="flex flex-wrap gap-2">
-                                            {selectedBlog.tags.map((tag, index) => (
-                                                <span
-                                                    key={index}
-                                                    className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-purple-100 hover:text-purple-700 transition-colors"
-                                                >
-                                                    #{tag}
-                                                </span>
-                                            ))}
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    </motion.div>
-                </div>
-            )}
         </div>
     )
 }

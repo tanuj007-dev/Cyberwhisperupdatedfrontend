@@ -8,26 +8,26 @@ const values = [
     icon: ShieldCheck,
     title: "Uncompromising Trust",
     description:
-      "Security is built on trust. We maintain the highest standards of data integrity and client confidentiality.",
+      "We protect confidentiality, respect boundaries, and operate with integrity - always security-first.",
     color: "text-primary",
   },
   {
     icon: Zap,
     title: "Rapid Resilience",
-    description: "In an era of zero-day threats, speed is safety. Our systems respond to anomalies in milliseconds.",
+    description: "We build workflows and defenses that help teams respond faster, recover smarter, and improve after every incident.",
     color: "text-accent",
   },
   {
     icon: Target,
     title: "Precision Defense",
     description:
-      "We don't just block; we identify. Precise threat modeling ensures your specific vulnerabilities are covered.",
+      "We focus on accuracy over noise - evidence-based investigations, clean detections, and outcomes that stand up to scrutiny.",
     color: "text-primary",
   },
   {
     icon: Eye,
     title: "Infinite Vision",
-    description: "Proactive monitoring and predictive analytics allow us to see threats before they materialize.",
+    description: "Threats evolve daily. Our training, labs, and methods are continuously updated to stay ahead.",
     color: "text-accent",
   },
 ]
@@ -65,7 +65,7 @@ export function ValuesSection() {
         >
           <h2 className="text-3xl md:text-5xl font-bold mb-4 text-gray-900 dark:text-white">Our Core Values</h2>
           <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-            The pillars that support our mission to redefine cybersecurity for the digital age.
+           The principles that guide how we build security programs and train defenders.
           </p>
         </motion.div>
 

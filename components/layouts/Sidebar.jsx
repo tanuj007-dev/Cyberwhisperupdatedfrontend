@@ -16,7 +16,8 @@ import {
     ChevronDown,
     Image as ImageIcon,
     Shield,
-    Calendar
+    Calendar,
+    Mail
 } from 'lucide-react';
 
 const Sidebar = ({ isOpen, setIsOpen }) => {
@@ -62,6 +63,16 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             name: 'Users',
             icon: Users,
             path: '/admin/users'
+        },
+        {
+            name: 'Newsletter',
+            icon: Mail,
+            path: '/admin/newsletter'
+        },
+        {
+            name: 'Gallery',
+            icon: ImageIcon,
+            path: '/admin/gallery'
         },
         /*{
             name: 'Media Library',
@@ -144,14 +155,14 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                                             <ChevronDown
                                                 size={16}
                                                 className={`transition-transform text-slate-400 ${(item.name === 'Blogs' && blogMenuOpen) ||
-                                                        (item.name === 'Batches' && batchMenuOpen)
-                                                        ? 'rotate-180' : ''
+                                                    (item.name === 'Batches' && batchMenuOpen)
+                                                    ? 'rotate-180' : ''
                                                     }`}
                                             />
                                         </button>
                                         <div className={`overflow-hidden transition-all duration-300 ${(item.name === 'Blogs' && blogMenuOpen) ||
-                                                (item.name === 'Batches' && batchMenuOpen)
-                                                ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0'
+                                            (item.name === 'Batches' && batchMenuOpen)
+                                            ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0'
                                             }`}>
                                             <ul className="mt-2 ml-4 pl-4 border-l border-slate-700 space-y-1">
                                                 {item.submenu.map((subItem) => (

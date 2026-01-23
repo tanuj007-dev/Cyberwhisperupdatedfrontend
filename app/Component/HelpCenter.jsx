@@ -1,9 +1,12 @@
 'use client';
 import React, { useState } from 'react';
+import { useTheme } from '../context/ThemeContext';
 import Image from 'next/image';
-import { Phone, Loader2, CheckCircle, AlertCircle } from 'lucide-react';
-
-// Use existing assets
+import { motion, AnimatePresence } from 'framer-motion';
+import { Shield, Phone, Zap, CheckCircle, AlertCircle, ArrowRight, Lock } from 'lucide-react';
+import MagicBento from './createParticleElement';
+import { MdOutlineDriveFileRenameOutline } from "react-icons/md";
+// Your existing images (reduced quantity for compactness)
 import lab1 from './assets/work5.webp';
 import lab2 from './assets/work6.webp';
 import lab3 from './assets/work7.webp';
@@ -11,253 +14,270 @@ import lab4 from './assets/work8.webp';
 import event1 from './assets/work1.webp';
 import event2 from './assets/work2.webp';
 import event3 from './assets/work3.webp';
-import event4 from './assets/work4.webp';
-import footerBg from './assets/footer-bg.webp';
 
-const techfestImages = [event1, event2, event3, event4, event1, event2, event3, event4, event1, event2, event3, event4]; // Duplicated for scrolling
-const labImages = [lab1, lab2, lab3, lab4, lab1, lab2, lab3, lab4, lab1, lab2, lab3, lab4]; // Duplicated for scrolling
+import gallery1 from './assets/gallery/1758278892364.jpg';
+import gallery2 from './assets/gallery/1755235926484.jpg';
+import gallery3 from './assets/gallery/WhatsApp Image 2026-01-12 at 6.34.47 PM.webp';
+import gallery4 from './assets/gallery/WhatsApp Image 2026-01-12 at 6.34.45 PM (1).webp';
+import gallery5 from './assets/gallery/1755235930440.jpg';
+import gallery6 from './assets/gallery/WhatsApp Image 2026-01-10 at 3.49.06 PM (10).webp';
 
-export default function HelpCenter() {
-    const [formData, setFormData] = useState({
-        name: '',
-        phone: '',
-        email: '',
-        subject: 'Free Demo Request',
-        message: 'I would like to request a free demo of your cybersecurity training programs.'
-    });
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [submitStatus, setSubmitStatus] = useState(null); // 'success' | 'error' | null
-    const [errorMessage, setErrorMessage] = useState('');
+const gridItems = [
+  {
+    image: gallery1,
+  },
+  {
+    image: gallery2,
+  },
+  {
+    image: gallery3,
+  },
+  {
+    image: gallery4,
+  },
+  {
+    image: gallery5,
+  },
+  {
+    image: gallery6,
+  }
+];
 
-    const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-    };
+export default function CompactPremiumDemo() {
+  const { theme } = useTheme();
+  const [formData, setFormData] = useState({
+    name: '',
+    phone: '',
+    email: '',
+  });
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setIsSubmitting(true);
-        setSubmitStatus(null);
-        setErrorMessage('');
+  const [status, setStatus] = useState('idle'); // idle | loading | success | error
+  const [message, setMessage] = useState('');
 
-        try {
-            const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3031';
-            const response = await fetch(`${apiUrl}/api/quotes`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData),
-            });
+  const handleChange = (e) => {
+    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+  };
 
-            if (!response.ok) {
-                throw new Error(`Failed to submit: ${response.statusText}`);
-            }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setStatus('loading');
+    setMessage('');
 
-            const data = await response.json();
-            console.log('Demo request submitted successfully:', data);
+    try {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3031';
+      const res = await fetch(`${apiUrl}/api/quotes`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...formData, interest: 'Elite Cyber Demo' }),
+      });
 
-            setSubmitStatus('success');
-            setFormData({
-                name: '',
-                phone: '',
-                email: '',
-                subject: 'Free Demo Request',
-                message: 'I would like to request a free demo of your cybersecurity training programs.'
-            });
+      if (!res.ok) throw new Error('Request failed');
 
-            // Reset success message after 5 seconds
-            setTimeout(() => {
-                setSubmitStatus(null);
-            }, 5000);
-        } catch (error) {
-            console.error('Error submitting demo request:', error);
-            setSubmitStatus('error');
-            setErrorMessage(error.message || 'Failed to submit request. Please try again.');
-        } finally {
-            setIsSubmitting(false);
-        }
-    };
+      setStatus('success');
+      setMessage('Request sent — expect contact within 24h');
+      setTimeout(() => setStatus('idle'), 5000);
 
-    return (
-        <section className="w-full py-12 md:py-20 bg-[#FBF9FF] dark:bg-black overflow-hidden font-sans relative transition-colors duration-300">
-            <div className="absolute inset-0 z-0 opacity-10 pointer-events-none"
-                style={{
-                    backgroundImage: `url(${footerBg.src || footerBg})`,
-                    backgroundPosition: 'center',
-                    backgroundRepeat: 'no-repeat',
-                    backgroundSize: 'contain'
-                }}
-            />
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex flex-col lg:flex-row gap-8 lg:gap-16">
+    } catch (err) {
+      setStatus('error');
+      setMessage('Error — please try again');
+    }
+  };
 
-                    {/* LEFT SIDE - Content & Carousels */}
-                    <div className="w-full lg:w-3/5 space-y-10 md:space-y-12 order-2 lg:order-1">
+  return (
+    <section className="relative py-16 md:py-20 bg-gradient-to-b from-gray-50 to-white dark:from-[#0a0015] dark:to-[#05000a] text-gray-900 dark:text-white overflow-hidden">
+      {/* Background effects - kept subtle */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(139,92,246,0.05),transparent_50%)] dark:bg-[radial-gradient(circle_at_30%_20%,rgba(139,92,246,0.08),transparent_50%)]" />
+        <div className="absolute inset-0 opacity-10"
+          style={{ backgroundImage: `radial-gradient(circle at 1px 1px, rgba(139,92,246,0.4) 1px, transparent 0)`, backgroundSize: '50px 50px' }}
+        />
+      </div>
 
-                        {/* Section 1: Techfest */}
-                        <div className="space-y-6">
-                            <div className="relative">
-                                <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-[#1a1a2e] dark:text-white leading-tight max-w-[90%]">
-                                    Immersive Tech Experiences in Our Workshop at Techfest 2025, IIT Bombay
-                                </h2>
-                                {/* Yellow Underline SVG */}
-                                <svg className="w-32 md:w-40 h-2 md:h-3 mt-2" viewBox="0 0 100 10" preserveAspectRatio="none">
-                                    <path d="M0 5 Q 50 10 100 5" stroke="#FFD700" strokeWidth="3" fill="none" />
-                                </svg>
-                            </div>
+      <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
+        {/* Header - compact */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7 }}
+          className="text-center mb-10"
+        >
+          <div className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-purple-100 dark:bg-white/5 border border-purple-200 dark:border-white/10 mb-4">
+            <Shield size={14} className="text-purple-600 dark:text-purple-400" />
+            <span className="text-xs font-medium tracking-wider text-purple-700 dark:text-purple-300">PRIORITY ACCESS</span>
+          </div>
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight">
+                        
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-gray-900 via-purple-700 to-purple-900 dark:from-white dark:via-purple-200 dark:to-purple-400">
+             CyberWhisper High-End Learning Labs
+            </span>
+          </h2>
+          <p className="mt-3 text-gray-600 justify-between dark:text-gray-300 text-sm md:text-base max-w-6xl mx-auto">
+           • Limited slots • Advanced red-team labs • Priority onboarding for qualified applicants
+          </p>
+        </motion.div>
 
-                            {/* Infinite Horizontal Scroll */}
-                            <div className="relative w-full overflow-hidden mask-linear-fade">
-                                <div className="flex gap-3 md:gap-4 animate-partner-scroll w-max">
-                                    {techfestImages.map((img, i) => (
-                                        <div key={i} className="relative w-[180px] h-[120px] sm:w-[200px] sm:h-[140px] md:w-[220px] md:h-[160px] rounded-xl overflow-hidden shrink-0 shadow-md">
-                                            <Image src={img} alt="Techfest Workshop" fill className="object-cover hover:scale-110 transition-transform duration-700" sizes="(max-width: 768px) 180px, 220px" />
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Section 2: Learning Labs */}
-                        <div className="space-y-6">
-                            <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-[#1a1a2e] dark:text-white">
-                                CyberWhisper High-End Learning Labs
-                            </h2>
-
-                            {/* Infinite Horizontal Scroll */}
-                            <div className="relative w-full overflow-hidden mask-linear-fade">
-                                <div className="flex gap-3 md:gap-4 animate-partner-scroll w-max" style={{ animationDirection: 'reverse' }}>
-                                    {labImages.map((img, i) => (
-                                        <div key={i} className="relative w-[180px] h-[120px] sm:w-[200px] sm:h-[140px] md:w-[220px] md:h-[160px] rounded-xl overflow-hidden shrink-0 shadow-md">
-                                            <Image src={img} alt="Learning Lab" fill className="object-cover hover:scale-110 transition-transform duration-700" sizes="(max-width: 768px) 180px, 220px" />
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
-
+        {/* Two Column Layout - Form on Left, Grid on Right */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8">
+          {/* Left: Contact Form */}
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, delay: 0.2 }}
+            className="lg:col-span-4 h-full"
+          >
+            <div className="relative rounded-2xl p-[1px] bg-gradient-to-br from-purple-600/40 to-indigo-600/30 h-full">
+              <div className="bg-white/80 dark:bg-black/50 backdrop-blur-xl border border-gray-200 dark:border-white/10 rounded-2xl overflow-hidden h-full flex flex-col shadow-xl shadow-gray-200/50 dark:shadow-none">
+                {/* Terminal style header */}
+                <div className="flex items-center justify-between px-5 py-3 border-b border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-black/40">
+                  <div className="flex items-center gap-2">
+                    <div className="flex gap-1.5">
+                      <div className="w-2.5 h-2.5 rounded-full bg-red-500/70" />
+                      <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/70" />
+                      <div className="w-2.5 h-2.5 rounded-full bg-green-500/70" />
                     </div>
-
-                    {/* RIGHT SIDE - Sticky Form & Help */}
-                    <div className="w-full lg:w-2/5 space-y-6 md:space-y-8 order-1 lg:order-2">
-
-                        {/* Need Help Card */}
-                        <div className="relative rounded-xl p-[2px] overflow-hidden group">
-                            {/* Animated Gradient Background */}
-                            <div
-                                className="absolute inset-0"
-                                style={{
-                                    backgroundImage: "linear-gradient(90deg, #6932E2, #EBDFFF, #6932E2)",
-                                    backgroundSize: "200% 100%",
-                                    animation: "borderMove 3s linear infinite",
-                                }}
-                            />
-
-                            {/* Inner Content */}
-                            <div className="relative bg-white dark:bg-gray-900 rounded-xl p-4 sm:p-5 shadow-sm flex flex-row items-center justify-between gap-4 h-full w-full">
-                                <div className="flex items-center gap-3 md:gap-4">
-                                    <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-purple-50 dark:bg-purple-900/40 flex items-center justify-center text-[#6B46E5] dark:text-purple-300 shrink-0">
-                                        <Phone className="w-5 h-5 md:w-6 md:h-6" />
-                                    </div>
-                                    <span className="font-semibold text-[#1a1a2e] dark:text-white text-base md:text-lg whitespace-nowrap">Need Help?</span>
-                                </div>
-                                <a href="tel:+919513805401" className="text-[#6B46E5] dark:text-purple-300 font-bold text-base md:text-lg hover:underline whitespace-nowrap">+91 9513805401</a>
-                            </div>
-                        </div>
-
-                        {/* Form Card */}
-                        <div className="relative bg-white dark:bg-gray-900 rounded-3xl md:rounded-4xl p-6 md:p-8 shadow-[0_10px_40px_rgba(107,70,229,0.1)] border-2 border-[#6B46E5]">
-                            <h3 className="text-xl md:text-2xl font-bold text-[#1a1a2e] dark:text-white mb-6 md:mb-8 text-center md:text-left">Get Free Demo Now</h3>
-
-                            <form onSubmit={handleSubmit} className="space-y-4 md:space-y-5">
-                                <div>
-                                    <input
-                                        type="text"
-                                        name="name"
-                                        value={formData.name}
-                                        onChange={handleChange}
-                                        placeholder="Name *"
-                                        required
-                                        disabled={isSubmitting}
-                                        className="w-full px-4 py-3 md:px-5 md:py-4 rounded-xl bg-[#F8F9FD] dark:bg-gray-800 border border-gray-100 dark:border-gray-700 text-[#1a1a2e] dark:text-white placeholder-gray-400 dark:placeholder-gray-500 text-sm md:text-base focus:outline-none focus:border-[#6B46E5] focus:ring-1 focus:ring-[#6B46E5] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                                    />
-                                </div>
-                                <div>
-                                    <input
-                                        type="tel"
-                                        name="phone"
-                                        value={formData.phone}
-                                        onChange={handleChange}
-                                        placeholder="Phone *"
-                                        required
-                                        disabled={isSubmitting}
-                                        className="w-full px-4 py-3 md:px-5 md:py-4 rounded-xl bg-[#F8F9FD] dark:bg-gray-800 border border-gray-100 dark:border-gray-700 text-[#1a1a2e] dark:text-white placeholder-gray-400 dark:placeholder-gray-500 text-sm md:text-base focus:outline-none focus:border-[#6B46E5] focus:ring-1 focus:ring-[#6B46E5] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                                    />
-                                </div>
-                                <div>
-                                    <input
-                                        type="email"
-                                        name="email"
-                                        value={formData.email}
-                                        onChange={handleChange}
-                                        placeholder="Email *"
-                                        required
-                                        disabled={isSubmitting}
-                                        className="w-full px-4 py-3 md:px-5 md:py-4 rounded-xl bg-[#F8F9FD] dark:bg-gray-800 border border-gray-100 dark:border-gray-700 text-[#1a1a2e] dark:text-white placeholder-gray-400 dark:placeholder-gray-500 text-sm md:text-base focus:outline-none focus:border-[#6B46E5] focus:ring-1 focus:ring-[#6B46E5] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                                    />
-                                </div>
-
-                                {/* Success Message */}
-                                {submitStatus === 'success' && (
-                                    <div className="flex items-center gap-2 p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-xl text-green-800 dark:text-green-300">
-                                        <CheckCircle className="w-5 h-5 shrink-0" />
-                                        <span className="text-sm font-medium">Thank you! We'll contact you soon for your free demo.</span>
-                                    </div>
-                                )}
-
-                                {/* Error Message */}
-                                {submitStatus === 'error' && (
-                                    <div className="flex items-center gap-2 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl text-red-800 dark:text-red-300">
-                                        <AlertCircle className="w-5 h-5 shrink-0" />
-                                        <span className="text-sm">{errorMessage}</span>
-                                    </div>
-                                )}
-
-                                <div className="pt-2">
-                                    <button
-                                        type="submit"
-                                        disabled={isSubmitting || submitStatus === 'success'}
-                                        className="w-full bg-[#1D0B2E] dark:bg-purple-700 text-white font-bold py-3 md:py-4 rounded-full text-sm md:text-base hover:bg-[#6B46E5] dark:hover:bg-purple-600 transition-all shadow-lg active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2"
-                                    >
-                                        {isSubmitting && <Loader2 className="w-5 h-5 animate-spin" />}
-                                        {isSubmitting ? 'Submitting...' : submitStatus === 'success' ? 'Submitted!' : 'Submit'}
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-
-                    </div>
-
+                    <span className="text-xs font-mono text-gray-500 dark:text-gray-400">access.terminal</span>
+                  </div>
+                  <Lock size={14} className="text-green-600 dark:text-green-400" />
                 </div>
-            </div>
 
-            {/* Tailwind Custom Animations for Scrolling */}
-            <style jsx global>{`
-        @keyframes partner-scroll {
-            from { transform: translateX(0); }
-            to { transform: translateX(-50%); }
-        }
-        .animate-partner-scroll {
-            animation: partner-scroll 40s linear infinite; /* Slowed down for better view */
-        }
-        .animate-partner-scroll:hover {
-            animation-play-state: paused;
-        }
-        @keyframes borderMove {
-            0% { background-position: 0% 50%; }
-            100% { background-position: 200% 50%; }
-        }
-      `}</style>
-        </section >
-    );
+                <div className="p-6 md:p-7 flex-1 flex flex-col justify-between">
+                  <h3 className="text-xl md:text-2xl font-bold mb-1 bg-gradient-to-r from-purple-700 to-blue-600 dark:from-purple-300 dark:to-blue-200 bg-clip-text text-transparent">
+                    Get Free Demo Now
+                  </h3>
+                  <p className="text-gray-500 dark:text-gray-400 text-sm mb-6">
+                    Limited availability — response within 24 hours
+                  </p>
+
+                  <form onSubmit={handleSubmit} className="space-y-4">
+                    <div className="relative">
+                      <MdOutlineDriveFileRenameOutline size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-purple-400" />
+                      <input
+                        name="name"
+                        value={formData.name}
+                        onChange={handleChange}
+                        required
+                        disabled={status === 'loading' || status === 'success'}
+                        className="w-full pl-11 pr-4 py-3.5 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg focus:border-purple-500 focus:ring-1 focus:ring-purple-500/50 outline-none text-gray-900 dark:text-white placeholder-gray-500 text-sm transition-all"
+                        placeholder="Enter Your Full Name"
+                      />
+                    </div>
+
+                    <div className="grid sm:grid-cols-1 gap-4">
+                      <div className="relative">
+                        <Phone size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-purple-400" />
+                        <input
+                          type="tel"
+                          name="phone"
+                          value={formData.phone}
+                          onChange={handleChange}
+                          required
+                          disabled={status === 'loading' || status === 'success'}
+                          className="w-full pl-11 pr-4 py-3.5 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg focus:border-purple-500 focus:ring-1 focus:ring-purple-500/50 outline-none text-gray-900 dark:text-white placeholder-gray-500 text-sm transition-all"
+                          placeholder="Enter Your Phone Number"
+                        />
+                      </div>
+
+                      <div className="relative">
+                        <Zap size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-purple-400" />
+                        <input
+                          type="email"
+                          name="email"
+                          value={formData.email}
+                          onChange={handleChange}
+                          required
+                          disabled={status === 'loading' || status === 'success'}
+                          className="w-full pl-11 pr-4 py-3.5 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg focus:border-purple-500 focus:ring-1 focus:ring-purple-500/50 outline-none text-gray-900 dark:text-white placeholder-gray-500 text-sm transition-all"
+                          placeholder="Enter Your Email"
+                        />
+                      </div>
+                    </div>
+
+                    <AnimatePresence>
+                      {(status === 'success' || status === 'error') && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: 'auto' }}
+                          exit={{ opacity: 0, height: 0 }}
+                          className={`flex items-center gap-2.5 p-3 rounded-lg text-sm ${status === 'success'
+                            ? 'bg-green-900/30 border border-green-700/40 text-green-300'
+                            : 'bg-red-900/30 border border-red-700/40 text-red-300'
+                            }`}
+                        >
+                          {status === 'success' ? <CheckCircle size={16} /> : <AlertCircle size={16} />}
+                          <span>{message}</span>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+
+                    <button
+                      type="submit"
+                      disabled={status === 'loading' || status === 'success'}
+                      className={`
+                        w-full py-3.5 px-6 rounded-lg font-semibold text-sm md:text-base transition-all flex items-center justify-center gap-2
+                        ${status === 'loading'
+                          ? 'bg-gray-700 cursor-not-allowed'
+                          : 'bg-purple-600 text-white shadow-lg shadow-purple-900/30 hover:shadow-purple-700/50'}
+                      `}
+                    >
+                      {status === 'loading' ? (
+                        <>Processing... <span className="animate-spin">⟳</span></>
+                      ) : status === 'success' ? (
+                        <>Sent ✓</>
+                      ) : (
+                        <>
+                          Request Access <ArrowRight size={16} />
+                        </>
+                      )}
+                    </button>
+                  </form>
+
+                  <div className="mt-6 flex items-center justify-center gap-3 bg-gray-50 dark:bg-white/5 p-3 rounded-xl border border-gray-200 dark:border-white/5">
+                    <div className="w-10 h-10 rounded-lg bg-purple-500/10 flex items-center justify-center shrink-0">
+                      <Phone size={20} className="text-purple-600 dark:text-purple-400" />
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-semibold text-gray-600 dark:text-gray-300">Need Help?</span>
+                      <a
+                        href="tel:+919513805401"
+                        className="text-base font-bold text-purple-600 dark:text-purple-400 hover:text-purple-500 dark:hover:text-purple-300 transition-colors"
+                      >
+                        +91 95138 05401
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Right: MagicBento Grid */}
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, delay: 0.4 }}
+            className="lg:col-span-8 h-full"
+          >
+            <MagicBento
+              theme={theme}
+              items={gridItems}
+              textAutoHide={true}
+              enableStars
+              enableSpotlight
+              enableBorderGlow={true}
+              enableTilt={false}
+              enableMagnetism={false}
+              clickEffect
+              spotlightRadius={540}
+              particleCount={12}
+              glowColor="132, 0, 255"
+              disableAnimations={false}
+            />
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  );
 }

@@ -77,9 +77,7 @@ export default function AboutUsPage() {
                                         transition={{ delay: 0.4, duration: 0.6 }}
                                         className="text-gray-600 dark:text-gray-400 text-[15px] leading-relaxed text-center md:text-left"
                                     >
-                                        Cyber Whisper provides comprehensive cybersecurity services to safeguard your digital assets,
-                                        prevent potential threats, and ensure a secure environment through immersive training and
-                                        advanced defense mechanisms.
+                                       Security fails when it stays theoretical. Cyber Whisper helps organizations and individuals build real capability through a blend of cybersecurity services, SOC enablement, and hands-on cyber range training. The approach is evidence-driven and designed to produce outcomes that can be measured - faster triage, cleaner investigations, and stronger response decisions.
                                     </motion.p>
                                     <div className="grid grid-cols-2 gap-3 md:gap-6">
                                         <motion.div
@@ -117,7 +115,7 @@ export default function AboutUsPage() {
                                     transition={{ delay: 0.3, duration: 0.8 }}
                                     className="relative"
                                 >
-                                    <div className="relative rounded-2xl overflow-hidden border border-gray-200 dark:border-white/10 grayscale hover:grayscale-0 transition-all duration-700 shadow-2xl aspect-square">
+                                    <div className="relative rounded-2xl overflow-hidden border border-gray-200 dark:border-white/10 transition-all duration-700 shadow-2xl aspect-square">
                                         <Image
                                             src="/cyber_security_expert_analysis_1767456147793.webp"
                                             alt="Expert Analysis"
