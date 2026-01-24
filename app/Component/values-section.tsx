@@ -61,11 +61,11 @@ export function ValuesSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-left md:text-center mb-16"
         >
           <h2 className="text-3xl md:text-5xl font-bold mb-4 text-gray-900 dark:text-white">Our Core Values</h2>
           <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-           The principles that guide how we build security programs and train defenders.
+            The principles that guide how we build security programs and train defenders.
           </p>
         </motion.div>
 

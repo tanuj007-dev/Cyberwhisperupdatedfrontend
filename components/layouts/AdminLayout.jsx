@@ -1,12 +1,32 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import Sidebar from './Sidebar';
 import Header from './Header';
 import { AdminProvider } from '@/contexts/AdminContext';
 
 const AdminLayout = ({ children }) => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const router = useRouter();
+
+    useEffect(() => {
+        const isAuth = localStorage.getItem('adminAuth');
+        if (isAuth !== 'true') {
+            router.push('/admin/login');
+        } else {
+            setIsAuthenticated(true);
+        }
+    }, [router]);
+
+    if (!isAuthenticated) {
+        return (
+            <div className="flex items-center justify-center min-h-screen bg-gray-50">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+            </div>
+        );
+    }
 
     return (
         <AdminProvider>

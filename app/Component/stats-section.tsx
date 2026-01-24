@@ -3,10 +3,10 @@
 import { motion } from "framer-motion"
 
 const stats = [
-  { label: "Threats Blocked", value: "2.4B+", prefix: "" },
-  { label: "Uptime Guarantee", value: "99.99", prefix: "%" },
-  { label: "Response Time", value: "< 5", prefix: "ms" },
-  { label: "Global Clients", value: "500+", prefix: "" },
+  { label: "engagements delivered (training / consulting / deployments)", value: "2.4B+", prefix: "" },
+  { label: "professionals trained across SOC / TI / detection engineering tracks", value: "99.99", prefix: "%" },
+  { label: "labs and scenarios available in the Cyber Range + CTF ecosystem", value: "< 5", prefix: "ms" },
+  { label: "partner/client teams enabled across enterprise, education, and government", value: "500+", prefix: "" },
 ]
 
 export function StatsSection() {
@@ -31,29 +31,29 @@ export function StatsSection() {
   }
 
   return (
-    <section className="py-24 relative overflow-hidden">
+    <section className="py-10 md:py-24 relative overflow-hidden">
       <div className="w-full max-w-7xl mx-auto px-4">
         <motion.div
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-50px" }}
-          className="grid grid-cols-2 lg:grid-cols-4 gap-8"
+          className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8"
         >
           {stats.map((stat, index) => (
             <motion.div
               key={index}
               variants={itemVariants}
-              className="text-center group"
+              className="text-center group p-2 md:p-0"
             >
-              <div className="text-4xl md:text-5xl font-mono font-bold text-primary mb-2 transition-transform group-hover:scale-110 duration-300">
+              <div className="text-2xl sm:text-3xl md:text-5xl font-mono font-bold text-primary mb-1 md:mb-2 transition-transform group-hover:scale-110 duration-300">
                 {stat.value}
                 {stat.prefix}
               </div>
-              <div className="text-gray-600 dark:text-gray-400 text-sm md:text-base uppercase tracking-widest font-medium">
+              <div className="text-gray-600 dark:text-gray-400 text-[10px] sm:text-xs md:text-base uppercase tracking-widest font-medium leading-tight">
                 {stat.label}
               </div>
-              <div className="h-0.5 w-0 group-hover:w-full bg-primary/50 mx-auto mt-4 transition-all duration-500" />
+              <div className="h-0.5 w-0 group-hover:w-full bg-primary/50 mx-auto mt-2 md:mt-4 transition-all duration-500" />
             </motion.div>
           ))}
         </motion.div>

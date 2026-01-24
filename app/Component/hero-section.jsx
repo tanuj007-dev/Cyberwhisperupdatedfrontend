@@ -232,7 +232,7 @@ function HeroLayout({ isVideoOpen, setIsVideoOpen }) {
         </motion.div>
 
         {/* Right Content Area - Staggered Cards */}
-        <div className="lg:w-[45%] relative flex flex-col mt-8 lg:mt-0 w-full px-4 sm:px-0">
+        <div className="hidden lg:flex lg:w-[45%] relative flex-col mt-8 lg:mt-0 w-full px-4 sm:px-0">
 
           {/* DESKTOP LAYOUT (Hidden on mobile/tablet) */}
           <div className="hidden lg:flex flex-col gap-10">

@@ -12,7 +12,8 @@ export async function GET(request, { params }) {
                     lessons: 25,
                     level: 'Beginner',
                     duration: '3 Weeks',
-                    category: 'Programming'
+                    category: 'Programming',
+                    image: '/Component/assets/cyber_lab_1.webp'
                 },
                 {
                     id: 2,
@@ -21,7 +22,8 @@ export async function GET(request, { params }) {
                     lessons: 30,
                     level: 'Intermediate',
                     duration: '4 Weeks',
-                    category: 'Programming'
+                    category: 'Programming',
+                    image: '/Component/assets/cyber_lab_2.webp'
                 },
                 {
                     id: 3,
@@ -30,7 +32,8 @@ export async function GET(request, { params }) {
                     lessons: 40,
                     level: 'Advanced',
                     duration: '6 Weeks',
-                    category: 'Programming'
+                    category: 'Programming',
+                    image: '/Component/assets/cyber_lab_3.webp'
                 }
             ],
             cisco: [
@@ -41,7 +44,8 @@ export async function GET(request, { params }) {
                     lessons: 35,
                     level: 'Beginner',
                     duration: '5 Weeks',
-                    category: 'CISCO'
+                    category: 'CISCO',
+                    image: '/Component/assets/cisco.webp'
                 },
                 {
                     id: 5,
@@ -50,7 +54,8 @@ export async function GET(request, { params }) {
                     lessons: 40,
                     level: 'Advanced',
                     duration: '6 Weeks',
-                    category: 'CISCO'
+                    category: 'CISCO',
+                    image: '/Component/assets/cyber_lab_4.webp'
                 },
                 {
                     id: 6,
@@ -59,7 +64,8 @@ export async function GET(request, { params }) {
                     lessons: 28,
                     level: 'Intermediate',
                     duration: '4 Weeks',
-                    category: 'CISCO'
+                    category: 'CISCO',
+                    image: '/Component/assets/cyber_range.webp'
                 }
             ],
             'red hat': [
@@ -70,7 +76,8 @@ export async function GET(request, { params }) {
                     lessons: 32,
                     level: 'Intermediate',
                     duration: '4 Weeks',
-                    category: 'Red Hat'
+                    category: 'Red Hat',
+                    image: '/Component/assets/redhat.webp'
                 },
                 {
                     id: 8,
@@ -79,7 +86,8 @@ export async function GET(request, { params }) {
                     lessons: 28,
                     level: 'Beginner',
                     duration: '3 Weeks',
-                    category: 'Red Hat'
+                    category: 'Red Hat',
+                    image: '/Component/assets/cyber_online.webp'
                 },
                 {
                     id: 9,
@@ -88,7 +96,8 @@ export async function GET(request, { params }) {
                     lessons: 45,
                     level: 'Advanced',
                     duration: '8 Weeks',
-                    category: 'Red Hat'
+                    category: 'Red Hat',
+                    image: '/Component/assets/cyber_corporate.webp'
                 }
             ],
             comptia: [
@@ -99,25 +108,28 @@ export async function GET(request, { params }) {
                     lessons: 38,
                     level: 'Beginner',
                     duration: '5 Weeks',
-                    category: 'CompTIA'
+                    category: 'CompTIA',
+                    image: '/Component/assets/comptia.webp'
                 },
                 {
                     id: 11,
-                    title: 'CompTIA Security+',
-                    rating: 4.8,
+                    title: 'CompTIA Network+',
+                    rating: 4.6,
                     lessons: 42,
                     level: 'Intermediate',
                     duration: '6 Weeks',
-                    category: 'CompTIA'
+                    category: 'CompTIA',
+                    image: '/Component/assets/cyber_map.webp'
                 },
                 {
                     id: 12,
-                    title: 'CompTIA Network+',
-                    rating: 4.6,
-                    lessons: 35,
-                    level: 'Intermediate',
-                    duration: '5 Weeks',
-                    category: 'CompTIA'
+                    title: 'CompTIA Security+',
+                    rating: 4.8,
+                    lessons: 45,
+                    level: 'Advanced',
+                    duration: '7 Weeks',
+                    category: 'CompTIA',
+                    image: '/Component/assets/cyberdefence.webp'
                 }
             ],
             'microsoft azure': [
@@ -125,57 +137,63 @@ export async function GET(request, { params }) {
                     id: 13,
                     title: 'Azure Fundamentals',
                     rating: 4.5,
-                    lessons: 24,
+                    lessons: 30,
                     level: 'Beginner',
-                    duration: '3 Weeks',
-                    category: 'Microsoft Azure'
+                    duration: '4 Weeks',
+                    category: 'Microsoft Azure',
+                    image: '/Component/assets/Microsoft-Azure-Logo.webp'
                 },
                 {
                     id: 14,
                     title: 'Azure Administrator',
                     rating: 4.7,
-                    lessons: 38,
+                    lessons: 40,
                     level: 'Intermediate',
-                    duration: '5 Weeks',
-                    category: 'Microsoft Azure'
+                    duration: '6 Weeks',
+                    category: 'Microsoft Azure',
+                    image: '/Component/assets/Microsoft-Sentinel-1.webp'
                 },
                 {
                     id: 15,
-                    title: 'Azure Solutions Architect',
+                    title: 'Azure Security Engineer',
                     rating: 4.8,
-                    lessons: 42,
+                    lessons: 48,
                     level: 'Advanced',
-                    duration: '6 Weeks',
-                    category: 'Microsoft Azure'
+                    duration: '8 Weeks',
+                    category: 'Microsoft Azure',
+                    image: '/Component/assets/cyber_resilience.webp'
                 }
             ],
             cybersecurity: [
                 {
                     id: 16,
-                    title: 'Cybersecurity Essentials',
-                    rating: 4.6,
-                    lessons: 30,
+                    title: 'Ethical Hacking Basics',
+                    rating: 4.9,
+                    lessons: 35,
                     level: 'Beginner',
-                    duration: '4 Weeks',
-                    category: 'Cybersecurity'
+                    duration: '5 Weeks',
+                    category: 'Cybersecurity',
+                    image: '/Component/assets/cyber_lab_1.webp'
                 },
                 {
                     id: 17,
-                    title: 'Ethical Hacking & Penetration Testing',
-                    rating: 4.8,
-                    lessons: 45,
-                    level: 'Advanced',
-                    duration: '7 Weeks',
-                    category: 'Cybersecurity'
+                    title: 'Penetration Testing',
+                    rating: 4.7,
+                    lessons: 42,
+                    level: 'Intermediate',
+                    duration: '6 Weeks',
+                    category: 'Cybersecurity',
+                    image: '/Component/assets/vapt.webp'
                 },
                 {
                     id: 18,
-                    title: 'Incident Response & Threat Analysis',
-                    rating: 4.7,
-                    lessons: 35,
+                    title: 'Advanced Cybersecurity',
+                    rating: 4.8,
+                    lessons: 50,
                     level: 'Advanced',
-                    duration: '5 Weeks',
-                    category: 'Cybersecurity'
+                    duration: '10 Weeks',
+                    category: 'Cybersecurity',
+                    image: '/Component/assets/cyberdefence.webp'
                 }
             ]
         };

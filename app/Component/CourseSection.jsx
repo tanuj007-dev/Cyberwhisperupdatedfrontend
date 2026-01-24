@@ -4,7 +4,6 @@ import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { Star, BookOpen, BarChart2, Calendar, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
-import { safeFetch, mockData } from '@/app/utils/safeFetch'
 
 // Import assets
 import thumb1 from './assets/cyber_lab_1.webp'
@@ -36,36 +35,22 @@ export default function CourseSection() {
     const fetchCategories = async () => {
         setCategoriesLoading(true)
         try {
-            const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3031';
-            const response = await fetch(
-                `${apiUrl}/api/courses/categories`,
-                {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    mode: 'cors',
-                    credentials: 'include'
-                }
-            )
+            const response = await fetch('/api/courses/categories')
 
             if (!response.ok) {
                 throw new Error(`Failed to fetch categories: ${response.status}`)
             }
 
             const data = await response.json()
-            const fetchedCategories = Array.isArray(data) ? data : (data.categories || [])
+            const fetchedCategories = Array.isArray(data) ? data : []
 
             if (fetchedCategories.length > 0) {
                 setCategories(fetchedCategories)
                 setActiveCategory(fetchedCategories[0])
             }
         } catch (err) {
-            console.warn('Backend unavailable, using fallback categories:', err.message)
-            // Fallback categories
-            const fallbackCategories = ['Programming', 'CISCO', 'Red Hat', 'CompTIA', 'Microsoft Azure', 'Cybersecurity']
-            setCategories(fallbackCategories)
-            setActiveCategory(fallbackCategories[0])
+            console.warn('API unavailable, using fallback categories:', err.message)
+            setCategories([])
         } finally {
             setCategoriesLoading(false)
         }
@@ -75,18 +60,7 @@ export default function CourseSection() {
         setLoading(true)
         setError(null)
         try {
-            const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3031';
-            const response = await fetch(
-                `${apiUrl}/api/courses/category/${category.toLowerCase()}?page=1&limit=10`,
-                {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    mode: 'cors',
-                    credentials: 'include'
-                }
-            )
+            const response = await fetch(`/api/courses/category/${category.toLowerCase()}`)
 
             if (!response.ok) {
                 throw new Error(`Failed to fetch courses: ${response.status}`)
@@ -95,7 +69,7 @@ export default function CourseSection() {
             const data = await response.json()
             const processedCourses = (data.courses || data || []).map((course, idx) => ({
                 ...course,
-                image: course.image || defaultImage,
+                image: course.image || course.thumbnail || defaultImage,
                 rating: course.rating || 4.5,
                 lessons: course.lessons || 20,
                 level: course.level || 'A1 - A2',
@@ -105,7 +79,7 @@ export default function CourseSection() {
 
             setCourses(processedCourses)
         } catch (err) {
-            console.warn('Backend unavailable for courses, showing empty state:', err.message)
+            console.warn('API unavailable for courses, showing empty state:', err.message)
             // Don't set error state to avoid red error messages
             setCourses([])
         } finally {

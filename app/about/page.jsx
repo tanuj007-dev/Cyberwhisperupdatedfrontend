@@ -59,9 +59,9 @@ export default function AboutUsPage() {
                                         whileInView={{ opacity: 1, x: 0 }}
                                         viewport={{ once: true }}
                                         transition={{ delay: 0.2, duration: 0.6 }}
-                                        className="space-y-4 text-center md:text-left"
+                                        className="space-y-4 text-left"
                                     >
-                                        <span className="text-primary font-bold uppercase tracking-widest text-sm flex items-center justify-center md:justify-start gap-2">
+                                        <span className="text-primary font-bold uppercase tracking-widest text-sm flex items-center justify-start gap-2">
                                             <span className="w-8 h-px bg-primary"></span>
                                             What We Do
                                         </span>
@@ -75,9 +75,9 @@ export default function AboutUsPage() {
                                         whileInView={{ opacity: 1 }}
                                         viewport={{ once: true }}
                                         transition={{ delay: 0.4, duration: 0.6 }}
-                                        className="text-gray-600 dark:text-gray-400 text-[15px] leading-relaxed text-center md:text-left"
+                                        className="text-gray-600 dark:text-gray-400 text-sm md:text-[15px] leading-relaxed text-left"
                                     >
-                                       Security fails when it stays theoretical. Cyber Whisper helps organizations and individuals build real capability through a blend of cybersecurity services, SOC enablement, and hands-on cyber range training. The approach is evidence-driven and designed to produce outcomes that can be measured - faster triage, cleaner investigations, and stronger response decisions.
+                                        Security fails when it stays theoretical. Cyber Whisper helps organizations and individuals build real capability through a blend of cybersecurity services, SOC enablement, and hands-on cyber range training. The approach is evidence-driven and designed to produce outcomes that can be measured - faster triage, cleaner investigations, and stronger response decisions.
                                     </motion.p>
                                     <div className="grid grid-cols-2 gap-3 md:gap-6">
                                         <motion.div

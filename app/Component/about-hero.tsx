@@ -24,7 +24,7 @@ export function AboutHero() {
 
       <div className="absolute inset-0 cyber-grid-bg opacity-10 z-0" />
 
-      <div className="w-full max-w-7xl mx-auto px-4 relative z-20 text-center">
+      <div className="w-full max-w-7xl mx-auto px-4 relative z-20 text-left md:text-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -49,7 +49,7 @@ export function AboutHero() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="flex items-center justify-center gap-4 text-gray-600 dark:text-gray-400 font-medium text-sm md:text-base"
+          className="flex items-center justify-start md:justify-center gap-4 text-gray-600 dark:text-gray-400 font-medium text-sm md:text-base"
         >
           <a href="/" className="hover:text-primary transition-colors hover:scale-105 transform">
             Home

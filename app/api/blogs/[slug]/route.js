@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server';
-
-const BACKEND_API_URL = process.env.BACKEND_API_URL || 'http://localhost:3001';
+import { getBlogById, getAllBlogs } from '@/lib/blogStorage';
 
 const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
@@ -15,7 +14,7 @@ export async function OPTIONS() {
 
 /**
  * GET /api/blogs/[slug]
- * Fetch a single blog by slug from the backend API
+ * Fetch a single blog by slug or ID from local storage
  * 
  * Returns: { success: true, data: {...blog} }
  */
@@ -30,50 +29,32 @@ export async function GET(request, context) {
         console.log('=== FETCH BLOG BY SLUG/ID ===');
         console.log('Parameter:', slug);
         console.log('Type:', isNumeric ? 'ID' : 'Slug');
-        console.log('Backend API URL:', BACKEND_API_URL);
 
-        // Fetch from backend API
-        const response = await fetch(`${BACKEND_API_URL}/api/blogs/${slug}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            cache: 'no-store',
-        });
+        let blog;
 
-        console.log('Backend response status:', response.status);
-
-        if (!response.ok) {
-            if (response.status === 404) {
-                return NextResponse.json(
-                    { success: false, error: 'Blog not found' },
-                    { status: 404, headers: corsHeaders }
-                );
-            }
-
-            const errorText = await response.text();
-            console.error('Backend error:', errorText);
-            throw new Error(`Backend API error: ${response.status}`);
+        if (isNumeric) {
+            // Fetch by ID
+            blog = await getBlogById(parseInt(slug));
+            console.log('Blog found by ID:', blog ? blog.title : 'Not found');
+        } else {
+            // Fetch by slug - need to search through all blogs
+            const blogs = await getAllBlogs();
+            blog = blogs.find(b => b.slug === slug);
+            console.log('Blog found by slug:', blog ? blog.title : 'Not found');
         }
 
-        const result = await response.json();
-        console.log('Backend response:', result);
-
-        // Handle different response structures
-        let blog;
-        if (result.success && result.data) {
-            blog = result.data;
-        } else if (result.id || result.slug) {
-            blog = result;
-        } else {
-            throw new Error('Invalid blog data format');
+        if (!blog) {
+            return NextResponse.json(
+                { success: false, error: 'Blog not found' },
+                { status: 404, headers: corsHeaders }
+            );
         }
 
         // Map blog fields to match frontend expectations
         const mappedBlog = {
             ...blog,
             image: blog.banner_url || blog.thumbnail_url || blog.image,
-            content: blog.description || blog.content || '',
+            content: blog.content || blog.description || '',
             description: blog.short_description || blog.description?.substring(0, 200) || '',
             excerpt: blog.short_description || blog.description?.substring(0, 150) || '',
             date: blog.published_at || blog.created_at,

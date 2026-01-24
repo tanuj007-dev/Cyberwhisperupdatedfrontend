@@ -60,6 +60,7 @@ const services = [
 
 export default function CoreServicesOverview() {
     const [width, setWidth] = useState(0);
+    const [currentIndex, setCurrentIndex] = useState(0);
     const carouselRef = useRef();
     const x = useMotionValue(0);
     const { openEnquiry } = useEnquiry();
@@ -84,26 +85,62 @@ export default function CoreServicesOverview() {
         return () => window.removeEventListener('resize', updateWidth);
     }, []);
 
+    useEffect(() => {
+        const updatePosition = () => {
+            if (carouselRef.current) {
+                const isMobile = window.innerWidth < 768;
+                const gap = isMobile ? 12 : 24;
+                const cardWidth = isMobile ? carouselRef.current.offsetWidth : 320;
+
+                const newX = -(currentIndex * (cardWidth + gap));
+                animate(x, newX, {
+                    type: "spring",
+                    stiffness: 300,
+                    damping: 30
+                });
+            }
+        };
+        updatePosition();
+    }, [currentIndex, x]);
+
     const slide = (direction) => {
-        const currentX = x.get();
-        // Estimate clickable move distance (roughly one card width + gap)
-        // Desktop: 320px + 24px = 344px
-        // Mobile: 280px + 16px = 296px
-        const moveAmount = window.innerWidth < 768 ? 300 : 350;
+        if (direction === 'next') {
+            if (currentIndex < services.length - 1) {
+                setCurrentIndex(prev => prev + 1);
+            }
+        } else {
+            if (currentIndex > 0) {
+                setCurrentIndex(prev => prev - 1);
+            }
+        }
+    };
 
-        let newX = direction === 'next' ? currentX - moveAmount : currentX + moveAmount;
+    const handleDragEnd = (e, { offset, velocity }) => {
+        const swipe = Math.abs(offset.x) * velocity.x;
+        const swipeConfidenceThreshold = 10000;
 
-        // Clamp values
-        const maxScroll = -width;
-        if (newX > 0) newX = 0;
-        if (newX < maxScroll) newX = maxScroll;
+        if (swipe < -swipeConfidenceThreshold) {
+            slide('next');
+        } else if (swipe > swipeConfidenceThreshold) {
+            slide('prev');
+        } else {
+            // Snap back if not swiped enough, but relying on the index helps here 
+            // If strictly index based, maybe just force update:
+            // Actually, for better UX on free drag, we might want to calculate nearest index.
+            // But for "one card preview" snapping is best.
+            // Let's implement nearest index snapping for drag release without velocity.
 
-        animate(x, newX, {
-            type: "spring",
-            stiffness: 400,
-            damping: 40,
-            mass: 0.8
-        });
+            const isMobile = window.innerWidth < 768;
+            const gap = isMobile ? 12 : 24;
+            const cardWidth = isMobile ? carouselRef.current.offsetWidth : 320;
+            const itemWidth = cardWidth + gap;
+
+            const currentX = x.get();
+            const projectedIndex = Math.round(-currentX / itemWidth);
+            const clampedIndex = Math.max(0, Math.min(projectedIndex, services.length - 1));
+
+            setCurrentIndex(clampedIndex);
+        }
     };
 
     // Cyber Grid Background Component
@@ -164,8 +201,9 @@ export default function CoreServicesOverview() {
                         <motion.div
                             drag="x"
                             dragConstraints={{ right: 0, left: -width }}
-                            dragElastic={0.05}
+                            dragElastic={0.1} // Increased elasticity for feel
                             dragTransition={{ bounceStiffness: 600, bounceDamping: 20 }}
+                            onDragEnd={handleDragEnd}
                             style={{ x }}
                             whileTap={{ cursor: "grabbing" }}
                             className="flex gap-3 md:gap-6 py-4 px-1 md:px-2 items-stretch"
@@ -173,7 +211,7 @@ export default function CoreServicesOverview() {
                             {services.map((service, idx) => (
                                 <motion.div
                                     key={idx}
-                                    className="relative min-w-[calc(100vw-3rem)] md:min-w-[320px] rounded-2xl p-[1px] group/card h-auto select-none pointer-events-auto"
+                                    className="relative min-w-full md:min-w-[320px] rounded-2xl p-[1px] group/card h-auto select-none pointer-events-auto"
                                     initial={{ opacity: 0, scale: 0.9 }}
                                     whileInView={{ opacity: 1, scale: 1 }}
                                     viewport={{ once: true }}

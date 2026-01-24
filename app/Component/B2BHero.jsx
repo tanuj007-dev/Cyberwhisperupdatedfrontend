@@ -60,7 +60,7 @@ export default function B2BHero() {
                                 Enterprise Solutions
                             </div>
                         </div>
-                        <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-[1.1] tracking-tight text-gray-900 dark:text-white transition-colors duration-300">
+                        <h1 className="text-4xl md:text-[50px]  font-bold leading-[1.1] tracking-tight text-gray-900 dark:text-white transition-colors duration-300">
                             Fortify Your <br className="hidden md:block" />
                             <span className="text-transparent bg-clip-text bg-linear-to-r from-[#6B46E5] dark:from-[#FFFDFF] via-[#A78BFA] to-[#6B46E5] transition-all duration-300">
                                 Organization
@@ -68,14 +68,29 @@ export default function B2BHero() {
                         </h1>
                     </div>
 
-                    <p className="text-lg md:text-xl text-gray-600 dark:text-gray-300 max-w-xl mx-auto lg:mx-0 leading-relaxed font-light transition-colors duration-300">
-                        Master the art of digital defense with AI-driven training and simulation. Prepare your team for the threats of tomorrow, today.
+                    <p className="text-lg md:text-lg text-gray-600 dark:text-gray-300 max-w-xl mx-auto lg:mx-0 leading-snug font-light transition-colors duration-300">
+                        Cyber Whisper helps teams reduce risk with SOC enablement, cyber range training, and detection engineering - so you detect faster, investigate cleaner, and respond with confidence.
                     </p>
+
+                    <ul className="mt-6 space-y-3 max-w-xl mx-auto lg:mx-0 text-base md:text-[15px] text-gray-600 dark:text-gray-300">
+                        <li className="flex items-start gap-3">
+                            <span className="mt-2 h-2 w-2 rounded-full bg-[#6B46E5] shrink-0"></span>
+                            <span>SOC Deployment & Enablement (SIEM / Wazuh / detection workflows)</span>
+                        </li>
+                        <li className="flex items-start gap-3">
+                            <span className="mt-2 h-2 w-2 rounded-full bg-[#6B46E5] shrink-0"></span>
+                            <span>Cyber Range + CTF Programs (role-based tracks, realistic simulations)</span>
+                        </li>
+                        <li className="flex items-start gap-3">
+                            <span className="mt-2 h-2 w-2 rounded-full bg-[#6B46E5] shrink-0"></span>
+                            <span>Threat Intelligence (CTI) + Response Playbooks (actionable, SOC-ready)</span>
+                        </li>
+                    </ul>
 
                     <div className="flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start pt-4">
                         <button className="group relative px-8 py-4 bg-[#6B46E5] text-white font-bold rounded-xl shadow-[0_0_20px_rgba(107,70,229,0.4)] hover:shadow-[0_0_35px_rgba(107,70,229,0.6)] hover:scale-105 active:scale-95 transition-all w-full sm:w-auto overflow-hidden">
                             <span className="relative z-10 flex items-center justify-center gap-2">
-                                GET STARTED
+                              Book a Demo
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="transform group-hover:translate-x-1 transition-transform">
                                     <path d="M5 12h14"></path>
                                     <path d="m12 5 7 7-7 7"></path>
@@ -84,7 +99,7 @@ export default function B2BHero() {
                         </button>
 
                         <button className="px-8 py-4 bg-transparent border border-[#6B46E5]/50 text-[#6B46E5] dark:text-white font-bold rounded-xl hover:bg-[#6B46E5]/10 hover:border-[#6B46E5] hover:scale-105 active:scale-95 transition-all w-full sm:w-auto">
-                            BOOK DEMO
+                           Get a Quote
                         </button>
                     </div>
                 </div>

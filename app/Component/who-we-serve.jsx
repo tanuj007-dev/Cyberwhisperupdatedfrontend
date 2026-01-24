@@ -112,8 +112,8 @@ export default function WeServe() {
                 {/* Heading */}
                 <h2 className="text-3xl md:text-4xl lg:text-[45px] font-bold leading-[1.2] text-foreground tracking-tight">
                   We don't just deploy and <br className="hidden md:block" />
-                  go we partner with you for <br className="hidden md:block" />
-                  the long haul
+                leave - we partner with you for<br className="hidden md:block" />
+                the long haul
                 </h2>
 
                 {/* Description */}

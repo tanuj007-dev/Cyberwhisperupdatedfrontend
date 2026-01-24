@@ -71,16 +71,6 @@ export default function WorkProcessSection() {
           <h2 className="text-4xl md:text-[50px] font-semibold text-foreground mb-10 tracking-tight">
             Our Engagement Process
           </h2>
-
-          {/* Watch Video Button */}
-          <button className="bg-[#1D0B2E] hover:bg-[#2A1042] text-white pl-8 pr-3 py-3 rounded-full font-semibold flex items-center gap-4 mx-auto transition-all duration-300 shadow-xl group">
-            Watch Video
-            <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center transition-transform group-hover:scale-110">
-              <svg className="w-4 h-4 text-[#1D0B2E] ml-0.5" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M8 5v14l11-7z" />
-              </svg>
-            </div>
-          </button>
         </div>
 
         {/* Process Flow Desktop - visible only on XL screens where fixed layout fits */}

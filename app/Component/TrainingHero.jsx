@@ -19,7 +19,7 @@ export default function TrainingHero() {
     const [billingCycle, setBillingCycle] = React.useState('monthly');
 
     return (
-        <section className="relative w-full pt-8 md:pt-12 pb-6 md:pb-8 overflow-hidden bg-[#02000d] font-sans transition-colors duration-500">
+        <section className="relative w-full pt-28 md:pt-12 pb-6 md:pb-8 overflow-hidden bg-[#02000d] font-sans transition-colors duration-500">
 
             {/* Premium Background Layer */}
             <div className="absolute inset-0 pointer-events-none">
@@ -126,8 +126,8 @@ export default function TrainingHero() {
                                 <span className="absolute -bottom-2 left-0 w-full h-1 bg-purple-600 rounded-full shadow-[0_4px_10px_rgba(251,191,36,0.5)]" />
                             </span>
                         </h1>
-                        <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
-                            <span className="text-purple-200/80 font-medium tracking-wide">Get Premium Subscription of</span>
+                        <div className="flex flex-col md:flex-row items-center justify-center gap-1 md:gap-3 pt-2">
+                            <span className="text-purple-200/80 font-medium tracking-wide text-sm md:text-base">Get Premium Subscription of</span>
                             <div className="px-4 py-1.5 rounded-lg bg-white/5 border border-purple-500/20 backdrop-blur-md text-white font-bold text-sm tracking-widest hover:border-purple-500/50 transition-colors cursor-pointer group">
                                 WhisperRange
                                 <span className="block h-px w-0 group-hover:w-full bg-purple-500 transition-all duration-300" />
@@ -136,19 +136,19 @@ export default function TrainingHero() {
                     </div>
 
                     {/* Program Metrics Row */}
-                    <div className="flex flex-wrap items-center justify-center gap-6 w-full py-3 border-y border-white/5 bg-[#0a0015]/20 backdrop-blur-sm">
+                    <div className="flex flex-nowrap items-center justify-center gap-4 md:gap-6 w-full py-3 border-y border-white/5 bg-[#0a0015]/20 backdrop-blur-sm overflow-x-auto no-scrollbar px-4 md:px-0 scroll-smooth">
                         {[
                             { label: 'DURATION', value: '12 Months', icon: FaCalendarAlt, color: 'text-purple-400' },
                             { label: 'LANGUAGE', value: 'Hindi | English', icon: FaGlobe, color: 'text-white' },
                             { label: 'MODE', value: 'Online | Offline', icon: IoLogoWhatsapp, color: 'text-purple-300' }
                         ].map((item, i) => (
-                            <div key={i} className="flex items-center gap-4 group">
-                                <div className="p-3 rounded-2xl bg-purple-900/10 border border-purple-500/20 group-hover:border-purple-400/40 transition-all">
-                                    <item.icon className={`w-6 h-6 ${item.color}`} />
+                            <div key={i} className="flex flex-col md:flex-row items-center gap-2 md:gap-4 group shrink-0">
+                                <div className="p-2 md:p-3 rounded-2xl bg-purple-900/10 border border-purple-500/20 group-hover:border-purple-400/40 transition-all">
+                                    <item.icon className={`w-4 h-4 md:w-6 md:h-6 ${item.color}`} />
                                 </div>
-                                <div className="text-left">
-                                    <span className="block text-[10px] text-purple-200/60 font-bold tracking-[0.2em]">{item.label}</span>
-                                    <span className="text-white font-bold text-lg">{item.value}</span>
+                                <div className="text-center md:text-left">
+                                    <span className="block text-[8px] md:text-[10px] text-purple-200/60 font-bold tracking-[0.2em]">{item.label}</span>
+                                    <span className="text-white font-bold text-xs md:text-lg whitespace-nowrap">{item.value}</span>
                                 </div>
                                 {i < 2 && <div className="hidden lg:block w-px h-10 bg-white/10 ml-6" />}
                             </div>
@@ -156,49 +156,50 @@ export default function TrainingHero() {
                     </div>
 
                     {/* Action Bar */}
-                    <div className="flex flex-wrap items-center justify-center gap-3 pt-3">
-                        <button className="relative px-6 py-2.5 rounded-xl bg-purple-600/20 border border-purple-500/30 text-white font-bold text-sm tracking-wide hover:bg-purple-600/30 transition-all flex items-center gap-3">
-                            <FiDownload className="text-purple-300" />
-                            Download Content
+                    <div className="flex flex-row items-center justify-center gap-2 md:gap-3 pt-3 w-full px-2 md:px-0">
+                        <button className="relative px-3 md:px-6 py-2.5 rounded-xl bg-purple-600/20 border border-purple-500/30 text-white font-bold text-xs md:text-sm tracking-wide hover:bg-purple-600/30 transition-all flex items-center justify-center gap-2 md:gap-3 flex-1 md:flex-none">
+                            <FiDownload className="text-purple-300 w-3 h-3 md:w-4 md:h-4" />
+                            <span className="whitespace-nowrap">Download Content</span>
                         </button>
-                        <button className="relative px-6 py-2.5 rounded-xl border border-purple-500/20 hover:border-purple-500/50 text-white font-bold text-sm tracking-wide transition-all bg-[#0a0015]/40 backdrop-blur-md">
+                        <button className="relative px-3 md:px-6 py-2.5 rounded-xl border border-purple-500/20 hover:border-purple-500/50 text-white font-bold text-xs md:text-sm tracking-wide transition-all bg-[#0a0015]/40 backdrop-blur-md flex-1 md:flex-none whitespace-nowrap">
                             Chat on WhatsApp
                         </button>
                     </div>
 
                     {/* Subscription Pricing Card */}
-                    <div className="w-full max-w-4xl p-1 rounded-3xl bg-gradient-to-br from-primary/20 via-white/5 to-transparent backdrop-blur-xl mt-4">
-                        <div className="bg-[#02000d]/60 rounded-[1.4rem] p-4 flex flex-col md:flex-row items-center justify-between gap-4 border border-white/5">
-                            <div className="text-left space-y-1">
-                                <span className="text-purple-300 font-bold text-sm tracking-widest uppercase">Cyber Range</span>
-                                <h4 className="text-white font-bold text-xl">Individual Subscription</h4>
-                                <span className="text-purple-200/70 font-bold text-xs uppercase tracking-wider block">CTF included</span>
+                    {/* Subscription Pricing Card */}
+                    <div className="w-full max-w-4xl p-0.5 md:p-1 rounded-3xl bg-gradient-to-br from-primary/20 via-white/5 to-transparent backdrop-blur-xl mt-3 md:mt-4">
+                        <div className="bg-[#02000d]/60 rounded-[1.4rem] p-4 md:p-6 flex flex-col md:flex-row items-center justify-between gap-4 border border-white/5">
+                            <div className="text-center md:text-left space-y-0.5 md:space-y-1">
+                                <span className="text-purple-300 font-bold text-[10px] md:text-sm tracking-widest uppercase">Cyber Range</span>
+                                <h4 className="text-white font-bold text-lg md:text-xl">Individual Subscription</h4>
+                                <span className="text-purple-200/70 font-bold text-[10px] md:text-xs uppercase tracking-wider block">CTF included</span>
                             </div>
 
-                            <div className="flex flex-col items-center gap-1">
-                                <div className="flex items-baseline gap-2">
-                                    <span className="text-white font-bold text-3xl">
+                            <div className="flex flex-row md:flex-col items-center gap-3 md:gap-2">
+                                <div className="flex items-baseline gap-1 md:gap-2">
+                                    <span className="text-white font-bold text-lg md:text-3xl">
                                         {billingCycle === 'monthly' ? '₹1,999' : '₹19,999'}
                                     </span>
-                                    <span className="text-purple-200/60 text-sm">
+                                    <span className="text-purple-200/60 text-xs md:text-sm">
                                         {billingCycle === 'monthly' ? '/month' : '/year'}
                                     </span>
                                 </div>
-                                <div className="flex items-center bg-purple-900/20 rounded-full p-1 border border-purple-500/20">
+                                <div className="flex items-center bg-purple-900/20 rounded-full p-0.5 md:p-1 border border-purple-500/20 order-last md:order-none">
                                     <button
                                         onClick={() => setBillingCycle('monthly')}
-                                        className={`px-3 py-1 rounded-full text-xs font-bold transition-all ${billingCycle === 'monthly'
-                                                ? 'bg-purple-600/30 text-white shadow-lg'
-                                                : 'text-purple-300/60 hover:text-white'
+                                        className={`px-3 py-0.5 md:py-1 rounded-full text-[10px] md:text-xs font-bold transition-all ${billingCycle === 'monthly'
+                                            ? 'bg-purple-600/30 text-white shadow-lg'
+                                            : 'text-purple-300/60 hover:text-white'
                                             }`}
                                     >
                                         M
                                     </button>
                                     <button
                                         onClick={() => setBillingCycle('yearly')}
-                                        className={`px-3 py-1 rounded-full text-xs font-bold transition-all ${billingCycle === 'yearly'
-                                                ? 'bg-purple-600/30 text-white shadow-lg'
-                                                : 'text-purple-300/60 hover:text-white'
+                                        className={`px-3 py-0.5 md:py-1 rounded-full text-[10px] md:text-xs font-bold transition-all ${billingCycle === 'yearly'
+                                            ? 'bg-purple-600/30 text-white shadow-lg'
+                                            : 'text-purple-300/60 hover:text-white'
                                             }`}
                                     >
                                         Y
@@ -206,11 +207,11 @@ export default function TrainingHero() {
                                 </div>
                             </div>
 
-                            <div className="flex items-center gap-3">
-                                <button className="px-6 py-3 rounded-xl border border-purple-400/30 bg-purple-400/10 text-purple-300 font-bold text-sm hover:bg-purple-400/20 transition-all">
+                            <div className="flex flex-row items-center gap-2 md:gap-3 w-full md:w-auto">
+                                <button className="flex-1 md:flex-none px-4 py-2 md:px-6 md:py-3 rounded-xl border border-purple-400/30 bg-purple-400/10 text-purple-300 font-bold text-xs md:text-sm hover:bg-purple-400/20 transition-all whitespace-nowrap">
                                     Subscribe
                                 </button>
-                                <Link href="/ctf-offline" className="px-6 py-3 rounded-xl bg-purple-600/20 border border-purple-500/30 text-white font-bold text-sm hover:bg-purple-600/40 transition-all text-center">
+                                <Link href="/ctf-offline" className="flex-1 md:flex-none px-4 py-2 md:px-6 md:py-3 rounded-xl bg-purple-600/20 border border-purple-500/30 text-white font-bold text-xs md:text-sm hover:bg-purple-600/40 transition-all text-center whitespace-nowrap">
                                     Play CTF
                                 </Link>
                             </div>

@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import {
     LayoutDashboard,
     FileText,
@@ -17,7 +17,8 @@ import {
     Image as ImageIcon,
     Shield,
     Calendar,
-    Mail
+    Mail,
+    LogOut
 } from 'lucide-react';
 
 const Sidebar = ({ isOpen, setIsOpen }) => {
@@ -88,6 +89,12 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
 
     const isActive = (path) => pathname === path;
     const isParentActive = (submenu) => submenu?.some(item => pathname === item.path);
+
+    const router = useRouter();
+    const handleLogout = () => {
+        localStorage.removeItem('adminAuth');
+        router.push('/admin/login');
+    };
 
     return (
         <>
@@ -206,15 +213,21 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
 
                 {/* User Profile Section */}
                 <div className="p-4 border-t border-slate-700/50 bg-slate-900/30">
-                    <div className="flex items-center gap-3 px-3 py-3 rounded-xl bg-gradient-to-r from-slate-800/80 to-slate-700/50 hover:from-slate-700/80 hover:to-slate-600/50 transition-all cursor-pointer group">
-                        <div className="w-11 h-11 bg-gradient-to-br from-violet-500 via-purple-500 to-fuchsia-500 rounded-xl flex items-center justify-center shadow-lg shadow-purple-500/20 group-hover:shadow-purple-500/40 transition-all">
+                    <div className="flex items-center gap-3 px-3 py-3 rounded-xl bg-gradient-to-r from-slate-800/80 to-slate-700/50 transition-all group">
+                        <div className="w-11 h-11 bg-gradient-to-br from-violet-500 via-purple-500 to-fuchsia-500 rounded-xl flex items-center justify-center shadow-lg shadow-purple-500/20 transition-all">
                             <span className="text-white font-bold text-sm">AD</span>
                         </div>
                         <div className="flex-1 min-w-0">
                             <p className="text-sm font-semibold text-white truncate">Admin User</p>
                             <p className="text-xs text-slate-400 truncate">admin@cyberwhisper.com</p>
                         </div>
-                        <div className="w-2 h-2 bg-emerald-500 rounded-full ring-2 ring-emerald-500/20"></div>
+                        <button
+                            onClick={handleLogout}
+                            className="p-2 text-slate-400 hover:text-white hover:bg-slate-700 rounded-lg transition-all"
+                            title="Logout"
+                        >
+                            <LogOut size={18} />
+                        </button>
                     </div>
                 </div>
             </aside>

@@ -2,13 +2,13 @@
 import React from 'react';
 import Image from 'next/image';
 import path from "./assets/path.webp";
-const trainingVideo = "/assets/cw-video1.mp4";
+const trainingVideo = "/assets/cyber_promo.mp4";
 
 export default function TrainingPrograms() {
     return (
         <section className="relative w-full bg-background py-6 md:py-10 px-3 md:px-6 overflow-hidden font-sans transition-colors duration-300">
             <div className="max-w-7xl mx-auto">
-                <div className="relative w-full bg-[#6b46e5] rounded-[1.5rem] md:rounded-[2rem] p-4 md:p-8 overflow-hidden shadow-2xl isolate">
+                <div className="relative w-full bg-[#6b46e5] rounded-[1.5rem] md:rounded-4xl p-4 md:p-8 overflow-hidden shadow-2xl isolate">
 
                     {/* Background Pattern */}
                     <div className="absolute inset-0 opacity-40 mix-blend-overlay pointer-events-none">

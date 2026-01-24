@@ -43,9 +43,12 @@ export default function BlogPostDetail({ params }) {
             // Handle API response structure
             if (result.success && result.data) {
                 setBlog(result.data)
+                console.log('Blog data set:', result.data.title)
             } else if (result.id || result.slug) {
                 setBlog(result)
+                console.log('Blog data set (direct):', result.title)
             } else {
+                console.error('Invalid blog data format:', result)
                 throw new Error('Invalid blog data format')
             }
         } catch (err) {
@@ -105,18 +108,28 @@ export default function BlogPostDetail({ params }) {
                     {/* Main Content */}
                     <div className="flex-1 space-y-8">
                         {/* Featured Image */}
-                        {blog.image && (
+                        {(blog.image || blog.banner_url || blog.thumbnail_url) && (
                             <motion.div
                                 initial={{ opacity: 0, y: 30 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                className="relative aspect-video rounded-3xl overflow-hidden shadow-2xl"
+                                className="relative aspect-video rounded-3xl overflow-hidden shadow-2xl bg-gray-100"
                             >
                                 <Image
-                                    src={blog.image}
-                                    alt={blog.title}
+                                    src={blog.image || blog.banner_url || blog.thumbnail_url}
+                                    alt={blog.title || 'Blog image'}
                                     fill
                                     className="object-cover"
                                     priority
+                                    onError={(e) => {
+                                        console.error('Image failed to load:', blog.image);
+                                        // Hide the image and show a placeholder
+                                        e.target.style.display = 'none';
+                                        const parent = e.target.parentElement;
+                                        if (parent) {
+                                            parent.innerHTML = '<div class="flex items-center justify-center h-full bg-gray-200 text-gray-500">Image not available</div>';
+                                        }
+                                    }}
+                                    unoptimized={(blog.image || blog.banner_url || blog.thumbnail_url).includes('cloudinary')}
                                 />
                             </motion.div>
                         )}
