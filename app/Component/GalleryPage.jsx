@@ -120,7 +120,7 @@ export default function GalleryPage() {
 
                 // Extract unique contexts for dynamic categories
                 const uniqueContexts = [...new Set(imageArray.map(img => img.context).filter(Boolean))];
-                
+
                 // Create dynamic categories with icons
                 const iconMap = {
                     training: Monitor,

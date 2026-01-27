@@ -3,6 +3,8 @@ import B2BStats from '../Component/B2BStats';
 import B2BFeatures from '../Component/B2BFeatures';
 import B2BResilience from '../Component/B2BResilience';
 import B2BConnected from '../Component/B2BConnected';
+import B2BCaseStudy from '../Component/B2BCaseStudy';
+import B2BFAQ from '../Component/B2BFAQ';
 import B2BThemeWrapper from '../Component/B2BThemeWrapper';
 
 export const metadata = {
@@ -19,6 +21,8 @@ export default function B2BPage() {
                 <B2BFeatures />
                 <B2BResilience />
                 <B2BConnected />
+                <B2BCaseStudy />
+                <B2BFAQ />
             </B2BThemeWrapper>
         </main>
     );

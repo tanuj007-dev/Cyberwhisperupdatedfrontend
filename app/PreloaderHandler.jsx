@@ -4,20 +4,20 @@ import { usePathname } from "next/navigation"
 import dynamic from "next/dynamic"
 
 // Lazy load AnimatePresence to reduce initial bundle
-const AnimatePresence = dynamic(() => 
-  import('framer-motion').then(mod => ({ default: mod.AnimatePresence })), 
-  { ssr: false }
+const AnimatePresence = dynamic(() =>
+    import('framer-motion').then(mod => ({ default: mod.AnimatePresence })),
+    { ssr: false }
 );
 
 // Lazy load StairsPreloader
 const StairsPreloader = dynamic(() => import("./Component/StairsPreloader"), {
-  ssr: false,
+    ssr: false,
 });
 
 export default function PreloaderHandler({ children }) {
     const pathname = usePathname()
-    const [isLoading, setIsLoading] = useState(true)
-    const [isFullyEntered, setIsFullyEntered] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
+    const [isFullyEntered, setIsFullyEntered] = useState(true)
     const [isMobile, setIsMobile] = useState(false)
 
     // Detect mobile on client side
@@ -25,22 +25,23 @@ export default function PreloaderHandler({ children }) {
         const checkMobile = () => {
             const isMobileDevice = window.matchMedia("(max-width: 768px)").matches
             setIsMobile(isMobileDevice)
-            
+
             // If mobile, skip preloader
             if (isMobileDevice) {
                 setIsLoading(false)
                 setIsFullyEntered(true)
             }
         }
-        
+
         checkMobile()
-        
+
         const mediaQuery = window.matchMedia("(max-width: 768px)")
         mediaQuery.addEventListener("change", checkMobile)
-        
+
         return () => mediaQuery.removeEventListener("change", checkMobile)
     }, [])
 
+    /*
     useEffect(() => {
         // Skip preloader effect if mobile
         if (isMobile) return
@@ -70,6 +71,7 @@ export default function PreloaderHandler({ children }) {
             cancelAnimationFrame(animationFrameId)
         }
     }, [pathname, isMobile])
+    */
 
     return (
         <>

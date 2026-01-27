@@ -2,28 +2,35 @@
 import React from 'react';
 import { CloudLightning, Key, ShieldCheck } from 'lucide-react';
 
-const ResilienceCard = ({ icon: Icon, title, description, buttonText }) => {
+const ResilienceCard = ({ icon: Icon, title, description, bestFor, cta }) => {
     return (
-        <div className="group relative flex flex-col justify-between p-6 md:p-8 rounded-2xl bg-white dark:bg-[#0B0420] border border-gray-200 dark:border-white/5 hover:border-[#3b82f6]/50 transition-all duration-300 h-full hover:-translate-y-2 hover:shadow-[0_0_30px_rgba(59,130,246,0.15)] shadow-lg dark:shadow-none">
+        <div className="group relative flex flex-col justify-between p-6 md:p-8 rounded-2xl bg-white dark:bg-[#0B0420] border border-gray-200 dark:border-white/5 hover:border-[#6B46E5]/50 transition-all duration-300 h-full hover:-translate-y-2 hover:shadow-[0_0_30px_rgba(107,70,229,0.15)] shadow-lg dark:shadow-none">
             {/* Hover Glow */}
-            <div className="absolute inset-0 bg-gradient-to-b from-[#3b82f6]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl pointer-events-none" />
+            <div className="absolute inset-0 bg-linear-to-b from-[#6B46E5]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl pointer-events-none" />
 
             <div>
-                <div className="w-14 h-14 rounded-xl bg-gray-50 dark:bg-[#150833] border border-gray-200 dark:border-white/10 flex items-center justify-center mb-6 text-[#3b82f6] group-hover:text-white group-hover:bg-[#3b82f6] transition-colors duration-300">
+                <div className="w-14 h-14 rounded-xl bg-gray-50 dark:bg-[#150833] border border-gray-200 dark:border-white/10 flex items-center justify-center mb-6 text-[#6B46E5] group-hover:text-white group-hover:bg-[#6B46E5] transition-colors duration-300">
                     <Icon size={28} strokeWidth={1.5} />
                 </div>
 
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4 group-hover:text-[#3b82f6] transition-colors">
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4 group-hover:text-[#6B46E5] transition-colors text-left">
                     {title}
                 </h3>
 
-                <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed mb-8">
+                <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed mb-6 text-left">
                     {description}
                 </p>
+
+                <div className="mb-8 text-left">
+                    <span className="text-xs font-bold uppercase tracking-wider text-[#6B46E5]">Best for:</span>
+                    <p className="text-sm text-gray-700 dark:text-gray-300 mt-1 font-medium">
+                        {bestFor}
+                    </p>
+                </div>
             </div>
 
-            <button className="w-full py-3 px-4 rounded-lg border border-[#3b82f6]/30 text-[#3b82f6] text-xs font-bold uppercase tracking-wider hover:bg-[#3b82f6] hover:text-white transition-all duration-300">
-                {buttonText}
+            <button className="w-full py-3 px-4 rounded-lg border border-[#6B46E5]/30 text-[#6B46E5] text-xs font-bold uppercase tracking-wider hover:bg-[#6B46E5] hover:text-white transition-all duration-300">
+                {cta}
             </button>
         </div>
     );
@@ -34,20 +41,23 @@ export default function B2BResilience() {
         {
             icon: CloudLightning,
             title: "Immersive Cyber Range",
-            description: "Spin up live, enterprise-grade networks riddled with APTs, DDoS storms exploits then practice neutralizing them in a safe sandbox. Every scenario is mapped to MITRE ATT&CK and scored so your team sees instant skill gains.",
-            buttonText: "Launch A Test Attack"
+            description: "Your SOC team lacks live-fire experience? Our MITRE-mapped sandbox lets them battle APTs and ransomware safely, turning theory into battle-hardened reflexes.",
+            bestFor: "SOC Teams, Universities & Cyber Defense Units",
+            cta: "Book a Demo"
         },
         {
             icon: Key,
             title: "Strategic Cyber Consulting",
-            description: "Road-map reviews, architecture hardening, and board-level briefings tailored to your business size, risk appetite, and budget. We translate complex security gaps into clear, prioritized action plans.",
-            buttonText: "Request A Security Blueprint"
+            description: "Security is costly when reactive. We provide architecture roadmaps and risk assessments tailored to your budget, translating technical gaps into a clear executive strategy.",
+            bestFor: "CISOs, CTOs & Growth-Stage Startups",
+            cta: "Get a Quote"
         },
         {
             icon: ShieldCheck,
             title: "Hands-On Workshops",
-            description: "One-day and multi-week bootcamps that swap slide decks for keyboard time. From 'SIEM Zero-to-Hero' to 'Red-Team Ops,' every workshop ends with a certifiable capstone exercise.",
-            buttonText: "See Upcoming Dates"
+            description: "Slides don’t stop hackers—skills do. Our intensive bootcamps replace theory with keyboard time, delivering certifiable skills in SIEM, Red Teaming, and Forensics.",
+            bestFor: "Corporate Training & Upskilling Teams",
+            cta: "Book a Demo"
         }
     ];
 
