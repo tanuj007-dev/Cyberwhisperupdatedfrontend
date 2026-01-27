@@ -105,13 +105,9 @@ export default function CoreServicesOverview() {
 
     const slide = (direction) => {
         if (direction === 'next') {
-            if (currentIndex < services.length - 1) {
-                setCurrentIndex(prev => prev + 1);
-            }
+            setCurrentIndex(prev => (prev < services.length - 1 ? prev + 1 : 0));
         } else {
-            if (currentIndex > 0) {
-                setCurrentIndex(prev => prev - 1);
-            }
+            setCurrentIndex(prev => (prev > 0 ? prev - 1 : services.length - 1));
         }
     };
 
@@ -124,12 +120,6 @@ export default function CoreServicesOverview() {
         } else if (swipe > swipeConfidenceThreshold) {
             slide('prev');
         } else {
-            // Snap back if not swiped enough, but relying on the index helps here 
-            // If strictly index based, maybe just force update:
-            // Actually, for better UX on free drag, we might want to calculate nearest index.
-            // But for "one card preview" snapping is best.
-            // Let's implement nearest index snapping for drag release without velocity.
-
             const isMobile = window.innerWidth < 768;
             const gap = isMobile ? 12 : 24;
             const cardWidth = isMobile ? carouselRef.current.offsetWidth : 320;
@@ -137,6 +127,8 @@ export default function CoreServicesOverview() {
 
             const currentX = x.get();
             const projectedIndex = Math.round(-currentX / itemWidth);
+            // Clamp isn't enough for looping logic in drag, so we stick to simple boundary clamping for free drag
+            // but the buttons now allow full looping.
             const clampedIndex = Math.max(0, Math.min(projectedIndex, services.length - 1));
 
             setCurrentIndex(clampedIndex);

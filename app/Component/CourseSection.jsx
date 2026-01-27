@@ -35,7 +35,7 @@ export default function CourseSection() {
     const fetchCategories = async () => {
         setCategoriesLoading(true)
         try {
-            const response = await fetch('/api/courses/categories')
+            const response = await fetch('http://localhost:3001/api/courses/categories')
 
             if (!response.ok) {
                 throw new Error(`Failed to fetch categories: ${response.status}`)

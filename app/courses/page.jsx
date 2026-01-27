@@ -139,7 +139,22 @@ export default function AllCoursesPage() {
                             className="bg-white rounded-[2.5rem] border border-[#7B2CFF] shadow-[0_15px_40px_rgba(0,0,0,0.04)] overflow-hidden group hover:shadow-[0_25px_60px_rgba(107,70,229,0.08)] transition-all duration-500 flex flex-col h-full"
                         >
                             {/* Card Content Top */}
-                            <div className="p-8 pb-4 space-y-6 grow flex flex-col">
+                            <div className="px-6 pb-6 mt-6">
+                                <div className="relative aspect-video rounded-[1.5rem] overflow-hidden bg-gray-100">
+                                    <Image
+                                        src={course.image && course.image.startsWith('/') ? course.image : defaultImage}
+                                        alt={course.title}
+                                        fill
+                                        className="object-cover transition-transform duration-700 group-hover:scale-110"
+                                        onError={(e) => {
+                                            // Fallback if image fails to load
+                                            e.currentTarget.src = defaultImage.src
+                                            e.currentTarget.srcset = defaultImage.src
+                                        }}
+                                    />
+                                </div>
+                            </div>
+                            <div className="px-8 pb-4 space-y-6 grow flex flex-col">
                                 <div className="flex items-start justify-between gap-4">
                                     <div className="flex-1">
                                         <span className="bg-[#E9E4FF] text-[#6B46E5] px-3 py-1 rounded-sm text-xs font-semibold uppercase tracking-wider inline-block">
@@ -215,8 +230,8 @@ export default function AllCoursesPage() {
                                 onClick={handlePrevious}
                                 disabled={currentPage === 1}
                                 className={`flex items-center gap-2 px-6 py-3 rounded-full font-bold transition-all ${currentPage === 1
-                                        ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                                        : 'bg-[#1a1a2e] text-white hover:bg-[#6B46E5]'
+                                    ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                                    : 'bg-[#1a1a2e] text-white hover:bg-[#6B46E5]'
                                     }`}
                             >
                                 <ChevronLeft className="w-4 h-4" />
@@ -232,8 +247,8 @@ export default function AllCoursesPage() {
                                             window.scrollTo(0, 0)
                                         }}
                                         className={`w-10 h-10 rounded-full font-bold transition-all ${currentPage === page
-                                                ? 'bg-[#1a1a2e] text-white'
-                                                : 'bg-gray-100 text-slate-600 hover:bg-gray-200'
+                                            ? 'bg-[#1a1a2e] text-white'
+                                            : 'bg-gray-100 text-slate-600 hover:bg-gray-200'
                                             }`}
                                     >
                                         {page}
@@ -245,8 +260,8 @@ export default function AllCoursesPage() {
                                 onClick={handleNext}
                                 disabled={currentPage === totalPages}
                                 className={`flex items-center gap-2 px-6 py-3 rounded-full font-bold transition-all ${currentPage === totalPages
-                                        ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                                        : 'bg-[#1a1a2e] text-white hover:bg-[#6B46E5]'
+                                    ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                                    : 'bg-[#1a1a2e] text-white hover:bg-[#6B46E5]'
                                     }`}
                             >
                                 Next
