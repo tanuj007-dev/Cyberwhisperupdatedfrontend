@@ -36,14 +36,10 @@ export default function NeedHelp() {
             <div className="max-w-6xl mx-auto relative z-10">
                 {/* Header Section */}
                 <div className="text-center mb-16 space-y-4">
-                    <motion.div
-                        initial={{ opacity: 0, y: -10 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-100/50 dark:bg-purple-900/30 border border-purple-200 dark:border-purple-500/30 text-purple-600 dark:text-purple-300 text-xs font-semibold tracking-wider uppercase mb-2"
-                    >
-                        <ShieldCheck className="w-3 h-3 text-purple-600 dark:text-purple-400" />
-                        <span>Support & Ops</span>
-                    </motion.div>
+                    <div className="inline-flex items-center gap-3 mb-2">
+                        <div className="w-5 h-5 bg-[#6b46e5] shadow-[0_0_15px_rgba(107,70,229,0.5)]"></div>
+                        <span className="text-[#0f172a] dark:text-white text-sm font-bold tracking-[0.2em] uppercase">Support & Ops</span>
+                    </div>
 
                     <h2 className="text-3xl md:text-5xl font-bold text-gray-900 dark:text-white tracking-tight">
                         Need Help? <span className="text-transparent bg-clip-text bg-purple-600">Start Here First</span>

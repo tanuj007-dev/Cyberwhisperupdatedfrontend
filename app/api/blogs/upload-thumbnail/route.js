@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
-
-const BACKEND_API_URL = process.env.BACKEND_API_URL || 'http://localhost:3001';
+import { writeFile, mkdir } from 'fs/promises';
+import path from 'path';
 
 const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
@@ -15,15 +15,12 @@ export async function OPTIONS() {
 
 /**
  * POST /api/blogs/upload-thumbnail
- * Handles thumbnail image uploads for blog posts
- * Proxies the request to the backend API
- * 
- * Returns: { success: true, url: "uploaded-image-url", thumbnail_url: "uploaded-image-url" }
+ * Handles thumbnail image uploads for blog posts locally
+ * Saves images to public/uploads/thumbnails
  */
 export async function POST(request) {
     try {
-        console.log('=== BLOG THUMBNAIL UPLOAD ===');
-        console.log('Backend API URL:', BACKEND_API_URL);
+        console.log('=== BLOG THUMBNAIL UPLOAD (LOCAL) ===');
 
         // Parse the multipart form data
         const formData = await request.formData();
@@ -53,46 +50,34 @@ export async function POST(request) {
             );
         }
 
-        console.log('Uploading file:', {
-            name: file.name,
-            type: file.type,
-            size: file.size
-        });
+        const buffer = Buffer.from(await file.arrayBuffer());
 
-        // Forward the request to the backend
-        const backendFormData = new FormData();
-        backendFormData.append('thumbnail', file);
+        // Create unique filename
+        const timestamp = Date.now();
+        const originalName = file.name.replace(/[^a-zA-Z0-9.-]/g, ''); // Sanitize filename
+        const filename = `${timestamp}-${originalName}`;
 
-        const response = await fetch(`${BACKEND_API_URL}/api/blogs/upload-thumbnail`, {
-            method: 'POST',
-            body: backendFormData,
-        });
+        // Ensure upload directory exists
+        const uploadDir = path.join(process.cwd(), 'public', 'uploads', 'thumbnails');
+        await mkdir(uploadDir, { recursive: true });
 
-        console.log('Backend response status:', response.status);
+        // Save file
+        const filePath = path.join(uploadDir, filename);
+        await writeFile(filePath, buffer);
 
-        if (!response.ok) {
-            const errorText = await response.text();
-            console.error('Backend error:', errorText);
+        console.log('File saved locally:', filePath);
 
-            let errorData = {};
-            try {
-                errorData = JSON.parse(errorText);
-            } catch (e) {
-                errorData = { error: errorText || `Upload failed: ${response.status}` };
-            }
-
-            return NextResponse.json(
-                { error: errorData.error || errorData.message || 'Failed to upload thumbnail' },
-                { status: response.status, headers: corsHeaders }
-            );
-        }
-
-        const data = await response.json();
-        console.log('Upload successful:', data);
+        // Generate public URL
+        const fileUrl = `/uploads/thumbnails/${filename}`;
 
         // Return success with URL
         return NextResponse.json(
-            data,
+            {
+                success: true,
+                url: fileUrl,
+                thumbnail_url: fileUrl,
+                message: 'Thumbnail uploaded successfully'
+            },
             {
                 status: 200,
                 headers: corsHeaders

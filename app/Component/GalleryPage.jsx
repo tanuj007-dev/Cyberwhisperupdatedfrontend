@@ -73,15 +73,6 @@ const galleryData = [
     })
 ];
 
-const categories = [
-    { id: 'all', label: 'All', icon: Grid3X3 },
-    { id: 'training', label: 'Training', icon: Monitor },
-    { id: 'team', label: 'Team', icon: Users },
-    { id: 'workshop', label: 'Workshops', icon: Camera },
-    { id: 'events', label: 'Events', icon: Award },
-    { id: 'facilities', label: 'Facilities', icon: Shield },
-];
-
 const stats = [
     { value: '500+', label: 'Training Sessions', icon: Zap },
     { value: '50+', label: 'Global Events', icon: Award },
@@ -98,6 +89,7 @@ export default function GalleryPage() {
     const [selectedImage, setSelectedImage] = useState(null);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [galleryImages, setGalleryImages] = useState([]);
+    const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -106,7 +98,8 @@ export default function GalleryPage() {
         const fetchGalleryImages = async () => {
             try {
                 setLoading(true);
-                const response = await fetch('/api/gallery');
+                // Call backend API directly
+                const response = await fetch('http://localhost:3001/api/gallery');
 
                 if (!response.ok) {
                     throw new Error('Failed to fetch gallery images');
@@ -124,6 +117,31 @@ export default function GalleryPage() {
                 } else if (data.data && Array.isArray(data.data)) {
                     imageArray = data.data;
                 }
+
+                // Extract unique contexts for dynamic categories
+                const uniqueContexts = [...new Set(imageArray.map(img => img.context).filter(Boolean))];
+                
+                // Create dynamic categories with icons
+                const iconMap = {
+                    training: Monitor,
+                    team: Users,
+                    workshop: Camera,
+                    events: Award,
+                    facilities: Shield,
+                    projects: Grid3X3,
+                    portfolio: LayoutGrid
+                };
+
+                const dynamicCategories = [
+                    { id: 'all', label: 'All', icon: Grid3X3 },
+                    ...uniqueContexts.map(context => ({
+                        id: context,
+                        label: context.charAt(0).toUpperCase() + context.slice(1),
+                        icon: iconMap[context] || Camera
+                    }))
+                ];
+
+                setCategories(dynamicCategories);
 
                 // Map API images to gallery format
                 const mappedImages = imageArray
@@ -145,6 +163,7 @@ export default function GalleryPage() {
                 console.error('Error fetching gallery images:', err);
                 setError(err.message);
                 setGalleryImages([]);
+                setCategories([]);
             } finally {
                 setLoading(false);
             }

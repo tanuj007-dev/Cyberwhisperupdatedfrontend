@@ -88,8 +88,8 @@ export default function AddBatchPage() {
                     <ArrowLeft size={24} />
                 </button>
                 <div>
-                    <h1 className="text-3xl font-bold text-gray-900">Add New Batch</h1>
-                    <p className="text-gray-600 mt-1">Create a new training batch</p>
+                    <h1 className="text-3xl font-bold text-black">Add New Batch</h1>
+                    <p className="text-black mt-1">Create a new training batch</p>
                 </div>
             </div>
 
@@ -97,11 +97,11 @@ export default function AddBatchPage() {
             <form onSubmit={handleSubmit} className="bg-white rounded-2xl border border-gray-200 p-8 space-y-6">
                 {/* Program Details */}
                 <div className="space-y-4">
-                    <h2 className="text-xl font-bold text-gray-900 border-b pb-2">Program Details</h2>
+                    <h2 className="text-xl font-bold text-black border-b pb-2">Program Details</h2>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="md:col-span-2">
-                            <label className="block text-sm font-semibold text-gray-700 mb-2">
+                            <label className="block text-sm font-semibold text-black mb-2">
                                 Program Name *
                             </label>
                             <input
@@ -110,20 +110,20 @@ export default function AddBatchPage() {
                                 value={formData.program_name}
                                 onChange={handleChange}
                                 required
-                                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                className="w-full px-4 py-3 text-black border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                                 placeholder="e.g., One Year Cyber Security Diploma"
                             />
                         </div>
 
                         <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-2">
+                            <label className="block text-sm font-semibold text-black mb-2">
                                 Program Type *
                             </label>
                             <select
                                 name="program_type"
                                 value={formData.program_type}
                                 onChange={handleChange}
-                                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                className="w-full px-4 py-3 border text-black border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                             >
                                 <option>Professional Certification</option>
                                 <option>Diploma Program</option>
@@ -133,14 +133,14 @@ export default function AddBatchPage() {
                         </div>
 
                         <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-2">
+                            <label className="block text-sm font-semibold text-black mb-2">
                                 Status *
                             </label>
                             <select
                                 name="status"
                                 value={formData.status}
                                 onChange={handleChange}
-                                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                className="w-full px-4 py-3 border text-black border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                             >
                                 <option value="ACTIVE">Active</option>
                                 <option value="UPCOMING">Upcoming</option>
@@ -151,7 +151,7 @@ export default function AddBatchPage() {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-semibold text-gray-700 mb-2">
+                        <label className="block text-sm font-semibold text-black mb-2">
                             Description
                         </label>
                         <textarea
@@ -159,7 +159,7 @@ export default function AddBatchPage() {
                             value={formData.description}
                             onChange={handleChange}
                             rows={3}
-                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                            className="w-full px-4 py-3 text-black border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                             placeholder="Brief description of the program"
                         />
                     </div>
@@ -167,11 +167,11 @@ export default function AddBatchPage() {
 
                 {/* Schedule Details */}
                 <div className="space-y-4">
-                    <h2 className="text-xl font-bold text-gray-900 border-b pb-2">Schedule</h2>
+                    <h2 className="text-xl font-bold text-black border-b pb-2">Schedule</h2>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-2">
+                            <label className="block text-sm font-semibold text-black mb-2">
                                 Start Date *
                             </label>
                             <input
@@ -180,12 +180,12 @@ export default function AddBatchPage() {
                                 value={formData.start_date}
                                 onChange={handleChange}
                                 required
-                                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                className="w-full text-black px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                             />
                         </div>
 
                         <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-2">
+                            <label className="block text-sm font-semibold text-black mb-2">
                                 End Date *
                             </label>
                             <input
@@ -194,12 +194,12 @@ export default function AddBatchPage() {
                                 value={formData.end_date}
                                 onChange={handleChange}
                                 required
-                                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                className="w-full px-4 text-black py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                             />
                         </div>
 
                         <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-2">
+                            <label className="block text-sm font-semibold text-black mb-2">
                                 Start Time *
                             </label>
                             <input
@@ -208,12 +208,12 @@ export default function AddBatchPage() {
                                 value={formData.start_time}
                                 onChange={handleChange}
                                 required
-                                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                className="w-full px-4 text-black py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                             />
                         </div>
 
                         <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-2">
+                            <label className="block text-sm font-semibold text-black mb-2">
                                 End Time *
                             </label>
                             <input
@@ -222,12 +222,12 @@ export default function AddBatchPage() {
                                 value={formData.end_time}
                                 onChange={handleChange}
                                 required
-                                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                className="w-full text-black px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                             />
                         </div>
 
                         <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-2">
+                            <label className="block text-sm font-semibold text-black mb-2">
                                 Duration (Weeks) *
                             </label>
                             <input
@@ -237,19 +237,19 @@ export default function AddBatchPage() {
                                 onChange={handleChange}
                                 required
                                 min="1"
-                                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                className="w-full text-black px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                             />
                         </div>
 
                         <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-2">
+                            <label className="block text-sm font-semibold text-black mb-2">
                                 Schedule Type *
                             </label>
                             <select
                                 name="schedule_type"
                                 value={formData.schedule_type}
                                 onChange={handleChange}
-                                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                className="w-full text-black px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                             >
                                 <option>Flexible Schedule</option>
                                 <option>Fixed Schedule</option>
@@ -262,11 +262,11 @@ export default function AddBatchPage() {
 
                 {/* Pricing & Capacity */}
                 <div className="space-y-4">
-                    <h2 className="text-xl font-bold text-gray-900 border-b pb-2">Pricing & Capacity</h2>
+                    <h2 className="text-xl font-bold text-black border-b pb-2">Pricing & Capacity</h2>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-2">
+                            <label className="block text-sm font-semibold text-black mb-2">
                                 Price (₹) *
                             </label>
                             <input
@@ -277,13 +277,13 @@ export default function AddBatchPage() {
                                 required
                                 min="0"
                                 step="1"
-                                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                className="w-full text-black px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                                 placeholder="99999"
                             />
                         </div>
 
                         <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-2">
+                            <label className="block text-sm font-semibold text-black mb-2">
                                 Discount Price (₹)
                             </label>
                             <input
@@ -293,13 +293,13 @@ export default function AddBatchPage() {
                                 onChange={handleChange}
                                 min="0"
                                 step="1"
-                                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                className="w-full text-black px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                                 placeholder="79999"
                             />
                         </div>
 
                         <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-2">
+                            <label className="block text-sm font-semibold text-black mb-2">
                                 Max Students *
                             </label>
                             <input
@@ -309,7 +309,7 @@ export default function AddBatchPage() {
                                 onChange={handleChange}
                                 required
                                 min="1"
-                                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                className="w-full text-black px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                             />
                         </div>
                     </div>
@@ -320,7 +320,7 @@ export default function AddBatchPage() {
                     <button
                         type="button"
                         onClick={() => router.push('/admin/batches')}
-                        className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-xl font-semibold hover:bg-gray-50 transition-colors"
+                        className="flex-1 px-6 py-3 border border-gray-300 text-black rounded-xl font-semibold hover:bg-gray-50 transition-colors"
                         disabled={isSubmitting}
                     >
                         Cancel

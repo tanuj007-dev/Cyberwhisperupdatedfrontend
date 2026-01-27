@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 
 // Use server-side env variable for backend API
-const BACKEND_API_URL = process.env.BACKEND_API_URL || 'https://api.cyberwhisper.in';
+const BACKEND_API_URL = process.env.BACKEND_API_URL || 'http://localhost:3001';
 
 export async function POST(request) {
     console.log('📤 Gallery Upload API Route Called');
@@ -9,6 +9,7 @@ export async function POST(request) {
 
     try {
         const formData = await request.formData();
+        console.log('✅ FormData received successfully');
 
         // Log form data details (without file content)
         console.log('📋 Form Data Fields:');
@@ -51,8 +52,9 @@ export async function POST(request) {
         return NextResponse.json(data);
     } catch (error) {
         console.error('❌ Error handling upload:', error);
+        console.error('❌ Stack trace:', error.stack);
         return NextResponse.json(
-            { error: 'Upload Handler Failed', message: error.message },
+            { error: 'Upload Handler Failed', message: error.message, stack: error.stack },
             { status: 500 }
         );
     }

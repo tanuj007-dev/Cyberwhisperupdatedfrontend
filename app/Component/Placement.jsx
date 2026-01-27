@@ -73,8 +73,8 @@ export default function Placement() {
                 <div className="flex flex-col items-center text-center mb-16 space-y-4">
                     {/* Badge */}
                     <div className="flex items-center justify-center gap-3">
-                        <div className="w-3 h-3 md:w-4 md:h-4 bg-purple-600 rounded-[1px] shadow-[0_0_12px_rgba(147,51,234,0.5)]" />
-                        <span className="text-sm md:text-base font-bold text-gray-800 dark:text-gray-200 uppercase tracking-[0.25em]">
+                        <div className="w-5 h-5 bg-[#6b46e5] shadow-[0_0_15px_rgba(107,70,229,0.5)]"></div>
+                        <span className="text-sm md:text-base font-bold text-gray-800 dark:text-gray-200 uppercase tracking-[0.2em]">
                             Success Stories
                         </span>
                     </div>
@@ -198,10 +198,10 @@ function Carousel({ students }) {
 function StudentCard({ student, isActive }) {
     return (
         <div className={`
-            relative flex flex-col items-center text-center rounded-[2rem] p-8 transition-colors duration-500 min-h-[420px] shadow-2xl
+            relative flex flex-col items-center text-center rounded-[2rem] p-8 transition-all duration-500 min-h-[440px] border
             ${isActive
-                ? 'bg-[#854CE6] dark:bg-[#854CE6] text-white'
-                : 'bg-white dark:bg-zinc-900/50 text-gray-900 dark:text-white border border-gray-100 dark:border-zinc-800'
+                ? 'bg-gradient-to-b from-[#854CE6] to-[#6b35c5] text-white shadow-[0_20px_50px_rgba(133,76,230,0.4)] scale-105 border-transparent z-10'
+                : 'bg-white dark:bg-zinc-900 text-gray-900 dark:text-white border-gray-100 dark:border-white/10 shadow-xl opacity-90 hover:opacity-100'
             }
         `}>
             {/* Cyber Grid Pattern Background */}
@@ -209,66 +209,61 @@ function StudentCard({ student, isActive }) {
                 <Image src={gridImage} alt="Grid" fill className="object-cover" />
             </div>
 
-            {/* Hexagon Pattern Overlay for Active Card */}
+            {/* Glowing noise texture overlay */}
             {isActive && (
-                <div className="absolute bottom-0 right-0 opacity-20 pointer-events-none">
-                    <svg width="120" height="120" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M50 0L93.3013 25V75L50 100L6.69873 75V25L50 0Z" stroke="currentColor" strokeWidth="1" />
-                        <path d="M50 15L80.3109 32.5V67.5L50 85L19.6891 67.5V32.5L50 15Z" stroke="currentColor" strokeWidth="1" />
-                        <path d="M50 30L67.3205 40V60L50 70L32.6795 60V40L50 30Z" stroke="currentColor" strokeWidth="1" />
-                    </svg>
-                </div>
+                <div className="absolute inset-0 opacity-20 pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay"></div>
             )}
 
-            {/* Profile Image - Half out of box in screenshot? Use negative margin or separate container. 
-               In screenshot, it's inside but near top.
-            */}
-            <div className="mb-6 relative">
+            {/* Profile Image */}
+            <div className={`mb-6 relative transition-transform duration-500 ${isActive ? 'scale-110' : 'scale-100'}`}>
                 <div className={`
-                    w-28 h-28 rounded-full p-1 
-                    ${isActive ? 'bg-white/20' : 'bg-gray-100 dark:bg-zinc-800'}
+                    w-32 h-32 rounded-full p-1.5 shadow-lg
+                    ${isActive ? 'bg-white/20 backdrop-blur-sm' : 'bg-gray-100 dark:bg-zinc-800'}
                  `}>
-                    <div className="w-full h-full rounded-full overflow-hidden relative">
+                    <div className="w-full h-full rounded-full overflow-hidden relative border-4 border-white dark:border-zinc-800">
                         <Image src={student.image} alt={student.name} fill className="object-cover" />
                     </div>
+                </div>
+                {/* Status Indicator */}
+                <div className={`absolute bottom-2 right-2 w-6 h-6 rounded-full border-4 border-white dark:border-zinc-900 flex items-center justify-center ${isActive ? 'bg-green-400' : 'bg-gray-400'}`}>
+                    <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
                 </div>
             </div>
 
             {/* Name */}
-            <h3 className={`text-xl md:text-2xl font-bold mb-2 ${isActive ? 'text-white' : 'text-gray-900 dark:text-white'}`}>
+            <h3 className={`text-2xl font-bold mb-1 ${isActive ? 'text-white' : 'text-gray-900 dark:text-white'}`}>
                 {student.name}
             </h3>
 
-            {/* Subtitle / Role */}
-            <p className={`text-sm tracking-widest uppercase font-medium mb-6 ${isActive ? 'text-white/80' : 'text-[#854CE6]'}`}>
+            {/* Role */}
+            <p className={`text-xs font-bold tracking-[0.2em] uppercase mb-8 ${isActive ? 'text-purple-200' : 'text-purple-600 dark:text-purple-400'}`}>
                 {student.role}
             </p>
 
-            {/* Highlight/Score Section (Replaced by Company Logo Area) */}
-            <div className={`mt-auto w-full flex flex-col items-center gap-4`}>
-                <span className={`text-sm font-medium ${isActive ? 'text-white/90' : 'text-gray-500'}`}>
+            {/* Highlight/Score Section */}
+            <div className={`mt-auto w-full flex flex-col items-center gap-3`}>
+                <span className={`text-[10px] uppercase font-bold tracking-wider opacity-80 ${isActive ? 'text-white' : 'text-gray-500 dark:text-gray-400'}`}>
                     Placed At
                 </span>
 
                 <div className={`
-                    relative w-40 h-16 flex items-center justify-center p-3 rounded-xl
-                    ${isActive ? 'bg-white/20 backdrop-blur-md shadow-inner border border-white/20' : 'bg-gray-50 dark:bg-zinc-800/50'}
+                    relative w-48 h-20 flex items-center justify-center p-4 rounded-2xl
+                    ${isActive ? 'bg-white shadow-[0_10px_20px_rgba(0,0,0,0.1)]' : 'bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10'}
                 `}>
                     <Image
                         src={student.companyLogo}
                         alt="Company"
-                        className={`object-contain max-w-full max-h-full drop-shadow-sm`}
-                        width={120}
-                        height={50}
+                        className={`object-contain max-w-full max-h-full transition-all duration-300 ${isActive ? 'grayscale-0' : 'grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100'}`}
+                        width={140}
+                        height={60}
                     />
                 </div>
             </div>
 
-            {/* Quote (Simulated since we don't have real quotes) */}
-            <div className="mt-6 text-sm italic opacity-80 px-4">
-                "Cyber Whisper turned my passion for security into a professional career."
+            {/* Quote */}
+            <div className={`mt-6 text-sm italic leading-relaxed px-4 ${isActive ? 'text-white/80' : 'text-gray-500 dark:text-gray-400'}`}>
+                "Cyber Whisper transformed my career with real-world skills."
             </div>
-
         </div>
     );
 }

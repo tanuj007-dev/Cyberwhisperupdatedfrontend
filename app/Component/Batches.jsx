@@ -111,9 +111,9 @@ export default function Batches() {
                     transition={{ duration: 0.6 }}
                     className="text-center mb-12 md:mb-16"
                 >
-                    <div className="inline-flex items-center gap-2 mb-6 px-5 py-2.5 rounded-full bg-purple-100 dark:bg-linear-to-r dark:from-purple-500/10 dark:to-violet-500/10 border border-purple-200 dark:border-purple-500/20 backdrop-blur-sm">
-                        <Sparkles className="w-4 h-4 text-purple-600 dark:text-purple-400" />
-                        <span className="text-purple-700 dark:text-purple-300 text-sm font-semibold tracking-wider uppercase">Upcoming Training Sessions</span>
+                    <div className="inline-flex items-center gap-3 mb-6">
+                        <div className="w-5 h-5 bg-[#6b46e5] shadow-[0_0_15px_rgba(107,70,229,0.5)]"></div>
+                        <span className="text-[#0f172a] dark:text-white text-sm font-bold tracking-[0.2em] uppercase">Upcoming Training Sessions</span>
                     </div>
 
                     <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">

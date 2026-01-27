@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import gridImage from './assets/grid.webp';
+import heroBg from './assets/hero-bg.png';
 import Particles from './Particles';
 import b2b from './assets/b2b.png';
 import b2c from './assets/b2c.png';
@@ -22,20 +22,17 @@ function HeroLayout({ isVideoOpen, setIsVideoOpen }) {
   return (
     <section className="relative min-h-screen bg-background text-foreground flex items-center justify-center p-4 pt-24 sm:p-8 md:p-12 lg:p-16 overflow-hidden font-sans transition-colors duration-300">
 
-      {/* Background Grid Image */}
-      <div className="absolute inset-0 pointer-events-none opacity-30">
+      {/* Background Hero Image */}
+      <div className="absolute inset-0 pointer-events-none">
         <Image
-          src={gridImage}
-          alt="Background Grid"
+          src={heroBg}
+          alt="Cybersecurity Background"
           fill
-          className="object-cover dark:opacity-30 opacity-10 inverted-grid"
+          className="object-cover opacity-10 dark:opacity-40"
           priority
         />
-        {/* In light mode we might need to invert the grid if it is white lines, or just rely on opacity. 
-            Since we can't easily invert just the lines of a webp without CSS filter. 
-            Let's add a filter class if we want. For now, let's try standard opacity. 
-            Actually, adding 'invert' class on light mode for the image wrapper might work if the image is transparent PNG/WEBP with white lines.
-        */}
+        {/* Gradient Overlay for Text Visibility */}
+        <div className="absolute inset-0 bg-gradient-to-r from-white/90 via-white/50 to-transparent dark:from-[#02000d] dark:via-[#02000d]/80 dark:to-transparent/20"></div>
       </div>
       <div className="absolute inset-0 pointer-events-none opacity-30 block dark:hidden mix-blend-multiply bg-grid-slate-200" />
 

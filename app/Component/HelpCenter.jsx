@@ -102,18 +102,18 @@ export default function CompactPremiumDemo() {
           transition={{ duration: 0.7 }}
           className="text-center mb-10"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-purple-100 dark:bg-white/5 border border-purple-200 dark:border-white/10 mb-4">
-            <Shield size={14} className="text-purple-600 dark:text-purple-400" />
-            <span className="text-xs font-medium tracking-wider text-purple-700 dark:text-purple-300">PRIORITY ACCESS</span>
+          <div className="inline-flex items-center gap-3 mb-4">
+            <div className="w-5 h-5 bg-[#6b46e5] shadow-[0_0_15px_rgba(107,70,229,0.5)]"></div>
+            <span className="text-[#0f172a] dark:text-white text-sm font-bold tracking-[0.2em] uppercase">PRIORITY ACCESS</span>
           </div>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight">
-                        
+
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-gray-900 via-purple-700 to-purple-900 dark:from-white dark:via-purple-200 dark:to-purple-400">
-             CyberWhisper High-End Learning Labs
+              CyberWhisper High-End Learning Labs
             </span>
           </h2>
           <p className="mt-3 text-gray-600 justify-between dark:text-gray-300 text-sm md:text-base max-w-6xl mx-auto">
-           • Limited slots • Advanced red-team labs • Priority onboarding for qualified applicants
+            • Limited slots • Advanced red-team labs • Priority onboarding for qualified applicants
           </p>
         </motion.div>
 

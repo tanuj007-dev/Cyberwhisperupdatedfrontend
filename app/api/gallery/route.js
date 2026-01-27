@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-const BACKEND_API_URL = process.env.BACKEND_API_URL || 'https://api.cyberwhisper.in';
+const BACKEND_API_URL = process.env.BACKEND_API_URL || 'http://localhost:3001';
 
 export async function GET() {
     try {

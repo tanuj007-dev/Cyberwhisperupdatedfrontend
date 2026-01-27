@@ -107,7 +107,7 @@ const BlogList = () => {
                                 placeholder="Search by title or keywords..."
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
-                                className="w-full pl-11 pr-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                                className="w-full pl-11 pr-4 py-2.5 border text-black border-gray-300 rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-transparent"
                             />
                         </div>
                     </div>
@@ -116,7 +116,7 @@ const BlogList = () => {
                     <select
                         value={filterCategory}
                         onChange={(e) => setFilterCategory(e.target.value)}
-                        className="px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-transparent bg-white"
+                        className="px-4 py-2.5 border text-black border-gray-300 rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-transparent bg-white"
                     >
                         <option value="">All Categories</option>
                         {categories.map((category) => (
@@ -130,7 +130,7 @@ const BlogList = () => {
                     <select
                         value={filterStatus}
                         onChange={(e) => setFilterStatus(e.target.value)}
-                        className="px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-transparent bg-white"
+                        className="px-4 py-2.5 border text-black border-gray-300 rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-transparent bg-white"
                     >
                         <option value="">All Status</option>
                         <option value="active">Published</option>

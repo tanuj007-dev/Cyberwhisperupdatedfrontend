@@ -5,9 +5,10 @@ export async function GET(request) {
         const limit = searchParams.get('limit') || 10;
 
         // Call your backend API
-        const backendUrl = 'http://localhost:3031';
+        // Call your backend API
+        const backendUrl = process.env.BACKEND_API_URL || 'http://localhost:3001/api';
         const response = await fetch(
-            `${backendUrl}/api/courses?page=${page}&limit=${limit}`,
+            `${backendUrl}/courses?page=${page}&limit=${limit}`,
             {
                 method: 'GET',
                 headers: {

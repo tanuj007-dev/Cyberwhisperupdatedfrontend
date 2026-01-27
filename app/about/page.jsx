@@ -61,10 +61,10 @@ export default function AboutUsPage() {
                                         transition={{ delay: 0.2, duration: 0.6 }}
                                         className="space-y-4 text-left"
                                     >
-                                        <span className="text-primary font-bold uppercase tracking-widest text-sm flex items-center justify-start gap-2">
-                                            <span className="w-8 h-px bg-primary"></span>
-                                            What We Do
-                                        </span>
+                                        <div className="inline-flex items-center gap-3">
+                                            <div className="w-5 h-5 bg-[#6b46e5] shadow-[0_0_15px_rgba(107,70,229,0.5)]"></div>
+                                            <span className="text-[#0f172a] dark:text-white text-sm font-bold tracking-[0.2em] uppercase">What We Do</span>
+                                        </div>
                                         <h2 className="text-2xl sm:text-3xl md:text-[50px] font-semibold leading-tight text-gray-900 dark:text-white">
                                             Protecting, preventing, <br />
                                             <span className="text-primary ">securing your digital future</span>

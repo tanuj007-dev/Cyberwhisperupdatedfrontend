@@ -6,7 +6,7 @@ import Particles from './Particles';
 
 const BackgroundAnimations = () => {
     return (
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute inset-0 overflow-hidden p  ointer-events-none">
             {/* Static Gradient Orb 1 - Top Right */}
             <div className="absolute -top-[10%] -right-[5%] w-[500px] h-[500px] rounded-full bg-[#6B46E5]/30 blur-[100px] mix-blend-multiply dark:mix-blend-screen opacity-50 dark:opacity-100" />
 

@@ -24,9 +24,9 @@ export default function TrainingPrograms() {
                     <div className="relative z-10 flex flex-col items-center text-center text-white space-y-4 md:space-y-6">
                         {/* Header Section */}
                         <div className="space-y-3 md:space-y-4 max-w-4xl mx-auto">
-                            <div className="inline-flex items-center gap-2 px-3 py-1 md:px-4 md:py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20">
-                                <div className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-green-400 shadow-[0_0_10px_rgba(74,222,128,0.5)] animate-pulse"></div>
-                                <span className="text-[10px] md:text-xs font-bold tracking-widest uppercase text-white/90">Training Programs</span>
+                            <div className="inline-flex items-center gap-3">
+                                <div className="w-5 h-5 bg-white shadow-[0_0_15px_rgba(255,255,255,0.5)]"></div>
+                                <span className="text-white text-sm font-bold tracking-[0.2em] uppercase">Training Programs</span>
                             </div>
 
                             <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight leading-tight">

@@ -6,8 +6,8 @@ import {
     Upload,
     Trash2,
     Search,
-    Edit2,
-    Eye,
+    // Edit2,
+    // Eye,
     Image as ImageIcon,
     X,
     Plus,
@@ -65,7 +65,7 @@ const GalleryManagement = () => {
     const fetchImages = async () => {
         setLoading(true);
         try {
-            const response = await fetch('/api/gallery');
+            const response = await fetch('http://localhost:3001/api/gallery');
             if (!response.ok) throw new Error('Failed to fetch images');
 
             const data = await response.json();
@@ -128,6 +128,11 @@ const GalleryManagement = () => {
             return;
         }
 
+        console.log('🔍 Upload form data:', uploadForm);
+        console.log('🔍 Image file details:', uploadForm.image);
+        console.log('🔍 Image file type:', typeof uploadForm.image);
+        console.log('🔍 Is File object?', uploadForm.image instanceof File);
+
         const formData = new FormData();
         formData.append('image', uploadForm.image);
         formData.append('title', uploadForm.title);
@@ -137,8 +142,14 @@ const GalleryManagement = () => {
         formData.append('sort_order', uploadForm.sort_order);
         formData.append('is_active', uploadForm.is_active);
 
+        console.log('🔍 FormData entries:');
+        for (let [key, value] of formData.entries()) {
+            console.log(`  - ${key}:`, value, value instanceof File ? `File: ${value.name} (${value.size} bytes)` : typeof value);
+        }
+
         try {
-            const response = await fetch('/api/gallery/upload', {
+            // Call backend API directly
+            const response = await fetch('http://localhost:3001/api/gallery/upload', {
                 method: 'POST',
                 body: formData,
             });
@@ -159,8 +170,13 @@ const GalleryManagement = () => {
     const handleDelete = async () => {
         try {
             console.log('Deleting image:', selectedImage);
-            const response = await fetch(`/api/gallery/${selectedImage.id}`, {
+            
+            // Call backend API to delete image
+            const response = await fetch(`http://localhost:3001/api/gallery/${selectedImage.id}/remove`, {
                 method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
             });
 
             console.log('Delete response status:', response.status);
@@ -186,7 +202,8 @@ const GalleryManagement = () => {
         e.preventDefault();
 
         try {
-            const response = await fetch(`/api/gallery/${selectedImage.id}`, {
+            // Call backend API to update image
+            const response = await fetch(`http://localhost:3001/api/gallery/${selectedImage.id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -298,9 +315,7 @@ const GalleryManagement = () => {
                                 {images.filter(img => img.is_active).length}
                             </p>
                         </div>
-                        <div className="w-12 h-12 bg-green-600 rounded-xl flex items-center justify-center">
-                            <Eye className="text-white" size={24} />
-                        </div>
+                      
                     </div>
                 </div>
 
@@ -426,20 +441,20 @@ const GalleryManagement = () => {
 
                                     {/* Overlay */}
                                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/60 transition-all duration-300 flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100">
-                                        <button
+                                        {/* <button
                                             onClick={() => handleViewImage(image)}
                                             className="p-2 bg-white rounded-lg hover:bg-gray-100 transition-colors"
                                             title="View"
                                         >
                                             <Eye size={18} className="text-gray-900" />
-                                        </button>
-                                        <button
+                                        </button> */}
+                                        {/* <button
                                             onClick={() => openEditModal(image)}
                                             className="p-2 bg-white rounded-lg hover:bg-gray-100 transition-colors"
                                             title="Edit"
                                         >
                                             <Edit2 size={18} className="text-gray-900" />
-                                        </button>
+                                        </button> */}
                                         <button
                                             onClick={() => {
                                                 setSelectedImage(image);
@@ -507,20 +522,20 @@ const GalleryManagement = () => {
                                 </div>
 
                                 <div className="flex items-center gap-1">
-                                    <button
+                                    {/* <button
                                         onClick={() => handleViewImage(image)}
                                         className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
                                         title="View"
                                     >
                                         <Eye size={18} />
-                                    </button>
-                                    <button
+                                    </button> */}
+                                    {/* <button
                                         onClick={() => openEditModal(image)}
                                         className="p-2 text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors"
                                         title="Edit"
                                     >
                                         <Edit2 size={18} />
-                                    </button>
+                                    </button> */}
                                     <button
                                         onClick={() => {
                                             setSelectedImage(image);
@@ -581,7 +596,7 @@ const GalleryManagement = () => {
                             type="file"
                             accept="image/*"
                             onChange={(e) => setUploadForm({ ...uploadForm, image: e.target.files[0] })}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                            className="w-full px-4 py-2 border border-gray-300 text-black rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent"
                             required
                         />
                     </div>
@@ -594,7 +609,7 @@ const GalleryManagement = () => {
                             type="text"
                             value={uploadForm.title}
                             onChange={(e) => setUploadForm({ ...uploadForm, title: e.target.value })}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                            className="w-full px-4 text-black py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent"
                             required
                         />
                     </div>
@@ -606,7 +621,7 @@ const GalleryManagement = () => {
                         <select
                             value={uploadForm.context}
                             onChange={(e) => setUploadForm({ ...uploadForm, context: e.target.value })}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                            className="w-full px-4 py-2 border text-black border-gray-300 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent"
                         >
                             {contexts.map((context) => (
                                 <option key={context} value={context}>
@@ -624,7 +639,7 @@ const GalleryManagement = () => {
                             type="text"
                             value={uploadForm.alt_text}
                             onChange={(e) => setUploadForm({ ...uploadForm, alt_text: e.target.value })}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                            className="w-full px-4 py-2  text-black border border-gray-300 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent"
                             placeholder="Describe the image for accessibility"
                         />
                     </div>
@@ -637,7 +652,7 @@ const GalleryManagement = () => {
                             type="text"
                             value={uploadForm.tags}
                             onChange={(e) => setUploadForm({ ...uploadForm, tags: e.target.value })}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                            className="w-full px-4 py-2 text-black border border-gray-300 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent"
                             placeholder="photography, portfolio, team"
                         />
                     </div>
@@ -650,7 +665,7 @@ const GalleryManagement = () => {
                             type="number"
                             value={uploadForm.sort_order}
                             onChange={(e) => setUploadForm({ ...uploadForm, sort_order: parseInt(e.target.value) })}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                            className="w-full px-4 py-2 text-black border border-gray-300 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent"
                             min="1"
                         />
                     </div>

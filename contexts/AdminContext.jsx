@@ -33,11 +33,11 @@ export const AdminProvider = ({ children }) => {
                 setBlogs(mockBlogs);
                 setCategories(mockCategories);
                 setTags(mockTags);
-                setMedia(mockMedia);
                 setSiteSettings(mockSiteSettings);
 
-                // Fetch users from API, fallback to mock data
+                // Fetch users and media from API, fallback to mock data
                 await fetchUsers();
+                await fetchMedia();
             } catch (error) {
                 console.error('Error initializing admin data:', error);
                 setLoading(false);
@@ -50,7 +50,7 @@ export const AdminProvider = ({ children }) => {
     // Fetch users from API
     const fetchUsers = async () => {
         try {
-            const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3031';
+            const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
             console.log('Fetching users from API:', `${apiUrl}/api/users?page=1&limit=1000`);
 
             const response = await fetch(`${apiUrl}/api/users?page=1&limit=1000`, {
@@ -91,6 +91,49 @@ export const AdminProvider = ({ children }) => {
         }
     };
 
+    // Fetch media from API
+    const fetchMedia = async () => {
+        try {
+            const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+            console.log('Fetching media from API:', `${apiUrl}/api/media`);
+
+            const response = await fetch(`${apiUrl}/api/media`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            console.log('Fetch media response status:', response.status);
+
+            if (!response.ok) {
+                throw new Error(`Failed to fetch media: ${response.status}`);
+            }
+            const result = await response.json();
+            console.log('Full media API response:', result);
+
+            // Handle API response structure
+            let mediaList = [];
+            if (result.success && result.data) {
+                mediaList = Array.isArray(result.data) ? result.data : [result.data];
+            } else if (Array.isArray(result)) {
+                mediaList = result;
+            } else if (result.media) {
+                mediaList = result.media;
+            }
+
+            console.log('Media fetched successfully from API:', mediaList.length, 'items');
+            setMedia(mediaList);
+            setLoading(false);
+        } catch (error) {
+            console.error('Error fetching media from API:', error.message);
+            console.log('Falling back to mock media data');
+            // Fallback to mock media
+            setMedia(mockMedia);
+            setLoading(false);
+        }
+    };
+
     // Blog CRUD operations
     const addBlog = (blog) => {
         const newBlog = {
@@ -127,7 +170,7 @@ export const AdminProvider = ({ children }) => {
     // User CRUD operations
     const addUser = async (user) => {
         try {
-            const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3031';
+            const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
             const payload = {
                 first_name: user.first_name,
                 last_name: user.last_name,
@@ -178,7 +221,7 @@ export const AdminProvider = ({ children }) => {
 
     const updateUser = async (id, updatedUser) => {
         try {
-            const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3031';
+            const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
             const payload = {
                 first_name: updatedUser.first_name,
                 last_name: updatedUser.last_name,
@@ -225,7 +268,7 @@ export const AdminProvider = ({ children }) => {
 
     const deleteUser = async (id) => {
         try {
-            const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3031';
+            const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
             console.log('Deleting user:', id);
 
             const response = await fetch(`${apiUrl}/api/users/${id}`, {
@@ -301,13 +344,21 @@ export const AdminProvider = ({ children }) => {
     };
 
     // Media CRUD operations
-    const addMedia = (mediaItem) => {
+    const addMedia = async (mediaItem) => {
         const newMedia = {
             ...mediaItem,
             id: Math.max(...media.map(m => m.id), 0) + 1,
             uploadedAt: new Date().toISOString()
         };
         setMedia([...media, newMedia]);
+        
+        // Refresh media from backend to sync
+        try {
+            await fetchMedia();
+        } catch (error) {
+            console.log('Could not refresh media from backend, using local state');
+        }
+        
         return newMedia;
     };
 
@@ -333,7 +384,7 @@ export const AdminProvider = ({ children }) => {
 
     const getUserById = async (id) => {
         try {
-            const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3031';
+            const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
             const response = await fetch(`${apiUrl}/api/users/${id}`, {
                 method: 'GET',
                 headers: {

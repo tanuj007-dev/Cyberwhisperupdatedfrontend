@@ -1,6 +1,7 @@
 import Image from "next/image"
 import footerBg from "./assets/footer-bg.webp";
 import logo from "./assets/logo.webp";
+import lightLogo from "./assets/Untitled design (10).png";
 import { FaLinkedinIn, FaYoutube } from "react-icons/fa6"
 import { MapPin, Phone, Mail } from "lucide-react"
 
@@ -30,7 +31,13 @@ export default function Footer() {
                   src={logo}
                   alt="Cyber Whisper"
                   fill
-                  className="object-contain"
+                  className="object-contain dark:hidden"
+                />
+                <Image
+                  src={lightLogo}
+                  alt="Cyber Whisper"
+                  fill
+                  className="object-contain hidden dark:block"
                 />
               </div>
             </div>
@@ -88,7 +95,7 @@ export default function Footer() {
               <li><a href="/refund-policy" className="hover:text-[#6b46e5] hover:translate-x-1 transition-all inline-block">Refund Policy</a></li>
               <li><a href="/privacy-policy" className="hover:text-[#6b46e5] hover:translate-x-1 transition-all inline-block">Privacy Policy</a></li>
               <li><a href="/terms-of-service" className="hover:text-[#6b46e5] hover:translate-x-1 transition-all inline-block">Terms & Conditions</a></li>
-              <li><a href="#" className="hover:text-[#6b46e5] hover:translate-x-1 transition-all inline-block">Career</a></li>
+
             </ul>
           </div>
 

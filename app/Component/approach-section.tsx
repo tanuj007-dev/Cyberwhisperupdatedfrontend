@@ -62,9 +62,9 @@ export function ApproachSection() {
           transition={{ duration: 0.5 }}
           className="text-center max-w-3xl mx-auto mb-8 md:mb-12 space-y-2"
         >
-          <div className="inline-flex items-center gap-2 px-2 py-0.5 rounded-full bg-primary/10 border border-primary/20 mb-1">
-            <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-            <span className="text-primary font-bold uppercase tracking-[0.2em] text-[10px]">Strategy</span>
+          <div className="inline-flex items-center gap-3 mb-2">
+            <div className="w-5 h-5 bg-[#6b46e5] shadow-[0_0_15px_rgba(107,70,229,0.5)]"></div>
+            <span className="text-[#0f172a] dark:text-white text-sm font-bold tracking-[0.2em] uppercase">Strategy</span>
           </div>
           <h2 className="text-2xl md:text-3xl lg:text-4xl text-gray-900 dark:text-white font-bold tracking-tight">
             Strengthening security, <span className="text-primary  ">your future</span>

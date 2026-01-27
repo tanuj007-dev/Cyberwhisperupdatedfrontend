@@ -75,27 +75,56 @@ const MediaLibrary = () => {
         showToast('Media deleted successfully', 'success');
     };
 
-    const handleUpload = (e) => {
+    const handleUpload = async (e) => {
         e.preventDefault();
         if (!uploadData.url) {
             showToast('Please provide an image URL', 'error');
             return;
         }
 
-        addMedia({
-            name: uploadData.name || 'Untitled Image',
-            url: uploadData.url,
-            thumbnail: uploadData.url,
-            type: 'image/jpeg',
-            size: 0,
-            alt: uploadData.alt,
-            caption: uploadData.caption,
-            uploadedBy: 1
-        });
+        try {
+            // Call backend API to add media
+            const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+            const response = await fetch(`${apiUrl}/api/media`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    name: uploadData.name || 'Untitled Image',
+                    url: uploadData.url,
+                    alt: uploadData.alt,
+                    caption: uploadData.caption,
+                    uploadedBy: 1
+                }),
+            });
 
-        setUploadModalOpen(false);
-        setUploadData({ name: '', url: '', alt: '', caption: '' });
-        showToast('Media uploaded successfully', 'success');
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Failed to upload media');
+            }
+
+            const result = await response.json();
+            
+            // Add to local state
+            addMedia({
+                name: uploadData.name || 'Untitled Image',
+                url: uploadData.url,
+                thumbnail: uploadData.url,
+                type: 'image/jpeg',
+                size: 0,
+                alt: uploadData.alt,
+                caption: uploadData.caption,
+                uploadedBy: 1
+            });
+
+            setUploadModalOpen(false);
+            setUploadData({ name: '', url: '', alt: '', caption: '' });
+            showToast('Media uploaded successfully', 'success');
+        } catch (error) {
+            console.error('Error uploading media:', error);
+            showToast(error.message || 'Failed to upload media', 'error');
+        }
     };
 
     const formatFileSize = (bytes) => {
