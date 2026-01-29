@@ -2,8 +2,11 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
+import Link from 'next/link';
+import { useEnquiry } from '../context/EnquiryContext';
 
 export default function WeServe() {
+  const { openEnquiry } = useEnquiry();
   return (
     <section className="relative overflow-hidden bg-background py-12 md:py-24 lg:py-32 font-sans transition-colors duration-300">
       {/* Background Subtle Gradient & Grid */}
@@ -112,8 +115,8 @@ export default function WeServe() {
                 {/* Heading */}
                 <h2 className="text-3xl md:text-4xl lg:text-[45px] font-bold leading-[1.2] text-foreground tracking-tight">
                   We don't just deploy and <br className="hidden md:block" />
-                leave - we partner with you for<br className="hidden md:block" />
-                the long haul
+                  leave - we partner with you for<br className="hidden md:block" />
+                  the long haul
                 </h2>
 
                 {/* Description */}
@@ -131,10 +134,15 @@ export default function WeServe() {
 
                 {/* Buttons */}
                 <div className="flex flex-wrap gap-4 md:gap-5 pt-6 md:pt-8">
-                  <button className="bg-primary hover:bg-primary/90 text-white px-8 py-3 md:px-10 md:py-4 rounded-full font-bold text-sm md:text-[15px] transition-all duration-300 shadow-xl shadow-primary/20 active:scale-95">
-                    Learn More
-                  </button>
-                  <button className="border-2 border-primary/10 hover:border-primary text-primary px-8 py-3 md:px-10 md:py-4 rounded-full font-bold text-sm md:text-[15px] transition-all duration-300 active:scale-95">
+                  <Link href="/services">
+                    <button className="bg-primary hover:bg-primary/90 text-white px-8 py-3 md:px-10 md:py-4 rounded-full font-bold text-sm md:text-[15px] transition-all duration-300 shadow-xl shadow-primary/20 active:scale-95">
+                      Learn More
+                    </button>
+                  </Link>
+                  <button
+                    onClick={openEnquiry}
+                    className="border-2 border-primary/10 hover:border-primary text-primary px-8 py-3 md:px-10 md:py-4 rounded-full font-bold text-sm md:text-[15px] transition-all duration-300 active:scale-95"
+                  >
                     Contact Us
                   </button>
                 </div>

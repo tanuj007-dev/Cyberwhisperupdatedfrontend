@@ -15,7 +15,7 @@ const values = [
     icon: Zap,
     title: "Rapid Resilience",
     description: "We build workflows and defenses that help teams respond faster, recover smarter, and improve after every incident.",
-    color: "text-accent",
+    color: "text-primary",
   },
   {
     icon: Target,
@@ -28,7 +28,7 @@ const values = [
     icon: Eye,
     title: "Infinite Vision",
     description: "Threats evolve daily. Our training, labs, and methods are continuously updated to stay ahead.",
-    color: "text-accent",
+    color: "text-primary",
   },
 ]
 
@@ -84,13 +84,13 @@ export function ValuesSection() {
               className="glass-panel p-8 rounded-2xl group cursor-default bg-white border border-gray-200 dark:bg-white/5 dark:border-white/10 shadow-sm dark:shadow-none"
             >
               <div
-                className={`p-3 rounded-xl bg-gray-100 dark:bg-white/5 w-fit mb-6 group-hover:scale-110 transition-transform duration-300 ${value.color}`}
+                className={`p-3 rounded-xl bg-gray-100 dark:bg-white/5 w-fit mb-6 transition-transform duration-300 ${value.color}`}
               >
                 <value.icon className="w-8 h-8" />
               </div>
               <h3 className="text-xl font-semibold mb-3 text-gray-900 dark:text-white">{value.title}</h3>
               <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">{value.description}</p>
-              <div className="mt-6 flex items-center text-xs font-mono text-primary opacity-0 group-hover:opacity-100 transition-opacity">
+              <div className="mt-6 flex items-center text-xs font-mono text-primary opacity-100 transition-opacity">
                 <span>SYSTEM_CHECK: STABLE</span>
               </div>
             </motion.div>

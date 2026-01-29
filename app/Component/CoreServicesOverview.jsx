@@ -60,6 +60,7 @@ const services = [
 
 export default function CoreServicesOverview() {
     const [width, setWidth] = useState(0);
+    const [cardWidth, setCardWidth] = useState(0);
     const [currentIndex, setCurrentIndex] = useState(0);
     const carouselRef = useRef();
     const x = useMotionValue(0);
@@ -73,7 +74,20 @@ export default function CoreServicesOverview() {
     useEffect(() => {
         const updateWidth = () => {
             if (carouselRef.current) {
-                setWidth(carouselRef.current.scrollWidth - carouselRef.current.offsetWidth);
+                const isMobile = window.innerWidth < 768;
+                const gap = isMobile ? 12 : 24;
+                const padding = isMobile ? 8 : 16; // Account for px-1 (8px) or md:px-2 (16px) total horizontal padding
+                const containerWidth = carouselRef.current.offsetWidth;
+                const newCardWidth = isMobile ? containerWidth - padding : (containerWidth - (gap * 3) - padding) / 4;
+
+                setCardWidth(newCardWidth);
+
+                // Allow state and DOM to update before measuring scrollWidth
+                setTimeout(() => {
+                    if (carouselRef.current) {
+                        setWidth(carouselRef.current.scrollWidth - carouselRef.current.offsetWidth);
+                    }
+                }, 50);
             }
         };
 
@@ -87,10 +101,9 @@ export default function CoreServicesOverview() {
 
     useEffect(() => {
         const updatePosition = () => {
-            if (carouselRef.current) {
+            if (carouselRef.current && cardWidth > 0) {
                 const isMobile = window.innerWidth < 768;
                 const gap = isMobile ? 12 : 24;
-                const cardWidth = isMobile ? carouselRef.current.offsetWidth : 320;
 
                 const newX = -(currentIndex * (cardWidth + gap));
                 animate(x, newX, {
@@ -122,7 +135,6 @@ export default function CoreServicesOverview() {
         } else {
             const isMobile = window.innerWidth < 768;
             const gap = isMobile ? 12 : 24;
-            const cardWidth = isMobile ? carouselRef.current.offsetWidth : 320;
             const itemWidth = cardWidth + gap;
 
             const currentX = x.get();
@@ -147,7 +159,7 @@ export default function CoreServicesOverview() {
         <section className="relative w-full bg-slate-50 dark:bg-[#030014] py-16 md:py-24 overflow-hidden font-sans transition-colors duration-300">
             <CyberGrid />
 
-            <div className="relative z-10 max-w-7xl mx-auto px-4 md:px-6">
+            <div className="relative z-10 max-w-8xl mx-auto px-4 md:px-6">
 
                 {/* Header Section */}
                 <div className="text-center mb-12 space-y-4">
@@ -203,7 +215,11 @@ export default function CoreServicesOverview() {
                             {services.map((service, idx) => (
                                 <motion.div
                                     key={idx}
-                                    className="relative min-w-full md:min-w-[320px] rounded-2xl p-[1px] group/card h-auto select-none pointer-events-auto"
+                                    className="relative rounded-2xl p-[1px] group/card h-auto select-none pointer-events-auto shrink-0"
+                                    style={{
+                                        width: cardWidth > 0 ? `${cardWidth}px` : 'auto',
+                                        minWidth: cardWidth > 0 ? `${cardWidth}px` : 'auto'
+                                    }}
                                     initial={{ opacity: 0, scale: 0.9 }}
                                     whileInView={{ opacity: 1, scale: 1 }}
                                     viewport={{ once: true }}
@@ -245,7 +261,7 @@ export default function CoreServicesOverview() {
                                         {/* Bottom Content: Text & Button */}
                                         <div className="w-full flex flex-col items-center">
                                             <h3
-                                                className="text-lg font-bold mb-3 transition-all text-center"
+                                                className="text-base font-bold mb-3 transition-all text-center line-clamp-3 h-20 flex items-center justify-center px-2"
                                                 style={{ color: service.color }}
                                             >
                                                 {service.title}

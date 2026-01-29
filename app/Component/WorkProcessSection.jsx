@@ -100,7 +100,7 @@ export default function WorkProcessSection() {
             {/* The Main Connecting Path with Rounded Corners - Using AnimatedPath for looping */}
             {/* Path segment 1: Card 1 down to junction */}
             <AnimatedPath
-              d="M 130,207 V 270 Q 130,300 170,300 H 355 Q 380,295 385,320 V 400"
+              d="M 130,207 V 270 Q 130,300 172,301 H 352 Q 385,297 385,330 V 400"
               delay={0}
             />
             {/* Path segment 2: Junction up to Card 3 */}

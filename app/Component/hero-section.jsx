@@ -176,31 +176,7 @@ function HeroLayout({ isVideoOpen, setIsVideoOpen }) {
               </button>
             </motion.div>
 
-            {/* Video Modal */}
-            {isVideoOpen && (
-              <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm" onClick={() => setIsVideoOpen(false)}>
-                <div className="relative w-full max-w-4xl bg-black rounded-2xl overflow-hidden shadow-2xl border border-purple-500/20" onClick={e => e.stopPropagation()}>
-                  <button
-                    onClick={() => setIsVideoOpen(false)}
-                    className="absolute top-4 right-4 z-10 p-2 bg-black/50 hover:bg-black/70 text-white rounded-full backdrop-blur-md transition-colors"
-                  >
-                    <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                  </button>
-                  <div className="aspect-video w-full">
-                    <video
-                      className="w-full h-full object-cover"
-                      src="/Cyber Whisper.mp4"
-                      controls
-                      autoPlay
-                    >
-                      Your browser does not support the video tag.
-                    </video>
-                  </div>
-                </div>
-              </div>
-            )}
+
 
             {/* Trust Indicators / Social Proof */}
             <motion.div
@@ -285,6 +261,32 @@ function HeroLayout({ isVideoOpen, setIsVideoOpen }) {
 
         </div>
       </div>
+
+      {/* Video Modal - Top Level for correct stacking context */}
+      {isVideoOpen && (
+        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/90 backdrop-blur-md" onClick={() => setIsVideoOpen(false)}>
+          <div className="relative w-full max-w-5xl bg-black rounded-3xl overflow-hidden shadow-[0_0_50px_rgba(168,85,247,0.3)] border border-purple-500/20" onClick={e => e.stopPropagation()}>
+            <button
+              onClick={() => setIsVideoOpen(false)}
+              className="absolute top-6 right-6 z-20 p-3 bg-black/60 hover:bg-red-500 text-white rounded-full backdrop-blur-xl transition-all hover:scale-110 active:scale-90"
+            >
+              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+            <div className="aspect-video w-full">
+              <video
+                className="w-full h-full"
+                src="/Cyber Whisper.mp4"
+                controls
+                autoPlay
+              >
+                Your browser does not support the video tag.
+              </video>
+            </div>
+          </div>
+        </div>
+      )}
     </section >
   );
 } 

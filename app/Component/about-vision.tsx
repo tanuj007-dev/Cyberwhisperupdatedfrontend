@@ -1,6 +1,7 @@
 "use client"
 import { Shield, CheckCircle2, Phone } from "lucide-react"
 import Image from "next/image"
+import Link from "next/link"
 import { motion } from "framer-motion"
 
 export function AboutVision() {
@@ -96,20 +97,27 @@ export function AboutVision() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.4, duration: 0.6 }}
-              className="flex flex-wrap items-center gap-4 pt-2"
+              className="flex flex-wrap items-center gap-6 pt-4"
             >
-              <button className="py-3 px-14 rounded-full bg-primary text-white font-bold uppercase tracking-wider text-[11px] hover:bg-primary/90 transition-all hover:scale-105 shadow-lg shadow-primary/20 w-full sm:w-auto">
-                Get Started
-              </button>
-              <div className="flex items-center gap-3 px-4 py-2 rounded-xl hover:bg-black/5 dark:hover:bg-white/5 transition-all group cursor-pointer">
+              <Link href="/services" className="w-full sm:w-auto">
+                <button className="py-4 px-14 rounded-full bg-primary text-white font-bold uppercase tracking-wider text-[12px] hover:bg-primary/90 transition-all hover:scale-105 shadow-lg shadow-primary/20 w-full">
+                  Explore Services
+                </button>
+              </Link>
+              <a
+                href="https://wa.me/919220946887"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-3 px-4 py-2 rounded-full bg-black/10 dark:bg-white/5 transition-all group cursor-pointer shrink-0"
+              >
                 <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all">
                   <Phone className="w-4 h-4" />
                 </div>
                 <div>
-                  <p className="text-[9px] text-gray-500 font-bold uppercase tracking-widest">Expert Support</p>
+ 
                   <p className="text-[15px] font-bold text-gray-900 dark:text-white">Talk to an Expert</p>
                 </div>
-              </div>
+              </a>
             </motion.div>
           </div>
         </div>

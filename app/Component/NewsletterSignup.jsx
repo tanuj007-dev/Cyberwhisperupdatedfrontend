@@ -95,15 +95,15 @@ export default function NewsletterSignup() {
           {message && (
             <div
               className={`mb-4 px-6 py-3 rounded-full text-center font-semibold transition-all ${messageType === 'success'
-                  ? 'bg-green-500/20 text-green-100 border border-green-400'
-                  : 'bg-red-500/20 text-red-100 border border-red-400'
+                ? 'bg-green-500/20 text-green-100 border border-green-400'
+                : 'bg-red-500/20 text-red-100 border border-red-400'
                 }`}
             >
               {message}
             </div>
           )}
 
-          <div className="flex flex-col items-center justify-center gap-6 w-full max-w-3xl mx-auto">
+          <div className="flex flex-col md:flex-row items-center justify-center gap-4 w-full max-w-3xl mx-auto">
             <input
               type="email"
               placeholder="Enter Email Address"
@@ -115,29 +115,19 @@ export default function NewsletterSignup() {
                 }
               }}
               disabled={loading}
-              className="w-full max-w-xl bg-white px-6 py-2 rounded-full text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-all shadow-md text-base md:text-lg text-center md:text-left disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full max-w-xl bg-white/10 border border-white/20 backdrop-blur-md px-8 py-4 rounded-full text-white placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50 transition-all shadow-lg text-base md:text-lg text-center md:text-left disabled:opacity-50 disabled:cursor-not-allowed"
             />
 
-            <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto shrink-0 justify-center">
-              <button
-                onClick={handleSubmit}
-                disabled={loading}
-                className="bg-[#FFD700] hover:bg-[#FFC700] text-purple-900 font-bold px-8 py-2 rounded-full flex items-center justify-center gap-3 transition-transform active:scale-95 shadow-lg whitespace-nowrap text-base md:text-lg w-full sm:w-auto disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-[#FFD700]"
-              >
-                {loading ? 'Subscribing...' : 'Book Consultation'}
-                <div className="bg-purple-900 rounded-full p-1.5">
-                  <ArrowRight className={`w-4 h-4 text-[#FFD700] ${loading ? 'animate-pulse' : ''}`} />
-                </div>
-              </button>
-
-              <button
-                onClick={openEnquiry}
-                disabled={loading}
-                className="bg-white hover:bg-gray-50 text-purple-900 font-bold px-8 py-2 rounded-full flex items-center justify-center gap-2 transition-transform active:scale-95 shadow-lg whitespace-nowrap text-base md:text-lg w-full sm:w-auto border border-transparent hover:border-purple-200 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                Get a Quote
-              </button>
-            </div>
+            <button
+              onClick={handleSubmit}
+              disabled={loading}
+              className="bg-[#FFD700] hover:bg-[#FFD700]/90 text-[#310E3F] font-bold px-10 py-4 rounded-full flex items-center justify-center gap-3 transition-all hover:gap-5 active:scale-95 shadow-xl whitespace-nowrap text-base md:text-lg w-full md:w-auto disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {loading ? 'Subscribing...' : 'Subscribe Now'}
+              <div className="bg-[#310E3F] rounded-full p-2">
+                <ArrowRight className={`w-4 h-4 text-[#FFD700] ${loading ? 'animate-pulse' : ''}`} />
+              </div>
+            </button>
           </div>
         </div>
       </div>

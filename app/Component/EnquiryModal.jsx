@@ -106,8 +106,8 @@ export default function EnquiryModal() {
                                         value={formData.name}
                                         onChange={handleChange}
                                         disabled={isSubmitting}
-                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all disabled:bg-gray-100 disabled:cursor-not-allowed"
-                                        placeholder="John Doe"
+                                        className="w-full px-4 py-2 border border-gray-300 text-gray-900 placeholder:text-gray-500 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all disabled:bg-gray-100 disabled:cursor-not-allowed"
+                                        placeholder="Enter your full name"
                                     />
                                 </div>
 
@@ -121,8 +121,8 @@ export default function EnquiryModal() {
                                         value={formData.email}
                                         onChange={handleChange}
                                         disabled={isSubmitting}
-                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all disabled:bg-gray-100 disabled:cursor-not-allowed"
-                                        placeholder="john@example.com"
+                                        className="w-full px-4 py-2 border border-gray-300 text-gray-900 placeholder:text-gray-500 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all disabled:bg-gray-100 disabled:cursor-not-allowed"
+                                        placeholder="Enter your email address"
                                     />
                                 </div>
 
@@ -135,8 +135,8 @@ export default function EnquiryModal() {
                                         value={formData.phone}
                                         onChange={handleChange}
                                         disabled={isSubmitting}
-                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all disabled:bg-gray-100 disabled:cursor-not-allowed"
-                                        placeholder="+1 (555) 000-0000"
+                                        className="w-full px-4 py-2 border border-gray-300 text-gray-900 placeholder:text-gray-500 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all disabled:bg-gray-100 disabled:cursor-not-allowed"
+                                        placeholder="Enter your phone number"
                                     />
                                 </div>
 
@@ -150,8 +150,8 @@ export default function EnquiryModal() {
                                         value={formData.subject}
                                         onChange={handleChange}
                                         disabled={isSubmitting}
-                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all disabled:bg-gray-100 disabled:cursor-not-allowed"
-                                        placeholder="e.g., Web Development Course"
+                                        className="w-full px-4 py-2 border border-gray-300 text-gray-900 placeholder:text-gray-500 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all disabled:bg-gray-100 disabled:cursor-not-allowed"
+                                        placeholder="Enter your subject"
                                     />
                                 </div>
 
@@ -165,8 +165,8 @@ export default function EnquiryModal() {
                                         value={formData.message}
                                         onChange={handleChange}
                                         disabled={isSubmitting}
-                                        className="w-full px-4 py-2 border text-black border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all resize-none disabled:bg-gray-100 disabled:cursor-not-allowed"
-                                        placeholder="Briefly describe your project or needs..."
+                                        className="w-full px-4 py-2 border border-gray-300 text-gray-900 placeholder:text-gray-500 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all resize-none disabled:bg-gray-100 disabled:cursor-not-allowed"
+                                        placeholder="Enter your message"
                                     ></textarea>
                                 </div>
 

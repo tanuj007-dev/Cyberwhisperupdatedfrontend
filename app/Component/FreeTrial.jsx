@@ -4,7 +4,9 @@ import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import pathBg from "./assets/path.webp"
+import { useEnquiry } from '../context/EnquiryContext'
 export default function FreeTrial() {
+    const { openEnquiry } = useEnquiry();
     return (
         <section className="w-full py-8 md:py-16 px-4 md:px-6 font-sans">
             <div className="max-w-7xl mx-auto">
@@ -38,7 +40,10 @@ export default function FreeTrial() {
 
                     {/* Action Button */}
                     <div className="relative z-10 shrink-0 w-full sm:w-auto">
-                        <button className="group relative w-full sm:w-auto flex items-center justify-center bg-[#E4BB03] hover:bg-[#EAB308] text-[#1a1a2e] px-6 sm:px-8 py-3 rounded-full text-base sm:text-lg font-medium transition-all active:scale-95 whitespace-nowrap shadow-lg shadow-black/10">
+                        <button
+                            onClick={openEnquiry}
+                            className="group relative w-full sm:w-auto flex items-center justify-center bg-[#E4BB03] hover:bg-[#EAB308] text-[#1a1a2e] px-6 sm:px-8 py-3 rounded-full text-base sm:text-lg font-medium transition-all active:scale-95 whitespace-nowrap shadow-lg shadow-black/10"
+                        >
                             Get a Quote
                             <div className="ml-3 sm:ml-4 w-8 h-8 sm:w-9 sm:h-9 bg-[#310E3F] rounded-full flex items-center justify-center transition-transform group-hover:translate-x-1">
                                 <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 text-white" />

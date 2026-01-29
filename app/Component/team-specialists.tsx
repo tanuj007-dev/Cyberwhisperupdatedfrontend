@@ -89,7 +89,12 @@ export default function TeamSpecialists() {
                     <span className="bg-[#6B46E5] text-white text-[11px] font-black uppercase px-3 py-1 rounded-md shadow-lg shadow-blue-500/20">Free</span>
                     <p className="text-[#1C0F2D] dark:text-white text-lg font-medium">
                         Let's Create Something Better Together -
-                        <a href="/contact" className="ml-2 text-[#6B46E5] underline decoration-2 underline-offset-4 hover:text-[#6B46E5] transition-colors font-extrabold">
+                        <a
+                            href="https://wa.me/919220946887"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="ml-2 text-[#6B46E5] underline decoration-2 underline-offset-4 hover:text-[#6B46E5] transition-colors font-extrabold"
+                        >
                             Contact Us Today!
                         </a>
                     </p>
