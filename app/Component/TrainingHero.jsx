@@ -118,19 +118,28 @@ export default function TrainingHero() {
                     </div>
 
                     {/* High-Tech Heading */}
-                    <div className="space-y-4 max-w-5xl">
-                        <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white leading-[1.1] tracking-tight drop-shadow-2xl">
+                    <div className="space-y-4 max-w-7xl">
+                        <h1 className="text-3xl md:text-5xl lg:text-[50px] font-bold text-white leading-[1.1] tracking-tight drop-shadow-2xl">
                             1 Year Cyber Security <br />
-                            Diploma Training <span className="relative inline-block">
+                            Diploma Training + <span className="relative inline-block">
                                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-gray-900 via-purple-700 to-purple-900 dark:from-white dark:via-purple-200 dark:to-purple-400">Expert AI Skills</span>
                                 <span className="absolute -bottom-2 left-0 w-full h-1 bg-purple-600 rounded-full shadow-[0_4px_10px_rgba(251,191,36,0.5)]" />
                             </span>
                         </h1>
-                        <div className="flex flex-col md:flex-row items-center justify-center gap-1 md:gap-3 pt-2">
-                            <span className="text-purple-200/80 font-medium tracking-wide text-sm md:text-base">Get Premium Subscription of</span>
-                            <div className="px-4 py-1.5 rounded-lg bg-white/5 border border-purple-500/20 backdrop-blur-md text-white font-bold text-sm tracking-widest hover:border-purple-500/50 transition-colors cursor-pointer group">
-                                WhisperRange
-                                <span className="block h-px w-0 group-hover:w-full bg-purple-500 transition-all duration-300" />
+                        <div className="flex flex-row items-center justify-center gap-4 md:gap-8 lg:gap-12 pt-6 w-full max-w-7xl mx-auto px-2">
+                            {/* Practical Tracks Info */}
+                            <div className="flex items-center gap-x-1.5 text-[10px] md:text-sm lg:text-base text-purple-200/70 whitespace-nowrap">
+                                <span className="font-medium">Practical tracks:</span>
+                                <span className="text-white font-black">SOC L1–L3,</span>
+                                <span className="text-white/80 font-medium">Network Security, Cloud Security, AI Security</span>
+                            </div>
+
+                            {/* Subscription Badge */}
+                            <div className="flex items-center gap-2 md:gap-3 px-3 md:px-5 py-1.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-md shadow-2xl shrink-0">
+                                <span className="text-[9px] md:text-xs lg:text-sm text-purple-200/80 font-medium whitespace-nowrap">Get Premium Subscription of</span>
+                                <div className="px-3 md:px-4 py-1 rounded-full bg-black/40 border border-purple-500/40 text-white font-black text-[9px] md:text-xs lg:text-sm tracking-tight shadow-[0_0_15px_rgba(168,85,247,0.3)] whitespace-nowrap">
+                                    WhisperRange
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -161,7 +170,8 @@ export default function TrainingHero() {
                             <FiDownload className="text-purple-300 w-3 h-3 md:w-4 md:h-4" />
                             <span className="whitespace-nowrap">Download Content</span>
                         </button>
-                        <button className="relative px-3 md:px-6 py-2.5 rounded-xl border border-purple-500/20 hover:border-purple-500/50 text-white font-bold text-xs md:text-sm tracking-wide transition-all bg-[#0a0015]/40 backdrop-blur-md flex-1 md:flex-none whitespace-nowrap">
+                        <button className="relative px-3 md:px-6 py-2.5 rounded-xl border border-purple-500/20 hover:border-purple-500/50 text-white font-bold text-xs md:text-sm tracking-wide transition-all bg-[#0a0015]/40 backdrop-blur-md flex-1 md:flex-none whitespace-nowrap flex items-center justify-center gap-2">
+                            <FaWhatsapp className="text-green-400 w-4 h-4 md:w-5 md:h-5" />
                             Chat on WhatsApp
                         </button>
                     </div>
@@ -216,6 +226,16 @@ export default function TrainingHero() {
                                 </Link>
                             </div>
                         </div>
+                    </div>
+
+                    {/* Additional Information Section */}
+                    <div className="mt-8 max-w-4xl mx-auto text-center space-y-3 px-4">
+                        <p className="text-gray-400 text-[10px] md:text-sm leading-relaxed">
+                            <span className="text-white font-bold">Cyber Range labs included.</span> 4 certification tracks covered in the Diploma curriculum: <span className="text-white font-bold">CCNA, CEH, CompTIA Security+</span> (or <span className="text-white font-bold">CySA+</span>), and <span className="text-white font-bold">AWS Cloud Practitioner</span> (plus additional electives based on your career goal). Internship letter option and placement support for <span className="text-white font-bold">Big 4 (PwC, EY, KPMG, Deloitte)</span> and other companies — as per eligibility and openings.
+                        </p>
+                        <p className="text-purple-300/60 text-[10px] md:text-xs font-medium italic">
+                            Exam/voucher not included unless stated.
+                        </p>
                     </div>
                 </motion.div>
             </div>

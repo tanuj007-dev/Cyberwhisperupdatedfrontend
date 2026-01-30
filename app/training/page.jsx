@@ -1,7 +1,7 @@
 // import Banner from "../Component/Banner";
 import TrainingHero from "../Component/TrainingHero";
 
-import TrainingSection from "../Component/TrainingSection";
+// import TrainingSection from "../Component/TrainingSection";
 import Batches from "../Component/Batches";
 import HelpCenter from "../Component/HelpCenter";
 import Placement from "../Component/Placement";
@@ -25,7 +25,7 @@ export default function TrainingPage() {
         <main className="bg-white dark:bg-black transition-colors duration-300">
             <TrainingHero />
             {/* <Banner /> */}
-            <TrainingSection />
+            {/* <TrainingSection /> */}
             <HelpCenter />
             <Batches />
             <Placement />

@@ -49,7 +49,7 @@ export function AboutHero() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="flex items-center justify-start md:justify-center gap-4 text-gray-600 dark:text-gray-400 font-medium text-sm md:text-base"
+          className="flex items-center justify-start md:justify-center gap-4 text-gray-600 dark:text-gray-400 font-medium text-sm md:text-base mb-8"
         >
           <a href="/" className="hover:text-primary transition-colors hover:scale-105 transform">
             Home
@@ -57,6 +57,15 @@ export function AboutHero() {
           <span className="w-1.5 h-1.5 rounded-full bg-primary/40" />
           <span className="text-gray-900 dark:text-white">About Us</span>
         </motion.div>
+
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5, duration: 0.8 }}
+          className="text-base md:text-lg text-gray-600 dark:text-gray-400 max-w-3xl mx-auto leading-relaxed md:text-center text-left"
+        >
+          Practitioner-led cyber defense, delivered through real-world workflows, hands-on training, and measurable outcomes.
+        </motion.p>
       </div>
     </section>
   )

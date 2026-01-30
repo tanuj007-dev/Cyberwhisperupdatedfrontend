@@ -106,15 +106,19 @@ export default function CompactPremiumDemo() {
             <div className="w-5 h-5 bg-[#6b46e5] shadow-[0_0_15px_rgba(107,70,229,0.5)]"></div>
             <span className="text-[#0f172a] dark:text-white text-sm font-bold tracking-[0.2em] uppercase">PRIORITY ACCESS</span>
           </div>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight">
-
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight mb-4">
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-gray-900 via-purple-700 to-purple-900 dark:from-white dark:via-purple-200 dark:to-purple-400">
-              CyberWhisper High-End Learning Labs
+              Cyber Range Labs — Built for Real Practice
             </span>
           </h2>
-          <p className="mt-3 text-gray-600 justify-between dark:text-gray-300 text-sm md:text-base max-w-6xl mx-auto">
-            • Limited slots • Advanced red-team labs • Priority onboarding for qualified applicants
+          <p className="text-gray-600 dark:text-gray-400 text-base md:text-lg max-w-4xl mx-auto font-medium leading-relaxed">
+            Live mentor-led sessions with hands-on labs you can actually finish and explain in interviews.
           </p>
+          <div className="mt-6 flex flex-wrap justify-center gap-4 text-xs md:text-sm font-mono text-purple-600 dark:text-purple-400 bg-purple-50 dark:bg-purple-900/10 py-2 px-4 rounded-full w-fit mx-auto border border-purple-100 dark:border-purple-800/30">
+            <span>• Limited seats</span>
+            <span>• Live mentoring</span>
+            <span>• Priority onboarding</span>
+          </div>
         </motion.div>
 
         {/* Two Column Layout - Form on Left, Grid on Right */}

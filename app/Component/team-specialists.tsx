@@ -5,11 +5,14 @@ import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { FaFacebookF, FaLinkedinIn, FaInstagram, FaGlobe } from 'react-icons/fa'
 
+import imgSonu from './assets/vikas.png'
+import imgVikas from './assets/sonu.png'
+
 const teamMembers = [
     {
         name: "Sonu Mandecha",
         role: "Co-Founder | Director – Sales & Growth",
-        image: "/team_marcus_1767456277100.webp", // Using existing asset as placeholder
+        image: imgVikas,
         bio: "Leads partnerships, client success, and growth at Cyber Whisper while also driving core delivery across Cyber Threat Intelligence (CTI) and Cyber Range operations. Ensures training and security programs align with real customer needs and measurable outcomes.",
         focusAreas: ["Sales & Partnerships", "Client Success", "CTI Programs", "Cyber Range Operations"],
         socials: {
@@ -22,7 +25,7 @@ const teamMembers = [
     {
         name: "Vikas Chauhan",
         role: "Co-Founder | Training Head | Cybersecurity Researcher & Speaker",
-        image: "/team_marcus_1767456277100.webp", // Using existing asset as placeholder
+        image: imgSonu,
         bio: "Leads Cyber Whisper’s technical vision across Cyber Range, SOC enablement, and hands-on security training. Cybersecurity researcher and speaker focused on building analyst “muscle memory” through realistic labs, detection engineering, and investigation workflows.",
         focusAreas: ["Cyber Range", "SOC Operations", "Training & Enablement", "Research", "Public Speaking"],
         socials: {
@@ -124,9 +127,11 @@ function MobileTeamCard({ member }: { member: typeof teamMembers[0] }) {
                         src={member.image}
                         alt={member.name}
                         fill
+                        priority
+                        unoptimized
                         className="object-cover"
                     />
-                    <div className="absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-transparent" />
+                    <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent" />
                     <div className="absolute bottom-6 left-6 right-6">
                         <h3 className="text-2xl font-bold text-white uppercase tracking-wide">{member.name}</h3>
                         <p className="text-sm text-purple-300 font-medium uppercase tracking-wider mt-1">{member.role.split('|')[0]}</p>
@@ -192,6 +197,8 @@ function DesktopTeamCard({ member, index, setHoveredId, hoveredId }: { member: t
                 src={member.image}
                 alt={member.name}
                 fill
+                priority
+                unoptimized
                 className="object-cover transition-transform duration-1000 ease-out group-hover:scale-110"
             />
 
@@ -258,7 +265,7 @@ function DesktopTeamCard({ member, index, setHoveredId, hoveredId }: { member: t
             </div>
 
             {/* Gradient Scrim */}
-            <div className="absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-transparent opacity-90 group-hover:opacity-60 transition-opacity duration-500" />
+            <div className="absolute inset-0 bg-linear-to-t from-black/90 via-transparent to-transparent opacity-40 group-hover:opacity-30 transition-opacity duration-500" />
         </motion.div>
     );
 }

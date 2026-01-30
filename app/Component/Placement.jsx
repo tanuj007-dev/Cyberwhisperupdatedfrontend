@@ -38,22 +38,76 @@ import brand11 from './assets/Brands/ccec915961367d712558bef60cd354b110bab83f.we
 
 
 const students = [
-    { name: 'Riya Singh', role: 'Cyber Security', companyLogo: brand1, image: img1 },
-    { name: 'Rahul Verma', role: 'Cyber Security', companyLogo: brand2, image: img2 },
-    { name: 'Amit Sharma', role: 'Cyber Security', companyLogo: brand3, image: img3 },
-    { name: 'Ravi Kumar', role: 'Cyber Security', companyLogo: brand4, image: img4 },
-    { name: 'Radhika Verma', role: 'Cyber Security', companyLogo: brand5, image: img5 },
-    { name: 'Neha Gupta', role: 'Cyber Security', companyLogo: brand6, image: img6 },
-    { name: 'Vikram Malhotra', role: 'Cyber Security', companyLogo: brand7, image: img7 },
-    { name: 'Arjun Reddy', role: 'Cyber Security', companyLogo: brand8, image: img8 },
-    { name: 'Neha Reddy', role: 'Cyber Security', companyLogo: brand9, image: img9 },
-    { name: 'Aman Kapoor', role: 'Cyber Security', companyLogo: brand10, image: img10 },
-    { name: 'Rajesh Iyer', role: 'Cyber Security', companyLogo: brand11, image: img11 },
-    { name: 'Keshav Joshi', role: 'Cyber Security', companyLogo: brand1, image: img12 }, // Reusing logos as we have only 11 brands but 16 students
-    { name: 'Manish Tiwari', role: 'Cyber Security', companyLogo: brand2, image: img13 },
-    { name: 'Deepak Mehra', role: 'Cyber Security', companyLogo: brand3, image: img14 },
-    { name: 'Sanjay Dutt', role: 'Cyber Security', companyLogo: brand4, image: img15 },
-    { name: 'Chetan Nair', role: 'Cyber Security', companyLogo: brand5, image: img16 },
+    {
+        name: 'Aditi Sharma (India)',
+        role: 'SOC Analyst (L1)',
+        review: '“The training didn’t feel like lectures. We worked like a real SOC—alerts, evidence, notes, and closure. That structure helped me stay calm in interviews.”',
+        companyLogo: brand1,
+        image: img1
+    },
+    {
+        name: 'Rohan Mehta (India)',
+        role: 'Security Analyst Intern',
+        review: '“Mentor feedback changed everything for me. I learned how to explain my thinking instead of just giving answers. The labs made me faster at triage.”',
+        companyLogo: brand2,
+        image: img2
+    },
+    {
+        name: 'Sneha Iyer (India)',
+        role: 'Junior SOC Analyst',
+        review: '“I finally understood what to do after an alert comes in. The workflow practice and reporting style made my profile stronger and more professional.”',
+        companyLogo: brand3,
+        image: img3
+    },
+    {
+        name: 'Kunal Verma (India)',
+        role: 'Cloud Security Trainee',
+        review: '“Live sessions were very interactive. Whenever I got stuck, the mentor corrected my approach immediately. The labs helped me connect cloud basics with security.”',
+        companyLogo: brand4,
+        image: img4
+    },
+    {
+        name: 'Priya Nair (India)',
+        role: 'SOC Analyst Intern',
+        review: '“Weekly checkpoints kept me consistent. By the end, I was confident reading logs, validating alerts, and writing clean investigation notes.”',
+        companyLogo: brand5,
+        image: img5
+    },
+    {
+        name: 'Daniel Kim (USA)',
+        role: 'Security Operations Associate',
+        review: '“The best part was the practical investigation method. It improved how I validate alerts and document decisions. It felt job-focused, not theoretical.”',
+        companyLogo: brand6,
+        image: img6
+    },
+    {
+        name: 'Emily Carter (UK)',
+        role: 'Entry-Level SOC Analyst',
+        review: '“I liked that it’s mentor-led. You can ask questions anytime and get real guidance. The labs made me confident in interviews because I had proof of work.”',
+        companyLogo: brand7,
+        image: img7
+    },
+    {
+        name: 'Lucas Schneider (Germany)',
+        role: 'Junior Security Analyst',
+        review: '“Solid hands-on learning. The labs taught me how to reduce false positives and think clearly under pressure. It built real discipline.”',
+        companyLogo: brand8,
+        image: img8
+    },
+    {
+        name: 'Sofia Martinez (Spain)',
+        role: 'Cybersecurity Analyst Intern',
+        review: '“It’s not one-way teaching. The live sessions and corrections helped me learn faster. I started understanding the ‘why’ behind each step.”',
+        companyLogo: brand9,
+        image: img9
+    },
+    {
+        name: 'Ahmed Hassan (UAE)',
+        role: 'SOC Analyst (L1)',
+        review: '“The training is practice-first. I learned how to communicate findings clearly and present investigations properly. That was the key improvement for me.”',
+        companyLogo: brand10,
+        image: img10
+    }
 ];
 
 export default function Placement() {
@@ -134,25 +188,25 @@ function Carousel({ students }) {
             onMouseEnter={() => setIsAutoPlaying(false)}
             onMouseLeave={() => setIsAutoPlaying(true)}
         >
-            <div className="relative w-full max-w-7xl h-[480px] flex items-center justify-center overflow-visible">
+            <div className="relative w-full max-w-7xl h-[400px] flex items-center justify-center overflow-visible">
                 {/* 
                   Using Layout Group or AnimatePresence for smooth transitions.
                   We render the 3 cards in valid positions.
                 */}
-                <div className="flex items-center justify-center gap-4 md:gap-8 lg:gap-10 w-full perspective-1000">
+                <div className="flex items-center justify-center gap-4 md:gap-6 w-full perspective-1000">
 
                     {/* Previous Card */}
-                    <div className="hidden md:block flex-1 max-w-[320px] transition-all duration-500 ease-in-out transform scale-90 opacity-100 z-0">
+                    <div className="hidden md:block flex-1 max-w-[280px] transition-all duration-500 ease-in-out transform scale-90 opacity-100 z-0">
                         <StudentCard student={students[(activeIndex - 1 + students.length) % students.length]} isActive={false} />
                     </div>
 
                     {/* Active Card */}
-                    <div className="w-full max-w-[360px] md:max-w-[400px] z-20 scale-100 transition-all duration-500 ease-in-out">
+                    <div className="w-full max-w-[320px] md:max-w-[340px] z-20 scale-100 transition-all duration-500 ease-in-out">
                         <StudentCard student={students[activeIndex]} isActive={true} />
                     </div>
 
                     {/* Next Card */}
-                    <div className="hidden md:block flex-1 max-w-[320px] transition-all duration-500 ease-in-out transform scale-90 opacity-100 z-0">
+                    <div className="hidden md:block flex-1 max-w-[280px] transition-all duration-500 ease-in-out transform scale-90 opacity-100 z-0">
                         <StudentCard student={students[(activeIndex + 1) % students.length]} isActive={false} />
                     </div>
 
@@ -160,23 +214,23 @@ function Carousel({ students }) {
             </div>
 
             {/* Navigation Buttons */}
-            <div className="flex gap-4 mt-8">
+            <div className="flex gap-4 mt-4">
                 <button
                     onClick={prevSlide}
-                    className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 shadow-lg text-gray-700 dark:text-gray-300 hover:bg-purple-100 dark:hover:bg-purple-900/30 hover:text-purple-700 transition-all duration-300"
+                    className="w-10 h-10 flex items-center justify-center rounded-full bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 shadow-lg text-gray-700 dark:text-gray-300 hover:bg-purple-100 dark:hover:bg-purple-900/30 hover:text-purple-700 transition-all duration-300"
                 >
-                    <ArrowRight className="w-5 h-5 rotate-180" />
+                    <ArrowRight className="w-4 h-4 rotate-180" />
                 </button>
                 <button
                     onClick={nextSlide}
-                    className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 shadow-lg text-gray-700 dark:text-gray-300 hover:bg-purple-100 dark:hover:bg-purple-900/30 hover:text-purple-700 transition-all duration-300"
+                    className="w-10 h-10 flex items-center justify-center rounded-full bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 shadow-lg text-gray-700 dark:text-gray-300 hover:bg-purple-100 dark:hover:bg-purple-900/30 hover:text-purple-700 transition-all duration-300"
                 >
-                    <ArrowRight className="w-5 h-5" />
+                    <ArrowRight className="w-4 h-4" />
                 </button>
             </div>
 
             {/* Dots */}
-            <div className="flex gap-2 mt-6">
+            <div className="flex gap-1.5 mt-4">
                 {students.map((_, idx) => (
                     <button
                         key={idx}
@@ -184,8 +238,8 @@ function Carousel({ students }) {
                             setDirection(idx > activeIndex ? 1 : -1);
                             setActiveIndex(idx);
                         }}
-                        className={`w-2 h-2 rounded-full transition-all duration-300 ${idx === activeIndex
-                            ? 'w-6 bg-purple-600'
+                        className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${idx === activeIndex
+                            ? 'w-4 bg-purple-600'
                             : 'bg-gray-300 dark:bg-gray-700 hover:bg-purple-400'
                             }`}
                     />
@@ -198,14 +252,14 @@ function Carousel({ students }) {
 function StudentCard({ student, isActive }) {
     return (
         <div className={`
-            relative flex flex-col items-center text-center rounded-[2rem] p-8 transition-all duration-500 min-h-[440px] border
+            relative flex flex-col items-center text-center rounded-[1.5rem] p-6 transition-all duration-500 min-h-[380px] border
             ${isActive
                 ? 'bg-gradient-to-b from-[#854CE6] to-[#6b35c5] text-white shadow-[0_20px_50px_rgba(133,76,230,0.4)] scale-105 border-transparent z-10'
                 : 'bg-white dark:bg-zinc-900 text-gray-900 dark:text-white border-gray-100 dark:border-white/10 shadow-xl opacity-90 hover:opacity-100'
             }
         `}>
             {/* Cyber Grid Pattern Background */}
-            <div className="absolute inset-0 opacity-10 pointer-events-none rounded-[2rem] overflow-hidden">
+            <div className="absolute inset-0 opacity-10 pointer-events-none rounded-[1.5rem] overflow-hidden">
                 <Image src={gridImage} alt="Grid" fill className="object-cover" />
             </div>
 
@@ -215,54 +269,54 @@ function StudentCard({ student, isActive }) {
             )}
 
             {/* Profile Image */}
-            <div className={`mb-6 relative transition-transform duration-500 ${isActive ? 'scale-110' : 'scale-100'}`}>
+            <div className={`mb-4 relative transition-transform duration-500 ${isActive ? 'scale-105' : 'scale-100'}`}>
                 <div className={`
-                    w-32 h-32 rounded-full p-1.5 shadow-lg
+                    w-20 h-20 rounded-full p-1 shadow-lg
                     ${isActive ? 'bg-white/20 backdrop-blur-sm' : 'bg-gray-100 dark:bg-zinc-800'}
                  `}>
-                    <div className="w-full h-full rounded-full overflow-hidden relative border-4 border-white dark:border-zinc-800">
+                    <div className="w-full h-full rounded-full overflow-hidden relative border-2 border-white dark:border-zinc-800">
                         <Image src={student.image} alt={student.name} fill className="object-cover" />
                     </div>
                 </div>
                 {/* Status Indicator */}
-                <div className={`absolute bottom-2 right-2 w-6 h-6 rounded-full border-4 border-white dark:border-zinc-900 flex items-center justify-center ${isActive ? 'bg-green-400' : 'bg-gray-400'}`}>
-                    <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
+                <div className={`absolute bottom-1 right-1 w-4 h-4 rounded-full border-2 border-white dark:border-zinc-900 flex items-center justify-center ${isActive ? 'bg-green-400' : 'bg-gray-400'}`}>
+                    <div className="w-1.5 h-1.5 bg-white rounded-full animate-pulse" />
                 </div>
             </div>
 
             {/* Name */}
-            <h3 className={`text-2xl font-bold mb-1 ${isActive ? 'text-white' : 'text-gray-900 dark:text-white'}`}>
+            <h3 className={`text-lg font-bold mb-0.5 ${isActive ? 'text-white' : 'text-gray-900 dark:text-white'}`}>
                 {student.name}
             </h3>
 
             {/* Role */}
-            <p className={`text-xs font-bold tracking-[0.2em] uppercase mb-8 ${isActive ? 'text-purple-200' : 'text-purple-600 dark:text-purple-400'}`}>
+            <p className={`text-[9px] font-bold tracking-[0.2em] uppercase mb-3 ${isActive ? 'text-purple-200' : 'text-purple-600 dark:text-purple-400'}`}>
                 {student.role}
             </p>
 
-            {/* Highlight/Score Section */}
-            <div className={`mt-auto w-full flex flex-col items-center gap-3`}>
-                <span className={`text-[10px] uppercase font-bold tracking-wider opacity-80 ${isActive ? 'text-white' : 'text-gray-500 dark:text-gray-400'}`}>
+            {/* Quote */}
+            <div className={`mb-auto text-[11px] italic leading-relaxed px-2 ${isActive ? 'text-white/80' : 'text-gray-500 dark:text-gray-400'}`}>
+                {student.review}
+            </div>
+
+            {/* Placeat At */}
+            <div className={`mt-4 w-full flex flex-col items-center gap-1.5`}>
+                <span className={`text-[9px] uppercase font-bold tracking-wider opacity-80 ${isActive ? 'text-white' : 'text-gray-500 dark:text-gray-400'}`}>
                     Placed At
                 </span>
 
                 <div className={`
-                    relative w-48 h-20 flex items-center justify-center p-4 rounded-2xl
-                    ${isActive ? 'bg-white shadow-[0_10px_20px_rgba(0,0,0,0.1)]' : 'bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10'}
+                    relative w-28 h-10 flex items-center justify-center p-1.5 rounded-lg
+                    ${isActive ? 'bg-white shadow-[0_5px_15px_rgba(0,0,0,0.1)]' : 'bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10'}
                 `}>
                     <Image
                         src={student.companyLogo}
                         alt="Company"
-                        className={`object-contain max-w-full max-h-full transition-all duration-300 ${isActive ? 'grayscale-0' : 'grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100'}`}
-                        width={140}
-                        height={60}
+                        className={`object-contain max-w-full max-h-full transition-all duration-300 ${isActive ? 'grayscale-0' : 'grayscale opacity-70'}`}
+                        width={80}
+                        height={30}
                     />
                 </div>
-            </div>
-
-            {/* Quote */}
-            <div className={`mt-6 text-sm italic leading-relaxed px-4 ${isActive ? 'text-white/80' : 'text-gray-500 dark:text-gray-400'}`}>
-                "Cyber Whisper transformed my career with real-world skills."
             </div>
         </div>
     );

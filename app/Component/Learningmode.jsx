@@ -2,7 +2,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { ArrowRight, MonitorPlay, Users, Building2, Terminal, Shield, Cpu, ChevronRight } from 'lucide-react';
+import { MonitorPlay, Users, Building2, Terminal, Cpu, ChevronRight } from 'lucide-react';
 
 // Using suitable existing assets as placeholders for the learning modes
 import imgClassroom from './assets/cyber_classroom.png';
@@ -14,9 +14,13 @@ const modes = [
         id: 'classroom',
         title: 'Classroom_Training',
         subtitle: 'IMMERSIVE_OPS',
-        description: 'Hands-on VILT sessions with real-time expert interaction in a controlled environment.',
-        features: ['Real-time Mentorship', 'Hardware Labs', 'Red Team Sims'],
-        btnText: 'Join_Classroom',
+        description: 'Hands-on instructor-led training with real-time guidance in a controlled lab environment.',
+        features: [
+            'Real-time mentorship & doubt clearing',
+            'Cyber Range lab practice during sessions',
+            'Red/Blue team exercises & reporting drills'
+        ],
+        btnText: 'JOIN_CLASSROOM',
         image: imgClassroom,
         icon: Users,
         color: 'border-cyan-500/50 shadow-cyan-500/20',
@@ -27,9 +31,13 @@ const modes = [
         id: 'online',
         title: 'Online_access',
         subtitle: 'REMOTE_UPLINK',
-        description: 'Premium pre-recorded sessions and virtual labs. Access the mainframe from anywhere.',
-        features: ['Lifetime Access', '24/7 Virtual Labs', 'Self-paced Modules'],
-        btnText: 'Start_Uplink',
+        description: 'Live virtual sessions with guided labs—train from anywhere without losing interaction.',
+        features: [
+            'Live mentor-led classes (not recorded-only)',
+            'Remote Cyber Range + CTF practice',
+            'Flexible batches for students & professionals'
+        ],
+        btnText: 'START_UPLINK',
         image: imgOnline,
         icon: MonitorPlay,
         color: 'border-purple-500/50 shadow-purple-500/20',
@@ -40,9 +48,13 @@ const modes = [
         id: 'corporate',
         title: 'Corporate_Sec',
         subtitle: 'TEAM_DEPLOYMENT',
-        description: 'Customized upskilling programs for your defense squad. Fortify your workforce.',
-        features: ['Custom Curriculum', 'Skill Tracking', 'Zero-day Prep'],
-        btnText: 'Deploy_Team',
+        description: 'Customized upskilling for corporate teams with role-based learning and measurable outcomes.',
+        features: [
+            'Custom curriculum mapped to your roles/tools',
+            'Skill tracking + assessment reporting',
+            'Team exercises, simulations & readiness review'
+        ],
+        btnText: 'DEPLOY_TEAM',
         image: imgCorporate,
         icon: Building2,
         color: 'border-emerald-500/50 shadow-emerald-500/20',
@@ -72,13 +84,16 @@ export default function LearningMode() {
                         className="inline-flex items-center gap-2 mb-4 px-3 py-1 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-sm shadow-sm dark:shadow-none"
                     >
                         <Terminal className="w-3.5 h-3.5 text-purple-600 dark:text-green-400" />
-                        <span className="text-xs font-mono text-purple-600 dark:text-green-400 tracking-widest">SYSTEM_MODES // SELECT_PROTOCOL</span>
+                        <span className="text-xs font-mono text-purple-600 dark:text-green-400 tracking-widest uppercase">SYSTEM MODES // SELECT PROTOCOL</span>
                     </motion.div>
 
                     <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 tracking-tight">
                         <span className="text-gray-900 dark:text-white">DEPLOYMENT </span>
-                        <span className="bg-clip-text text-transparent bg-gradient-to-r from-gray-900 via-purple-700 to-purple-900 dark:from-white dark:via-purple-200 dark:to-purple-400">OPTIONS</span>
+                        <span className="bg-clip-text text-transparent bg-linear-to-r from-gray-900 via-purple-700 to-purple-900 dark:from-white dark:via-purple-200 dark:to-purple-400">OPTIONS</span>
                     </h2>
+                    <p className="text-gray-600 dark:text-gray-400 text-sm md:text-base font-mono max-w-2xl mx-auto">
+                        Choose how you want to train—classroom, online, or team deployment.
+                    </p>
                 </div>
 
                 {/* Cyber Cards Grid */}
