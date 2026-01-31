@@ -49,17 +49,19 @@ export function AboutVision() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
-              className="space-y-3"
+              className="space-y-6"
             >
-              <div className="inline-flex items-center gap-3">
-                <div className="w-5 h-5 bg-[#6b46e5] shadow-[0_0_15px_rgba(107,70,229,0.5)]"></div>
-                <span className="text-[#0f172a] dark:text-white text-sm font-bold tracking-[0.2em] uppercase">OUR STORY</span>
+              <div className="space-y-3 flex flex-col items-center text-center lg:items-start lg:text-left">
+                <div className="inline-flex items-center gap-3">
+                  <div className="w-5 h-5 bg-[#6b46e5] shadow-[0_0_15px_rgba(107,70,229,0.5)]"></div>
+                  <span className="text-[#0f172a] dark:text-white text-sm font-bold tracking-[0.2em] uppercase">OUR STORY</span>
+                </div>
+                <h2 className="text-2xl md:text-4xl lg:text-[44px] font-bold text-gray-900 dark:text-white leading-[1.1] tracking-tight">
+                  Get started <br />
+                  <span className="text-primary">Cyber Defense</span>
+                </h2>
               </div>
-              <h2 className="text-2xl md:text-4xl lg:text-[44px] font-bold text-gray-900 dark:text-white leading-[1.1] tracking-tight">
-                Your Trusted Partner for <br />
-                <span className="text-primary">Cyber Defense</span>
-              </h2>
-              <p className="text-gray-600 dark:text-gray-400 text-sm md:text-[15px] leading-relaxed">
+              <p className="text-gray-600 dark:text-gray-400 text-sm md:text-[15px] leading-relaxed text-justify lg:text-left">
                 Cyber Whisper is built by cybersecurity practitioners focused on outcomes, not noise. We help organizations strengthen detection and response, enable SOC teams with repeatable workflows, and train analysts using realistic labs that build true muscle memory. From advisory to implementation to training, the goal is the same: reduce risk and improve readiness.
               </p>
             </motion.div>
@@ -97,7 +99,7 @@ export function AboutVision() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.4, duration: 0.6 }}
-              className="flex flex-wrap items-center gap-6 pt-4"
+              className="flex flex-col sm:flex-row items-center gap-4 md:gap-6 pt-4"
             >
               <Link href="/services" className="w-full sm:w-auto">
                 <button className="py-4 px-14 rounded-full bg-primary text-white font-bold uppercase tracking-wider text-[12px] hover:bg-primary/90 transition-all hover:scale-105 shadow-lg shadow-primary/20 w-full">
@@ -108,15 +110,10 @@ export function AboutVision() {
                 href="https://wa.me/919220946887"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-3 px-4 py-2 rounded-full bg-black/10 dark:bg-white/5 transition-all group cursor-pointer shrink-0"
+                className="w-full sm:w-auto py-4 px-10 flex items-center justify-center gap-3 rounded-full bg-transparent border border-primary dark:text-white font-bold uppercase tracking-wider text-[12px] hover:bg-primary/90 transition-all hover:scale-105 shadow-lg shadow-primary/20"
               >
-                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all">
-                  <Phone className="w-4 h-4" />
-                </div>
-                <div>
- 
-                  <p className="text-[15px] font-bold text-gray-900 dark:text-white">Talk to an Expert</p>
-                </div>
+                <Phone className="w-4 h-4" />
+                <span>Talk to an Expert</span>
               </a>
             </motion.div>
           </div>

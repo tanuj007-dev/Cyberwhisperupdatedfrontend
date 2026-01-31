@@ -50,7 +50,7 @@ export default function B2BResilience() {
             title: "Strategic Cyber Consulting",
             description: "Security is costly when reactive. We provide architecture roadmaps and risk assessments tailored to your budget, translating technical gaps into a clear executive strategy.",
             bestFor: "CISOs, CTOs & Growth-Stage Startups",
-            cta: "Get a Quote"
+            cta: "Book a Demo"
         },
         {
             icon: ShieldCheck,

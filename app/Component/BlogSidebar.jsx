@@ -21,7 +21,7 @@ export default function BlogSidebar() {
                 : 'http://localhost:3000'
 
             // Fetch only 3 latest articles for sidebar
-            const apiUrl = `${baseUrl}/api/blogs/list?page=1&limit=3`
+            const apiUrl = `${baseUrl}/api/blogs/list?page=1&limit=5`
             console.log('Fetching latest articles for sidebar:', apiUrl)
 
             const response = await fetch(apiUrl)
@@ -41,7 +41,7 @@ export default function BlogSidebar() {
                 articles = result
             }
 
-            setLatestArticles(articles.slice(0, 3)) // Ensure max 3 articles
+            setLatestArticles(articles.slice(0, 5)) // Ensure max 3 articles
         } catch (err) {
             console.error('Error fetching latest articles:', err)
             // Keep empty array on error
@@ -117,20 +117,7 @@ export default function BlogSidebar() {
             </div>
 
             {/* Newsletter Section */}
-            <div className="bg-[#1C0F2D] rounded-2xl p-8 text-white relative overflow-hidden group">
-                <div className="relative z-10 space-y-4">
-                    <h3 className="text-xl font-bold">Secure Your Business</h3>
-                    <p className="text-slate-300 text-sm leading-relaxed">
-                        Get the latest security updates and threat alerts directly in your inbox.
-                    </p>
-                    <button className="w-full py-3 bg-[#6B46E5] hover:bg-[#5A3AC7] text-white rounded-xl font-bold transition-all">
-                        Subscribe Now
-                    </button>
-                </div>
-
-                {/* Decorative circle */}
-                <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-[#6B46E5]/20 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700" />
-            </div>
+        
         </aside>
     )
 }

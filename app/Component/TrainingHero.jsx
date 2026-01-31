@@ -19,7 +19,7 @@ export default function TrainingHero() {
     const [billingCycle, setBillingCycle] = React.useState('monthly');
 
     return (
-        <section className="relative w-full pt-28 md:pt-12 pb-6 md:pb-8 overflow-hidden bg-[#02000d] font-sans transition-colors duration-500">
+        <section className="relative w-full pt-20 md:pt-12 pb-8 md:pb-12 overflow-hidden bg-[#02000d] font-sans transition-colors duration-500">
 
             {/* Premium Background Layer */}
             <div className="absolute inset-0 pointer-events-none">
@@ -64,15 +64,6 @@ export default function TrainingHero() {
                     />
                 </div>
 
-                {/* Main Background Image - Subtle Overlay */}
-                {/* <Image
-                        src={essentialsBg}
-                        alt="Cyber Background"
-                        fill
-                        className="object-cover opacity-70 dark:opacity-70 mix-blend-overlay z-10"
-                        priority
-                    /> */}
-
                 {/* Radial Overlays for Focus & Content Contrast */}
                 <div className="absolute inset-0 bg-radial-gradient from-transparent via-[#02000d]/60 to-[#02000d] z-20" />
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,#6F2DFF15,transparent_70%)] z-20" />
@@ -88,10 +79,10 @@ export default function TrainingHero() {
             <div className="absolute inset-0 pointer-events-none z-0">
                 <Particles
                     particleColors={['#ffffff', '#a855f7', '#6366f1']}
-                    particleCount={100}
+                    particleCount={80}
                     particleSpread={20}
                     speed={0.04}
-                    particleBaseSize={60}
+                    particleBaseSize={50}
                     moveParticlesOnHover={true}
                     alphaParticles={true}
                     className="opacity-20 dark:opacity-30"
@@ -101,43 +92,43 @@ export default function TrainingHero() {
             {/* Dynamic Glows - Centered */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-primary/10 blur-[120px] rounded-full animate-pulse-slow pointer-events-none" />
 
-
-            <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center text-center">
+            <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center text-center">
 
                 {/* Main Content Area */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                    className="flex flex-col items-center space-y-4"
+                    className="flex flex-col items-center space-y-5 md:space-y-6"
                 >
                     {/* Admission Badge */}
-                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#0a0015]/60 border border-purple-500/30 backdrop-blur-md w-fit animate-fade-in shadow-[0_0_15px_rgba(168,85,247,0.2)]">
-                        <span className="flex h-2.5 w-2.5 rounded-full bg-purple-400 animate-pulse shadow-[0_0_8px_rgba(192,132,252,0.8)]" />
-                        <span className="text-white/90 font-bold uppercase tracking-[0.1em] text-[11px]">Admissions Now Open For 2026</span>
+                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#0a0015]/70 border border-purple-500/30 backdrop-blur-md w-fit animate-fade-in shadow-[0_0_15px_rgba(168,85,247,0.2)]">
+                        <span className="flex h-2 w-2 rounded-full bg-purple-400 animate-pulse shadow-[0_0_8px_rgba(192,132,252,0.8)]" />
+                        <span className="text-white font-bold uppercase tracking-[0.05em] text-[11px] md:text-[11px]">Admissions Now Open For 2026</span>
                     </div>
 
                     {/* High-Tech Heading */}
-                    <div className="space-y-4 max-w-7xl">
-                        <h1 className="text-3xl md:text-5xl lg:text-[50px] font-bold text-white leading-[1.1] tracking-tight drop-shadow-2xl">
-                            1 Year Cyber Security <br />
-                            Diploma Training + <span className="relative inline-block">
+                    <div className="space-y-5 max-w-4xl">
+                        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[54px] font-bold text-white leading-tight md:leading-[1.1] tracking-tight drop-shadow-2xl px-2">
+                            1 Year Cyber Security <br className="hidden md:block" />
+                            Diploma Training + <span className="relative inline-block mt-1 md:mt-0">
                                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-gray-900 via-purple-700 to-purple-900 dark:from-white dark:via-purple-200 dark:to-purple-400">Expert AI Skills</span>
-                                <span className="absolute -bottom-2 left-0 w-full h-1 bg-purple-600 rounded-full shadow-[0_4px_10px_rgba(251,191,36,0.5)]" />
+                                <span className="absolute -bottom-1 md:-bottom-2 left-0 w-full h-1 bg-purple-600 rounded-full shadow-[0_4px_10px_rgba(251,191,36,0.5)]" />
                             </span>
                         </h1>
-                        <div className="flex flex-row items-center justify-center gap-4 md:gap-8 lg:gap-12 pt-6 w-full max-w-7xl mx-auto px-2">
+
+                        <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8 pt-4 md:pt-6 w-full max-w-3xl mx-auto px-2">
                             {/* Practical Tracks Info */}
-                            <div className="flex items-center gap-x-1.5 text-[10px] md:text-sm lg:text-base text-purple-200/70 whitespace-nowrap">
+                            <div className="flex flex-wrap items-center justify-center gap-x-2 text-xs md:text-sm lg:text-base text-purple-200/80">
                                 <span className="font-medium">Practical tracks:</span>
                                 <span className="text-white font-black">SOC L1–L3,</span>
                                 <span className="text-white/80 font-medium">Network Security, Cloud Security, AI Security</span>
                             </div>
 
                             {/* Subscription Badge */}
-                            <div className="flex items-center gap-2 md:gap-3 px-3 md:px-5 py-1.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-md shadow-2xl shrink-0">
-                                <span className="text-[9px] md:text-xs lg:text-sm text-purple-200/80 font-medium whitespace-nowrap">Get Premium Subscription of</span>
-                                <div className="px-3 md:px-4 py-1 rounded-full bg-black/40 border border-purple-500/40 text-white font-black text-[9px] md:text-xs lg:text-sm tracking-tight shadow-[0_0_15px_rgba(168,85,247,0.3)] whitespace-nowrap">
+                            <div className="flex items-center gap-2 md:gap-3 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-md shadow-2xl">
+                                <span className="text-[11px] md:text-xs lg:text-sm text-purple-200/90 font-medium whitespace-nowrap">Get Premium Subscription of</span>
+                                <div className="px-2.5 py-0.5 rounded-full bg-purple-600/40 border border-purple-500/40 text-white font-black text-[10px] md:text-xs lg:text-sm tracking-tight shadow-[0_0_15px_rgba(168,85,247,0.3)]">
                                     WhisperRange
                                 </div>
                             </div>
@@ -145,92 +136,85 @@ export default function TrainingHero() {
                     </div>
 
                     {/* Program Metrics Row */}
-                    <div className="flex flex-nowrap items-center justify-center gap-4 md:gap-6 w-full py-3 border-y border-white/5 bg-[#0a0015]/20 backdrop-blur-sm overflow-x-auto no-scrollbar px-4 md:px-0 scroll-smooth">
+                    <div className="flex flex-nowrap items-center justify-start md:justify-center gap-4 md:gap-10 w-full py-4 md:py-5 border-y border-white/5 bg-[#0a0015]/30 backdrop-blur-sm px-4 overflow-x-auto no-scrollbar scroll-smooth">
                         {[
                             { label: 'DURATION', value: '12 Months', icon: FaCalendarAlt, color: 'text-purple-400' },
                             { label: 'LANGUAGE', value: 'Hindi | English', icon: FaGlobe, color: 'text-white' },
                             { label: 'MODE', value: 'Online | Offline', icon: IoLogoWhatsapp, color: 'text-purple-300' }
                         ].map((item, i) => (
-                            <div key={i} className="flex flex-col md:flex-row items-center gap-2 md:gap-4 group shrink-0">
-                                <div className="p-2 md:p-3 rounded-2xl bg-purple-900/10 border border-purple-500/20 group-hover:border-purple-400/40 transition-all">
-                                    <item.icon className={`w-4 h-4 md:w-6 md:h-6 ${item.color}`} />
+                            <div key={i} className="flex flex-row items-center gap-2 md:gap-4 group shrink-0">
+                                <div className="p-1.5 md:p-3 rounded-lg md:rounded-2xl bg-purple-900/10 border border-purple-500/20 group-hover:border-purple-400/40 transition-all">
+                                    <item.icon className="w-4 h-4 md:w-6 md:h-6 text-purple-400" />
                                 </div>
-                                <div className="text-center md:text-left">
-                                    <span className="block text-[8px] md:text-[10px] text-purple-200/60 font-bold tracking-[0.2em]">{item.label}</span>
-                                    <span className="text-white font-bold text-xs md:text-lg whitespace-nowrap">{item.value}</span>
+                                <div className="text-left">
+                                    <span className="block text-[8px] md:text-[10px] text-purple-200/70 font-bold tracking-[0.1em] md:tracking-[0.15em]">{item.label}</span>
+                                    <span className="text-white font-bold text-[11px] md:text-lg whitespace-nowrap">{item.value === 'Online/Offline' ? 'Online | Offline' : item.value}</span>
                                 </div>
-                                {i < 2 && <div className="hidden lg:block w-px h-10 bg-white/10 ml-6" />}
+                                {i < 2 && <div className="hidden md:block w-px h-8 bg-white/10 ml-4 md:ml-6" />}
                             </div>
                         ))}
                     </div>
 
                     {/* Action Bar */}
-                    <div className="flex flex-row items-center justify-center gap-2 md:gap-3 pt-3 w-full px-2 md:px-0">
-                        <button className="relative px-3 md:px-6 py-2.5 rounded-xl bg-purple-600/20 border border-purple-500/30 text-white font-bold text-xs md:text-sm tracking-wide hover:bg-purple-600/30 transition-all flex items-center justify-center gap-2 md:gap-3 flex-1 md:flex-none">
-                            <FiDownload className="text-purple-300 w-3 h-3 md:w-4 md:h-4" />
+                    <div className="flex flex-row items-center justify-center gap-4 pt-2 w-full max-w-md px-4">
+                        <button className="relative px-4 py-3 rounded-xl bg-purple-600/20 border border-purple-500/30 text-white font-bold text-xs md:text-sm tracking-wide hover:bg-purple-600/30 transition-all flex items-center justify-center gap-2 flex-1 shadow-lg shadow-purple-900/40">
+                            <FiDownload className="text-purple-300 w-4 h-4" />
                             <span className="whitespace-nowrap">Download Content</span>
                         </button>
-                        <button className="relative px-3 md:px-6 py-2.5 rounded-xl border border-purple-500/20 hover:border-purple-500/50 text-white font-bold text-xs md:text-sm tracking-wide transition-all bg-[#0a0015]/40 backdrop-blur-md flex-1 md:flex-none whitespace-nowrap flex items-center justify-center gap-2">
-                            <FaWhatsapp className="text-green-400 w-4 h-4 md:w-5 md:h-5" />
+                        <button className="relative px-4 py-3 rounded-xl border border-purple-500/20 hover:border-purple-500/50 text-white font-bold text-xs md:text-sm tracking-wide transition-all bg-[#0a0015]/40 backdrop-blur-md flex-1 whitespace-nowrap flex items-center justify-center gap-2">
+                            <FaWhatsapp className="text-green-400 w-5 h-5" />
                             Chat on WhatsApp
                         </button>
                     </div>
 
                     {/* Subscription Pricing Card */}
-                    {/* Subscription Pricing Card */}
-                    <div className="w-full max-w-4xl p-0.5 md:p-1 rounded-3xl bg-gradient-to-br from-primary/20 via-white/5 to-transparent backdrop-blur-xl mt-3 md:mt-4">
-                        <div className="bg-[#02000d]/60 rounded-[1.4rem] p-4 md:p-6 flex flex-col md:flex-row items-center justify-between gap-4 border border-white/5">
+                    <div className="w-full max-w-4xl p-px rounded-2xl md:rounded-3xl bg-gradient-to-br from-primary/30 via-white/10 to-transparent backdrop-blur-xl mt-3 md:mt-4 px-2 md:px-0">
+                        <div className="bg-[#02000d]/80 rounded-[0.95rem] md:rounded-[1.4rem] p-3.5 md:p-6 flex flex-col md:flex-row items-center justify-between gap-3 md:gap-5 border border-white/5">
                             <div className="text-center md:text-left space-y-0.5 md:space-y-1">
-                                <span className="text-purple-300 font-bold text-[10px] md:text-sm tracking-widest uppercase">Cyber Range</span>
-                                <h4 className="text-white font-bold text-lg md:text-xl">Individual Subscription</h4>
-                                <span className="text-purple-200/70 font-bold text-[10px] md:text-xs uppercase tracking-wider block">CTF included</span>
+                                <span className="text-purple-400 font-bold text-[9px] md:text-xs tracking-[0.2em] uppercase">Cyber Range</span>
+                                <h4 className="text-white font-bold text-[17px] md:text-xl leading-tight">Individual Subscription</h4>
+                                <span className="text-purple-200/70 font-bold text-[9px] md:text-xs uppercase tracking-wider block">CTF included</span>
                             </div>
 
-                            <div className="flex flex-row md:flex-col items-center gap-3 md:gap-2">
-                                <div className="flex items-baseline gap-1 md:gap-2">
-                                    <span className="text-white font-bold text-lg md:text-3xl">
+                            <div className="flex items-center gap-4 md:gap-5">
+                                <div className="flex items-baseline gap-1.5 md:gap-2">
+                                    <span className="text-white font-black text-2xl md:text-3xl">
                                         {billingCycle === 'monthly' ? '₹1,999' : '₹19,999'}
                                     </span>
-                                    <span className="text-purple-200/60 text-xs md:text-sm">
-                                        {billingCycle === 'monthly' ? '/month' : '/year'}
+                                    <span className="text-purple-200/50 text-[11px] md:text-sm">
+                                        /{billingCycle === 'monthly' ? 'mo' : 'yr'}
                                     </span>
                                 </div>
-                                <div className="flex items-center bg-purple-900/20 rounded-full p-0.5 md:p-1 border border-purple-500/20 order-last md:order-none">
+                                <div className="flex items-center bg-white/5 rounded-lg p-0.5 md:p-1 border border-white/10 shrink-0">
                                     <button
                                         onClick={() => setBillingCycle('monthly')}
-                                        className={`px-3 py-0.5 md:py-1 rounded-full text-[10px] md:text-xs font-bold transition-all ${billingCycle === 'monthly'
-                                            ? 'bg-purple-600/30 text-white shadow-lg'
-                                            : 'text-purple-300/60 hover:text-white'
-                                            }`}
+                                        className={`px-2.5 py-1 md:px-3 md:py-1.5 rounded-md text-[10px] md:text-xs font-bold transition-all ${billingCycle === 'monthly' ? 'bg-purple-600 text-white shadow-lg' : 'text-purple-300/60'}`}
                                     >
                                         M
                                     </button>
                                     <button
                                         onClick={() => setBillingCycle('yearly')}
-                                        className={`px-3 py-0.5 md:py-1 rounded-full text-[10px] md:text-xs font-bold transition-all ${billingCycle === 'yearly'
-                                            ? 'bg-purple-600/30 text-white shadow-lg'
-                                            : 'text-purple-300/60 hover:text-white'
-                                            }`}
+                                        className={`px-2.5 py-1 md:px-3 md:py-1.5 rounded-md text-[10px] md:text-xs font-bold transition-all ${billingCycle === 'yearly' ? 'bg-purple-600 text-white shadow-lg' : 'text-purple-300/60'}`}
                                     >
                                         Y
                                     </button>
                                 </div>
                             </div>
 
-                            <div className="flex flex-row items-center gap-2 md:gap-3 w-full md:w-auto">
-                                <button className="flex-1 md:flex-none px-4 py-2 md:px-6 md:py-3 rounded-xl border border-purple-400/30 bg-purple-400/10 text-purple-300 font-bold text-xs md:text-sm hover:bg-purple-400/20 transition-all whitespace-nowrap">
-                                    Subscribe
+                            <div className="flex items-center gap-2 md:gap-3 w-full md:w-auto">
+                                <button className="flex-1 md:flex-none px-4 py-2.5 rounded-lg bg-purple-600 text-white font-bold text-[13px] md:text-sm hover:bg-purple-700 transition-all shadow-lg shadow-purple-600/20">
+                                    Join Now
                                 </button>
-                                <Link href="/ctf-offline" className="flex-1 md:flex-none px-4 py-2 md:px-6 md:py-3 rounded-xl bg-purple-600/20 border border-purple-500/30 text-white font-bold text-xs md:text-sm hover:bg-purple-600/40 transition-all text-center whitespace-nowrap">
-                                    Play CTF
+                                <Link href="/ctf-offline" className="flex-1 md:flex-none px-4 py-2.5 rounded-lg border border-purple-500/30 text-white font-bold text-[13px] md:text-sm hover:bg-white/5 transition-all text-center">
+                                    CTF
                                 </Link>
                             </div>
                         </div>
                     </div>
 
                     {/* Additional Information Section */}
-                    <div className="mt-8 max-w-4xl mx-auto text-center space-y-3 px-4">
-                        <p className="text-gray-400 text-[10px] md:text-sm leading-relaxed">
+                    <div className="mt-6 max-w-4xl mx-auto text-center space-y-3 px-4">
+                        <p className="text-gray-400 text-xs md:text-[13px] leading-relaxed">
                             <span className="text-white font-bold">Cyber Range labs included.</span> 4 certification tracks covered in the Diploma curriculum: <span className="text-white font-bold">CCNA, CEH, CompTIA Security+</span> (or <span className="text-white font-bold">CySA+</span>), and <span className="text-white font-bold">AWS Cloud Practitioner</span> (plus additional electives based on your career goal). Internship letter option and placement support for <span className="text-white font-bold">Big 4 (PwC, EY, KPMG, Deloitte)</span> and other companies — as per eligibility and openings.
                         </p>
                         <p className="text-purple-300/60 text-[10px] md:text-xs font-medium italic">

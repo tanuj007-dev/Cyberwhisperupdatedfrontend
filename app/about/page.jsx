@@ -59,7 +59,7 @@ export default function AboutUsPage() {
                                         whileInView={{ opacity: 1, x: 0 }}
                                         viewport={{ once: true }}
                                         transition={{ delay: 0.2, duration: 0.6 }}
-                                        className="space-y-4 text-left"
+                                        className="space-y-4 flex flex-col items-center text-center lg:items-start lg:text-left"
                                     >
                                         <div className="inline-flex items-center gap-3">
                                             <div className="w-5 h-5 bg-[#6b46e5] shadow-[0_0_15px_rgba(107,70,229,0.5)]"></div>
@@ -75,7 +75,7 @@ export default function AboutUsPage() {
                                         whileInView={{ opacity: 1 }}
                                         viewport={{ once: true }}
                                         transition={{ delay: 0.4, duration: 0.6 }}
-                                        className="text-gray-600 dark:text-gray-400 text-sm md:text-[15px] leading-relaxed text-left"
+                                        className="text-gray-600 dark:text-gray-400 text-sm md:text-[15px] leading-relaxed text-justify lg:text-left"
                                     >
                                         Security fails when it stays theoretical. Cyber Whisper helps organizations and individuals build real capability through a blend of cybersecurity services, SOC enablement, and hands-on cyber range training. The approach is evidence-driven and designed to produce outcomes that can be measured - faster triage, cleaner investigations, and stronger response decisions.
                                     </motion.p>

@@ -135,25 +135,49 @@ const EditBlog = () => {
         return Object.keys(newErrors).length === 0;
     };
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         if (!validateForm()) {
             showToast('Please fill in all required fields', 'error');
             return;
         }
 
-        const blogData = {
-            ...formData,
-            blog_category_id: parseInt(formData.blog_category_id),
-            user_id: parseInt(formData.user_id),
-            keywords: formData.selectedTags?.map(id => tags.find(t => t.id === id)?.name).filter(Boolean).join(', ') || formData.keywords
-        };
+        try {
+            const blogData = {
+                title: formData.title,
+                slug: formData.slug,
+                category_id: parseInt(formData.blog_category_id),
+                author_id: parseInt(formData.user_id),
+                content: formData.description,
+                keywords: formData.selectedTags?.map(id => tags.find(t => t.id === id)?.name).filter(Boolean).join(', ') || formData.keywords,
+                short_description: formData.shortDescription,
+                reading_time: formData.readingTime || '5 min read',
+                thumbnail_url: formData.thumbnail || '',
+                banner_url: formData.banner || '',
+                image_alt_text: formData.imageAltText || formData.title,
+                image_caption: formData.imageCaption,
+                is_popular: formData.is_popular,
+                status: formData.status === 'active' || formData.status === 'ACTIVE' ? 'ACTIVE' : 'DRAFT',
+                visibility: formData.visibility.toUpperCase(),
+                seo_title: formData.seoTitle || formData.title,
+                seo_description: formData.seoDescription || formData.shortDescription,
+                focus_keyword: formData.focusKeyword,
+                meta_robots: formData.metaRobots.toUpperCase(),
+                allow_comments: formData.allowComments,
+                show_on_homepage: formData.showOnHomepage,
+                is_sticky: formData.pinPost
+            };
 
-        updateBlog(formData.blog_id, blogData);
-        showToast('Blog updated successfully!', 'success');
+            showToast('Updating blog post...', 'info');
+            await updateBlog(formData.blog_id, blogData);
+            showToast('Blog updated successfully!', 'success');
 
-        setTimeout(() => {
-            router.push('/admin/blogs');
-        }, 1500);
+            setTimeout(() => {
+                router.push('/admin/blogs');
+            }, 1500);
+        } catch (error) {
+            console.error('Error updating blog:', error);
+            showToast(error.message || 'Failed to update blog post', 'error');
+        }
     };
 
     const showToast = (message, type = 'success') => {

@@ -73,15 +73,15 @@ export default function B2BHero() {
                     <ul className="space-y-2 max-w-lg mx-auto lg:mx-0 text-sm md:text-base text-gray-600 dark:text-gray-300">
                         <li className="flex items-start gap-3">
                             <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-[#6B46E5] shrink-0"></span>
-                            <span>SOC Deployment & Enablement</span>
+                            <span>SOC Deployment & Enablement (SIEM / Wazuh / detection workflows)</span>
                         </li>
                         <li className="flex items-start gap-3">
                             <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-[#6B46E5] shrink-0"></span>
-                            <span>Cyber Range + CTF Programs</span>
+                            <span>Cyber Range + CTF Programs (role-based tracks, realistic simulations)</span>
                         </li>
                         <li className="flex items-start gap-3">
                             <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-[#6B46E5] shrink-0"></span>
-                            <span>Threat Intelligence (CTI) + Playbooks</span>
+                            <span>Threat Intelligence (CTI) + Response Playbooks (actionable, SOC-ready)</span>
                         </li>
                     </ul>
 

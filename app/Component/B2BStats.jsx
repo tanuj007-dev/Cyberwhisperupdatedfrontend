@@ -8,10 +8,10 @@ export default function B2BStats() {
     const [isVideoOpen, setIsVideoOpen] = useState(false);
 
     const stats = [
-        { label: "CTF challenges", value: "100+" },
-        { label: "Detection Labs", value: "200+" },
-        { label: "Security Experts", value: "20+" },
-        { label: "APT Scenarios", value: "50+" },
+        { label: "CTF scenarios (beginner to advanced)", value: "100+" },
+        { label: "Detection & investigation labs", value: "200+" },
+        { label: "APT-style simulations", value: "50+" },
+        { label: "Teams enabled / workshops delivered", value: "50+" },
     ];
 
     return (

@@ -218,21 +218,21 @@ const AddBlog = () => {
 
         try {
             // Prepare blog data for API
-            const blogData = {
+            const blogPost = {
                 title: formData.title,
                 slug: formData.slug,
                 category_id: parseInt(formData.blog_category_id),
                 author_id: parseInt(formData.user_id),
-                description: formData.description, // Main content
+                content: formData.description, // API expects 'content' or 'description'
                 keywords: formData.selectedTags.map(id => tags.find(t => t.id === id)?.name).join(', '),
                 short_description: formData.shortDescription,
                 reading_time: formData.readingTime || '5 min read',
                 thumbnail_url: formData.thumbnail || '',
-                banner_url: formData.banner || '', // Empty as per requirement
+                banner_url: formData.banner || '',
                 image_alt_text: formData.imageAltText || formData.title,
                 image_caption: formData.imageCaption,
                 is_popular: formData.is_popular,
-                status: status === 'publish' ? 'ACTIVE' : 'DRAFT', // ACTIVE for published
+                status: status === 'publish' ? 'ACTIVE' : 'DRAFT',
                 visibility: formData.visibility.toUpperCase(),
                 seo_title: formData.seoTitle || formData.title,
                 seo_description: formData.seoDescription || formData.shortDescription,
@@ -246,32 +246,8 @@ const AddBlog = () => {
             // Show loading state
             showToast('Saving blog post...', 'info');
 
-            // Call API - use current server
-            const baseUrl = typeof window !== 'undefined' 
-                ? `http://${window.location.hostname}:${window.location.port}`
-                : 'http://localhost:3001';
-            const response = await fetch(`${baseUrl}/api/blogs`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(blogData),
-            });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.error || 'Failed to create blog post');
-            }
-
-            const result = await response.json();
-            console.log('Blog created successfully:', result);
-
-            // Also add to AdminContext for local state management
-            addBlog({
-                ...blogData,
-                id: result.data.id,
-                status: status === 'publish' ? 'active' : 'inactive'
-            });
+            // Use addBlog from context which handles API and state refresh
+            await addBlog(blogPost);
 
             showToast(
                 status === 'publish' ? 'Blog published successfully!' : 'Blog saved as draft!',

@@ -176,31 +176,35 @@ export async function PUT(request) {
         if (!id) {
             return NextResponse.json(
                 { error: 'Blog ID is required for update' },
-                { status: 400 }
+                { status: 400, headers: corsHeaders }
             );
         }
 
-        // TODO: Update in database
-        // const updatedBlog = await db.blogs.update({
-        //     where: { id: parseInt(id) },
-        //     data: { ...updateData, updated_at: new Date() }
-        // });
+        // Update in file storage
+        const updatedBlog = await updateBlog(id, updateData);
 
-        console.log('Blog post updated:', { id, ...updateData });
+        if (!updatedBlog) {
+            return NextResponse.json(
+                { error: 'Blog not found or update failed' },
+                { status: 404, headers: corsHeaders }
+            );
+        }
+
+        console.log('Blog post updated:', updatedBlog);
 
         return NextResponse.json(
             {
                 success: true,
                 message: 'Blog post updated successfully',
-                data: { id, ...updateData, updated_at: new Date().toISOString() }
+                data: updatedBlog
             },
-            { status: 200 }
+            { status: 200, headers: corsHeaders }
         );
     } catch (error) {
         console.error('Error updating blog post:', error);
         return NextResponse.json(
             { error: 'Internal server error', details: error.message },
-            { status: 500 }
+            { status: 500, headers: corsHeaders }
         );
     }
 }
@@ -214,12 +218,19 @@ export async function DELETE(request) {
         if (!id) {
             return NextResponse.json(
                 { error: 'Blog ID is required for deletion' },
-                { status: 400 }
+                { status: 400, headers: corsHeaders }
             );
         }
 
-        // TODO: Delete from database
-        // await db.blogs.delete({ where: { id: parseInt(id) } });
+        // Delete from file storage
+        const success = await deleteBlog(id);
+
+        if (!success) {
+            return NextResponse.json(
+                { error: 'Failed to delete blog' },
+                { status: 500, headers: corsHeaders }
+            );
+        }
 
         console.log('Blog post deleted:', id);
 
@@ -228,13 +239,13 @@ export async function DELETE(request) {
                 success: true,
                 message: 'Blog post deleted successfully'
             },
-            { status: 200 }
+            { status: 200, headers: corsHeaders }
         );
     } catch (error) {
         console.error('Error deleting blog post:', error);
         return NextResponse.json(
             { error: 'Internal server error', details: error.message },
-            { status: 500 }
+            { status: 500, headers: corsHeaders }
         );
     }
 }

@@ -62,7 +62,7 @@ export default function TeamSpecialists() {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: 0.2, duration: 0.6 }}
-                        className="mt-4 md:mt-6 text-sm sm:text-base md:text-lg text-gray-600 dark:text-gray-300 max-w-3xl lg:max-w-4xl mx-auto leading-relaxed px-2 md:px-0"
+                        className="mt-4 md:mt-6 text-sm sm:text-base md:text-lg text-gray-600 dark:text-gray-300 max-w-5xl lg:max-w-5xl mx-auto leading-tight px-2 md:px-0"
                     >
                         We are a team of security practitioners, researchers, and trainers who care about capability. Whether it is SOC readiness, detection engineering, threat intelligence, or incident response, the focus stays practical: clear workflows, strong fundamentals, and repeatable execution in real tools and real scenarios.
                     </motion.p>

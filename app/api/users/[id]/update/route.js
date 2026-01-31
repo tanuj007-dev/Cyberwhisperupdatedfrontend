@@ -1,38 +1,80 @@
 import { NextResponse } from 'next/server';
+import { updateUser, getUserById } from '@/lib/userStorage';
 
 const BACKEND_URL = process.env.BACKEND_API_URL || 'http://localhost:3001';
 
-export async function PUT(request, { params }) {
+const corsHeaders = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'PUT, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, Accept',
+};
+
+// Handle CORS preflight requests
+export async function OPTIONS() {
+    return NextResponse.json({}, { headers: corsHeaders });
+}
+
+export async function PUT(request, context) {
     try {
-        const { id } = params;
+        // Await params in Next.js 15+
+        const { id } = await context.params;
         const body = await request.json();
-        const url = `${BACKEND_URL}/users/${id}`; // Usually update is PUT /users/:id, but AdminContext sends /users/:id/update? No, AdminContext fetch URL is /api/users/${id}/update.
-        // Wait, let's check AdminContext fetch call again in Step 240.
-        // Line 199: fetch(`${apiUrl}/api/users/${id}/update`, { method: 'PUT' ... })
-        // So the frontend calls /api/users/:id/update
-        // The question is: what does the BACKEND expect? 
-        // Usually REST is PUT /users/:id. 
-        // If I proxy to ${BACKEND_URL}/users/${id}/update, it assumes backend has that route.
-        // If backend is standard REST, it might be just PUT /users/${id}.
-        // I'll assume standard REST for the backend unless I see otherwise. 
-        // Let's try proxying to standard PUT /users/:id. If that fails, I can change it.
-
-        // Actually, looking at previous conversations, the backend seems to follow what the frontend expects or vice versa. 
-        // Let's assume the backend is standard RESTful. I will proxy to `${BACKEND_URL}/users/${id}`.
-
+        
+        console.log('=== UPDATE USER ===');
+        console.log('User ID:', id);
+        console.log('Update data:', body);
+        
+        // Check if user exists locally
+        const existingUser = await getUserById(id);
+        
+        if (existingUser) {
+            // Update in local storage
+            const updatedUser = await updateUser(id, body);
+            
+            if (!updatedUser) {
+                return NextResponse.json(
+                    { success: false, message: 'Failed to update user' },
+                    { status: 500, headers: corsHeaders }
+                );
+            }
+            
+            console.log('User updated successfully in local storage');
+            
+            return NextResponse.json(
+                {
+                    success: true,
+                    message: 'User updated successfully',
+                    data: updatedUser
+                },
+                { status: 200, headers: corsHeaders }
+            );
+        }
+        
+        // If not found locally, try backend server
+        console.log('User not found locally, trying backend server');
         const backendUrl = `${BACKEND_URL}/users/${id}`;
-
+        
         const res = await fetch(backendUrl, {
             method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(body),
         });
-
-        const data = await res.json();
-        return NextResponse.json(data, { status: res.status });
+        
+        if (res.ok) {
+            const data = await res.json();
+            return NextResponse.json(data, { status: res.status, headers: corsHeaders });
+        }
+        
+        return NextResponse.json(
+            { success: false, message: 'User not found' },
+            { status: 404, headers: corsHeaders }
+        );
+        
     } catch (error) {
-        return NextResponse.json({ success: false, message: 'Internal Server Error' }, { status: 500 });
+        console.error('Error updating user:', error);
+        return NextResponse.json(
+            { success: false, message: 'Internal Server Error', details: error.message },
+            { status: 500, headers: corsHeaders }
+        );
     }
 }

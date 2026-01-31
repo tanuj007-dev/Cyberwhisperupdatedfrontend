@@ -131,12 +131,7 @@ export default function LearningMode() {
                                         />
 
                                         {/* Tech Badge */}
-                                        <div className="absolute top-3 right-3 z-30">
-                                            <div className="bg-white/90 dark:bg-black/60 backdrop-blur-sm border border-gray-200 dark:border-white/10 px-2 py-1 flex items-center gap-1.5 shadow-sm">
-                                                <div className={`w-1.5 h-1.5 rounded-full ${mode.bgAccent.replace('bg-', 'bg-').replace('/10', '')} animate-pulse`} />
-                                                <span className={`text-[10px] font-mono font-bold ${mode.textAccent} uppercase`}>{mode.subtitle}</span>
-                                            </div>
-                                        </div>
+
                                     </div>
 
                                     {/* Content Section */}

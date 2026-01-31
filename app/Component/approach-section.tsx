@@ -6,19 +6,19 @@ import { Target, Lightbulb, ShieldCheck } from "lucide-react"
 const pillars = [
   {
     icon: Target,
-    title: "Our Mission",
+    title: "Mission",
     desc: "To strengthen cyber defense through hands-on, real-world learning and SOC enablement - helping teams prevent, detect, investigate, and respond with confidence using practical workflows, labs, and measurable outcomes.",
     image: "/approach_mission.webp"
   },
   {
     icon: Lightbulb,
-    title: "Our Vision",
+    title: "Vision",
     desc: "To build the most trusted cyber range and SOC enablement ecosystem, where every learner and security team can practice on realistic attack scenarios, validate skills, and become job-ready defenders at scale.",
     image: "/approach_vision.webp"
   },
   {
     icon: ShieldCheck,
-    title: "Our Values",
+    title: "Values",
     desc: "Practitioner-led excellence, hands-on execution, clarity and accountability, continuous improvement, and integrity in everything delivered.",
     image: "/approach_values.webp"
   },
@@ -64,7 +64,7 @@ export function ApproachSection() {
         >
           <div className="inline-flex items-center gap-3 mb-2">
             <div className="w-5 h-5 bg-[#6b46e5] shadow-[0_0_15px_rgba(107,70,229,0.5)]"></div>
-            <span className="text-[#0f172a] dark:text-white text-sm font-bold tracking-[0.2em] uppercase">Strategy</span>
+            <span className="text-[#0f172a] dark:text-white text-sm font-bold tracking-[0.2em] uppercase"> Our Strategy</span>
           </div>
           <h2 className="text-2xl md:text-3xl lg:text-4xl text-gray-900 dark:text-white font-bold tracking-tight">
             Strengthening security, <span className="text-primary  ">your future</span>
@@ -100,26 +100,14 @@ export function ApproachSection() {
                   <div className="absolute -inset-10 bg-primary/5 blur-[50px] rounded-full opacity-0 group-hover/card:opacity-100 transition-opacity duration-700 pointer-events-none" />
 
                   {/* Header: Icon + Number */}
-                  <div className="relative mb-4 flex justify-between items-center">
-                    <div className="w-11 h-11 rounded-xl bg-linear-to-br from-primary to-purple-600 p-px group-hover:scale-110 transition-transform duration-500 animate-float" style={{ animationDelay: `${idx * 0.15}s` }}>
-                      <div className="w-full h-full rounded-[11px] bg-white dark:bg-[#0B0224] flex items-center justify-center text-primary dark:text-white">
-                        <pillar.icon className="w-5 h-5 group-hover:rotate-12 transition-transform" />
-                      </div>
-                    </div>
-
-                    {/* Styled Backdrop Number */}
-                    <div className="flex flex-col items-end">
-                      <span className="text-3xl font-black text-gray-100 dark:text-white/5 select-none leading-none group-hover:text-primary/10 transition-colors italic">0{idx + 1}</span>
-                      <div className="h-px w-4 bg-primary/20 group-hover:w-full transition-all duration-500" />
-                    </div>
-                  </div>
+               
 
                   {/* Content Section */}
                   <div className="relative z-10 flex flex-col h-full">
                     <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2 group-hover:text-primary transition-colors tracking-tight">
                       {pillar.title}
                     </h3>
-                    <p className="text-[13px] text-gray-600 dark:text-gray-400 leading-snug font-medium mb-5 opacity-90">
+                    <p className="text-[13px] text-gray-600 dark:text-gray-400 leading-snug font-medium mb-5 opacity-90 text-justify">
                       {pillar.desc}
                     </p>
 

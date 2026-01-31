@@ -6,39 +6,74 @@ import { motion } from 'framer-motion';
 const testimonials = [
   {
     id: 1,
-    name: 'Jane Doe',
-    role: 'Student',
-    image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop',
-    text: '"Amit Sharma Sir is an exceptional AWS Associate teacher at Craw Saket. His deep knowledge, clear explanations, and practical teaching approach make complex concepts easy to understand."',
+    name: 'Aarav Mehta',
+    role: 'Student (Mumbai, India)',
+    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop',
+    text: '"The training is completely hands-on. After every concept we worked on real SOC-style alerts, investigations, and reporting. Mentor support was quick and practical."',
   },
   {
     id: 2,
-    name: 'John Smith',
-    role: 'Student',
-    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop',
-    text: '"The course structure is amazing and the instructors are very supportive. I learned so much and feel confident in my skills now. Highly recommend to everyone."',
+    name: 'Priya Sharma',
+    role: 'Working Professional (Delhi, India)',
+    image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop',
+    text: '"Cyber Whisper’s SIEM labs (Wazuh/ELK) made things click. The workflow—from triage to closure notes—felt exactly like what happens in a real SOC."',
   },
   {
     id: 3,
-    name: 'Sarah Johnson',
-    role: 'Student',
-    image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop',
-    text: '"Best learning experience ever! The practical approach and hands-on projects helped me understand complex concepts easily. The curriculum is truly top-notch."',
+    name: 'Rohit Verma',
+    role: 'Fresher (Bengaluru, India)',
+    image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop',
+    text: '"I joined with basics and gained confidence fast. The cyber range labs and weekly checkpoints kept me consistent, and the capstone project helped my portfolio."',
   },
   {
     id: 4,
-    name: 'Michael Brown',
-    role: 'Student',
-    image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop',
-    text: '"Highly recommend this course to anyone looking to advance their career. The teaching methodology is top-notch and the curriculum is always up-to-date."',
+    name: 'Neha Iyer',
+    role: 'Security Analyst (Pune, India)',
+    image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop',
+    text: '"What I liked most was the real-world approach—log analysis, detection logic, incident timelines, and documentation. It improved how I communicate findings."',
   },
   {
     id: 5,
-    name: 'Emily Davis',
-    role: 'Student',
+    name: 'Kunal Singh',
+    role: 'Final Year Student (Hyderabad, India)',
+    image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop',
+    text: '"The mentoring is strong and the labs are not generic. I learned alert triage, threat intel enrichment, and reporting in a structured way—very job-aligned."',
+  },
+  {
+    id: 6,
+    name: 'Emily Carter',
+    role: 'Student (London, UK)',
     image: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop',
-    text: '"The mentors are always available to help. The community is very active and supportive. I am glad I chose this course for my professional growth."',
-  }
+    text: '"The sessions are interactive and mentor-led, not one-way. The labs after each module helped me retain concepts and build a clear SOC workflow mindset."',
+  },
+  {
+    id: 7,
+    name: 'Michael Reyes',
+    role: 'IT Support → SOC Transition (Austin, USA)',
+    image: 'https://images.unsplash.com/photo-1599566150163-29194dcaad36?w=150&h=150&fit=crop',
+    text: '"I needed a practical bridge into blue-team work. The cyber range exercises, case investigations, and playbook-style learning gave me a solid foundation."',
+  },
+  {
+    id: 8,
+    name: 'Sophie Nguyen',
+    role: 'Junior Analyst (Toronto, Canada)',
+    image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop',
+    text: '"Great structure and guidance. The team explains why an alert matters, how to validate it, and how to document it properly—very useful for real operations."',
+  },
+  {
+    id: 9,
+    name: 'Jonas Weber',
+    role: 'Working Professional (Berlin, Germany)',
+    image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&h=150&fit=crop',
+    text: '"Strong focus on detection and investigation. The log-based exercises felt realistic, and the mentor feedback improved my methodology and reporting clarity."',
+  },
+  {
+    id: 10,
+    name: 'Olivia Hart',
+    role: 'Graduate Student (Sydney, Australia)',
+    image: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=150&h=150&fit=crop',
+    text: '"The monthly checkpoints and hands-on labs kept me accountable. I learned how to approach incidents step-by-step and present findings confidently."',
+  },
 ];
 
 const extendedTestimonials = [...testimonials, ...testimonials, ...testimonials];
@@ -100,7 +135,7 @@ export default function TestimonialsSection() {
             viewport={{ once: true }}
             className="inline-flex items-center gap-2 mb-4"
           >
-                                   <div className="w-3 h-3 md:w-4 md:h-4 bg-white  shadow-[0_0_15px_rgba(255,255,255,0.4)]"></div>
+            <div className="w-3 h-3 md:w-4 md:h-4 bg-white  shadow-[0_0_15px_rgba(255,255,255,0.4)]"></div>
             <span className="text-white text-xs font-bold uppercase tracking-[0.2em]">TESTIMONIALS</span>
           </motion.div>
           <motion.h2

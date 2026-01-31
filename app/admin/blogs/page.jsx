@@ -45,16 +45,24 @@ const BlogList = () => {
         setTimeout(() => setToast({ isVisible: false, message: '', type: 'success' }), 3000);
     };
 
-    const handleDelete = () => {
-        deleteBlog(selectedBlog.blog_id);
-        setDeleteModalOpen(false);
-        setSelectedBlog(null);
-        showToast('Blog deleted successfully', 'success');
+    const handleDelete = async () => {
+        try {
+            await deleteBlog(selectedBlog.blog_id);
+            setDeleteModalOpen(false);
+            setSelectedBlog(null);
+            showToast('Blog deleted successfully', 'success');
+        } catch (error) {
+            showToast('Failed to delete blog', 'error');
+        }
     };
 
-    const handleTogglePopular = (blog) => {
-        toggleBlogPopular(blog.blog_id);
-        showToast(`Blog ${!blog.is_popular ? 'marked' : 'unmarked'} as popular`, 'success');
+    const handleTogglePopular = async (blog) => {
+        try {
+            await toggleBlogPopular(blog.blog_id);
+            showToast(`Blog ${!blog.is_popular ? 'marked' : 'unmarked'} as popular`, 'success');
+        } catch (error) {
+            showToast('Failed to update blog', 'error');
+        }
     };
 
     const getUserName = (userId) => {

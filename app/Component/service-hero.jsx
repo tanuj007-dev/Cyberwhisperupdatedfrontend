@@ -149,7 +149,7 @@ export default function ServiceHero() {
             <div className="space-y-2  animate-in fade-in slide-in-from-left duration-1000">
               <h1 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-slate-900 dark:text-white tracking-tight leading-tight">
                 We Don’t Just Talk <span className="text-[#6B46E5]"> Cybersecurity</span> <br className="hidden sm:block" />
-                <span className="sm:inline block">We Build Cyber Defenders</span>
+                <span className="sm:inline block">We Build Cyber <span className="text-[#6B46E5]">Defenders</span></span>
               </h1>
             </div>
 

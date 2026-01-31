@@ -33,7 +33,15 @@ export async function GET(request) {
         const status = searchParams.get('status') || 'ACTIVE';
 
         // Get blogs from file storage
-        let blogs = await getFilteredBlogs({ status, category_id });
+        let filterOptions = {};
+        if (status !== 'all') {
+            filterOptions.status = status;
+        }
+        if (category_id) {
+            filterOptions.category_id = category_id;
+        }
+
+        let blogs = await getFilteredBlogs(filterOptions);
 
         // Sort by created_at descending (newest first)
         blogs = blogs.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));

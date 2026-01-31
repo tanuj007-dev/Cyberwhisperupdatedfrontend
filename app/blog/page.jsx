@@ -144,11 +144,9 @@ export default function BlogPage() {
                         {/* Blog Grid */}
                         {!loading && blogs.length > 0 && (
                             <>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
                                     {blogs.map((post) => (
-                                        <div key={post.id} onClick={() => handleBlogClick(post)} className="cursor-pointer">
-                                            <BlogCard {...post} />
-                                        </div>
+                                        <BlogCard key={post.id} {...post} />
                                     ))}
                                 </div>
 

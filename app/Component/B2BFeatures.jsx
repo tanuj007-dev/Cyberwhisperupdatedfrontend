@@ -42,7 +42,7 @@ export default function B2BFeatures() {
         { icon: Server, title: "Cyber Range Access", desc: "User provisioning (time-bound)" },
         { icon: Target, title: "Training Plan", desc: "Schedule + learning outcomes" },
         { icon: ClipboardList, title: "SOC Playbooks", desc: "SOP templates + checklists" },
-        { icon: BarChart, title: "Assessments", desc: "Scoring (pre/post) + report" },
+        { icon: BarChart, title: "Assessments", desc: "scoring (pre/post) + completion report" },
         { icon: LayoutDashboard, title: "Detection Rules", desc: "Dashboards & queries included" },
         { icon: Award, title: "Certificates", desc: "Completion & participation proofs" }
     ];

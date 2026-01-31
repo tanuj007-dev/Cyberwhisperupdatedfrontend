@@ -30,14 +30,14 @@ export const AdminProvider = ({ children }) => {
         const initializeData = async () => {
             try {
                 // Initialize static data from mock files
-                setBlogs(mockBlogs);
                 setCategories(mockCategories);
                 setTags(mockTags);
                 setSiteSettings(mockSiteSettings);
 
-                // Fetch users and media from API, fallback to mock data
+                // Fetch users, media and blogs from API, fallback to mock data
                 await fetchUsers();
                 await fetchMedia();
+                await fetchBlogs();
             } catch (error) {
                 console.error('Error initializing admin data:', error);
                 setLoading(false);
@@ -46,6 +46,54 @@ export const AdminProvider = ({ children }) => {
 
         initializeData();
     }, []);
+
+    // Fetch blogs from API
+    const fetchBlogs = async () => {
+        try {
+            const baseUrl = typeof window !== 'undefined'
+                ? `http://${window.location.hostname}:${window.location.port}`
+                : 'http://localhost:3000';
+
+            // Fetch all blogs (both ACTIVE and DRAFT/INACTIVE)
+            const apiUrl = `${baseUrl}/api/blogs/list?limit=1000&status=all`;
+            console.log('Fetching all blogs for admin:', apiUrl);
+
+            const response = await fetch(apiUrl);
+            if (!response.ok) {
+                throw new Error(`Failed to fetch blogs: ${response.status}`);
+            }
+
+            const result = await response.json();
+            let blogsList = [];
+
+            if (result.success && result.data) {
+                blogsList = Array.isArray(result.data) ? result.data : [result.data];
+            } else if (Array.isArray(result)) {
+                blogsList = result;
+            }
+
+            console.log('Blogs fetched successfully for admin:', blogsList.length);
+            
+            // Map the blog data to match the admin panel's expectations if needed
+            const mappedBlogs = blogsList.map(blog => ({
+                ...blog,
+                blog_id: blog.id, // Admin uses blog_id
+                thumbnail: blog.thumbnail_url || blog.image,
+                added_date: blog.created_at,
+                updated_date: blog.updated_at,
+                likes: blog.likes || 0,
+                blog_category_id: blog.category_id,
+                user_id: blog.author_id,
+                status: blog.status?.toLowerCase() || 'inactive'
+            }));
+
+            setBlogs(mappedBlogs);
+        } catch (error) {
+            console.error('Error fetching blogs for admin:', error);
+            // Fallback to mock blogs
+            setBlogs(mockBlogs);
+        }
+    };
 
     // Fetch users from API
     const fetchUsers = async () => {
@@ -135,36 +183,85 @@ export const AdminProvider = ({ children }) => {
     };
 
     // Blog CRUD operations
-    const addBlog = (blog) => {
-        const newBlog = {
-            ...blog,
-            blog_id: Math.max(...blogs.map(b => b.blog_id), 0) + 1,
-            added_date: new Date().toISOString(),
-            updated_date: new Date().toISOString(),
-            likes: 0
-        };
-        setBlogs([...blogs, newBlog]);
-        return newBlog;
+    const addBlog = async (blogData) => {
+        try {
+            const baseUrl = typeof window !== 'undefined'
+                ? `http://${window.location.hostname}:${window.location.port}`
+                : 'http://localhost:3000';
+
+            const response = await fetch(`${baseUrl}/api/blogs`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(blogData)
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to add blog');
+            }
+
+            const result = await response.json();
+            await fetchBlogs(); // Refresh list
+            return result.data;
+        } catch (error) {
+            console.error('Error adding blog:', error);
+            throw error;
+        }
     };
 
-    const updateBlog = (blog_id, updatedBlog) => {
-        setBlogs(blogs.map(blog =>
-            blog.blog_id === blog_id
-                ? { ...blog, ...updatedBlog, updated_date: new Date().toISOString() }
-                : blog
-        ));
+    const updateBlog = async (blog_id, updatedBlog) => {
+        try {
+            const baseUrl = typeof window !== 'undefined'
+                ? `http://${window.location.hostname}:${window.location.port}`
+                : 'http://localhost:3000';
+
+            const response = await fetch(`${baseUrl}/api/blogs`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id: blog_id, ...updatedBlog })
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to update blog');
+            }
+
+            await fetchBlogs(); // Refresh list
+        } catch (error) {
+            console.error('Error updating blog:', error);
+            throw error;
+        }
     };
 
-    const deleteBlog = (blog_id) => {
-        setBlogs(blogs.filter(blog => blog.blog_id !== blog_id));
+    const deleteBlog = async (blog_id) => {
+        try {
+            const baseUrl = typeof window !== 'undefined'
+                ? `http://${window.location.hostname}:${window.location.port}`
+                : 'http://localhost:3000';
+
+            const response = await fetch(`${baseUrl}/api/blogs?id=${blog_id}`, {
+                method: 'DELETE'
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to delete blog');
+            }
+
+            await fetchBlogs(); // Refresh list
+        } catch (error) {
+            console.error('Error deleting blog:', error);
+            throw error;
+        }
     };
 
-    const toggleBlogPopular = (blog_id) => {
-        setBlogs(blogs.map(blog =>
-            blog.blog_id === blog_id
-                ? { ...blog, is_popular: !blog.is_popular, updated_date: new Date().toISOString() }
-                : blog
-        ));
+    const toggleBlogPopular = async (blog_id) => {
+        try {
+            const blog = blogs.find(b => b.blog_id === blog_id);
+            if (!blog) return;
+
+            await updateBlog(blog_id, { is_popular: !blog.is_popular });
+        } catch (error) {
+            console.error('Error toggling blog popular status:', error);
+            throw error;
+        }
     };
 
     // User CRUD operations
