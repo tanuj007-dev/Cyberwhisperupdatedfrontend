@@ -3,10 +3,10 @@
 import { motion } from "framer-motion"
 
 const stats = [
-  { label: "engagements delivered (training / consulting / deployments)", value: "2.4B+", prefix: "" },
-  { label: "professionals trained across SOC / TI / detection engineering tracks", value: "99.99", prefix: "%" },
-  { label: "labs and scenarios available in the Cyber Range + CTF ecosystem", value: "< 5", prefix: "ms" },
-  { label: "partner/client teams enabled across enterprise, education, and government", value: "500+", prefix: "" },
+  { label: "Professionals Trained", value: "900+", prefix: "" },
+  { label: "Hands-On Labs & Scenarios", value: "1,000+", prefix: "" },
+  { label: "CTF Challenges & Simulations", value: "500+", prefix: "ms" },
+  { label: "Partner Institutes / Client Teams", value: "50+", prefix: "" },
 ]
 
 export function StatsSection() {

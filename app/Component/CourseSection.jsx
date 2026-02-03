@@ -35,18 +35,22 @@ export default function CourseSection() {
     const fetchCategories = async () => {
         setCategoriesLoading(true)
         try {
-            const response = await fetch('http://localhost:3001/api/courses/categories')
+            const response = await fetch('/api/courses?page=1&limit=100')
 
             if (!response.ok) {
                 throw new Error(`Failed to fetch categories: ${response.status}`)
             }
 
             const data = await response.json()
-            const fetchedCategories = Array.isArray(data) ? data : []
 
-            if (fetchedCategories.length > 0) {
-                setCategories(fetchedCategories)
-                setActiveCategory(fetchedCategories[0])
+            if (data.success && data.courses) {
+                // Extract unique categories from courses
+                const uniqueCategories = [...new Set(data.courses.map(course => course.category).filter(Boolean))]
+
+                if (uniqueCategories.length > 0) {
+                    setCategories(uniqueCategories)
+                    setActiveCategory(uniqueCategories[0])
+                }
             }
         } catch (err) {
             console.warn('API unavailable, using fallback categories:', err.message)
@@ -60,24 +64,34 @@ export default function CourseSection() {
         setLoading(true)
         setError(null)
         try {
-            const response = await fetch(`/api/courses/category/${category.toLowerCase()}`)
+            const response = await fetch('/api/courses?page=1&limit=50')
 
             if (!response.ok) {
                 throw new Error(`Failed to fetch courses: ${response.status}`)
             }
 
             const data = await response.json()
-            const processedCourses = (data.courses || data || []).map((course, idx) => ({
-                ...course,
-                image: course.image || course.thumbnail || defaultImage,
-                rating: course.rating || 4.5,
-                lessons: course.lessons || 20,
-                level: course.level || 'A1 - A2',
-                duration: course.duration || '2 Weeks',
-                category: category
-            }))
 
-            setCourses(processedCourses)
+            if (data.success && data.courses) {
+                // Filter courses by category
+                const filteredCourses = data.courses.filter(course =>
+                    course.category === category
+                )
+
+                const processedCourses = filteredCourses.map((course, idx) => ({
+                    ...course,
+                    image: course.thumbnail || course.image || defaultImage,
+                    rating: course.rating || 4.5,
+                    lessons: course.lessons || 20,
+                    level: course.level || 'Beginner',
+                    duration: course.duration || '3 Weeks',
+                    category: course.category
+                }))
+
+                setCourses(processedCourses)
+            }
+
+
         } catch (err) {
             console.warn('API unavailable for courses, showing empty state:', err.message)
             // Don't set error state to avoid red error messages
@@ -254,6 +268,7 @@ export default function CourseSection() {
                                         src={course.image}
                                         alt={course.title}
                                         fill
+                                        unoptimized={typeof course.image === 'string' && course.image.startsWith('http')}
                                         className="object-cover transition-transform duration-700 group-hover:scale-110"
                                     />
                                 </div>

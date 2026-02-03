@@ -87,10 +87,10 @@ export default function AboutUsPage() {
                                             transition={{ delay: 0.5, duration: 0.5 }}
                                             className="flex flex-col md:flex-row items-center md:items-start text-center md:text-left gap-2 md:gap-4 p-4 md:p-6 glass-panel rounded-2xl border-gray-200 dark:border-white/5 hover:border-primary/20 transition-all group bg-white/50 dark:bg-transparent"
                                         >
-                                            <div className="text-2xl md:text-3xl font-bold text-primary group-hover:scale-110 transition-transform">25+</div>
+                                            <div className="text-2xl md:text-3xl font-bold text-primary group-hover:scale-110 transition-transform">15+</div>
                                             <div className="text-xs md:text-sm font-medium text-gray-600 dark:text-gray-300">
                                                 Years of <br />
-                                                Experience
+                                             Combined Experience
                                             </div>
                                         </motion.div>
                                         <motion.div
@@ -102,8 +102,7 @@ export default function AboutUsPage() {
                                         >
                                             <div className="text-2xl md:text-3xl font-bold text-primary group-hover:scale-110 transition-transform">15K+</div>
                                             <div className="text-xs md:text-sm font-medium text-gray-600 dark:text-gray-300">
-                                                Projects <br />
-                                                Completed
+                                            Trainings / Workshops Delivered 
                                             </div>
                                         </motion.div>
                                     </div>

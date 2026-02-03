@@ -4,10 +4,18 @@ import Link from 'next/link';
 import Image from 'next/image';
 import heroBg from './assets/hero-bg.png';
 import Particles from './Particles';
-import b2b from './assets/b2b.png';
+import b2b from './assets/2.png';
+import b2bbg from './assets/b2bbg.png';
 import b2c from './assets/b2c.png';
+import b2cbg from './assets/b2cbg.png';
+import b2cCard from './assets/b2c card .png';
 import { motion } from 'framer-motion';
 import { GoArrowRight } from "react-icons/go";
+import { Building2, GraduationCap } from 'lucide-react';
+
+// Import icon images
+const b2bIcon = "data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3e%3cdefs%3e%3cradialGradient id='glow'%3e%3cstop offset='0%25' style='stop-color:%237C3AED;stop-opacity:0.4'/%3e%3cstop offset='100%25' style='stop-color:%237C3AED;stop-opacity:0'/%3e%3c/radialGradient%3e%3c/defs%3e%3ccircle cx='100' cy='100' r='90' fill='%237C3AED'/%3e%3cpath d='M70 60 h20 v10 h-20 z M75 75 h10 v30 h-10 z M90 65 h20 v10 h-20 z M95 80 h10 v25 h-10 z M110 70 h20 v10 h-20 z M115 85 h10 v20 h-10 z M65 110 h70 v5 h-70 z' fill='white'/%3e%3c/svg%3e";
+const b2cIcon = "data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3e%3cdefs%3e%3cradialGradient id='glow'%3e%3cstop offset='0%25' style='stop-color:%237C3AED;stop-opacity:0.4'/%3e%3cstop offset='100%25' style='stop-color:%237C3AED;stop-opacity:0'/%3e%3c/radialGradient%3e%3c/defs%3e%3ccircle cx='100' cy='100' r='90' fill='%237C3AED'/%3e%3ccircle cx='85' cy='75' r='12' fill='white'/%3e%3cpath d='M85 90 q-15 0 -15 15 v10 h30 v-10 q0 -15 -15 -15' fill='white'/%3e%3ccircle cx='115' cy='75' r='12' fill='white'/%3e%3cpath d='M115 90 q-15 0 -15 15 v10 h30 v-10 q0 -15 -15 -15' fill='white'/%3e%3c/svg%3e";
 export default function HeroSection() {
   const [isVideoOpen, setIsVideoOpen] = useState(false);
 
@@ -125,6 +133,17 @@ function HeroLayout({ isVideoOpen, setIsVideoOpen }) {
                     background-position: 200% 50%;
                   }
                 }
+                @keyframes shine {
+                  0% {
+                    transform: translateX(-100%);
+                  }
+                  50% {
+                    transform: translateX(300%);
+                  }
+                  100% {
+                    transform: translateX(-100%);
+                  }
+                }
               `}</style>
             </div>
             <motion.h1
@@ -208,27 +227,27 @@ function HeroLayout({ isVideoOpen, setIsVideoOpen }) {
         <div className="hidden lg:flex lg:w-[45%] relative flex-col mt-8 lg:mt-0 w-full px-4 sm:px-0">
 
           {/* DESKTOP LAYOUT (Hidden on mobile/tablet) */}
-          <div className="hidden lg:flex flex-col gap-10">
+          <div className="hidden lg:flex flex-col gap-6 scale-90 origin-right">
             {/* B2B Card Desktop */}
-            <Link href="/b2b" className="relative self-start w-full max-w-[750px] ml-20 group">
+            <Link href="/b2b" className="relative self-end w-full max-w-[500px] ml-40 group">
               <div className="absolute -inset-10 rounded-full pointer-events-none "></div>
               <Image
                 src={b2b}
                 alt="Enterprise B2B - Train Teams Test Defences Improve Readiness"
-                width={750}
-                height={450}
-                className="w-[750px] h-[450px] hover:scale-105 duration-500 object-contain"
+                width={500}
+                height={300}
+                className="w-[500px] h-[300px] hover:scale-105 ml-20 duration-500 object-contain rounded-[40px]"
               />
             </Link>
 
             {/* B2C Card Desktop */}
-            <Link href="/training" className="relative self-end w-full max-w-[750px] mr-25 -mt-50 group">
+            <Link href="/training" className="relative self-start w-full max-w-[500px] -mt-40  group">
               <Image
-                src={b2c}
+                src={b2cCard}
                 alt="Individuals B2C - Learn Security Build Skills Launch Careers"
-                width={750}
-                height={450}
-                className="w-[750px] h-[450px] hover:scale-105 duration-500 object-contain"
+                width={500}
+                height={300}
+                className="w-[500px] h-[300px] hover:scale-105 duration-500 object-contain rounded-[40px]"
               />
             </Link>
           </div>
@@ -236,26 +255,191 @@ function HeroLayout({ isVideoOpen, setIsVideoOpen }) {
           {/* MOBILE LAYOUT (Hidden on desktop) */}
           <div className="flex lg:hidden flex-col gap-6">
             {/* B2B Card Mobile */}
-            <Link href="/b2b" className="relative w-full max-w-[500px] self-center group">
-              <div className="absolute -inset-10 bg-[#a855f7]/20 blur-[60px] rounded-full pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity"></div>
-              <Image
-                src={b2b}
-                alt="Enterprise B2B - Train Teams Test Defences Improve Readiness"
-                width={600}
-                height={350}
-                className="w-full h-[400px] rounded-[1.2rem] shadow-2xl transition-transform group-hover:scale-105 duration-500"
-              />
+            <Link href="/b2b" className="relative w-full max-w-[400px] self-center group">
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+                className="relative overflow-hidden rounded-2xl border-2 border-purple-300 shadow-[0_0_25px_rgba(107,70,229,0.3)] group-hover:shadow-[0_0_40px_rgba(107,70,229,0.5)] transition-all duration-500 group-hover:scale-[1.02]"
+              >
+                {/* Animated Moving Border */}
+                <div className="absolute inset-0 rounded-2xl p-[2px] overflow-hidden">
+                  <div
+                    className="absolute inset-0 rounded-2xl opacity-70"
+                    style={{
+                      background: "linear-gradient(90deg, #60A5FA, #A78BFA, #EC4899, #60A5FA)",
+                      backgroundSize: "300% 100%",
+                      animation: "borderMove 4s linear infinite",
+                    }}
+                  />
+                </div>
+
+                {/* Inner border to create the effect */}
+                <div className="absolute inset-[1px] rounded-2xl bg-transparent border border-purple-500/20" />
+                {/* Background Image */}
+                <div className="absolute inset-0">
+                  <Image
+                    src={b2bbg}
+                    alt="Background"
+                    fill
+                    className="object-cover blur-[2px] scale-110"
+                  />
+                  {/* Dark Overlay */}
+                  <div className="absolute inset-0 bg-black/40" />
+                  {/* Overlay Gradient */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#1a0b2e]/98 via-[#16213e]/95 to-[#0f3460]/98" />
+                </div>
+
+                {/* Content */}
+                <div className="relative z-10 p-5">
+                  {/* Badge */}
+                  <div className="flex justify-start mb-2">
+                    <div className="inline-flex items-start gap-1.5 px-2.5 py-1 rounded-full bg-white/10 border border-purple-400/30 backdrop-blur-md">
+                      <span className="text-purple-300 text-[10px] font-semibold">Enterprise (B2B)</span>
+                    </div>
+                  </div>
+
+                  {/* Shine Divider */}
+                  <div className="relative h-px w-full mb-2 overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-purple-400/50 to-transparent" />
+                    <div
+                      className="absolute inset-0 bg-gradient-to-r from-transparent via-white/60 to-transparent w-1/3"
+                      style={{
+                        animation: "shine 3s ease-in-out infinite",
+                      }}
+                    />
+                  </div>
+
+                  {/* Main Content */}
+                  <div className="flex flex-col items-center text-center">
+                    {/* Icon */}
+                    <div className="w-10 h-10 relative mb-1.5">
+                      <div className="absolute inset-0 rounded-full bg-purple-400/30 blur-md opacity-80" />
+                      <Image
+                        src={b2bIcon}
+                        alt="Enterprise"
+                        width={48}
+                        height={48}
+                        className="w-full h-full drop-shadow-[0_0_8px_rgba(168,85,247,0.6)]"
+                      />
+                    </div>
+
+                    {/* Heading */}
+                    <h3 className="text-base font-bold text-white mb-1 leading-tight">
+                      Train Teams Test Defences Improve Readiness
+                    </h3>
+
+                    {/* Description */}
+                    <p className="text-gray-300 text-[10px] leading-relaxed mb-2">
+                      Prepare your security teams using immersive cyber range simulations and intelligent workflows.
+                    </p>
+
+                    {/* CTA Button */}
+                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-white/10 border border-purple-400/40 text-white text-[10px] font-semibold hover:bg-white/20 hover:border-purple-400/60 transition-all duration-300 backdrop-blur-sm group/btn">
+                      <span>Explore Solutions</span>
+                      <GoArrowRight className="w-3 h-3 group-hover/btn:translate-x-1 transition-transform" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Glow Effect on Hover */}
+                <div className="absolute inset-0 bg-gradient-to-r from-purple-500/0 via-purple-500/10 to-purple-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+              </motion.div>
             </Link>
 
             {/* B2C Card Mobile */}
-            <Link href="/training" className="relative w-full max-w-[500px] self-center group">
-              <Image
-                src={b2c}
-                alt="Individuals B2C - Learn Security Build Skills Launch Careers"
-                width={600}
-                height={350}
-                className="w-full h-[400px] rounded-[1.2rem] shadow-2xl transition-transform group-hover:scale-105 duration-500"
-              />
+            <Link href="/training" className="relative w-full max-w-[400px] self-center group">
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                className="relative overflow-hidden rounded-2xl border-2 border-purple-300 shadow-[0_0_25px_rgba(59,130,246,0.3)] group-hover:shadow-[0_0_40px_rgba(59,130,246,0.5)] transition-all duration-500 group-hover:scale-[1.02]"
+              >
+                {/* Animated Moving Border */}
+                <div className="absolute inset-0 rounded-2xl p-[2px] overflow-hidden">
+                  <div
+                    className="absolute inset-0 rounded-2xl opacity-70"
+                    style={{
+                      background: "linear-gradient(90deg, #60A5FA, #A78BFA, #EC4899, #60A5FA)",
+                      backgroundSize: "300% 100%",
+                      animation: "borderMove 4s linear infinite",
+                    }}
+                  />
+                </div>
+
+                {/* Inner border to create the effect */}
+                <div className="absolute inset-[1px] rounded-2xl bg-transparent border border-blue-500/20" />
+                {/* Background Image */}
+                <div className="absolute inset-0">
+                  <Image
+                    src={b2cCard}
+                    alt="Background"
+                    fill
+                    className="object-cover blur-[2px] scale-110"
+                  />
+                  {/* Dark Overlay */}
+                  <div className="absolute inset-0 bg-black/40" />
+                  {/* Overlay Gradient */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#1a0b2e]/98 via-[#0f1f3e]/95 to-[#0a1628]/98" />
+                </div>
+
+                {/* Content */}
+                <div className="relative z-10 p-5">
+                  {/* Badge */}
+                  <div className="flex justify-center mb-2">
+                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/10 border border-blue-400/30 backdrop-blur-md">
+                      <span className="text-blue-300 text-[10px] font-semibold">Individuals (B2C)</span>
+                    </div>
+                  </div>
+
+                  {/* Shine Divider */}
+                  <div className="relative h-px w-full mb-2 overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-blue-400/50 to-transparent" />
+                    <div
+                      className="absolute inset-0 bg-gradient-to-r from-transparent via-white/60 to-transparent w-1/3"
+                      style={{
+                        animation: "shine 3s ease-in-out infinite",
+                      }}
+                    />
+                  </div>
+
+                  {/* Main Content */}
+                  <div className="flex flex-col items-center text-center">
+                    {/* Icon */}
+                    <div className="w-10 h-10 relative mb-1.5">
+                      <div className="absolute inset-0 rounded-full bg-blue-400/30 blur-md opacity-80" />
+                      <Image
+                        src={b2cIcon}
+                        alt="Individuals"
+                        width={48}
+                        height={48}
+                        className="w-full h-full drop-shadow-[0_0_8px_rgba(59,130,246,0.6)]"
+                      />
+                    </div>
+
+                    {/* Heading */}
+                    <h3 className="text-base font-bold text-white mb-1 leading-tight">
+                      Learn Security Build Skills Launch Careers
+                    </h3>
+
+                    {/* Description */}
+                    <p className="text-gray-300 text-[10px] leading-relaxed mb-2">
+                      Prepare students with structured cybersecurity training and certification programs.
+                    </p>
+
+                    {/* CTA Button */}
+                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-white/10 border border-blue-400/40 text-white text-[10px] font-semibold hover:bg-white/20 hover:border-blue-400/60 transition-all duration-300 backdrop-blur-sm group/btn">
+                      <span>Explore Programs</span>
+                      <GoArrowRight className="w-3 h-3 group-hover/btn:translate-x-1 transition-transform" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Glow Effect on Hover */}
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/0 via-blue-500/10 to-blue-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+              </motion.div>
             </Link>
           </div>
 

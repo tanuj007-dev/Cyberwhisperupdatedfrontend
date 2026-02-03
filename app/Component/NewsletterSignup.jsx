@@ -83,12 +83,11 @@ export default function NewsletterSignup() {
         {/* Content */}
         <div className="relative z-10 text-center max-w-5xl mx-auto">
           <h2 className="text-2xl md:text-3xl font-bold text-white mb-2 leading-tight">
-            Are you prepared to secure and chase your demons?
-
+          Stay ahead of threats with practical learning.
           </h2>
 
           <p className="text-white/90 mb-6 text-sm md:text-base font-medium">
-            Let's build a stronger security posture with practical, measurable outcomes.
+          Get updates on new labs, CTF challenges, training tracks, and security insights—straight to your inbox.
           </p>
 
           {/* Success/Error Message */}

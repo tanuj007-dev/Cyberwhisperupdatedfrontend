@@ -24,7 +24,7 @@ export function AboutHero() {
 
       <div className="absolute inset-0 cyber-grid-bg opacity-10 z-0" />
 
-      <div className="w-full max-w-7xl mx-auto px-4 relative z-20 text-center md:text-left">
+      <div className="w-full max-w-7xl mx-auto px-4 relative z-20 text-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -49,7 +49,7 @@ export function AboutHero() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="flex items-center justify-center md:justify-start gap-4 text-gray-600 dark:text-gray-400 font-medium text-sm md:text-base mb-8"
+          className="flex items-center justify-center gap-4 text-gray-600 dark:text-gray-400 font-medium text-sm md:text-base mb-8"
         >
           <a href="/" className="hover:text-primary transition-colors hover:scale-105 transform">
             Home
@@ -62,7 +62,7 @@ export function AboutHero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5, duration: 0.8 }}
-          className="text-base md:text-lg text-gray-600 dark:text-gray-400 max-w-3xl mx-auto md:mx-0 leading-relaxed text-justify md:text-left"
+          className="text-base md:text-lg text-gray-600 dark:text-gray-400 max-w-3xl mx-auto leading-relaxed text-center"
         >
           Practitioner-led cyber defense, delivered through real-world workflows, hands-on training, and measurable outcomes.
         </motion.p>

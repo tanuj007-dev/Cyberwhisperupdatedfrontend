@@ -1,17 +1,45 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { Play, X } from 'lucide-react';
+import { useInView, useMotionValue, useSpring } from 'framer-motion';
 import analystImage from './assets/b2b-analyst.webp';
+
+function Counter({ value, suffix = "" }) {
+    const ref = useRef(null);
+    const motionValue = useMotionValue(0);
+    const springValue = useSpring(motionValue, {
+        damping: 50,
+        stiffness: 100,
+    });
+    const isInView = useInView(ref, { once: true, margin: "-50px" });
+
+    useEffect(() => {
+        if (isInView) {
+            motionValue.set(value);
+        }
+    }, [motionValue, isInView, value]);
+
+    useEffect(() => {
+        const unsubscribe = springValue.on("change", (latest) => {
+            if (ref.current) {
+                ref.current.textContent = Math.floor(latest) + suffix;
+            }
+        });
+        return unsubscribe;
+    }, [springValue, suffix]);
+
+    return <span ref={ref}>0{suffix}</span>;
+}
 
 export default function B2BStats() {
     const [isVideoOpen, setIsVideoOpen] = useState(false);
 
     const stats = [
-        { label: "CTF scenarios (beginner to advanced)", value: "100+" },
-        { label: "Detection & investigation labs", value: "200+" },
-        { label: "APT-style simulations", value: "50+" },
-        { label: "Teams enabled / workshops delivered", value: "50+" },
+        { label: "CTF scenarios (beginner to advanced)", value: 100, suffix: "+" },
+        { label: "Detection & investigation labs", value: 200, suffix: "+" },
+        { label: "APT-style simulations", value: 50, suffix: "+" },
+        { label: "Teams enabled / workshops delivered", value: 50, suffix: "+" },
     ];
 
     return (
@@ -43,8 +71,9 @@ export default function B2BStats() {
 
                                 {/* Content */}
                                 <div className="flex flex-col items-center sm:items-start text-center sm:text-left">
-                                    <h3 className="text-2xl md:text-3xl font-bold leading-tight mb-6 text-gray-900 dark:text-white transition-colors duration-300">
-                                        Our Work Process <br /> With Clients
+                                    <h3 className="text-2xl md:text-3xl font-bold leading-tight mb-6 transition-colors duration-300">
+                                        <span className="text-gray-900 dark:text-white">Our Work Process </span><br />
+                                        <span className="bg-gradient-to-r from-purple-600 via-purple-700 to-purple-900 dark:from-purple-400 dark:via-purple-500 dark:to-purple-700 bg-clip-text text-transparent">With Clients</span>
                                     </h3>
 
                                     <button
@@ -70,7 +99,7 @@ export default function B2BStats() {
                                     className="flex flex-col items-center text-center"
                                 >
                                     <span className="text-5xl md:text-6xl font-bold text-transparent bg-clip-text bg-linear-to-b from-gray-900 to-gray-600 dark:from-white dark:to-white/60 mb-2 font-mono tracking-tighter transition-all duration-300">
-                                        {stat.value}
+                                        <Counter value={stat.value} suffix={stat.suffix} />
                                     </span>
                                     <span className="text-gray-600 dark:text-gray-400 font-medium text-lg transition-colors duration-300">
                                         {stat.label}

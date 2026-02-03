@@ -32,8 +32,9 @@ export default function B2BTargetAudience() {
             <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
                 {/* Header */}
                 <div className="text-center mb-12">
-                    <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-3 transition-colors duration-300">
-                        Who We Serve
+                    <h2 className="text-3xl md:text-4xl font-bold mb-3 transition-colors duration-300">
+                        <span className="text-gray-900 dark:text-white">Who We </span>
+                        <span className="bg-gradient-to-r from-purple-600 via-purple-700 to-purple-900 dark:from-purple-400 dark:via-purple-500 dark:to-purple-700 bg-clip-text text-transparent">Serve</span>
                     </h2>
                     <p className="text-gray-600 dark:text-gray-400 text-base md:text-lg max-w-2xl mx-auto transition-colors duration-300">
                         Tailored cybersecurity solutions for diverse organizations

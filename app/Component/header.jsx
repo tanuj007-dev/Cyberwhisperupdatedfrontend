@@ -1,6 +1,6 @@
 'use client';
 import Image from 'next/image';
-import logo from './assets/logo.png'
+const logo = '/assets/cw_logo_sample_2.png'
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -48,8 +48,8 @@ export default function Header() {
                 <Image
                   src={logo}
                   alt="Cyber Whisper Logo"
-                  width={150}
-                  height={150}
+                  width={100}
+                  height={100}
                   className="rounded-lg object-contain"
                 />
               </Link>

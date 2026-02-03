@@ -1,8 +1,10 @@
 "use client";
 import React from 'react';
 import Particles from './Particles';
+import { useEnquiry } from '../context/EnquiryContext';
 
 const BackgroundAnimations = () => {
+
     return (
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
             {/* Static Gradient Orb 1 - Top Right */}
@@ -11,21 +13,46 @@ const BackgroundAnimations = () => {
             {/* Static Gradient Orb 2 - Bottom Left */}
             <div className="absolute -bottom-[10%] -left-[10%] w-[600px] h-[600px]   bg-[#8B5CF6]/20 blur-[120px] mix-blend-multiply dark:mix-blend-screen opacity-50 dark:opacity-100" />
 
-            {/* Static Grid Pattern */}
-            <div className="absolute inset-0 opacity-[0.1] dark:opacity-[0.15]"
-                style={{
-                    backgroundImage: `linear-gradient(#6B46E5 1px, transparent 1px), linear-gradient(90deg, #6B46E5 1px, transparent 1px)`,
-                    backgroundSize: '40px 40px',
-                    maskImage: 'linear-gradient(to bottom, transparent, black, transparent)'
-                }}
-            />
+
+
         </div>
     );
 };
 
 export default function B2BHero() {
+    const { openEnquiry } = useEnquiry();
+
+    const features = [
+        {
+            title: "SOC Enablement + Use-Case Engineering",
+            description: "Log onboarding, correlation rules, alert tuning, dashboards — aligned to your SOC operating model.",
+            color: "bg-purple-500"
+        },
+        {
+            title: "Cyber Range + Purple Team Simulations",
+            description: "Realistic attack scenarios mapped to MITRE ATT&CK, repeatable drills, measurable outcomes.",
+            color: "bg-purple-500"
+        },
+        {
+            title: "Threat Intelligence + Response Playbooks",
+            description: "Actionable advisories, triage workflows, investigation notes, escalation-ready reporting.",
+            color: "bg-purple-500"
+        },
+        {
+            title: "AI-Assisted SOC Workflows (Human-Approved)",
+            description: "Alert summarization, enrichment suggestions, auto case notes, detection gap insights.",
+            color: "bg-purple-500"
+        }
+    ];
+
+    const tags = [
+        "Safe Isolated Sandbox",
+        "One-Click Reset Labs",
+        "KPI & Readiness Reporting",
+        "Works with SIEM/EDR/SOAR"
+    ];
     return (
-        <section className="relative py-16 md:py-24 bg-gray-50 dark:bg-[#150833] text-gray-900 dark:text-[#FFFDFF] flex items-center justify-center p-6 md:p-12 overflow-hidden font-sans transition-colors duration-300">
+        <section className="relative py-8 md:py-24 bg-gray-50 dark:bg-[#150833] text-gray-900 dark:text-[#FFFDFF] flex items-center justify-center p-4 md:p-6 overflow-hidden font-sans transition-colors duration-300">
             <BackgroundAnimations />
 
             {/* OGL Particles Background */}
@@ -43,108 +70,97 @@ export default function B2BHero() {
                 />
             </div>
 
-            <div className="relative z-10 max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+            <div className="relative z-10 max-w-7xl mx-auto w-full grid grid-cols-1 mt-8 lg:grid-cols-2 gap-6 lg:gap-8 items-center">
 
                 {/* Left Content */}
-                <div className="flex flex-col gap-6 text-center lg:text-left">
-                    <div className="space-y-4">
-                        <div className="relative inline-flex overflow-hidden rounded-full p-[1px] mx-auto lg:mx-0 w-fit">
-                            <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#6B46E5_0%,#FFFFFF_50%,#6B46E5_100%)]" />
-                            <div className="inline-flex h-full w-full items-center justify-center rounded-full bg-white dark:bg-[#150833] px-4 py-1.5 text-sm font-medium text-gray-900 dark:text-white backdrop-blur-3xl gap-2 transition-colors duration-300">
-                                <span className="relative flex h-2 w-2">
-                                    <span className="absolute inline-flex h-full w-full rounded-full bg-[#6B46E5] opacity-75 animate-ping"></span>
-                                    <span className="relative inline-flex rounded-full h-2 w-2 bg-[#6B46E5]"></span>
-                                </span>
-                                Enterprise Solutions
-                            </div>
-                        </div>
-                        <h1 className="text-3xl md:text-5xl font-bold leading-[1.1] tracking-tight text-gray-900 dark:text-white transition-colors duration-300">
-                            Fortify Your <br className="hidden md:block" />
-                            <span className="text-transparent bg-clip-text bg-linear-to-r from-[#6B46E5] dark:from-[#FFFDFF] via-[#A78BFA] to-[#6B46E5] transition-all duration-300">
-                                Organization
-                            </span>
+                <div className="flex flex-col gap-4 text-center lg:text-left">
+                    <div className="space-y-1">
+                        <span className="inline-block py-1 mt-8 md:mt-0 px-3 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-600 dark:text-purple-400 text-[10px] font-bold tracking-wider mb-2">
+                            ENTERPRISE CYBER RANGE
+                        </span>
+                        <h1 className="text-2xl md:text-3xl lg:text-[50px] font-bold leading-tight tracking-tighter">
+                            <span className="text-gray-900 dark:text-white">Prove Your SOC Can Respond — </span>
+                            <span className="bg-gradient-to-r from-purple-600 via-purple-700 to-purple-900 dark:from-purple-400 dark:via-purple-500 dark:to-purple-700 bg-clip-text text-transparent">Before the Next Incident</span>
                         </h1>
+                        <p className="text-[16px] text-gray-700 dark:text-gray-400 leading-snug max-w-3xl mx-auto lg:mx-0 font-light">
+                            Cyber Whisper builds enterprise-grade cyber range programs that validate your detections, sharpen workflows, and improve response quality. Run realistic simulations and measure readiness.
+                        </p>
                     </div>
 
-                    <p className="text-base md:text-lg text-gray-600 dark:text-gray-300 max-w-lg mx-auto lg:mx-0 leading-relaxed font-light transition-colors duration-300">
-                        Cyber Whisper helps teams reduce risk with SOC enablement, cyber range training, and detection engineering - so you detect faster, investigate cleaner, and respond with confidence.
-                    </p>
-
-                    <ul className="space-y-2 max-w-lg mx-auto lg:mx-0 text-sm md:text-base text-gray-600 dark:text-gray-300">
-                        <li className="flex items-start gap-3">
-                            <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-[#6B46E5] shrink-0"></span>
-                            <span>SOC Deployment & Enablement (SIEM / Wazuh / detection workflows)</span>
-                        </li>
-                        <li className="flex items-start gap-3">
-                            <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-[#6B46E5] shrink-0"></span>
-                            <span>Cyber Range + CTF Programs (role-based tracks, realistic simulations)</span>
-                        </li>
-                        <li className="flex items-start gap-3">
-                            <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-[#6B46E5] shrink-0"></span>
-                            <span>Threat Intelligence (CTI) + Response Playbooks (actionable, SOC-ready)</span>
-                        </li>
-                    </ul>
-
-                    <div className="flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start pt-2">
-                        <button className="group relative px-6 py-3 bg-[#6B46E5] text-white font-bold rounded-xl shadow-[0_0_20px_rgba(107,70,229,0.4)] hover:shadow-[0_0_35px_rgba(107,70,229,0.6)] hover:scale-105 active:scale-95 transition-all w-full sm:w-auto overflow-hidden text-sm uppercase tracking-wide">
-                            <span className="relative z-10 flex items-center justify-center gap-2">
-                                Book a Demo
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="transform group-hover:translate-x-1 transition-transform">
-                                    <path d="M5 12h14"></path>
-                                    <path d="m12 5 7 7-7 7"></path>
-                                </svg>
-                            </span>
-                        </button>
-
-                        <button className="px-6 py-3 bg-transparent border border-[#6B46E5]/50 text-[#6B46E5] dark:text-white font-bold rounded-xl hover:bg-[#6B46E5]/10 hover:border-[#6B46E5] hover:scale-105 active:scale-95 transition-all w-full sm:w-auto text-sm uppercase tracking-wide">
-                            Get a Quote
-                        </button>
+                    <div className="space-y-3 w-full max-w-3xl mx-auto lg:mx-0">
+                        {features.map((feature, index) => (
+                            <div key={index} className="group p-3 rounded-lg bg-gray-100/80 dark:bg-white/5 backdrop-blur-sm border border-gray-300 dark:border-white/10 hover:border-gray-400 dark:hover:border-white/20 transition-all duration-300 text-left shadow-lg">
+                                <div className="flex items-start gap-2.5">
+                                    <div className={`mt-1 w-1.5 h-1.5 rounded-full ${feature.color} shadow-[0_0_4px_currentColor] shrink-0`} />
+                                    <div>
+                                        <h3 className="text-[14px] font-bold text-gray-900 dark:text-white mb-0.5">
+                                            {feature.title}
+                                        </h3>
+                                        <p className="text-[12px] text-gray-700 dark:text-gray-400 bg-transparent leading-snug">
+                                            {feature.description}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
                     </div>
                 </div>
 
-                {/* Right Image Content */}
-                <div className="relative flex justify-center lg:justify-end">
-                    <div className="relative w-full max-w-[400px] lg:max-w-[550px] aspect-square flex items-center justify-center">
-                        {/* Animated Rings */}
-                        <div className="absolute inset-0 bg-linear-to-tr from-[#6B46E5]/30 to-transparent blur-[80px] rounded-full opacity-40" />
+                {/* Right Column: Unified CTA & Visual Card */}
+                {/* Right Column: Unified CTA & Visual Card */}
+                <div className="lg:col-span-1 relative h-auto flex items-start justify-center">
+                    <div className="w-full max-w-[400px] bg-gray-100/90 dark:bg-white/5 backdrop-blur-md border border-gray-300 dark:border-white/10 rounded-2xl p-5 relative overflow-hidden flex flex-col shadow-2xl h-auto">
 
-                        {/* Outer Ring */}
-                        <div className="absolute inset-4 border border-[#6B46E5]/10 rounded-full" />
-                        <div className="absolute inset-4 rounded-full border border-transparent border-t-[#A78BFA] shadow-[0_0_10px_#A78BFA] animate-[spin_8s_linear_infinite]" />
+                        {/* Content */}
+                        <div className="relative z-10 w-full mb-4">
+                            <p className="text-[10px] font-bold text-gray-600 dark:text-gray-400 uppercase tracking-widest mb-3 border-l-2 border-gray-400 dark:border-gray-600 pl-2">
+                                Next Step
+                            </p>
 
-                        {/* Inner Ring */}
-                        <div className="absolute inset-12 border border-[#6B46E5]/10 rounded-full" />
-                        <div className="absolute inset-12 rounded-full border border-transparent border-b-[#A78BFA] shadow-[0_0_10px_#A78BFA] animate-[spin_6s_linear_infinite_reverse]" />
+                            <div className="flex gap-3 mb-4 w-full">
+                                <button
+                                    onClick={openEnquiry}
+                                    className="flex-1 py-2.5 px-2 bg-purple-500 text-white font-extrabold rounded-xl shadow-lg transition-all text-[11px] uppercase tracking-wide whitespace-nowrap"
+                                >
+                                    Book a Demo
+                                </button>
+                                <button
+                                    onClick={openEnquiry}
+                                    className="flex-1 py-2.5 px-2 bg-transparent border-2 border-purple-500 hover:border-purple-600 text-purple-600 dark:text-gray-300 hover:text-purple-700 dark:hover:text-white font-extrabold rounded-xl transition-all text-[11px] uppercase tracking-wide whitespace-nowrap"
+                                >
+                                    Get a Quote
+                                </button>
+                            </div>
 
-                        {/* Server Video */}
-                        <div className="relative z-10 w-[85%] md:w-full h-full flex items-center justify-center rounded-full overflow-hidden">
-                            <video
-                                src="/assets/enterprise-fortress.mp4"
-                                autoPlay
-                                loop
-                                muted
-                                playsInline
-                                className="object-cover w-full h-full rounded-full"
-                                suppressHydrationWarning
-                            />
-                        </div>
+                            <p className="text-[16px] text-gray-700 dark:text-gray-400 mb-4 leading-relaxed border-b border-gray-300 dark:border-gray-800 pb-3">
+                                Request a pilot plan + sample lab outline + sample executive report.
+                            </p>
 
-                        {/* Static Tech Badges */}
-                        <div className="absolute top-[20%] mt-8 -right-4 bg-white/90 dark:bg-[#1E1145]/90 backdrop-blur-md border border-[#6B46E5]/30 p-2.5 rounded-lg shadow-xl z-20 transition-colors duration-300">
-                            <div className="absolute inset-0 rounded-lg border border-[#A78BFA] opacity-50 animate-pulse pointer-events-none"></div>
-                            <div className="flex items-center gap-2 relative z-10">
-                                <div className="h-1.5 w-1.5 rounded-full bg-green-500"></div>
-                                <span className="text-[10px] uppercase font-bold tracking-widest text-[#6B46E5] dark:text-[#A78BFA] transition-colors duration-300">System Secure</span>
+                            <div className="flex flex-wrap items-center justify-center gap-1.5 relative z-20">
+                                {tags.map((tag, idx) => (
+                                    <span key={idx} className="px-2 py-1 bg-gray-200 dark:bg-[#1F2937] border border-gray-400 dark:border-gray-700 rounded-full text-[10px] font-bold text-gray-700 dark:text-purple-500 shadow-sm">
+                                        {tag}
+                                    </span>
+                                ))}
                             </div>
                         </div>
 
-                        <div className="absolute bottom-[20%] -left-4 bg-white/90 dark:bg-[#1E1145]/90 backdrop-blur-md border border-[#6B46E5]/30 p-2.5 rounded-lg shadow-xl z-20 transition-colors duration-300">
-                            <div className="absolute inset-0 rounded-lg border border-[#A78BFA] opacity-50 animate-pulse pointer-events-none"></div>
-                            <div className="flex items-center gap-2 relative z-10">
-                                <div className="h-1.5 w-1.5 rounded-full bg-[#6B46E5]"></div>
-                                <span className="text-[10px] uppercase font-bold tracking-widest text-[#6B46E5] dark:text-[#A78BFA] transition-colors duration-300">AI Monitoring</span>
+                        {/* Bottom Visual - Huge Circular Mask */}
+                        <div className="relative mx-auto w-full max-w-[350px] aspect-square mt-2">
+                            <div className="w-full h-full rounded-full border border-gray-400 dark:border-gray-700/50 relative overflow-hidden shadow-[0_-10px_40px_rgba(0,0,0,0.3)] dark:shadow-[0_-10px_40px_rgba(0,0,0,0.5)] bg-gray-200 dark:bg-[#0B0F19]">
+                                {/* Video / Visual */}
+                                <video
+                                    src="/assets/enterprise-fortress.mp4"
+                                    autoPlay
+                                    loop
+                                    muted
+                                    playsInline
+                                    className="w-full h-full object-cover scale-[1.2] opacity-90 mix-blend-screen"
+                                />
+
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>

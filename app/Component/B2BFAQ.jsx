@@ -83,8 +83,9 @@ export default function B2BFAQ() {
                         <HelpCircle size={14} />
                         <span>Common Questions</span>
                     </div>
-                    <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-                        Frequently Asked Questions
+                    <h2 className="text-3xl md:text-4xl font-bold mb-4">
+                        <span className="text-gray-900 dark:text-white">Frequently Asked </span>
+                        <span className="bg-gradient-to-r from-purple-600 via-purple-700 to-purple-900 dark:from-purple-400 dark:via-purple-500 dark:to-purple-700 bg-clip-text text-transparent">Questions</span>
                     </h2>
                     <p className="text-gray-600 dark:text-gray-400 max-w-xl mx-auto">
                         Everything you need to know about our enterprise training and cyber range solutions.
@@ -103,14 +104,7 @@ export default function B2BFAQ() {
                     ))}
                 </div>
 
-                <div className="mt-12 text-center">
-                    <p className="text-gray-600 dark:text-gray-400 mb-4">
-                        Still have questions?
-                    </p>
-                    <a href="#contact" className="inline-flex items-center justify-center px-6 py-3 text-sm font-bold text-white transition-all duration-200 bg-[#6B46E5] rounded-lg hover:bg-[#5538B5] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#6B46E5] focus:ring-offset-gray-900">
-                        Contact Sales
-                    </a>
-                </div>
+
             </div>
         </section>
     );

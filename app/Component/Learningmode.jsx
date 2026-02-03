@@ -1,8 +1,9 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { MonitorPlay, Users, Building2, Terminal, Cpu, ChevronRight } from 'lucide-react';
+import { DeploymentForm } from './DeploymentForm';
 
 // Using suitable existing assets as placeholders for the learning modes
 import imgClassroom from './assets/cyber_classroom.png';
@@ -21,6 +22,7 @@ const modes = [
             'Red/Blue team exercises & reporting drills'
         ],
         btnText: 'JOIN_CLASSROOM',
+        formType: 'JOIN_CLASSROOM',
         image: imgClassroom,
         icon: Users,
         color: 'border-cyan-500/50 shadow-cyan-500/20',
@@ -38,6 +40,7 @@ const modes = [
             'Flexible batches for students & professionals'
         ],
         btnText: 'START_UPLINK',
+        formType: 'START_UPLINK',
         image: imgOnline,
         icon: MonitorPlay,
         color: 'border-purple-500/50 shadow-purple-500/20',
@@ -55,6 +58,7 @@ const modes = [
             'Team exercises, simulations & readiness review'
         ],
         btnText: 'DEPLOY_TEAM',
+        formType: 'DEPLOY_TEAM',
         image: imgCorporate,
         icon: Building2,
         color: 'border-emerald-500/50 shadow-emerald-500/20',
@@ -64,6 +68,8 @@ const modes = [
 ];
 
 export default function LearningMode() {
+    const [activeForm, setActiveForm] = useState(null);
+
     return (
         <section className="relative w-full py-16 lg:py-24 bg-[#FBF9FF] dark:bg-background text-gray-900 dark:text-white overflow-hidden font-sans transition-colors duration-300">
 
@@ -160,7 +166,10 @@ export default function LearningMode() {
 
                                         {/* Button */}
                                         <div className="mt-auto relative z-10">
-                                            <button className={`w-full group/btn relative overflow-hidden bg-gray-900 dark:bg-[#0d0d12] border border-gray-800 dark:border-white/10 hover:${mode.color.split(' ')[0]} text-white px-4 py-3 font-mono text-xs font-bold uppercase tracking-wider flex items-center justify-between transition-all duration-300`}>
+                                            <button
+                                                onClick={() => setActiveForm(mode.formType)}
+                                                className={`w-full group/btn relative overflow-hidden bg-gray-900 dark:bg-[#0d0d12] border border-gray-800 dark:border-white/10 hover:${mode.color.split(' ')[0]} text-white px-4 py-3 font-mono text-xs font-bold uppercase tracking-wider flex items-center justify-between transition-all duration-300`}
+                                            >
                                                 <span className="relative z-10 flex items-center gap-2">
                                                     <span className={`${mode.textAccent}`}>[</span> {mode.btnText} <span className={`${mode.textAccent}`}>]</span>
                                                 </span>
@@ -178,6 +187,14 @@ export default function LearningMode() {
                 </div>
 
             </div>
+
+            {/* Render Active Form Modal */}
+            {activeForm && (
+                <DeploymentForm
+                    formType={activeForm}
+                    onClose={() => setActiveForm(null)}
+                />
+            )}
         </section>
     );
 }

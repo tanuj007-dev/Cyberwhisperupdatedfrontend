@@ -7,6 +7,7 @@ import { FaFacebookF, FaLinkedinIn, FaInstagram, FaGlobe } from 'react-icons/fa'
 
 import imgSonu from './assets/vikas.png'
 import imgVikas from './assets/sonu.png'
+import { useEnquiry } from '../context/EnquiryContext'
 
 const teamMembers = [
     {
@@ -16,10 +17,7 @@ const teamMembers = [
         bio: "Leads partnerships, client success, and growth at Cyber Whisper while also driving core delivery across Cyber Threat Intelligence (CTI) and Cyber Range operations. Ensures training and security programs align with real customer needs and measurable outcomes.",
         focusAreas: ["Sales & Partnerships", "Client Success", "CTI Programs", "Cyber Range Operations"],
         socials: {
-            globe: "#",
-            facebook: "#",
-            instagram: "#",
-            linkedin: "#"
+            linkedin: "https://www.linkedin.com/in/sonu-mandecha-28a6aa16a/"
         }
     },
     {
@@ -29,17 +27,14 @@ const teamMembers = [
         bio: "Leads Cyber Whisper’s technical vision across Cyber Range, SOC enablement, and hands-on security training. Cybersecurity researcher and speaker focused on building analyst “muscle memory” through realistic labs, detection engineering, and investigation workflows.",
         focusAreas: ["Cyber Range", "SOC Operations", "Training & Enablement", "Research", "Public Speaking"],
         socials: {
-            globe: "#",
-            facebook: "#",
-            instagram: "#",
-            linkedin: "#"
+            linkedin: "https://www.linkedin.com/in/vikas-chauhan-229786197"
         }
     }
 ]
 
 export default function TeamSpecialists() {
     const [hoveredId, setHoveredId] = useState<number | null>(null)
-
+    const { openEnquiry } = useEnquiry();
 
     return (
         <section className="py-24 bg-white dark:bg-[#0E0429] relative overflow-hidden transition-colors duration-300">
@@ -93,7 +88,7 @@ export default function TeamSpecialists() {
                     <p className="text-[#1C0F2D] dark:text-white text-lg font-medium">
                         Let's Create Something Better Together -
                         <a
-                            href="https://wa.me/919220946887"
+                            onClick={openEnquiry}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="ml-2 text-[#6B46E5] underline decoration-2 underline-offset-4 hover:text-[#6B46E5] transition-colors font-extrabold"
@@ -165,10 +160,8 @@ function MobileTeamCard({ member }: { member: typeof teamMembers[0] }) {
                             ))}
                         </div>
 
-                        <div className="flex gap-4 pt-4 justify-center">
-                            <SocialIcon href={member.socials.globe} icon={<FaGlobe size={16} />} />
-                            <SocialIcon href={member.socials.facebook} icon={<FaFacebookF size={16} />} />
-                            <SocialIcon href={member.socials.instagram} icon={<FaInstagram size={16} />} />
+                        <div className="flex flex-col items-center gap-2 pt-4 justify-center">
+                            <span className="text-[10px] text-purple-300 font-bold uppercase tracking-widest">Connect on LinkedIn</span>
                             <SocialIcon href={member.socials.linkedin} icon={<FaLinkedinIn size={16} />} />
                         </div>
                     </div>
@@ -251,10 +244,8 @@ function DesktopTeamCard({ member, index, setHoveredId, hoveredId }: { member: t
                                         ))}
                                     </div>
 
-                                    <div className="flex gap-3 pt-2">
-                                        <SocialIcon href={member.socials.globe} icon={<FaGlobe size={14} />} />
-                                        <SocialIcon href={member.socials.facebook} icon={<FaFacebookF size={14} />} />
-                                        <SocialIcon href={member.socials.instagram} icon={<FaInstagram size={14} />} />
+                                    <div className="flex flex-col items-center gap-2 pt-2">
+                                        <span className="text-[10px] text-purple-300 font-bold uppercase tracking-widest">Connect on LinkedIn</span>
                                         <SocialIcon href={member.socials.linkedin} icon={<FaLinkedinIn size={14} />} />
                                     </div>
                                 </motion.div>

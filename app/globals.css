@@ -370,3 +370,46 @@
   border-radius: 50%;
   /* Ensure it's circular if simulating a point source, but for a shield image, maybe match shape or just be a glow behind */
 }
+
+/* Marquee Animations */
+@keyframes marquee-slow {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-33.333%);
+  }
+}
+
+@keyframes marquee-slow-reverse {
+  0% {
+    transform: translateX(-33.333%);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes marquee-slower {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee-slow {
+  animation: marquee-slow 60s linear infinite;
+}
+
+.animate-marquee-slow-reverse {
+  animation: marquee-slow-reverse 55s linear infinite;
+}
+
+.animate-marquee-slower {
+  animation: marquee-slower 90s linear infinite;
+}

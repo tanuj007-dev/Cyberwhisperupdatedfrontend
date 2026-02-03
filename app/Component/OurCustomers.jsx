@@ -69,6 +69,7 @@ const OurCustomers = () => {
                                         alt={customer.name}
                                         width={140}
                                         height={140}
+                                        unoptimized
                                         className="w-full h-full object-contain transition-all duration-300 group-hover:scale-110 relative z-10"
                                         loading="lazy"
                                     />
@@ -90,6 +91,7 @@ const OurCustomers = () => {
                                         alt={customer.name}
                                         width={140}
                                         height={140}
+                                        unoptimized
                                         className="w-full h-full object-contain transition-all duration-300 group-hover:scale-110 relative z-10"
                                         loading="lazy"
                                     />

@@ -1,7 +1,5 @@
 import Image from "next/image"
 import footerBg from "./assets/footer-bg.webp";
-import logo from "./assets/logo.webp";
-import lightLogo from "./assets/Untitled design (10).png";
 import { FaLinkedinIn, FaYoutube, FaInstagram, FaXTwitter } from "react-icons/fa6"
 import { MapPin, Phone, Mail } from "lucide-react"
 
@@ -26,9 +24,9 @@ export default function Footer() {
           {/* Left Section: Branding */}
           <div className="sm:col-span-2 lg:col-span-5 flex flex-col">
             <div className="mb-4 md:mb-6">
-              <div className="relative w-48 h-12 md:w-64 md:h-16">
+              <div className="relative w-32 h-32 md:w-40 md:h-40">
                 <Image
-                  src={logo}
+                  src="/assets/cw_logo_sample_2.png"
                   alt="Cyber Whisper"
                   fill
                   className="object-contain"

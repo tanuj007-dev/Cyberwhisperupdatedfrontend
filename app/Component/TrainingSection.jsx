@@ -1,50 +1,57 @@
 "use client"
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
-import { Star, BookOpen, BarChart2, Calendar, ArrowRight } from 'lucide-react'
+import { Star, BookOpen, BarChart2, Calendar, ArrowRight, Loader2 } from 'lucide-react'
 
-// Import assets
+// Import fallback assets
 import thumb1 from './assets/cyber_lab_1.webp'
 import thumb2 from './assets/cyber_lab_2.webp'
 import thumb3 from './assets/cyber_lab_3.webp'
 
-const categories = [
-    'Programming', 'CISCO', 'Red Hat', 'CompTIA', 'Microsoft Azure', 'Cybersecurity'
-]
-
-const trainingPrograms = [
-    {
-        category: 'Programming',
-        rating: 4.5,
-        title: 'One Year Cyber Security Diploma',
-        lessons: 20,
-        level: 'A1 - A2',
-        duration: '2 Weeks',
-        image: thumb1
-    },
-    {
-        category: 'Programming',
-        rating: 4.5,
-        title: 'One Year Cyber Security Diploma',
-        lessons: 18,
-        level: 'A1 - B1',
-        duration: '2 Weeks',
-        image: thumb2
-    },
-    {
-        category: 'Programming',
-        rating: 4.5,
-        title: 'One Year Cyber Security Diploma',
-        lessons: 20,
-        level: 'A1 - A2',
-        duration: '2 Weeks',
-        image: thumb3
-    }
-]
+const fallbackImages = [thumb1, thumb2, thumb3]
 
 export default function TrainingSection() {
-    const [activeCategory, setActiveCategory] = useState('Programming')
+    const [activeCategory, setActiveCategory] = useState('All')
+    const [courses, setCourses] = useState([])
+    const [categories, setCategories] = useState(['All'])
+    const [loading, setLoading] = useState(true)
+    const [error, setError] = useState(null)
+
+    useEffect(() => {
+        fetchCourses()
+    }, [])
+
+    const fetchCourses = async () => {
+        try {
+            setLoading(true)
+            const response = await fetch('/api/courses?page=1&limit=10')
+
+            if (!response.ok) {
+                throw new Error('Failed to fetch courses')
+            }
+
+            const data = await response.json()
+
+            if (data.success && data.courses) {
+                setCourses(data.courses)
+
+                // Extract unique categories from courses
+                const uniqueCategories = ['All', ...new Set(data.courses.map(course => course.category).filter(Boolean))]
+                setCategories(uniqueCategories)
+            }
+        } catch (err) {
+            console.error('Error fetching courses:', err)
+            setError(err.message)
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    // Filter courses by active category
+    const filteredCourses = activeCategory === 'All'
+        ? courses
+        : courses.filter(course => course.category === activeCategory)
 
     return (
         <section className="relative w-full bg-white dark:bg-black py-24 px-6 overflow-hidden font-sans transition-colors duration-300">
@@ -94,73 +101,94 @@ export default function TrainingSection() {
                 </div>
 
                 {/* Training Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-                    {trainingPrograms.map((program, idx) => (
-                        <motion.div
-                            key={idx}
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: idx * 0.1 }}
-                            className="bg-white dark:bg-gray-900 rounded-[2.5rem] border border-[#7B2CFF] shadow-[0_15px_40px_rgba(0,0,0,0.04)] overflow-hidden group hover:shadow-[0_25px_60px_rgba(107,70,229,0.08)] transition-all duration-500 flex flex-col"
+                {loading ? (
+                    <div className="flex items-center justify-center py-20">
+                        <Loader2 className="w-12 h-12 text-purple-600 animate-spin" />
+                    </div>
+                ) : error ? (
+                    <div className="text-center py-20">
+                        <p className="text-red-500 dark:text-red-400 text-lg font-semibold">Error: {error}</p>
+                        <button
+                            onClick={fetchCourses}
+                            className="mt-4 px-6 py-2 bg-purple-600 text-white rounded-full hover:bg-purple-700 transition-colors"
                         >
-                            {/* Card Content Top */}
-                            <div className="p-8 pb-4 space-y-6 grow">
-                                <div className="flex items-center justify-between">
-                                    <span className="bg-[#E9E4FF] text-[#6B46E5] px-3 py-1 rounded-sm text-xs font-semibold uppercase tracking-wider">
-                                        {program.category}
-                                    </span>
-                                    <div className="flex items-center gap-1">
-                                        <span className="text-sm   text-slate-900 dark:text-white">{program.rating}</span>
-                                        <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                            Retry
+                        </button>
+                    </div>
+                ) : filteredCourses.length === 0 ? (
+                    <div className="text-center py-20">
+                        <p className="text-gray-500 dark:text-gray-400 text-lg">No courses available in this category.</p>
+                    </div>
+                ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+                        {filteredCourses.map((course, idx) => (
+                            <motion.div
+                                key={course.id}
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: idx * 0.1 }}
+                                className="bg-white dark:bg-gray-900 rounded-[2.5rem] border border-[#7B2CFF] shadow-[0_15px_40px_rgba(0,0,0,0.04)] overflow-hidden group hover:shadow-[0_25px_60px_rgba(107,70,229,0.08)] transition-all duration-500 flex flex-col"
+                            >
+                                {/* Card Content Top */}
+                                <div className="p-8 pb-4 space-y-6 grow">
+                                    <div className="flex items-center justify-between">
+                                        <span className="bg-[#E9E4FF] text-[#6B46E5] px-3 py-1 rounded-sm text-xs font-semibold uppercase tracking-wider">
+                                            {course.category || 'General'}
+                                        </span>
+                                        <div className="flex items-center gap-1">
+                                            <span className="text-sm text-slate-900 dark:text-white">{course.rating || 4.5}</span>
+                                            <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                                        </div>
+                                    </div>
+
+                                    <h3 className="text-[22px] font-semibold text-[#1a1a2e] dark:text-white leading-[1.2] group-hover:text-[#6B46E5] transition-colors">
+                                        {course.title}
+                                    </h3>
+
+                                    <div className="flex items-center gap-3">
+                                        <button className="flex-1 bg-[#310E3F] text-white py-3 rounded-full text-sm font-bold hover:bg-[#6B46E5] transition-colors">
+                                            Enroll Now
+                                        </button>
+                                        <button className="flex-1 border-2 border-[#310E3F] dark:border-purple-400 text-[#310E3F] dark:text-purple-400 py-3 rounded-full text-sm font-bold hover:border-[#6B46E5] dark:hover:border-purple-300 hover:text-[#6B46E5] dark:hover:text-purple-300 transition-all">
+                                            Learn More
+                                        </button>
+                                    </div>
+
+                                    <div className="flex items-center justify-between pt-4 border-t border-gray-50 dark:border-gray-800 text-slate-400 dark:text-gray-500">
+                                        <div className="flex flex-col items-center gap-1">
+                                            <BookOpen size={18} />
+                                            <span className="text-[11px] font-bold uppercase tracking-tighter">{course.lessons || 20} lessons</span>
+                                        </div>
+                                        <div className="w-px h-8 bg-gray-100 dark:bg-gray-800" />
+                                        <div className="flex flex-col items-center gap-1">
+                                            <BarChart2 size={18} />
+                                            <span className="text-[11px] font-bold uppercase tracking-tighter">{course.level || 'Beginner'}</span>
+                                        </div>
+                                        <div className="w-px h-8 bg-gray-100 dark:bg-gray-800" />
+                                        <div className="flex flex-col items-center gap-1">
+                                            <Calendar size={18} />
+                                            <span className="text-[11px] font-bold uppercase tracking-tighter">{course.duration || '3 Weeks'}</span>
+                                        </div>
                                     </div>
                                 </div>
 
-                                <h3 className="text-[22px] font-semibold text-[#1a1a2e] dark:text-white leading-[1.2] group-hover:text-[#6B46E5] transition-colors">
-                                    {program.title}
-                                </h3>
-
-                                <div className="flex items-center gap-3">
-                                    <button className="flex-1 bg-[#310E3F] text-white py-3 rounded-full text-sm font-bold hover:bg-[#6B46E5] transition-colors">
-                                        Enroll Now
-                                    </button>
-                                    <button className="flex-1 border-2 border-[#310E3F] dark:border-purple-400 text-[#310E3F] dark:text-purple-400 py-3 rounded-full text-sm font-bold hover:border-[#6B46E5] dark:hover:border-purple-300 hover:text-[#6B46E5] dark:hover:text-purple-300 transition-all">
-                                        Learn More
-                                    </button>
-                                </div>
-
-                                <div className="flex items-center justify-between pt-4 border-t border-gray-50 dark:border-gray-800 text-slate-400 dark:text-gray-500">
-                                    <div className="flex flex-col items-center gap-1">
-                                        <BookOpen size={18} />
-                                        <span className="text-[11px] font-bold uppercase tracking-tighter">{program.lessons} lessons</span>
-                                    </div>
-                                    <div className="w-px h-8 bg-gray-100 dark:bg-gray-800" />
-                                    <div className="flex flex-col items-center gap-1">
-                                        <BarChart2 size={18} />
-                                        <span className="text-[11px] font-bold uppercase tracking-tighter">{program.level}</span>
-                                    </div>
-                                    <div className="w-px h-8 bg-gray-100 dark:bg-gray-800" />
-                                    <div className="flex flex-col items-center gap-1">
-                                        <Calendar size={18} />
-                                        <span className="text-[11px] font-bold uppercase tracking-tighter">{program.duration}</span>
+                                {/* Card Image Bottom */}
+                                <div className="px-6 pb-6 mt-auto">
+                                    <div className="relative aspect-16/10 rounded-[1.5rem] overflow-hidden">
+                                        <Image
+                                            src={course.thumbnail || fallbackImages[idx % fallbackImages.length]}
+                                            alt={course.title}
+                                            fill
+                                            unoptimized={!!course.thumbnail}
+                                            className="object-cover transition-transform duration-700 group-hover:scale-110"
+                                        />
                                     </div>
                                 </div>
-                            </div>
-
-                            {/* Card Image Bottom */}
-                            <div className="px-6 pb-6 mt-auto">
-                                <div className="relative aspect-16/10 rounded-[1.5rem] overflow-hidden">
-                                    <Image
-                                        src={program.image}
-                                        alt={program.title}
-                                        fill
-                                        className="object-cover transition-transform duration-700 group-hover:scale-110"
-                                    />
-                                </div>
-                            </div>
-                        </motion.div>
-                    ))}
-                </div>
+                            </motion.div>
+                        ))}
+                    </div>
+                )}
 
                 {/* View All Button */}
                 <div className="flex justify-center">

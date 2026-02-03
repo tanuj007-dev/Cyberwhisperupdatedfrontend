@@ -1,5 +1,6 @@
 import B2BHero from '../Component/B2BHero';
-import B2BTrustMarquee from '../Component/B2BTrustMarquee';
+import B2BMarquees from '../Component/B2BMarquees';
+// import B2BTrustMarquee from '../Component/B2BTrustMarquee';
 import B2BStats from '../Component/B2BStats';
 import B2BFeatures from '../Component/B2BFeatures';
 import B2BResilience from '../Component/B2BResilience';
@@ -19,7 +20,8 @@ export default function B2BPage() {
         <main>
             <B2BThemeWrapper>
                 <B2BHero />
-                <B2BTrustMarquee />
+                <B2BMarquees />
+                {/* <B2BTrustMarquee /> */}
                 <B2BStats />
                 <B2BFeatures />
                 <B2BResilience />

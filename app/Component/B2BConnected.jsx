@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Check, Calendar, MessageSquare } from 'lucide-react';
 import connectedImage from './assets/cyber_dashboard_blurred.png';
-
+import { useEnquiry } from '../context/EnquiryContext';
 export default function B2BConnected() {
     const benefits = [
         "Plug-and-play access over a single link",
@@ -12,7 +12,7 @@ export default function B2BConnected() {
         "One dashboard joins red, blue, and observers together",
         "Build a SOC-ready team with measurable outcomes"
     ];
-
+    const { openEnquiry } = useEnquiry();
     return (
         <section className="relative py-24 bg-white dark:bg-[#0B0420] text-gray-900 dark:text-white overflow-hidden transition-colors duration-300">
             {/* Background Gradient */}
@@ -70,7 +70,7 @@ export default function B2BConnected() {
                             <Link href="/contact">
                                 <button className="group flex items-center justify-center gap-2 px-5 py-3 bg-[#a855f7] hover:bg-[#9333ea] text-white font-bold text-sm rounded-xl shadow-lg shadow-[#a855f7]/25 hover:shadow-xl hover:shadow-[#a855f7]/40 transition-all duration-300 hover:scale-105 w-full sm:w-auto">
                                     <Calendar size={16} className="group-hover:scale-110 transition-transform" />
-                                    <span>Book a Demo</span>
+                                    <span><button onClick={openEnquiry}>Book a Demo</button></span>
                                 </button>
                             </Link>
 
@@ -78,7 +78,7 @@ export default function B2BConnected() {
                             <Link href="/contact">
                                 <button className="group flex items-center justify-center gap-2 px-5 py-3 bg-white dark:bg-white/5 hover:bg-gray-50 dark:hover:bg-white/10 text-gray-900 dark:text-white font-bold text-sm rounded-xl border-2 border-gray-300 dark:border-white/20 hover:border-[#a855f7] dark:hover:border-[#a855f7] shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105 w-full sm:w-auto">
                                     <MessageSquare size={16} className="group-hover:scale-110 transition-transform" />
-                                    <span>Get a Quote</span>
+                                    <span><button onClick={openEnquiry}>Get a Quote</button></span>
                                 </button>
                             </Link>
                         </div>

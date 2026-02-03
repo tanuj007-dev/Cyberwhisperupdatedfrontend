@@ -102,9 +102,9 @@ export default function TrainingHero() {
                     className="flex flex-col items-center space-y-5 md:space-y-6"
                 >
                     {/* Admission Badge */}
-                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#0a0015]/70 border border-purple-500/30 backdrop-blur-md w-fit animate-fade-in shadow-[0_0_15px_rgba(168,85,247,0.2)]">
+                    <div className="inline-flex items-center gap-2 px-4 py-1.5 mt-10 rounded-full bg-[#0a0015]/70 border border-purple-500/30 backdrop-blur-md w-fit animate-fade-in shadow-[0_0_15px_rgba(168,85,247,0.2)]">
                         <span className="flex h-2 w-2 rounded-full bg-purple-400 animate-pulse shadow-[0_0_8px_rgba(192,132,252,0.8)]" />
-                        <span className="text-white font-bold uppercase tracking-[0.05em] text-[11px] md:text-[11px]">Admissions Now Open For 2026</span>
+                        <span className="text-white font-bold uppercase tracking-[0.05em] text-[11px] md:text-[11px]">12-Months Diploma Program</span>
                     </div>
 
                     {/* High-Tech Heading */}
@@ -117,7 +117,7 @@ export default function TrainingHero() {
                             </span>
                         </h1>
 
-                        <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8 pt-4 md:pt-6 w-full max-w-3xl mx-auto px-2">
+                        <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8 pt-4 md:pt-6 w-full max-w-7xl mx-auto px-2">
                             {/* Practical Tracks Info */}
                             <div className="flex flex-wrap items-center justify-center gap-x-2 text-xs md:text-sm lg:text-base text-purple-200/80">
                                 <span className="font-medium">Practical tracks:</span>
@@ -205,7 +205,7 @@ export default function TrainingHero() {
                                 <button className="flex-1 md:flex-none px-4 py-2.5 rounded-lg bg-purple-600 text-white font-bold text-[13px] md:text-sm hover:bg-purple-700 transition-all shadow-lg shadow-purple-600/20">
                                     Join Now
                                 </button>
-                                <Link href="/ctf-offline" className="flex-1 md:flex-none px-4 py-2.5 rounded-lg border border-purple-500/30 text-white font-bold text-[13px] md:text-sm hover:bg-white/5 transition-all text-center">
+                                <Link href="https://ctf.cyberwhisper.in/" className="flex-1 md:flex-none px-4 py-2.5 rounded-lg border border-purple-500/30 text-white font-bold text-[13px] md:text-sm hover:bg-white/5 transition-all text-center">
                                     CTF
                                 </Link>
                             </div>
@@ -213,7 +213,7 @@ export default function TrainingHero() {
                     </div>
 
                     {/* Additional Information Section */}
-                    <div className="mt-6 max-w-4xl mx-auto text-center space-y-3 px-4">
+                    <div className="mt-6 max-w-8xl mx-auto text-center space-y-3 px-4">
                         <p className="text-gray-400 text-xs md:text-[13px] leading-relaxed">
                             <span className="text-white font-bold">Cyber Range labs included.</span> 4 certification tracks covered in the Diploma curriculum: <span className="text-white font-bold">CCNA, CEH, CompTIA Security+</span> (or <span className="text-white font-bold">CySA+</span>), and <span className="text-white font-bold">AWS Cloud Practitioner</span> (plus additional electives based on your career goal). Internship letter option and placement support for <span className="text-white font-bold">Big 4 (PwC, EY, KPMG, Deloitte)</span> and other companies — as per eligibility and openings.
                         </p>

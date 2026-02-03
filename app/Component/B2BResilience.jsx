@@ -1,7 +1,7 @@
 "use client";
 import React from 'react';
 import { CloudLightning, Key, ShieldCheck } from 'lucide-react';
-
+import { useEnquiry } from '../context/EnquiryContext';
 const ResilienceCard = ({ icon: Icon, title, description, bestFor, cta }) => {
     return (
         <div className="group relative flex flex-col justify-between p-6 md:p-8 rounded-2xl bg-white dark:bg-[#0B0420] border border-gray-200 dark:border-white/5 hover:border-[#6B46E5]/50 transition-all duration-300 h-full hover:-translate-y-2 hover:shadow-[0_0_30px_rgba(107,70,229,0.15)] shadow-lg dark:shadow-none">
@@ -37,27 +37,28 @@ const ResilienceCard = ({ icon: Icon, title, description, bestFor, cta }) => {
 };
 
 export default function B2BResilience() {
+    const { openEnquiry } = useEnquiry();
     const cards = [
         {
             icon: CloudLightning,
             title: "Immersive Cyber Range",
             description: "Your SOC team lacks live-fire experience? Our MITRE-mapped sandbox lets them battle APTs and ransomware safely, turning theory into battle-hardened reflexes.",
             bestFor: "SOC Teams, Universities & Cyber Defense Units",
-            cta: "Book a Demo"
+            cta: <button onClick={openEnquiry}>Book a Demo</button>
         },
         {
             icon: Key,
             title: "Strategic Cyber Consulting",
             description: "Security is costly when reactive. We provide architecture roadmaps and risk assessments tailored to your budget, translating technical gaps into a clear executive strategy.",
             bestFor: "CISOs, CTOs & Growth-Stage Startups",
-            cta: "Book a Demo"
+            cta: <button onClick={openEnquiry}>Book a Demo</button>
         },
         {
             icon: ShieldCheck,
             title: "Hands-On Workshops",
             description: "Slides don’t stop hackers—skills do. Our intensive bootcamps replace theory with keyboard time, delivering certifiable skills in SIEM, Red Teaming, and Forensics.",
             bestFor: "Corporate Training & Upskilling Teams",
-            cta: "Book a Demo"
+            cta: <button onClick={openEnquiry}>Book a Demo</button>
         }
     ];
 
@@ -69,8 +70,9 @@ export default function B2BResilience() {
             <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10 text-center">
 
                 <div className="mb-16">
-                    <h2 className="text-3xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4 tracking-tight transition-colors duration-300">
-                        Unlock Cyber Resilience with Cyber Whisper
+                    <h2 className="text-3xl md:text-5xl font-bold mb-4 tracking-tight transition-colors duration-300">
+                        <span className="text-gray-900 dark:text-white">Unlock Cyber Resilience with </span>
+                        <span className="bg-gradient-to-r from-purple-600 via-purple-700 to-purple-900 dark:from-purple-400 dark:via-purple-500 dark:to-purple-700 bg-clip-text text-transparent">Cyber Whisper</span>
                     </h2>
                     <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto text-lg font-light transition-colors duration-300">
                         Real-world labs, round-the-clock defense, and expert guidance <br className="hidden md:block" /> everything you need to outsmart tomorrow's threats.

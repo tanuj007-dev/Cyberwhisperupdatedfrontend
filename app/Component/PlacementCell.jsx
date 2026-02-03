@@ -93,15 +93,12 @@ export default function PlacementCell() {
 
                             <div className="relative z-10">
                                 <div className="flex items-center gap-5 mb-8">
-                                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#7B2CFF] to-purple-800 flex items-center justify-center text-white text-2xl font-bold shadow-lg shadow-purple-900/50">
-                                        M
+                                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#7B2CFF] to-purple-800 flex items-center justify-center text-white shadow-lg shadow-purple-900/50 group-hover:scale-105 transition-transform duration-300">
+                                        <Users size={32} strokeWidth={2.5} />
                                     </div>
                                     <div>
-                                        <h4 className={`text-xl md:text-2xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'} mb-1 transition-colors duration-300`}>Mansi Srivastava</h4>
-                                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/20">
-                                            <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span>
-                                            <span className="text-purple-600 text-xs font-semibold tracking-wide uppercase">Placement Coordinator</span>
-                                        </div>
+                                        <h4 className={`text-xl md:text-2xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'} mb-1 transition-colors duration-300`}>Placement Coordinator</h4>
+                                        
                                     </div>
                                 </div>
 
