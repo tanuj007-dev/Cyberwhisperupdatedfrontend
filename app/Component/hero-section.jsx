@@ -227,27 +227,27 @@ function HeroLayout({ isVideoOpen, setIsVideoOpen }) {
         <div className="hidden lg:flex lg:w-[45%] relative flex-col mt-8 lg:mt-0 w-full px-4 sm:px-0">
 
           {/* DESKTOP LAYOUT (Hidden on mobile/tablet) */}
-          <div className="hidden lg:flex flex-col gap-6 scale-90 origin-right">
+          <div className="hidden lg:flex flex-col gap-8 scale-90 origin-right">
             {/* B2B Card Desktop */}
-            <Link href="/b2b" className="relative self-end w-full max-w-[500px] ml-40 group">
+            <Link href="/b2b" className="relative self-end w-full max-w-[500px] ml-24 group">
               <div className="absolute -inset-10 rounded-full pointer-events-none "></div>
               <Image
                 src={b2b}
                 alt="Enterprise B2B - Train Teams Test Defences Improve Readiness"
                 width={500}
                 height={300}
-                className="w-[500px] h-[300px] hover:scale-105 ml-20 duration-500 object-contain rounded-[40px]"
+                className="w-[500px] h-[300px] hover:scale-105 ml-12 duration-500 object-contain rounded-[40px]"
               />
             </Link>
 
             {/* B2C Card Desktop */}
-            <Link href="/training" className="relative self-start w-full max-w-[500px] -mt-40  group">
+            <Link href="/training" className="relative self-start w-full max-w-[500px] -mt-5  group">
               <Image
                 src={b2cCard}
                 alt="Individuals B2C - Learn Security Build Skills Launch Careers"
                 width={500}
                 height={300}
-                className="w-[500px] h-[300px] hover:scale-105 duration-500 object-contain rounded-[40px]"
+                className="w-[500px] h-[300px] hover:scale-105 mr-12 duration-500 object-contain rounded-[40px]"
               />
             </Link>
           </div>
