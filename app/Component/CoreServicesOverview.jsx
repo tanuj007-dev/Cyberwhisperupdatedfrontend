@@ -210,7 +210,7 @@ export default function CoreServicesOverview() {
                             className="cursor-grab active:cursor-grabbing outline-none flex gap-3 md:gap-6 py-4 px-1 md:px-2"
                             style={{ x }}
                             drag="x"
-                            dragConstraints={{ right: 0, left: -((cardWidth + (window.innerWidth < 768 ? 12 : 24)) * services.length) }}
+                            dragConstraints={{ right: 0, left: -width }}
                             onDragEnd={handleDragEnd}
                         >
                             {/* Duplicate services 3 times for infinite feel */}

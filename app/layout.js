@@ -27,8 +27,6 @@ export const metadata = {
     title: "CyberWhisper - Cybersecurity Training & Solutions",
     description: "Advanced cybersecurity training, B2B solutions, and cyber range services",
     keywords: "cybersecurity, training, penetration testing, cyber range",
-    viewport: "width=device-width, initial-scale=1, maximum-scale=5",
-    themeColor: "#1B0D37",
     manifest: "/manifest.json",
     openGraph: {
         type: "website",
@@ -40,6 +38,7 @@ export const viewport = {
     width: "device-width",
     initialScale: 1,
     maximumScale: 5,
+    themeColor: "#1B0D37",
 };
 
 export default function RootLayout({ children }) {
