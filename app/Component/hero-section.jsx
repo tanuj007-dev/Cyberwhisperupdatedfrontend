@@ -1,21 +1,17 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import dynamic from 'next/dynamic';
 import heroBg from './assets/hero-bg.png';
-import Particles from './Particles';
+// Dynamically load Particles to improve initial load time
+const Particles = dynamic(() => import('./Particles'), { ssr: false });
+
 import b2b from './assets/2.png';
-import b2bbg from './assets/b2bbg.png';
-import b2c from './assets/b2c.png';
-import b2cbg from './assets/b2cbg.png';
 import b2cCard from './assets/b2c card .png';
 import { motion } from 'framer-motion';
 import { GoArrowRight } from "react-icons/go";
-import { Building2, GraduationCap } from 'lucide-react';
 
-// Import icon images
-const b2bIcon = "data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3e%3cdefs%3e%3cradialGradient id='glow'%3e%3cstop offset='0%25' style='stop-color:%237C3AED;stop-opacity:0.4'/%3e%3cstop offset='100%25' style='stop-color:%237C3AED;stop-opacity:0'/%3e%3c/radialGradient%3e%3c/defs%3e%3ccircle cx='100' cy='100' r='90' fill='%237C3AED'/%3e%3cpath d='M70 60 h20 v10 h-20 z M75 75 h10 v30 h-10 z M90 65 h20 v10 h-20 z M95 80 h10 v25 h-10 z M110 70 h20 v10 h-20 z M115 85 h10 v20 h-10 z M65 110 h70 v5 h-70 z' fill='white'/%3e%3c/svg%3e";
-const b2cIcon = "data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3e%3cdefs%3e%3cradialGradient id='glow'%3e%3cstop offset='0%25' style='stop-color:%237C3AED;stop-opacity:0.4'/%3e%3cstop offset='100%25' style='stop-color:%237C3AED;stop-opacity:0'/%3e%3c/radialGradient%3e%3c/defs%3e%3ccircle cx='100' cy='100' r='90' fill='%237C3AED'/%3e%3ccircle cx='85' cy='75' r='12' fill='white'/%3e%3cpath d='M85 90 q-15 0 -15 15 v10 h30 v-10 q0 -15 -15 -15' fill='white'/%3e%3ccircle cx='115' cy='75' r='12' fill='white'/%3e%3cpath d='M115 90 q-15 0 -15 15 v10 h30 v-10 q0 -15 -15 -15' fill='white'/%3e%3c/svg%3e";
 export default function HeroSection() {
   const [isVideoOpen, setIsVideoOpen] = useState(false);
 
@@ -23,8 +19,6 @@ export default function HeroSection() {
     <HeroLayout isVideoOpen={isVideoOpen} setIsVideoOpen={setIsVideoOpen} />
   );
 }
-
-
 
 function HeroLayout({ isVideoOpen, setIsVideoOpen }) {
   return (
@@ -45,8 +39,7 @@ function HeroLayout({ isVideoOpen, setIsVideoOpen }) {
       <div className="absolute inset-0 pointer-events-none opacity-30 block dark:hidden mix-blend-multiply bg-grid-slate-200" />
 
 
-      {/* OGL Particles Background - Removed for performance */}
-      {/* OGL Particles Background */}
+      {/* OGL Particles Background - Lazy Loaded */}
       <div className="absolute inset-0 pointer-events-none z-0">
         <Particles
           particleColors={['#ffffff', '#a855f7', '#6366f1']}
@@ -237,6 +230,7 @@ function HeroLayout({ isVideoOpen, setIsVideoOpen }) {
                 width={500}
                 height={300}
                 className="w-[500px] h-[300px] hover:scale-105 ml-12 duration-500 object-contain rounded-[40px]"
+                priority={true}
               />
             </Link>
 
@@ -248,6 +242,7 @@ function HeroLayout({ isVideoOpen, setIsVideoOpen }) {
                 width={500}
                 height={300}
                 className="w-[500px] h-[300px] hover:scale-105 mr-12 duration-500 object-contain rounded-[40px]"
+                priority={true}
               />
             </Link>
           </div>
@@ -262,6 +257,7 @@ function HeroLayout({ isVideoOpen, setIsVideoOpen }) {
                 width={350}
                 height={210}
                 className="w-full h-auto hover:scale-105 duration-500 object-contain rounded-[30px]"
+                priority={true}
               />
             </Link>
 
@@ -273,6 +269,7 @@ function HeroLayout({ isVideoOpen, setIsVideoOpen }) {
                 width={350}
                 height={210}
                 className="w-full h-auto hover:scale-105 duration-500 object-contain rounded-[30px]"
+                priority={true}
               />
             </Link>
           </div>
