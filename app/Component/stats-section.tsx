@@ -31,7 +31,7 @@ export function StatsSection() {
   }
 
   return (
-    <section className="py-10 md:py-24 relative overflow-hidden">
+    <section className="py-6 pb-4 md:py-24 relative overflow-hidden">
       <div className="w-full max-w-7xl mx-auto px-4">
         <motion.div
           variants={containerVariants}

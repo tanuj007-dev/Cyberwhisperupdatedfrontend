@@ -128,7 +128,7 @@ export default function LearningHub() {
                                     align="left"
                                 />
                                 <FeatureCard
-                                    title="Plug-and-play access over a single link"
+                                    title="Instant Access with a Single Link"
                                     description="Instant Access via Secure Link
     Launch labs and simulations instantly without complex setup or local configuration.
     "
@@ -142,7 +142,7 @@ export default function LearningHub() {
                             {/* Right Column */}
                             <div className="flex flex-col flex-1 justify-between items-end h-full py-4">
                                 <FeatureCard
-                                    title="Plug-and-play access over a single link"
+                                    title="Realistic Attack Simulations"
                                     description="Realistic Attack Simulations
     Practice detection and response using real-world attack scenarios mapped to modern threat techniques."
                                     align="right"
@@ -166,7 +166,7 @@ export default function LearningHub() {
                             align="center"
                         />
                         <FeatureCard
-                            title="Plug-and-play access over a single link"
+                            title="Instant Access with a Single Link"
                             description="Instant Access via Secure Link. Launch labs and simulations instantly without complex setup or local configuration."
                             align="center"
                         />
@@ -190,7 +190,7 @@ export default function LearningHub() {
                         </motion.div>
 
                         <FeatureCard
-                            title="Plug-and-play access over a single link"
+                            title="Realistic Attack Simulations"
                             description="Realistic Attack Simulations. Practice detection and response using real-world attack scenarios mapped to modern threat techniques."
                             align="center"
                         />

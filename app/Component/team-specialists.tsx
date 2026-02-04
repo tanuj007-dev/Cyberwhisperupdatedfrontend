@@ -37,7 +37,7 @@ export default function TeamSpecialists() {
     const { openEnquiry } = useEnquiry();
 
     return (
-        <section className="py-24 bg-white dark:bg-[#0E0429] relative overflow-hidden transition-colors duration-300">
+        <section className="pt-8 pb-24 md:py-24 bg-white dark:bg-[#0E0429] relative overflow-hidden transition-colors duration-300">
             {/* Subtle Background Glow */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[600px] bg-purple-50/50 dark:bg-purple-900/10 blur-[120px] rounded-full pointer-events-none" />
 
@@ -82,19 +82,17 @@ export default function TeamSpecialists() {
                     whileInView={{ opacity: 1 }}
                     viewport={{ once: true }}
                     transition={{ delay: 0.5 }}
-                    className="mt-20 flex flex-wrap items-center justify-center gap-4 text-center"
+                    className="mt-8 md:mt-20 flex flex-wrap items-center justify-center gap-4 text-center"
                 >
                     <span className="bg-[#6B46E5] text-white text-[11px] font-black uppercase px-3 py-1 rounded-md shadow-lg shadow-blue-500/20">Free</span>
                     <p className="text-[#1C0F2D] dark:text-white text-lg font-medium">
                         Let's Create Something Better Together -
-                        <a
+                        <button
                             onClick={openEnquiry}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="ml-2 text-[#6B46E5] underline decoration-2 underline-offset-4 hover:text-[#6B46E5] transition-colors font-extrabold"
+                            className="ml-2 text-[#6B46E5] underline decoration-2 underline-offset-4 hover:text-[#6B46E5] transition-colors font-extrabold cursor-pointer"
                         >
                             Contact Us Today!
-                        </a>
+                        </button>
                     </p>
                 </motion.div>
             </div>
@@ -138,36 +136,38 @@ function MobileTeamCard({ member }: { member: typeof teamMembers[0] }) {
                 </div>
 
                 {/* BACK FACE */}
-                <div className="absolute inset-0 w-full h-full [backface-visibility:hidden] [transform:rotateY(180deg)] bg-[#1C1F2E] rounded-[2.5rem] overflow-hidden p-6 flex flex-col items-center justify-center text-center border border-purple-500/20 shadow-xl">
+                <div className="absolute inset-0 w-full h-full [backface-visibility:hidden] [transform:rotateY(180deg)] bg-[#1C1F2E] rounded-[2.5rem] overflow-hidden border border-purple-500/20 shadow-xl">
                     {/* Background decoration */}
                     <div className="absolute top-0 left-0 w-full h-full bg-purple-900/10 pointer-events-none" />
 
-                    <div className="relative z-10 space-y-4">
-                        <div>
-                            <h3 className="text-2xl font-bold text-white uppercase tracking-wide">{member.name}</h3>
-                            <p className="text-xs text-purple-300 font-medium uppercase tracking-wider mt-1">{member.role}</p>
+                    <div className="relative z-10 h-full p-4 flex flex-col items-center justify-between text-center">
+                        <div className="space-y-2 flex-1 flex flex-col justify-center">
+                            <div>
+                                <h3 className="text-lg font-bold text-white uppercase tracking-wide">{member.name}</h3>
+                                <p className="text-[9px] text-purple-300 font-medium uppercase tracking-wider mt-0.5">{member.role}</p>
+                            </div>
+
+                            <p className="text-[11px] text-gray-300 leading-snug px-2">
+                                {member.bio}
+                            </p>
+
+                            <div className="flex flex-wrap justify-center gap-1.5">
+                                {member.focusAreas.map((area, i) => (
+                                    <span key={i} className="text-[8px] uppercase font-bold text-[#A855F7] bg-[#A855F7]/10 px-1.5 py-0.5 rounded-full border border-[#A855F7]/20">
+                                        {area}
+                                    </span>
+                                ))}
+                            </div>
+
+                            <div className="flex flex-col items-center gap-1.5 pt-2">
+                                <span className="text-[9px] text-purple-300 font-bold uppercase tracking-widest">Connect on LinkedIn</span>
+                                <SocialIcon href={member.socials.linkedin} icon={<FaLinkedinIn size={14} />} />
+                            </div>
                         </div>
 
-                        <p className="text-sm text-gray-300 leading-relaxed line-clamp-4">
-                            {member.bio}
-                        </p>
-
-                        <div className="flex flex-wrap justify-center gap-2">
-                            {member.focusAreas.map((area, i) => (
-                                <span key={i} className="text-[10px] uppercase font-bold text-[#A855F7] bg-[#A855F7]/10 px-2 py-1 rounded-full border border-[#A855F7]/20">
-                                    {area}
-                                </span>
-                            ))}
-                        </div>
-
-                        <div className="flex flex-col items-center gap-2 pt-4 justify-center">
-                            <span className="text-[10px] text-purple-300 font-bold uppercase tracking-widest">Connect on LinkedIn</span>
-                            <SocialIcon href={member.socials.linkedin} icon={<FaLinkedinIn size={16} />} />
-                        </div>
+                        {/* Close hint */}
+                        <div className="text-white/30 text-[10px] pt-2">Tap to flip back</div>
                     </div>
-
-                    {/* Close hint */}
-                    <div className="absolute bottom-4 text-white/30 text-xs">Tap to flip back</div>
                 </div>
             </motion.div>
         </div>

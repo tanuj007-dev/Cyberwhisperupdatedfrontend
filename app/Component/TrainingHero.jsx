@@ -108,7 +108,7 @@ export default function TrainingHero() {
                     </div>
 
                     {/* High-Tech Heading */}
-                    <div className="space-y-5 max-w-4xl">
+                    <div className="space-y-5 max-w-7xl">
                         <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[54px] font-bold text-white leading-tight md:leading-[1.1] tracking-tight drop-shadow-2xl px-2">
                             1 Year Cyber Security <br className="hidden md:block" />
                             Diploma Training + <span className="relative inline-block mt-1 md:mt-0">
@@ -156,12 +156,12 @@ export default function TrainingHero() {
                     </div>
 
                     {/* Action Bar */}
-                    <div className="flex flex-row items-center justify-center gap-4 pt-2 w-full max-w-md px-4">
-                        <button className="relative px-4 py-3 rounded-xl bg-purple-600/20 border border-purple-500/30 text-white font-bold text-xs md:text-sm tracking-wide hover:bg-purple-600/30 transition-all flex items-center justify-center gap-2 flex-1 shadow-lg shadow-purple-900/40">
+                    <div className="flex flex-row items-center justify-center gap-3 pt-2 w-full max-w-sm px-6">
+                        <button className="relative px-3 py-3 rounded-xl bg-purple-600/20 border border-purple-500/30 text-white font-bold text-xs md:text-sm tracking-wide hover:bg-purple-600/30 transition-all flex items-center justify-center gap-2 flex-1 shadow-lg shadow-purple-900/40">
                             <FiDownload className="text-purple-300 w-4 h-4" />
                             <span className="whitespace-nowrap">Download Content</span>
                         </button>
-                        <button className="relative px-4 py-3 rounded-xl border border-purple-500/20 hover:border-purple-500/50 text-white font-bold text-xs md:text-sm tracking-wide transition-all bg-[#0a0015]/40 backdrop-blur-md flex-1 whitespace-nowrap flex items-center justify-center gap-2">
+                        <button className="relative px-3 py-3 rounded-xl border border-purple-500/20 hover:border-purple-500/50 text-white font-bold text-xs md:text-sm tracking-wide transition-all bg-[#0a0015]/40 backdrop-blur-md flex-1 whitespace-nowrap flex items-center justify-center gap-2">
                             <FaWhatsapp className="text-green-400 w-5 h-5" />
                             Chat on WhatsApp
                         </button>

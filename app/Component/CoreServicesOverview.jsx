@@ -1,6 +1,7 @@
 "use client"
 import { useState, useRef, useEffect } from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 import { motion, useMotionValue, useTransform, animate } from 'framer-motion'
 import { ArrowLeft, ArrowRight, Zap, MessageCircle } from 'lucide-react'
 import { useEnquiry } from '../context/EnquiryContext'
@@ -19,42 +20,48 @@ const services = [
         title: 'Cyber Range',
         description: 'Hands-on cyber range environments with real-world attack scenarios, Red vs Blue team exercises, and customizable labs mapped to MITRE ATT&CK.',
         image: cyberRangeAsset,
-        color: '#8B5CF6' // Violet
+        color: '#8B5CF6', // Violet
+        link: '/b2b' // Cyber Range is part of B2B services
     },
     {
         badge: 'Build SOC Capability',
         title: 'SOC Deployment & Readiness',
         description: 'Support for SOC setup, workflows, and analyst readiness through real alerts, detection use cases, and operational best practices.',
         image: socDeploymentAsset,
-        color: '#8B5CF6' // Violet
+        color: '#8B5CF6', // Violet
+        link: '/b2b' // SOC services are B2B
     },
     {
         badge: 'Threat Intelligence',
         title: 'Stay Ahead of Attackers',
         description: 'Monitor global threat patterns and leverage intelligence-driven insights to improve detection, response, and proactive defense.',
         image: threatIntelAsset,
-        color: '#8B5CF6' // Violet
+        color: '#8B5CF6', // Violet
+        link: '/b2b' // Threat Intelligence is B2B
     },
     {
         badge: 'Identify Critical Gaps',
         title: 'VAPT (Vulnerability Assessment & Pen Testing)',
         description: 'Identify vulnerabilities, assess risk exposure, and receive prioritized remediation guidance to strengthen security posture.',
         image: vaptAsset,
-        color: '#8B5CF6' // Violet
+        color: '#8B5CF6', // Violet
+        link: '/b2b' // VAPT is B2B service
     },
     {
         badge: 'Security Blueprint',
         title: 'Strategic Cyber Consulting',
         description: 'Tailored cybersecurity roadmaps, architecture reviews, and expert advisory aligned with business and compliance needs.',
         image: consultingAsset,
-        color: '#8B5CF6' // Violet
+        color: '#8B5CF6', // Violet
+        link: '/b2b' // Consulting is B2B
     },
     {
         badge: 'Learn by Doing',
         title: 'Cybersecurity Education & Workshops ',
         description: 'Instructor-led workshops, cyber drills, and practical training programs delivered across universities and professional communities.',
         image: educationAsset,
-        color: '#8B5CF6' // Violet
+        color: '#8B5CF6', // Violet
+        link: '/training' // Education is for individuals/training
     }
 ]
 
@@ -150,7 +157,7 @@ export default function CoreServicesOverview() {
     // Cyber Grid Background Component
     const CyberGrid = () => (
         <div className="absolute inset-0 z-0 opacity-20 pointer-events-none">
-            <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
+            <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-size-[24px_24px]"></div>
             <div className="absolute left-0 right-0 top-0 -z-10 m-auto h-[310px] w-[310px] rounded-full bg-purple-500 opacity-20 blur-[100px]"></div>
         </div>
     );
@@ -196,26 +203,21 @@ export default function CoreServicesOverview() {
 
                 {/* Carousel Wrapper with Desktop Navigation */}
                 <div className="relative group">
-                    {/* Smooth Drag Carousel */}
-                    <motion.div
-                        ref={carouselRef}
-                        className="cursor-grab active:cursor-grabbing overflow-hidden outline-none"
-                        style={{ touchAction: 'pan-y' }}
-                    >
+                    {/* Infinite Carousel Logic */}
+                    <div className="overflow-hidden">
                         <motion.div
-                            drag="x"
-                            dragConstraints={{ right: 0, left: -width }}
-                            dragElastic={0.1} // Increased elasticity for feel
-                            dragTransition={{ bounceStiffness: 600, bounceDamping: 20 }}
-                            onDragEnd={handleDragEnd}
+                            ref={carouselRef}
+                            className="cursor-grab active:cursor-grabbing outline-none flex gap-3 md:gap-6 py-4 px-1 md:px-2"
                             style={{ x }}
-                            whileTap={{ cursor: "grabbing" }}
-                            className="flex gap-3 md:gap-6 py-4 px-1 md:px-2 items-stretch"
+                            drag="x"
+                            dragConstraints={{ right: 0, left: -((cardWidth + (window.innerWidth < 768 ? 12 : 24)) * services.length) }}
+                            onDragEnd={handleDragEnd}
                         >
-                            {services.map((service, idx) => (
+                            {/* Duplicate services 3 times for infinite feel */}
+                            {[...services, ...services, ...services].map((service, idx) => (
                                 <motion.div
-                                    key={idx}
-                                    className="relative rounded-2xl p-[1px] group/card h-auto select-none pointer-events-auto shrink-0"
+                                    key={`${service.title}-${idx}`}
+                                    className="relative rounded-2xl p-px group/card h-auto select-none pointer-events-auto shrink-0"
                                     style={{
                                         width: cardWidth > 0 ? `${cardWidth}px` : 'auto',
                                         minWidth: cardWidth > 0 ? `${cardWidth}px` : 'auto'
@@ -223,10 +225,10 @@ export default function CoreServicesOverview() {
                                     initial={{ opacity: 0, scale: 0.9 }}
                                     whileInView={{ opacity: 1, scale: 1 }}
                                     viewport={{ once: true }}
-                                    transition={{ duration: 0.4, delay: idx * 0.1 }}
+                                    transition={{ duration: 0.4, delay: (idx % services.length) * 0.1 }}
                                 >
                                     {/* Simplified Border - No blur during interaction */}
-                                    <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-gray-200 via-white to-transparent dark:from-white/20 dark:via-white/5 dark:to-transparent opacity-50 group-hover/card:opacity-100 transition-opacity duration-300" />
+                                    <div className="absolute inset-0 rounded-2xl bg-linear-to-b from-gray-200 via-white to-transparent dark:from-white/20 dark:via-white/5 dark:to-transparent opacity-50 group-hover/card:opacity-100 transition-opacity duration-300" />
 
                                     {/* Card Content - Solid backgrounds for performance */}
                                     <div className="relative h-full bg-white dark:bg-[#0F0720] rounded-2xl p-5 md:p-6 flex flex-col items-center text-center border border-gray-100 dark:border-white/5 overflow-hidden justify-between shadow-lg dark:shadow-none">
@@ -266,23 +268,24 @@ export default function CoreServicesOverview() {
                                             >
                                                 {service.title}
                                             </h3>
-                                            <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed mb-5 text-center">
+                                            <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed mb-5 text-center line-clamp-3">
                                                 {service.description}
                                             </p>
 
-                                            <button
-                                                onClick={openEnquiry}
-                                                className="w-full py-2.5 rounded-lg bg-gray-50 border border-gray-200 text-gray-900 shadow-sm dark:shadow-none dark:bg-white/5 dark:border-white/10 text-xs font-semibold dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 flex items-center justify-center gap-1 transition-all hover:gap-2 hover:border-purple-200 dark:hover:border-white/20"
-                                            >
-                                                Enquire Now
-                                                <MessageCircle className="w-3 h-3" />
-                                            </button>
+                                            <Link href={service.link}>
+                                                <button
+                                                    className="w-full py-2.5 px-4 rounded-lg bg-gray-50 border border-gray-200 text-gray-900 shadow-sm dark:shadow-none dark:bg-white/5 dark:border-white/10 text-xs font-semibold dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 flex items-center justify-center gap-1 transition-all hover:gap-2 hover:border-purple-200 dark:hover:border-white/20"
+                                                >
+                                                    Enquire now
+                                                    <ArrowRight className="w-3 h-3" />
+                                                </button>
+                                            </Link>
                                         </div>
                                     </div>
                                 </motion.div>
                             ))}
                         </motion.div>
-                    </motion.div>
+                    </div>
 
                     {/* Desktop Navigation Buttons */}
                     <button
@@ -317,7 +320,7 @@ export default function CoreServicesOverview() {
                         {/* Mobile Scroll Indicator */}
                         <div className="w-16 h-1 rounded-full bg-gray-200 dark:bg-white/10 overflow-hidden">
                             <motion.div
-                                className="h-full bg-gradient-to-r from-purple-500 to-blue-500"
+                                className="h-full bg-linear-to-r from-purple-500 to-blue-500"
                                 style={{ width: `${indicatorWidth}%`, x: indicatorX }}
                             />
                         </div>
@@ -335,7 +338,7 @@ export default function CoreServicesOverview() {
                     <div className="hidden md:flex items-center">
                         <div className="w-32 h-1.5 rounded-full bg-gray-200 dark:bg-white/10 overflow-hidden">
                             <motion.div
-                                className="h-full bg-gradient-to-r from-purple-500 to-blue-500"
+                                className="h-full bg-linear-to-r from-purple-500 to-blue-500"
                                 style={{ width: `${indicatorWidth}%`, x: indicatorX }}
                             />
                         </div>

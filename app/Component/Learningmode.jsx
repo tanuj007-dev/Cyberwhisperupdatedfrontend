@@ -98,7 +98,7 @@ export default function LearningMode() {
                         <span className="bg-clip-text text-transparent bg-linear-to-r from-gray-900 via-purple-700 to-purple-900 dark:from-white dark:via-purple-200 dark:to-purple-400">OPTIONS</span>
                     </h2>
                     <p className="text-gray-600 dark:text-gray-400 text-sm md:text-base font-mono max-w-2xl mx-auto">
-                        Choose how you want to train—classroom, online, or team deployment.
+                        Choose how you want to train - classroom, online, or team deployment.
                     </p>
                 </div>
 

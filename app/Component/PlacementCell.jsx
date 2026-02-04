@@ -111,7 +111,7 @@ export default function PlacementCell() {
                                             </div>
                                             <div className="flex flex-col">
                                                 <span className={`text-[10px] ${theme === 'dark' ? 'text-purple-300/70' : 'text-purple-600/70'} uppercase tracking-widest font-bold`}>Call Now</span>
-                                                <span className={`${theme === 'dark' ? 'text-white' : 'text-gray-900'} font-semibold transition-colors`}>+91 9513805401</span>
+                                                <span className={`${theme === 'dark' ? 'text-white' : 'text-gray-900'} font-semibold transition-colors`}>(+91) 9220946887</span>
                                             </div>
                                         </div>
                                     </a>
@@ -124,7 +124,7 @@ export default function PlacementCell() {
                                             </div>
                                             <div className="flex flex-col">
                                                 <span className={`text-[10px] ${theme === 'dark' ? 'text-purple-300/70' : 'text-purple-600/70'} uppercase tracking-widest font-bold`}>Email Us</span>
-                                                <span className={`${theme === 'dark' ? 'text-white' : 'text-gray-900'} font-semibold transition-colors`}>placement@craw.in</span>
+                                                <span className={`${theme === 'dark' ? 'text-white' : 'text-gray-900'} font-semibold transition-colors`}>Placement@cyberwhisper.tech</span>
                                             </div>
                                         </div>
                                     </a>

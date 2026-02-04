@@ -175,7 +175,7 @@ export default function ServiceHero() {
                   <GoArrowRight size={20} />
                 </div>
               </button>
-              <button className="px-8 md:px-10 py-3 rounded-full border-2 border-[#310E3F] dark:border-purple-500 text-[#310E3F] dark:text-purple-400 font-bold text-base md:text-lg transition-all hover:border-slate-400 dark:hover:border-purple-300 hover:text-slate-900 dark:hover:text-white active:scale-95 w-full sm:w-auto">
+              <button onClick={openEnquiry} className="px-8 md:px-10 py-3 rounded-full border-2 border-[#310E3F] dark:border-purple-500 text-[#310E3F] dark:text-purple-400 font-bold text-base md:text-lg transition-all hover:border-slate-400 dark:hover:border-purple-300 hover:text-slate-900 dark:hover:text-white active:scale-95 w-full sm:w-auto">
                 Book a Cyber Range Demo
               </button>
             </div>

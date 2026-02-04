@@ -108,71 +108,65 @@ const TrustedByBest = () => {
 
                         {/* Heading */}
                         <div className="space-y-2">
-                            <h2 className="text-3xl sm:text-4xl md:text-[42px] lg:text-[50px] font-semibold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 via-purple-700 to-purple-900 dark:from-white dark:via-purple-200 dark:to-purple-400 leading-tight pb-2">
+                            <h2 className="text-3xl sm:text-4xl md:text-[42px] lg:text-[50px] font-semibold bg-clip-text text-transparent bg-linear-to-r from-gray-900 via-purple-700 to-purple-900 dark:from-white dark:via-purple-200 dark:to-purple-400 leading-tight pb-2">
                                 Defence Staff Training
                             </h2>
                         </div>
                     </div>
 
-                    {/* Bottom - Logo Carousel with Navigation */}
-                    <div className="w-full max-w-7xl relative">
-                        <div className="flex items-center gap-2 sm:gap-4 md:gap-6">
+                    {/* Continuous Scrolling Marquee */}
+                    <div className="w-full relative overflow-hidden">
+                        {/* Gradient Overlays for fade effect */}
+                        <div className="absolute left-0 top-0 bottom-0 w-20 md:w-32 bg-linear-to-r from-white dark:from-black to-transparent z-10 pointer-events-none" />
+                        <div className="absolute right-0 top-0 bottom-0 w-20 md:w-32 bg-linear-to-l from-white dark:from-black to-transparent z-10 pointer-events-none" />
 
-                            {/* Previous Button */}
-                            <button
-                                onClick={handlePrev}
-                                className="shrink-0 w-8 h-8 md:w-10 md:h-10 rounded-full bg-purple-200 dark:bg-purple-900/30 hover:bg-purple-200 dark:hover:bg-purple-900/50 transition-all duration-300 flex items-center justify-center group hover:scale-110 active:scale-95"
-                                aria-label="Previous logos"
-                            >
-                                <ChevronLeft className="w-4 h-4 md:w-5 md:h-5 text-purple-600 dark:text-purple-300 group-hover:text-purple-700 transition-colors" />
-                            </button>
-
-                            <div className="flex-1 overflow-hidden">
+                        <div className="flex gap-8 md:gap-12 animate-marquee">
+                            {/* First set of logos */}
+                            {logos.map((logo) => (
                                 <div
-                                    className="flex transition-transform duration-700 ease-in-out"
-                                    style={{
-                                        transform: `translateX(-${currentIndex * 100}%)`,
-                                    }}
+                                    key={`first-${logo.id}`}
+                                    className="shrink-0 flex items-center justify-center"
                                 >
-                                    {Array.from({ length: Math.ceil(logos.length / logosPerSlide) }).map((_, pageIndex) => {
-                                        const pageLogos = logos.slice(pageIndex * logosPerSlide, (pageIndex + 1) * logosPerSlide);
-                                        return (
-                                            <div key={pageIndex} className="min-w-full flex items-center justify-around px-2">
-                                                {pageLogos.map((logo) => (
-                                                    <div
-                                                        key={logo.id}
-                                                        className="shrink-0 flex items-center justify-center"
-                                                    >
-                                                        <div className="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 flex items-center justify-center p-1.5 transition-transform duration-300 hover:scale-110 bg-white dark:bg-white/5 rounded-full">
-                                                            <img
-                                                                src={typeof logo.image === 'string' ? logo.image : logo.image.src}
-                                                                alt={logo.name}
-                                                                className="max-w-full max-h-full object-contain transition-opacity duration-300 hover:opacity-80"
-                                                                onError={(e) => {
-                                                                    e.target.style.display = 'none';
-                                                                    e.target.parentElement.innerHTML = `
-                                                          <div class="text-gray-600 text-[10px] text-center font-medium px-1">
-                                                            ${logo.name}
-                                                          </div>
-                                                        `;
-                                                                }}
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        );
-                                    })}
+                                    <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 flex items-center justify-center p-2 transition-transform duration-300 hover:scale-110 bg-white dark:bg-white/5 rounded-full shadow-sm">
+                                        <img
+                                            src={typeof logo.image === 'string' ? logo.image : logo.image.src}
+                                            alt={logo.name}
+                                            className="max-w-full max-h-full object-contain transition-opacity duration-300 hover:opacity-80"
+                                            onError={(e) => {
+                                                e.target.style.display = 'none';
+                                                e.target.parentElement.innerHTML = `
+                                                  <div class="text-gray-600 text-[10px] text-center font-medium px-1">
+                                                    ${logo.name}
+                                                  </div>
+                                                `;
+                                            }}
+                                        />
+                                    </div>
                                 </div>
-                            </div>
-                            {/* Next Button */}
-                            <button
-                                onClick={handleNext}
-                                className="shrink-0 w-8 h-8 md:w-10 md:h-10 rounded-full bg-purple-200   transition-all duration-300 flex items-center justify-center group hover:scale-110 active:scale-95 shadow-md shadow-purple-300/50"
-                                aria-label="Next logos"
-                            >
-                                <ChevronRight className="w-4 h-4 md:w-5 md:h-5 text-purple-600 transition-transform group-hover:translate-x-0.5" />
-                            </button>
+                            ))}
+                            {/* Duplicate set for seamless loop */}
+                            {logos.map((logo) => (
+                                <div
+                                    key={`second-${logo.id}`}
+                                    className="shrink-0 flex items-center justify-center"
+                                >
+                                    <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 flex items-center justify-center p-2 transition-transform duration-300 hover:scale-110 bg-white dark:bg-white/5 rounded-full shadow-sm">
+                                        <img
+                                            src={typeof logo.image === 'string' ? logo.image : logo.image.src}
+                                            alt={logo.name}
+                                            className="max-w-full max-h-full object-contain transition-opacity duration-300 hover:opacity-80"
+                                            onError={(e) => {
+                                                e.target.style.display = 'none';
+                                                e.target.parentElement.innerHTML = `
+                                                  <div class="text-gray-600 text-[10px] text-center font-medium px-1">
+                                                    ${logo.name}
+                                                  </div>
+                                                `;
+                                            }}
+                                        />
+                                    </div>
+                                </div>
+                            ))}
                         </div>
                     </div>
 
@@ -181,20 +175,21 @@ const TrustedByBest = () => {
 
             {/* CSS Animations */}
             <style jsx>{`
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-            transform: scale(0.9);
+        @keyframes marquee {
+          0% {
+            transform: translateX(0);
           }
-          to {
-            opacity: 1;
-            transform: scale(1);
+          100% {
+            transform: translateX(-50%);
           }
         }
 
-        .animate-fadeIn {
-          animation: fadeIn 0.6s ease-out forwards;
-          opacity: 0;
+        .animate-marquee {
+          animation: marquee 30s linear infinite;
+        }
+
+        .animate-marquee:hover {
+          animation-play-state: paused;
         }
       `}</style>
         </section>

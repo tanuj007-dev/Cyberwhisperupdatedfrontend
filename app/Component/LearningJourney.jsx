@@ -95,17 +95,9 @@ export default function LearningJourney() {
                                 whileHover={{ y: -5 }}
                                 className="relative group  h-full"
                             >
-                                <div className="h-full relative border-2 border-purple-300 dark:border-purple-600 overflow-hidden rounded-2xl p-px transition-all duration-300 shadow-sm dark:shadow-none hover:shadow-md dark:group-hover:shadow-[0_0_25px_rgba(168,85,247,0.25)]">
-                                    {/* Spinning Gradient Border */}
-                                    <div
-                                        className="absolute -inset-full animate-[spin_3s_linear_infinite]"
-                                        style={{
-                                            background: 'conic-gradient(from 90deg at 50% 50%, #0000 0%, #a855f7 50%, #0000 100%)'
-                                        }}
-                                    />
-
+                                <div className="h-full relative border border-gray-200 dark:border-white/10 overflow-hidden rounded-2xl transition-all duration-300 shadow-sm dark:shadow-none hover:shadow-md hover:border-purple-500 dark:hover:border-purple-500/50">
                                     {/* Inner Content Card */}
-                                    <div className="h-full flex flex-col gap-3 p-5 rounded-2xl bg-white dark:bg-white/5 border border-gray-100 dark:border-white/10 group-hover:border-transparent dark:group-hover:border-transparent backdrop-blur-md transition-all duration-300 relative z-10">
+                                    <div className="h-full flex flex-col gap-3 p-5 bg-white dark:bg-white/5 backdrop-blur-md transition-all duration-300 relative z-10">
 
                                         {/* Icon Box */}
                                         <div className="w-10 h-10 rounded-lg bg-linear-to-br from-purple-500 to-indigo-600 p-px shadow-sm dark:shadow-[0_0_10px_rgba(168,85,247,0.3)]">

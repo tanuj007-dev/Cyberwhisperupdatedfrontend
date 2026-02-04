@@ -36,6 +36,7 @@ const students = [
         review: '"The training didnt feel like lectures.We worked like a real SOC—alerts, evidence, notes, and closure.That structure helped me stay calm in interviews."',
         // placedAt: 'Deloitte (Big 4)',
         placedAt: 'Deloitte',
+        image: img1,
         logo: logo1
     },
     {

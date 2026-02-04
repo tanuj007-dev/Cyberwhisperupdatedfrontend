@@ -115,7 +115,7 @@ export default function WeServe() {
                 {/* Heading */}
                 <h2 className="text-3xl md:text-4xl lg:text-[45px] font-bold leading-[1.2] text-foreground tracking-tight">
                   We don't just deploy and <br className="hidden md:block" />
-                  leave - we partner with you for<br className="hidden md:block" />
+                  leave - we partner with you for <br className="hidden md:block" />
                   the long haul
                 </h2>
 
@@ -133,15 +133,15 @@ export default function WeServe() {
                 </div>
 
                 {/* Buttons */}
-                <div className="flex flex-wrap gap-4 md:gap-5 pt-6 md:pt-8">
-                  <Link href="/services">
-                    <button className="bg-primary hover:bg-primary/90 text-white px-8 py-3 md:px-10 md:py-4 rounded-full font-bold text-sm md:text-[15px] transition-all duration-300 shadow-xl shadow-primary/20 active:scale-95">
+                <div className="flex flex-wrap gap-4 md:gap-5 pt-6 md:pt-8 relative z-20">
+                  <Link href="/services" className="inline-block">
+                    <button className="bg-primary hover:bg-primary/90 text-white px-8 py-3 md:px-10 md:py-4 rounded-full font-bold text-sm md:text-[15px] transition-all duration-300 shadow-xl shadow-primary/20 active:scale-95 touch-manipulation">
                       Learn More
                     </button>
                   </Link>
                   <button
                     onClick={openEnquiry}
-                    className="border-2 border-primary/10 hover:border-primary text-primary px-8 py-3 md:px-10 md:py-4 rounded-full font-bold text-sm md:text-[15px] transition-all duration-300 active:scale-95"
+                    className="border-2 border-primary/10 hover:border-primary text-primary px-8 py-3 md:px-10 md:py-4 rounded-full font-bold text-sm md:text-[15px] transition-all duration-300 active:scale-95 touch-manipulation"
                   >
                     Contact Us
                   </button>
