@@ -1,7 +1,8 @@
 "use client";
 import React from "react";
 import { motion } from "framer-motion";
-import { CheckCircle2, Download, Calendar, Users, Briefcase, GraduationCap } from "lucide-react";
+import { CheckCircle2, Laptop, Calendar, Users, Briefcase, GraduationCap } from "lucide-react";
+import { useEnquiry } from '../context/EnquiryContext';
 
 const features = [
     {
@@ -27,6 +28,8 @@ const features = [
 ];
 
 export default function LearningJourney() {
+    const { openEnquiry } = useEnquiry();
+
     return (
         <section className="relative py-12 md:py-16 bg-gray-50 dark:bg-black overflow-hidden selection:bg-purple-500/30 font-sans transition-colors duration-300">
             {/* Background Ambience */}
@@ -47,7 +50,7 @@ export default function LearningJourney() {
                         className="space-y-4 text-center lg:text-left"
                     >
                         <div className="inline-flex items-center gap-3 mb-4">
-                            <div className="w-5 h-5 bg-[#6b46e5] shadow-[0_0_15px_rgba(107,70,229,0.5)]"></div>
+                            <div className="w-5 h-5 bg-[#6b44e5]  shadow-[0_0_15px_rgba(107,70,229,0.5)]"></div>
                             <span className="text-[#0f172a] dark:text-white text-sm font-bold tracking-[0.2em] uppercase">Learning Journey</span>
                         </div>
 
@@ -66,13 +69,14 @@ export default function LearningJourney() {
 
                         {/* CTA Buttons */}
                         <div className="flex flex-wrap gap-4 pt-2 justify-center lg:justify-start">
-                            <button className="px-8 py-3 bg-[#a855f7] text-white font-bold rounded-full flex items-center gap-2 hover:bg-[#9333ea] hover:scale-105 active:scale-95 transition-all duration-300 shadow-[0_0_20px_rgba(168,85,247,0.4)] text-sm tracking-wider uppercase">
-                                <Download className="w-5 h-5" />
-                                Download Syllabus
+                            <button
+                                onClick={openEnquiry}
+                                className="px-8 py-3 bg-[#a855f7] text-white font-bold rounded-full flex items-center gap-2 hover:bg-[#9333ea] hover:scale-105 active:scale-95 transition-all duration-300 shadow-[0_0_20px_rgba(168,85,247,0.4)] text-sm tracking-wider uppercase"
+                            >
+                                <Laptop className="w-5 h-5" />
+                                Get Free Demo
                             </button>
-                            <button className="px-8 py-3 bg-transparent border-2 dark:border-[#a855f7] border-[#a855f7] text-[#a855f7] dark:text-white font-bold rounded-full flex items-center gap-2 hover:bg-[#a855f7]/10 transition-all duration-300 text-sm tracking-wider uppercase">
-                                Book Free Counselling
-                            </button>
+
                         </div>
 
                         {/* Audience Info Mobile */}

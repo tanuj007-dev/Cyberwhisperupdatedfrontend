@@ -8,71 +8,61 @@ const testimonials = [
     id: 1,
     name: 'Aarav Mehta',
     role: 'Student (Mumbai, India)',
-    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop',
     text: '"The training is completely hands-on. After every concept we worked on real SOC-style alerts, investigations, and reporting. Mentor support was quick and practical."',
   },
   {
     id: 2,
     name: 'Priya Sharma',
     role: 'Working Professional (Delhi, India)',
-    image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop',
     text: '"Cyber Whisper’s SIEM labs (Wazuh/ELK) made things click. The workflow—from triage to closure notes—felt exactly like what happens in a real SOC."',
   },
   {
     id: 3,
     name: 'Rohit Verma',
     role: 'Fresher (Bengaluru, India)',
-    image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop',
     text: '"I joined with basics and gained confidence fast. The cyber range labs and weekly checkpoints kept me consistent, and the capstone project helped my portfolio."',
   },
   {
     id: 4,
     name: 'Neha Iyer',
     role: 'Security Analyst (Pune, India)',
-    image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop',
     text: '"What I liked most was the real-world approach—log analysis, detection logic, incident timelines, and documentation. It improved how I communicate findings."',
   },
   {
     id: 5,
     name: 'Kunal Singh',
     role: 'Final Year Student (Hyderabad, India)',
-    image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop',
     text: '"The mentoring is strong and the labs are not generic. I learned alert triage, threat intel enrichment, and reporting in a structured way—very job-aligned."',
   },
   {
     id: 6,
     name: 'Emily Carter',
     role: 'Student (London, UK)',
-    image: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop',
     text: '"The sessions are interactive and mentor-led, not one-way. The labs after each module helped me retain concepts and build a clear SOC workflow mindset."',
   },
   {
     id: 7,
     name: 'Michael Reyes',
     role: 'IT Support → SOC Transition (Austin, USA)',
-    image: 'https://images.unsplash.com/photo-1599566150163-29194dcaad36?w=150&h=150&fit=crop',
     text: '"I needed a practical bridge into blue-team work. The cyber range exercises, case investigations, and playbook-style learning gave me a solid foundation."',
   },
   {
     id: 8,
     name: 'Sophie Nguyen',
     role: 'Junior Analyst (Toronto, Canada)',
-    image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop',
     text: '"Great structure and guidance. The team explains why an alert matters, how to validate it, and how to document it properly—very useful for real operations."',
   },
   {
     id: 9,
     name: 'Jonas Weber',
     role: 'Working Professional (Berlin, Germany)',
-    image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&h=150&fit=crop',
     text: '"Strong focus on detection and investigation. The log-based exercises felt realistic, and the mentor feedback improved my methodology and reporting clarity."',
   },
   {
     id: 10,
     name: 'Olivia Hart',
     role: 'Graduate Student (Sydney, Australia)',
-    image: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=150&h=150&fit=crop',
-    text: '"The monthly checkpoints and hands-on labs kept me accountable. I learned how to approach incidents step-by-step and present findings confidently."',
+    text: '"The monthly checkpoints and hands-on labs kept me accountability. I learned how to approach incidents step-by-step and present findings confidently."',
   },
 ];
 
@@ -227,11 +217,9 @@ export default function TestimonialsSection() {
                       <div className="flex items-center gap-3 md:gap-4">
                         <div className="relative">
                           <div className="absolute -inset-1 bg-white/30 blur-md rounded-full group-hover:bg-white/50 transition-all duration-300" />
-                          <img
-                            src={testimonial.image}
-                            alt={testimonial.name}
-                            className="relative w-12 h-12 md:w-14 md:h-14 rounded-full object-cover border-2 border-white/60 shadow-lg"
-                          />
+                          <div className="relative w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center bg-white/20 border-2 border-white/60 shadow-lg text-white">
+                            <UserIcon />
+                          </div>
                         </div>
                         <div>
                           <h4 className="text-white font-bold text-base md:text-lg tracking-tight leading-none">
@@ -287,6 +275,14 @@ function ArrowRightIcon() {
   return (
     <svg className="w-6 h-6 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+    </svg>
+  );
+}
+
+function UserIcon() {
+  return (
+    <svg className="w-6 h-6 md:w-8 md:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
     </svg>
   );
 }

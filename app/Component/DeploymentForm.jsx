@@ -16,7 +16,7 @@ export const MultiSelectDropdown = ({ label, options, selected, onChange, requir
         onChange(newSelected);
 
         // Show/hide "Other" text input
-        if (option === 'Other (If selected → show a text box "Other Track/Cert")') {
+        if (option === 'Other') {
             setShowOtherInput(!selected.includes(option));
         }
     };
@@ -80,7 +80,7 @@ export const MultiSelectDropdown = ({ label, options, selected, onChange, requir
             )}
 
             {/* Other Track/Cert input */}
-            {showOtherInput && selected.includes('Other (If selected → show a text box "Other Track/Cert")') && (
+            {showOtherInput && selected.includes('Other') && (
                 <input
                     type="text"
                     placeholder="Please specify other track/certification"
@@ -108,7 +108,7 @@ export const DeploymentForm = ({ formType, onClose }) => {
         'CompTIA Security+',
         'CompTIA CySA+',
         'MITRE ATT&CK',
-        'Other (If selected → show a text box "Other Track/Cert")'
+        'Other'
     ];
 
     const [formData, setFormData] = useState({

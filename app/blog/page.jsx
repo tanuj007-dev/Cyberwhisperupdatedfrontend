@@ -4,9 +4,9 @@ import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import BlogCard from '../Component/BlogCard'
 import BlogSidebar from '../Component/BlogSidebar'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi'
-import { Loader2 } from 'lucide-react'
+import { Loader2, X } from 'lucide-react'
 
 export default function BlogPage() {
     const router = useRouter()
@@ -15,7 +15,19 @@ export default function BlogPage() {
     const [error, setError] = useState(null)
     const [currentPage, setCurrentPage] = useState(1)
     const [totalPages, setTotalPages] = useState(1)
+    const [selectedBlog, setSelectedBlog] = useState(null)
     const blogsPerPage = 6
+
+    useEffect(() => {
+        if (selectedBlog) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+        return () => {
+            document.body.style.overflow = 'unset';
+        }
+    }, [selectedBlog]);
 
     useEffect(() => {
         fetchBlogs()
@@ -84,9 +96,11 @@ export default function BlogPage() {
     }
 
     const handleBlogClick = (blog) => {
-        // Navigate to the single blog page using the slug
-        const slug = blog.slug || blog.id
-        router.push(`/blog/${slug}`)
+        setSelectedBlog(blog)
+    }
+
+    const handleCloseModal = () => {
+        setSelectedBlog(null)
     }
 
     return (
@@ -146,7 +160,9 @@ export default function BlogPage() {
                             <>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
                                     {blogs.map((post) => (
-                                        <BlogCard key={post.id} {...post} />
+                                        <div key={post.id} onClick={() => handleBlogClick(post)} className="cursor-pointer h-full">
+                                            <BlogCard {...post} onClick={() => handleBlogClick(post)} />
+                                        </div>
                                     ))}
                                 </div>
 
@@ -204,6 +220,95 @@ export default function BlogPage() {
                     <BlogSidebar />
                 </div>
             </section>
+
+            {/* Blog Modal */}
+            <AnimatePresence>
+                {selectedBlog && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6" style={{ margin: 0 }}>
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            onClick={handleCloseModal}
+                            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+                        />
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                            className="relative w-full max-w-4xl bg-white rounded-2xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col"
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            {/* Close Button */}
+                            <button
+                                onClick={handleCloseModal}
+                                className="absolute top-4 right-4 z-10 p-2 bg-white/80 hover:bg-white rounded-full shadow-lg transition-transform hover:scale-110"
+                            >
+                                <X className="w-6 h-6 text-gray-800" />
+                            </button>
+
+                            {/* Scrollable Content */}
+                            <div className="overflow-y-auto custom-scrollbar">
+                                {/* Hero Image */}
+                                <div className="relative w-full h-64 md:h-96">
+                                    <Image
+                                        src={selectedBlog.image}
+                                        alt={selectedBlog.title}
+                                        fill
+                                        className="object-cover"
+                                    />
+                                    <div className="absolute inset-0 bg-linear-to-t from-black/60 to-transparent" />
+                                </div>
+
+                                <div className="p-8 md:p-12 space-y-6">
+                                    {/* Header */}
+                                    <div className="space-y-4">
+                                        <div className="flex flex-wrap gap-2 items-center text-sm">
+                                            <span className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full font-medium">
+                                                {selectedBlog.category || 'Cybersecurity'}
+                                            </span>
+                                            <span className="text-gray-500">•</span>
+                                            <span className="text-gray-600">
+                                                By {selectedBlog.author || 'Cyber Whisper Team'}
+                                            </span>
+                                            <span className="text-gray-500">•</span>
+                                            <span className="text-gray-600">
+                                                {selectedBlog.date ? new Date(selectedBlog.date).toLocaleDateString() : 'Recent'}
+                                            </span>
+                                        </div>
+
+                                        <h2 className="text-3xl md:text-4xl font-bold text-[#1C0F2D] leading-tight">
+                                            {selectedBlog.title}
+                                        </h2>
+                                    </div>
+
+                                    {/* Content */}
+                                    <div
+                                        className="prose prose-lg max-w-none text-gray-700 prose-headings:text-[#1C0F2D] prose-a:text-purple-600 hover:prose-a:text-purple-700 prose-img:rounded-xl"
+                                        dangerouslySetInnerHTML={{ __html: selectedBlog.content || selectedBlog.description }}
+                                    />
+
+                                    {/* Tags */}
+                                    {selectedBlog.tags && (
+                                        <div className="pt-8 border-t border-gray-100">
+                                            <div className="flex flex-wrap gap-2">
+                                                {selectedBlog.tags.split(',').map((tag, index) => (
+                                                    <span
+                                                        key={index}
+                                                        className="px-3 py-1 bg-gray-100 text-gray-600 rounded-lg text-sm hover:bg-purple-50 hover:text-purple-600 transition-colors cursor-default"
+                                                    >
+                                                        #{tag.trim()}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
 
             {/* Decorative background elements */}
             <div className="absolute top-1/4 -left-20 w-80 h-80 bg-purple-200/20 blur-[100px] rounded-full pointer-events-none -z-10" />

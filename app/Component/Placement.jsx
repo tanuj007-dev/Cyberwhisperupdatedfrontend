@@ -18,89 +18,97 @@ import img9 from './assets/students/Sofia.webp';
 import img10 from './assets/students/Ahmed.webp';
 
 // Import logos from Brands folder
-import logo1 from './assets/png-clipart-deloitte-logo-brand-management-consulting-product-lg-logo-text-logo.png';
-import logo2 from './assets/Brands/0b1e2b23dbd8276e3eb1560a57f1084f9f513d4e.webp';
-import logo3 from './assets/Brands/71a717e11aabee6d9f3369399039d7d15e636ceb.webp';
-import logo4 from './assets/Brands/7e39a76fc89754001e93cc38a4de07d8c29135c0.webp';
-import logo5 from './assets/Brands/83470d2a3495d0a8b2dbf74d52eb4fd7b488bf4b.webp';
-import logo6 from './assets/Brands/8508cef27a45f68eb0d26e12e4f09f3471f7b902.webp';
-import logo7 from './assets/Brands/984b561fa1af52365d5f382f9c5a2d5fd0cb6069.webp';
-import logo8 from './assets/Brands/ae045a0d9ddf389f291d256483fab25e184c5a2e.webp';
-import logo9 from './assets/Brands/b5083774b6690c1b65eee321c218a6645b1556eb.webp';
-import logo10 from './assets/Brands/b6158405f31cc46cf45f92e859c300c040ff71c9.webp';
+import logo1 from './assets/E&.png';
+import logo2 from './assets/BAE_Systems_logo.svg.png';
+import accentureLogo from './assets/Accenture.png';
+import deloitteLogo from './assets/deloitte.png';
+import eyLogo from './assets/ey.png';
+import ibmLogo from './assets/ibm.png';
+import sapLogo from './assets/sap.png';
+import telefonicaLogo from './assets/teleforinia.png';
+import kpmgLogo from './assets/Brands/83470d2a3495d0a8b2dbf74d52eb4fd7b488bf4b.webp';
+import pwcLogo from './assets/Brands/b5083774b6690c1b65eee321c218a6645b1556eb.webp';
 
 const students = [
     {
         name: 'Aditi Sharma (India)',
         role: 'SOC Analyst (L1)',
         review: '"The training didnt feel like lectures.We worked like a real SOC—alerts, evidence, notes, and closure.That structure helped me stay calm in interviews."',
-        // placedAt: 'Deloitte (Big 4)',
         placedAt: 'Deloitte',
         image: img1,
-        logo: logo1
+        logo: deloitteLogo
     },
     {
         name: 'Rohan Mehta (India)',
         role: 'Security Analyst Intern',
         review: '"Mentor feedback changed everything for me. I learned how to explain my thinking instead of just giving answers. The labs made me faster at triage."',
         placedAt: 'PwC (Big 4)',
-        image: img2
+        image: img2,
+        logo: pwcLogo
     },
     {
         name: 'Sneha Iyer (India)',
         role: 'Junior SOC Analyst',
         review: '"I finally understood what to do after an alert comes in. The workflow practice and reporting style made my profile stronger and more professional."',
         placedAt: 'EY (Big 4)',
-        image: img3
+        image: img3,
+        logo: eyLogo
     },
     {
         name: 'Kunal Verma (India)',
         role: 'Cloud Security Trainee',
         review: '"Live sessions were very interactive. Whenever I got stuck, the mentor corrected my approach immediately. The labs helped me connect cloud basics with security."',
         placedAt: 'KPMG (Big 4)',
-        image: img4
+        image: img4,
+        logo: kpmgLogo
     },
     {
         name: 'Priya Nair (India)',
         role: 'SOC Analyst Intern',
         review: '"Weekly checkpoints kept me consistent. By the end, I was confident reading logs, validating alerts, and writing clean investigation notes."',
         placedAt: 'Accenture',
-        image: img5
+        image: img5,
+        logo: accentureLogo
     },
     {
         name: 'Daniel Kim (USA)',
         role: 'Security Operations Associate',
         review: '"The best part was the practical investigation method. It improved how I validate alerts and document decisions. It felt job-focused, not theoretical."',
         placedAt: 'IBM',
-        image: img6
+        image: img6,
+        logo: ibmLogo
     },
     {
         name: 'Emily Carter (UK)',
         role: 'Entry-Level SOC Analyst',
         review: '"I liked that its mentor- led.You can ask questions anytime and get real guidance.The labs made me confident in interviews because I had proof of work."',
         placedAt: 'BAE Systems',
-        image: img7
+        image: img7,
+        logo: logo2
     },
     {
         name: 'Lucas Schneider (Germany)',
         role: 'Junior Security Analyst',
         review: '"Solid hands-on learning. The labs taught me how to reduce false positives and think clearly under pressure. It built real discipline."',
         placedAt: 'SAP',
-        image: img8
+        image: img8,
+        logo: sapLogo
     },
     {
         name: 'Sofia Martinez (Spain)',
         role: 'Cybersecurity Analyst Intern',
         review: '"Its not one - way teaching.The live sessions and corrections helped me learn faster.I started understanding the why behind each step."',
         placedAt: 'Telefónica',
-        image: img9
+        image: img9,
+        logo: telefonicaLogo
     },
     {
         name: 'Ahmed Hassan (UAE)',
         role: 'SOC Analyst (L1)',
         review: '"The training is practice-first. I learned how to communicate findings clearly and present investigations properly. That was the key improvement for me."',
         placedAt: 'e& (Etisalat Group)',
-        image: img10
+        image: img10,
+        logo: logo1
     }
 ];
 
@@ -303,12 +311,18 @@ function StudentCard({ student, isActive }) {
 
             {/* Placed At Footer */}
             <div className="w-full">
-                <div className="flex items-center justify-between">
+                <div className="flex items-end justify-between">
+                    <p className="text-[9px] uppercase font-bold text-gray-500 tracking-wider mb-1">Placed At</p>
                     <div>
-                        <p className="text-[9px] uppercase font-bold text-gray-500 tracking-wider mb-1">Placed At</p>
                         {student.logo ? (
-                            <div className="h-6 w-auto relative min-w-[60px] flex items-center justify-start">
-                                <Image src={student.logo} alt={student.placedAt} className="object-contain object-left max-h-6 w-auto" height={24} width={80} />
+                            <div className="h-5 max-w-[70px] relative flex items-center justify-end">
+                                <Image
+                                    src={student.logo}
+                                    alt={student.placedAt}
+                                    className="object-contain object-right h-full w-auto"
+                                    height={20}
+                                    width={70}
+                                />
                             </div>
                         ) : (
                             <div className="flex items-center gap-2">
@@ -319,7 +333,6 @@ function StudentCard({ student, isActive }) {
                             </div>
                         )}
                     </div>
-
                 </div>
             </div>
 

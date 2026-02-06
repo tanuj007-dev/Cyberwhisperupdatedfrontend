@@ -5,7 +5,7 @@ import { motion } from "framer-motion"
 const stats = [
   { label: "Professionals Trained", value: "900+", prefix: "" },
   { label: "Hands-On Labs & Scenarios", value: "1,000+", prefix: "" },
-  { label: "CTF Challenges & Simulations", value: "500+", prefix: "ms" },
+  { label: "CTF Challenges & Simulations", value: "500+", prefix: " " },
   { label: "Partner Institutes / Client Teams", value: "50+", prefix: "" },
 ]
 

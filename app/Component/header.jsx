@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEnquiry } from '../context/EnquiryContext';
 import { useTheme } from '../context/ThemeContext';
-import { Sun, Moon } from 'lucide-react';
+import { Sun, Moon, ChevronDown } from 'lucide-react';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -30,8 +30,17 @@ export default function Header() {
     { name: 'Services', href: '/services' },
     { name: 'Training', href: '/training' },
     { name: 'Courses', href: '/courses' },
-    { name: 'Blog', href: '/blog' }
+    { name: 'Blog', href: '/blog' },
+    {
+      name: 'Products',
+      href: '#',
+      dropdownItems: [
+        { name: 'Cyber Range', href: '/b2b' }
+      ]
+    },
   ];
+
+  const [isProductsOpen, setIsProductsOpen] = useState(false);
 
   return (
     <header className="fixed top-0 z-50 w-full bg-transparent font-sans">
@@ -39,7 +48,7 @@ export default function Header() {
       <div className="w-full px-4 py-4">
         <div className="mx-auto max-w-7xl">
           {/* Centered white navbar container */}
-          <nav className="mx-auto flex max-w-6xl items-center justify-between rounded-full bg-white px-6 py-3 shadow-lg transition-shadow duration-300 hover:shadow-xl">
+          <nav className="mx-auto flex max-w-6xl items-center justify-between rounded-full bg-white px-6 py-3 shadow-lg transition-all duration-300 hover:shadow-xl">
 
             {/* Logo Section */}
             <div className="flex items-center space-x-2">
@@ -58,14 +67,44 @@ export default function Header() {
             {/* Desktop Navigation Links */}
             <div className="hidden md:flex items-center space-x-8">
               {navigationLinks.map((link) => (
-                <Link
-                  key={link.name}
-                  href={link.href}
-                  onClick={(e) => handleScrollToTop(e, link.href)}
-                  className="text-[16px] font-medium text-gray-700 transition-colors duration-200 hover:text-purple-600 focus:text-purple-600 focus:outline-none font-sans"
-                >
-                  {link.name}
-                </Link>
+                link.dropdownItems ? (
+                  <div
+                    key={link.name}
+                    className="relative group"
+                    onMouseEnter={() => setIsProductsOpen(true)}
+                    onMouseLeave={() => setIsProductsOpen(false)}
+                  >
+                    <button
+                      className="flex items-center gap-1 text-[16px] font-medium text-gray-700 transition-colors duration-200 hover:text-purple-600 focus:outline-none font-sans"
+                    >
+                      {link.name}
+                      <ChevronDown size={14} className={`transition-transform duration-200 ${isProductsOpen ? 'rotate-180' : ''}`} />
+                    </button>
+
+                    {/* Dropdown Menu */}
+                    <div className={`absolute left-0 mt-0 w-48 rounded-2xl bg-white p-2 shadow-xl border border-gray-100 transition-all duration-200 ${isProductsOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2 pointer-events-none'}`}>
+                      {link.dropdownItems.map((item) => (
+                        <Link
+                          key={item.name}
+                          href={item.href}
+                          className="block rounded-xl px-4 py-2 text-[15px] font-medium text-gray-700 hover:bg-purple-50 hover:text-purple-600 transition-all"
+                          onClick={() => setIsProductsOpen(false)}
+                        >
+                          {item.name}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <Link
+                    key={link.name}
+                    href={link.href}
+                    onClick={(e) => handleScrollToTop(e, link.href)}
+                    className="text-[16px] font-medium text-gray-700 transition-colors duration-200 hover:text-purple-600 focus:text-purple-600 focus:outline-none font-sans"
+                  >
+                    {link.name}
+                  </Link>
+                )
               ))}
             </div>
 
@@ -125,17 +164,33 @@ export default function Header() {
               <div className="rounded-2xl bg-white px-6 py-4 shadow-lg">
                 <div className="flex flex-col space-y-4">
                   {navigationLinks.map((link) => (
-                    <Link
-                      key={link.name}
-                      href={link.href}
-                      className="text-[16px] font-medium text-gray-700 transition-colors duration-200 hover:text-purple-600 focus:text-purple-600 focus:outline-none font-sans"
-                      onClick={(e) => {
-                        setIsMenuOpen(false);
-                        handleScrollToTop(e, link.href);
-                      }}
-                    >
-                      {link.name}
-                    </Link>
+                    link.dropdownItems ? (
+                      <div key={link.name} className="flex flex-col space-y-2">
+                        <span className="text-[12px] font-bold text-gray-400 uppercase tracking-widest px-2">{link.name}</span>
+                        {link.dropdownItems.map((item) => (
+                          <Link
+                            key={item.name}
+                            href={item.href}
+                            className="text-[16px] font-medium text-gray-700 transition-colors duration-200 hover:text-purple-600 focus:text-purple-600 focus:outline-none font-sans px-2"
+                            onClick={() => setIsMenuOpen(false)}
+                          >
+                            {item.name}
+                          </Link>
+                        ))}
+                      </div>
+                    ) : (
+                      <Link
+                        key={link.name}
+                        href={link.href}
+                        className="text-[16px] font-medium text-gray-700 transition-colors duration-200 hover:text-purple-600 focus:text-purple-600 focus:outline-none font-sans"
+                        onClick={(e) => {
+                          setIsMenuOpen(false);
+                          handleScrollToTop(e, link.href);
+                        }}
+                      >
+                        {link.name}
+                      </Link>
+                    )
                   ))}
                   <div className="pt-2 flex flex-col gap-4">
                     <button

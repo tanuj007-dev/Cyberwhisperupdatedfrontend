@@ -101,9 +101,7 @@ export default function B2BMarquees() {
                 </div>
 
                 {/* Marquee with fade edges */}
-                <div className="relative overflow-hidden">
-                    {/* Left fade */}
-                   
+                <div className="relative overflow-hidden py-4">
                     {/* Marquee content */}
                     <div className="flex gap-6" style={animationStyle}>
                         {items.map((item, idx) => (

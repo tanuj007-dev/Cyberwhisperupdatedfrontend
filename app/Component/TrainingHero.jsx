@@ -3,7 +3,7 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { FaDownload, FaWhatsapp, FaCalendarAlt, FaLanguage, FaGlobe } from 'react-icons/fa';
+import { FaDownload, FaWhatsapp, FaCalendarAlt, FaLanguage, FaGlobe, FaLaptopCode, FaCertificate, FaBriefcase } from 'react-icons/fa';
 // Assuming the image will be placed in assets
 // For now using the generated path directly or a placeholder if path is tricky
 import { IoLogoWhatsapp } from "react-icons/io";
@@ -155,20 +155,10 @@ export default function TrainingHero() {
                         ))}
                     </div>
 
-                    {/* Action Bar */}
-                    <div className="flex flex-row items-center justify-center gap-3 pt-2 w-full max-w-sm px-6">
-                        <button className="relative px-3 py-3 rounded-xl bg-purple-600/20 border border-purple-500/30 text-white font-bold text-xs md:text-sm tracking-wide hover:bg-purple-600/30 transition-all flex items-center justify-center gap-2 flex-1 shadow-lg shadow-purple-900/40">
-                            <FiDownload className="text-purple-300 w-4 h-4" />
-                            <span className="whitespace-nowrap">Download Content</span>
-                        </button>
-                        <button className="relative px-3 py-3 rounded-xl border border-purple-500/20 hover:border-purple-500/50 text-white font-bold text-xs md:text-sm tracking-wide transition-all bg-[#0a0015]/40 backdrop-blur-md flex-1 whitespace-nowrap flex items-center justify-center gap-2">
-                            <FaWhatsapp className="text-green-400 w-5 h-5" />
-                            Chat on WhatsApp
-                        </button>
-                    </div>
+
 
                     {/* Subscription Pricing Card */}
-                    <div className="w-full max-w-4xl p-px rounded-2xl md:rounded-3xl bg-gradient-to-br from-primary/30 via-white/10 to-transparent backdrop-blur-xl mt-3 md:mt-4 px-2 md:px-0">
+                    <div className="w-full max-w-4xl p-px rounded-2xl md:rounded-3xl bg-linear-to-br from-primary/30 via-white/10 to-transparent backdrop-blur-xl mt-3 md:mt-4 px-2 md:px-0">
                         <div className="bg-[#02000d]/80 rounded-[0.95rem] md:rounded-[1.4rem] p-3.5 md:p-6 flex flex-col md:flex-row items-center justify-between gap-3 md:gap-5 border border-white/5">
                             <div className="text-center md:text-left space-y-0.5 md:space-y-1">
                                 <span className="text-purple-400 font-bold text-[9px] md:text-xs tracking-[0.2em] uppercase">Cyber Range</span>
@@ -212,14 +202,64 @@ export default function TrainingHero() {
                         </div>
                     </div>
 
-                    {/* Additional Information Section */}
-                    <div className="mt-6 max-w-8xl mx-auto text-center space-y-3 px-4">
-                        <p className="text-gray-400 text-xs md:text-[13px] leading-relaxed">
-                            <span className="text-white font-bold">Cyber Range labs included.</span> 4 certification tracks covered in the Diploma curriculum: <span className="text-white font-bold">CCNA, CEH, CompTIA Security+</span> (or <span className="text-white font-bold">CySA+</span>), and <span className="text-white font-bold">AWS Cloud Practitioner</span> (plus additional electives based on your career goal). Internship letter option and placement support for <span className="text-white font-bold">Big 4 (PwC, EY, KPMG, Deloitte)</span> and other companies — as per eligibility and openings.
-                        </p>
-                        <p className="text-purple-300/60 text-[10px] md:text-xs font-medium italic">
-                            Exam/voucher not included unless stated.
-                        </p>
+                    {/* Additional Information Section - Interactive Grid */}
+                    <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4 w-full max-w-5xl mx-auto px-2">
+                        {/* Card 1: Labs */}
+                        <motion.div
+                            whileHover={{ y: -5 }}
+                            className="group relative p-4 rounded-xl bg-white/5 border border-white/10 backdrop-blur-sm overflow-hidden"
+                        >
+                            <div className="absolute inset-0 bg-linear-to-br from-purple-600/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                            <div className="relative flex flex-col items-center text-center gap-2">
+                                <div className="p-2 rounded-lg bg-purple-500/20 text-purple-300 border border-purple-500/30">
+                                    <FaLaptopCode className="w-4 h-4 md:w-5 md:h-5" />
+                                </div>
+                                <h5 className="text-white font-bold text-xs md:text-sm tracking-wide">Cyber Range Included</h5>
+                                <p className="text-gray-400 text-[10px] md:text-xs leading-relaxed">
+                                    Hands-on simulation labs integrated directly into the curriculum for real-world experience.
+                                </p>
+                            </div>
+                        </motion.div>
+
+                        {/* Card 2: Certifications */}
+                        <motion.div
+                            whileHover={{ y: -5 }}
+                            className="group relative p-4 rounded-xl bg-white/5 border border-white/10 backdrop-blur-sm overflow-hidden"
+                        >
+                            <div className="absolute inset-0 bg-linear-to-br from-blue-600/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                            <div className="relative flex flex-col items-center text-center gap-2">
+                                <div className="p-2 rounded-lg bg-blue-500/20 text-blue-300 border border-blue-500/30">
+                                    <FaCertificate className="w-4 h-4 md:w-5 md:h-5" />
+                                </div>
+                                <h5 className="text-white font-bold text-xs md:text-sm tracking-wide">4+ Certification Tracks</h5>
+                                <p className="text-gray-400 text-[10px] md:text-xs leading-relaxed">
+                                    <span className="text-white/90">CCNA, CEH, Security+/CySA+, AWS Cloud</span> + Electives based on your goals.
+                                </p>
+                            </div>
+                        </motion.div>
+
+                        {/* Card 3: Placement */}
+                        <motion.div
+                            whileHover={{ y: -5 }}
+                            className="group relative p-4 rounded-xl bg-white/5 border border-white/10 backdrop-blur-sm overflow-hidden"
+                        >
+                            <div className="absolute inset-0 bg-linear-to-br from-green-600/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                            <div className="relative flex flex-col items-center text-center gap-2">
+                                <div className="p-2 rounded-lg bg-green-500/20 text-green-300 border border-green-500/30">
+                                    <FaBriefcase className="w-4 h-4 md:w-5 md:h-5" />
+                                </div>
+                                <h5 className="text-white font-bold text-xs md:text-sm tracking-wide">Career Support</h5>
+                                <p className="text-gray-400 text-[10px] md:text-xs leading-relaxed">
+                                    Internship letters & placement support for <span className="text-white/90 font-semibold">Big 4</span> & other top firms.
+                                </p>
+                            </div>
+                        </motion.div>
+
+                        <div className="col-span-full text-center mt-1">
+                            <p className="text-purple-300/40 text-[10px] font-medium italic">
+                                * Exam vouchers not included unless explicitly stated in your package.
+                            </p>
+                        </div>
                     </div>
                 </motion.div>
             </div>

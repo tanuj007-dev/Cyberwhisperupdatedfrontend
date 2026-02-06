@@ -147,7 +147,7 @@ export default function B2BHero() {
 
                         {/* Bottom Visual - Huge Circular Mask */}
                         <div className="relative mx-auto w-full max-w-[350px] aspect-square mt-2">
-                            <div className="w-full h-full rounded-full border border-gray-400 dark:border-gray-700/50 relative overflow-hidden shadow-[0_-10px_40px_rgba(0,0,0,0.3)] dark:shadow-[0_-10px_40px_rgba(0,0,0,0.5)] bg-gray-200 dark:bg-[#0B0F19]">
+                            <div className="w-full h-full rounded-lg border border-gray-400 dark:border-gray-700/50 relative overflow-hidden shadow-[0_-10px_40px_rgba(0,0,0,0.3)] dark:shadow-[0_-10px_40px_rgba(0,0,0,0.5)] bg-gray-200 dark:bg-[#0B0F19]">
                                 {/* Video / Visual */}
                                 <video
                                     src="/assets/enterprise-fortress.mp4"

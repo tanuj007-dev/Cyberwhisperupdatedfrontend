@@ -124,7 +124,7 @@ export default function AboutUsPage() {
                                     </div>
                                     {/* Floating badge */}
                                     <div className="absolute -top-6 -right-6 w-32 h-32 rounded-full bg-primary flex flex-col items-center justify-center text-white text-center shadow-[0_0_30px_rgba(168,85,247,0.5)] z-20">
-                                        <span className="text-2xl font-bold leading-none">25+</span>
+                                        <span className="text-2xl font-bold leading-none">15+</span>
                                         <span className="text-[10px] uppercase font-bold tracking-tighter">Years Exp.</span>
                                     </div>
                                     <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-primary/20 blur-3xl rounded-full" />

@@ -127,7 +127,7 @@ const TrustedByBest = () => {
                                     key={`first-${logo.id}`}
                                     className="shrink-0 flex items-center justify-center"
                                 >
-                                    <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 flex items-center justify-center p-2 transition-transform duration-300 hover:scale-110 bg-white dark:bg-white/5 rounded-full shadow-sm">
+                                    <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 flex items-center justify-center p-2 transition-transform duration-300 hover:scale-110 bg-white dark:bg-white/5 rounded-full">
                                         <img
                                             src={typeof logo.image === 'string' ? logo.image : logo.image.src}
                                             alt={logo.name}
@@ -150,7 +150,7 @@ const TrustedByBest = () => {
                                     key={`second-${logo.id}`}
                                     className="shrink-0 flex items-center justify-center"
                                 >
-                                    <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 flex items-center justify-center p-2 transition-transform duration-300 hover:scale-110 bg-white dark:bg-white/5 rounded-full shadow-sm">
+                                    <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 flex items-center justify-center p-2 transition-transform duration-300 hover:scale-110 bg-white dark:bg-white/5 rounded-full">
                                         <img
                                             src={typeof logo.image === 'string' ? logo.image : logo.image.src}
                                             alt={logo.name}

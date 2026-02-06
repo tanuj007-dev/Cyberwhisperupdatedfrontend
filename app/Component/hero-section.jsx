@@ -7,8 +7,8 @@ import heroBg from './assets/hero-bg.png';
 // Dynamically load Particles to improve initial load time
 const Particles = dynamic(() => import('./Particles'), { ssr: false });
 
-import b2b from './assets/2.png';
-import b2cCard from './assets/b2c card .png';
+import b2bCard from './assets/c2.png';
+import b2cCard from './assets/c1.png';
 import { motion } from 'framer-motion';
 import { GoArrowRight } from "react-icons/go";
 
@@ -93,7 +93,7 @@ function HeroLayout({ isVideoOpen, setIsVideoOpen }) {
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="lg:w-[60%] flex flex-col justify-start text-center lg:text-left pt-0 lg:pt-6"
+          className="lg:w-[55%] flex flex-col justify-start text-center lg:text-left pt-0 lg:pt-6"
         >
           <div className="space-y-5 md:space-y-8 mt-0 lg:mt-6">
             {/* New Badge */}
@@ -216,64 +216,43 @@ function HeroLayout({ isVideoOpen, setIsVideoOpen }) {
           </div>
         </motion.div>
 
-        {/* Right Content Area - Staggered Cards */}
-        <div className="flex lg:w-[45%] relative flex-col mt-8 lg:mt-0 w-full px-4 sm:px-0">
+        {/* Right Content Area - Staggered B2B/B2C Cards */}
+        <div className="hidden lg:flex lg:w-[45%] relative flex-col mt-12 lg:mt-0 w-full px-4 sm:px-0 items-center lg:items-center justify-center min-h-[500px]">
+          <div className="relative w-full max-w-[400px]">
+            {/* Upper B2B Card */}
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 40 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.8, duration: 0.8 }}
+              className="relative z-20"
+            >
+              <Link href="/b2b" className="block drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+                <img
+                  src={b2bCard.src}
+                  alt="B2B Solutions"
+                  className="w-full h-auto object-cover ml-20 hover:scale-105 transition-transform duration-500 rounded-3xl"
+                />
+              </Link>
+            </motion.div>
 
-          {/* DESKTOP LAYOUT (Hidden on mobile/tablet) */}
-          <div className="hidden lg:flex flex-col gap-8 scale-90 origin-right">
-            {/* B2B Card Desktop */}
-            <Link href="/b2b" className="relative self-end w-full max-w-[500px] ml-24 group">
-              <div className="absolute -inset-10 rounded-full pointer-events-none "></div>
-              <Image
-                src={b2b}
-                alt="Enterprise B2B - Train Teams Test Defences Improve Readiness"
-                width={500}
-                height={300}
-                className="w-[500px] h-[300px] hover:scale-105 ml-12 duration-500 object-contain rounded-[40px]"
-                priority={true}
-              />
-            </Link>
-
-            {/* B2C Card Desktop */}
-            <Link href="/training" className="relative self-start w-full max-w-[500px] -mt-5  group">
-              <Image
-                src={b2cCard}
-                alt="Individuals B2C - Learn Security Build Skills Launch Careers"
-                width={500}
-                height={300}
-                className="w-[500px] h-[300px] hover:scale-105 mr-12 duration-500 object-contain rounded-[40px]"
-                priority={true}
-              />
-            </Link>
+            {/* Lower B2C Card */}
+            <motion.div
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: -40 }}
+              viewport={{ once: true }}
+              transition={{ delay: 1, duration: 0.8 }}
+              className="relative z-10   -mt-16 lg:-mt-16"
+            >
+              <Link href="/training" className="block drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+                <img
+                  src={b2cCard.src}
+                  alt="Individual Training"
+                  className="w-full h-auto object-cover hover:scale-105 transition-transform duration-500 rounded-3xl"
+                />
+              </Link>
+            </motion.div>
           </div>
-
-          {/* MOBILE LAYOUT (Hidden on desktop) */}
-          <div className="flex lg:hidden flex-col gap-6 items-center">
-            {/* B2B Card Mobile */}
-            <Link href="/b2b" className="relative w-full max-w-[350px] group">
-              <Image
-                src={b2b}
-                alt="Enterprise B2B - Train Teams Test Defences Improve Readiness"
-                width={350}
-                height={210}
-                className="w-full h-auto hover:scale-105 duration-500 object-contain rounded-[30px]"
-                priority={true}
-              />
-            </Link>
-
-            {/* B2C Card Mobile */}
-            <Link href="/training" className="relative w-full max-w-[350px] group">
-              <Image
-                src={b2cCard}
-                alt="Individuals B2C - Learn Security Build Skills Launch Careers"
-                width={350}
-                height={210}
-                className="w-full h-auto hover:scale-105 duration-500 object-contain rounded-[30px]"
-                priority={true}
-              />
-            </Link>
-          </div>
-
         </div>
       </div>
 

@@ -6,6 +6,16 @@ import Enterprise2 from './assets/Enterprises/IMG_20250228_112127.webp';
 import Enterprise3 from './assets/Enterprises/IMG_20250228_120104.webp';
 import Enterprise4 from './assets/Enterprises/EnterpriseAction4.webp';
 
+// Gallery Images
+import Gallery1 from './assets/gallery/WhatsApp Image 2026-01-10 at 3.49.06 PM (1).webp';
+import Gallery2 from './assets/gallery/WhatsApp Image 2026-01-10 at 3.49.06 PM (4).webp';
+import Gallery3 from './assets/gallery/WhatsApp Image 2026-01-10 at 3.49.06 PM (12).webp';
+import Gallery4 from './assets/gallery/WhatsApp Image 2026-01-12 at 6.34.47 PM.webp';
+import Gallery5 from './assets/gallery/WhatsApp Image 2026-01-12 at 6.34.48 PM.webp';
+import Gallery6 from './assets/gallery/WhatsApp Image 2026-01-12 at 6.34.49 PM.webp';
+import Gallery7 from './assets/gallery/WhatsApp Image 2026-01-12 at 6.34.50 PM.webp';
+import Gallery8 from './assets/gallery/WhatsApp Image 2026-01-10 at 3.49.06 PM (10).webp';
+
 export default function EnterpriseSolutions() {
     const [activeTab, setActiveTab] = React.useState(0);
 
@@ -19,11 +29,11 @@ export default function EnterpriseSolutions() {
 
     // Rotating the 4 images to creates distinct sets for each category
     const categoryImages = {
-        0: [Enterprise1, Enterprise2, Enterprise3, Enterprise4],
-        1: [Enterprise2, Enterprise3, Enterprise4, Enterprise1],
-        2: [Enterprise3, Enterprise4, Enterprise1, Enterprise2],
-        3: [Enterprise4, Enterprise1, Enterprise2, Enterprise3],
-        4: [Enterprise1, Enterprise3, Enterprise2, Enterprise4]
+        0: [Gallery1, Gallery2, Gallery3, Gallery4],
+        1: [Gallery5, Gallery6, Gallery7, Gallery8],
+        2: [Enterprise1, Enterprise2, Enterprise3, Enterprise4],
+        3: [Gallery1, Gallery3, Gallery5, Gallery7],
+        4: [Gallery2, Gallery4, Gallery6, Gallery8]
     };
 
     return (
