@@ -1,6 +1,7 @@
 "use client"
 import React, { useEffect, useState } from 'react';
 import { Gavel, ArrowRight, HelpCircle, FileText, CheckCircle2, Shield, AlertTriangle, Scale, Lock, Globe, Mail, Phone, MapPin } from 'lucide-react';
+import { useEnquiry } from '../../context/EnquiryContext';
 
 const sections = [
     { id: 'acceptance', title: '1. Acceptance of Terms' },
@@ -23,6 +24,7 @@ const sections = [
 ];
 
 export default function TermsOfService() {
+    const { openEnquiry } = useEnquiry();
     const [activeSection, setActiveSection] = useState('acceptance');
 
     useEffect(() => {
@@ -101,9 +103,11 @@ export default function TermsOfService() {
                                 <HelpCircle className="w-8 h-8 mb-4 text-purple-400" />
                                 <h4 className="font-bold mb-2">Legal Query?</h4>
                                 <p className="text-sm text-purple-200/80 mb-4">Reach out to our compliance department for any legal clarifications.</p>
-                                <button onClick={() => scrollToSection('contact')} className="w-full py-2.5 bg-white text-[#1a0b2e] rounded-lg font-bold text-sm hover:bg-purple-50 transition-colors">
+
+                                <button onClick={openEnquiry} className="w-full py-2.5 bg-white text-[#1a0b2e] rounded-lg font-bold text-sm hover:bg-purple-50 transition-colors">
                                     Contact Legal
                                 </button>
+
                             </div>
                         </div>
                     </div>

@@ -1,6 +1,7 @@
 "use client";
 import React from 'react';
 import { Shield, Server, MonitorSmartphone, Check, Lock, Cloud, ClipboardList, Target, BarChart, LayoutDashboard, Award } from 'lucide-react';
+import Link from 'next/link';
 import { useEnquiry } from '../context/EnquiryContext';
 export default function B2BFeatures() {
     const { openEnquiry } = useEnquiry();
@@ -110,11 +111,13 @@ export default function B2BFeatures() {
                         {/* Buttons */}
                         {/* BUTTONS */}
                         <div className="flex flex-col sm:flex-row gap-4 sm:gap-5 w-full sm:w-auto">
-                            <button
-                                className="px-8 py-3.5 bg-[#6B46E5] text-white font-bold rounded-lg shadow-lg hover:bg-[#5538B5] hover:scale-105 active:scale-95 transition-all uppercase text-sm tracking-wide w-full sm:w-auto"
-                            >
-                                Learn More
-                            </button>
+                            <Link href="/about">
+                                <button
+                                    className="px-8 py-3.5 bg-[#6B46E5] text-white font-bold rounded-lg shadow-lg hover:bg-[#5538B5] hover:scale-105 active:scale-95 transition-all uppercase text-sm tracking-wide w-full sm:w-auto"
+                                >
+                                    Learn More
+                                </button>
+                            </Link>
                             <button
                                 onClick={openEnquiry}
                                 className="px-8 py-3.5 bg-transparent border border-[#6B46E5] text-[#6B46E5] dark:text-white font-bold rounded-lg hover:bg-[#6B46E5]/10 hover:scale-105 active:scale-95 transition-all uppercase text-sm tracking-wide w-full sm:w-auto"

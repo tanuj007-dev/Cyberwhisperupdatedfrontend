@@ -272,14 +272,13 @@ export default function CoreServicesOverview() {
                                                 {service.description}
                                             </p>
 
-                                            <Link href={service.link}>
-                                                <button
-                                                    className="w-full py-2.5 px-4 rounded-lg bg-gray-50 border border-gray-200 text-gray-900 shadow-sm dark:shadow-none dark:bg-white/5 dark:border-white/10 text-xs font-semibold dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 flex items-center justify-center gap-1 transition-all hover:gap-2 hover:border-purple-200 dark:hover:border-white/20"
-                                                >
-                                                    Enquire now
-                                                    <ArrowRight className="w-3 h-3" />
-                                                </button>
-                                            </Link>
+                                            <button
+                                                onClick={openEnquiry}
+                                                className="w-full py-2.5 px-4 rounded-lg bg-gray-50 border border-gray-200 text-gray-900 shadow-sm dark:shadow-none dark:bg-white/5 dark:border-white/10 text-xs font-semibold dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 flex items-center justify-center gap-1 transition-all hover:gap-2 hover:border-purple-200 dark:hover:border-white/20"
+                                            >
+                                                Get a Quote
+                                                <ArrowRight className="w-3 h-3" />
+                                            </button>
                                         </div>
                                     </div>
                                 </motion.div>

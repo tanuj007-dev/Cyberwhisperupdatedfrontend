@@ -155,7 +155,7 @@ export default function B2BHero() {
                                     loop
                                     muted
                                     playsInline
-                                    className="w-full h-full object-cover scale-[1.2] opacity-90 mix-blend-screen"
+                                    className="w-full h-full object-cover scale-[1.2]"
                                 />
 
                             </div>

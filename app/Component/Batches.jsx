@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { Calendar, Clock, Users, Sparkles, ArrowRight, Loader2, GraduationCap, IndianRupee } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Calendar, Clock, Users, Sparkles, ArrowRight, Loader2, GraduationCap, IndianRupee, X, User, Mail, Phone as PhoneIcon } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 
 export default function Batches() {
@@ -9,6 +9,57 @@ export default function Batches() {
     const [batches, setBatches] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedBatch, setSelectedBatch] = useState(null);
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        phone: ''
+    });
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    const handleEnrollClick = (batch) => {
+        setSelectedBatch(batch);
+        setIsModalOpen(true);
+    };
+
+    const handleFormChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
+    const handleRegister = async (e) => {
+        e.preventDefault();
+        setIsSubmitting(true);
+
+        // Simulate registration process
+        try {
+            // Here you would normally send the data to an API
+            const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3031';
+            await fetch(`${apiUrl}/api/enroll`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ ...formData, batch_id: selectedBatch?.id })
+            }).catch(err => console.log("API not reachable, continuing with brochure download"));
+
+            // After registration, trigger brochure download
+            const brochureUrl = '/assets/brochure.pdf'; // Path to your brochure
+            const link = document.createElement('a');
+            link.href = brochureUrl;
+            link.download = 'CyberWhisper_Brochure.pdf';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            // Reset and close
+            alert('Registration successful! Your brochure is downloading.');
+            setIsModalOpen(false);
+            setFormData({ name: '', email: '', phone: '' });
+        } catch (err) {
+            console.error("Registration failed", err);
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
 
     useEffect(() => {
         fetchBatches();
@@ -279,7 +330,10 @@ export default function Batches() {
 
                                     {/* Action Column */}
                                     <div className="lg:col-span-2 flex items-center justify-start lg:justify-center relative z-10 mt-4 lg:mt-0">
-                                        <button className="w-full lg:w-auto group/btn flex items-center justify-center gap-2 bg-gradient-to-r from-purple-600 to-violet-600 hover:from-purple-500 hover:to-violet-500 text-white px-6 py-3 lg:py-2.5 rounded-xl font-bold text-sm transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/30 active:scale-95">
+                                        <button
+                                            onClick={() => handleEnrollClick(batch)}
+                                            className="w-full lg:w-auto group/btn flex items-center justify-center gap-2 bg-linear-to-r from-purple-600 to-violet-600 hover:from-purple-500 hover:to-violet-500 text-white px-6 py-3 lg:py-2.5 rounded-xl font-bold text-sm transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/30 active:scale-95"
+                                        >
                                             <span>Enroll Now</span>
                                             <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
                                         </button>
@@ -302,6 +356,108 @@ export default function Batches() {
                 )}
 
             </div>
+
+            {/* Enrollment Modal */}
+            <AnimatePresence>
+                {isModalOpen && (
+                    <div className="fixed inset-0 z-100 flex items-center justify-center p-4">
+                        {/* Backdrop */}
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            onClick={() => setIsModalOpen(false)}
+                            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+                        />
+
+                        {/* Modal Content */}
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                            className="relative w-full max-w-md bg-white dark:bg-[#1a0b2e] rounded-3xl shadow-2xl overflow-hidden border border-gray-100 dark:border-white/10"
+                        >
+                            <button
+                                onClick={() => setIsModalOpen(false)}
+                                className="absolute top-4 right-4 p-2 text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+                            >
+                                <X className="w-5 h-5" />
+                            </button>
+
+                            <div className="p-8">
+                                <div className="text-center mb-8">
+                                    <div className="w-16 h-16 bg-purple-100 dark:bg-purple-500/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                                        <GraduationCap className="w-8 h-8 text-purple-600 dark:text-purple-400" />
+                                    </div>
+                                    <h3 className="text-2xl font-bold text-gray-900 dark:text-white">Enroll Now</h3>
+                                    <p className="text-gray-500 dark:text-gray-400 mt-2 text-sm">
+                                        Register to enroll in <span className="text-purple-600 dark:text-purple-400 font-semibold">{selectedBatch?.program_name}</span> and download the brochure.
+                                    </p>
+                                </div>
+
+                                <form onSubmit={handleRegister} className="space-y-4">
+                                    <div className="relative items-center justify-center group/input">
+                                        <input
+                                            type="text"
+                                            name="name"
+                                            required
+                                            value={formData.name}
+                                            onChange={handleFormChange}
+                                            placeholder="Full Name"
+                                            className="w-full pl-6 pr-4 py-3.5 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl focus:ring-2 focus:ring-purple-500 outline-none transition-all placeholder:text-gray-400 dark:text-white text-sm"
+                                        />
+                                    </div>
+
+                                    <div className="relative items-center justify-center group/input">
+                                        <input
+                                            type="email"
+                                            name="email"
+                                            required
+                                            value={formData.email}
+                                            onChange={handleFormChange}
+                                            placeholder="Email Address"
+                                            className="w-full pl-6 pr-4 py-3.5 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl focus:ring-2 focus:ring-purple-500 outline-none transition-all placeholder:text-gray-400 dark:text-white text-sm"
+                                        />
+                                    </div>
+
+                                    <div className="relative items-center justify-center group/input">
+                                        <input
+                                            type="tel"
+                                            name="phone"
+                                            required
+                                            value={formData.phone}
+                                            onChange={handleFormChange}
+                                            placeholder="Mobile Number"
+                                            className="w-full pl-6 pr-4 py-3.5 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl focus:ring-2 focus:ring-purple-500 outline-none transition-all placeholder:text-gray-400 dark:text-white text-sm"
+                                        />
+                                    </div>
+
+                                    <button
+                                        type="submit"
+                                        disabled={isSubmitting}
+                                        className="w-full flex items-center justify-center gap-2 bg-linear-to-r from-purple-600 to-violet-600 text-white font-bold py-4 rounded-xl shadow-lg hover:shadow-purple-500/25 transition-all active:scale-[0.98] disabled:opacity-70"
+                                    >
+                                        {isSubmitting ? (
+                                            <>
+                                                <Loader2 className="w-5 h-5 animate-spin" />
+                                                <span>Registering...</span>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <span>Register & Download Brochure</span>
+                                                <ArrowRight className="w-5 h-5" />
+                                            </>
+                                        )}
+                                    </button>
+                                </form>
+                                <p className="text-center text-[11px] text-gray-400 mt-4 leading-relaxed">
+                                    By registering, you agree to our Terms of Service and Privacy Policy.
+                                </p>
+                            </div>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
         </section>
     );
 }

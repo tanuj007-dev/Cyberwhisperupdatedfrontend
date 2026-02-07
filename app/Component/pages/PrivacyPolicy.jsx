@@ -6,7 +6,7 @@ const sections = [
     { id: 'who-we-are', title: '1. Who We Are' },
     { id: 'info-collect', title: '2. Information We Collect' },
     { id: 'data-use', title: '3. How We Use Information' },
-    { id: 'data-share', title: '4. specific data sharing' },
+    { id: 'data-share', title: '4. How We Share Your Information' },
     { id: 'cookies', title: '5. Cookies & Technologies' },
     { id: 'retention', title: '6. Data Retention' },
     { id: 'security', title: '7. Security' },

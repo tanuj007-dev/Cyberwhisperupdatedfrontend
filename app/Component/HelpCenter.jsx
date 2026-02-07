@@ -244,10 +244,10 @@ export default function CompactPremiumDemo() {
                     <div className="flex items-center gap-2">
                       <span className="text-sm font-semibold text-gray-600 dark:text-gray-300">Need Help?</span>
                       <a
-                        href="tel:+919513805401"
+                        href="tel:+919220946887"
                         className="text-base font-bold text-purple-600 dark:text-purple-400 hover:text-purple-500 dark:hover:text-purple-300 transition-colors"
                       >
-                        +91 95138 05401
+                        (+91) 9220946887
                       </a>
                     </div>
                   </div>

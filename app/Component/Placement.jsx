@@ -315,12 +315,12 @@ function StudentCard({ student, isActive }) {
                     <p className="text-[9px] uppercase font-bold text-gray-500 tracking-wider mb-1">Placed At</p>
                     <div>
                         {student.logo ? (
-                            <div className="h-5 max-w-[70px] relative flex items-center justify-end">
+                            <div className="h-12 max-w-[120px] relative flex items-center justify-end">
                                 <Image
                                     src={student.logo}
                                     alt={student.placedAt}
                                     className="object-contain object-right h-full w-auto"
-                                    height={20}
+                                    height={50}
                                     width={70}
                                 />
                             </div>
