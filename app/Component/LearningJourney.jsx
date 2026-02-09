@@ -74,7 +74,7 @@ export default function LearningJourney() {
                                 className="px-8 py-3 bg-[#a855f7] text-white font-bold rounded-full flex items-center gap-2 hover:bg-[#9333ea] hover:scale-105 active:scale-95 transition-all duration-300 shadow-[0_0_20px_rgba(168,85,247,0.4)] text-sm tracking-wider uppercase"
                             >
                                 <Laptop className="w-5 h-5" />
-                                Get Free Demo
+                                Talk to our expert
                             </button>
 
                         </div>

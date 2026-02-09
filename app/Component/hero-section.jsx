@@ -7,7 +7,8 @@ import heroBg from './assets/hero-bg.png';
 // Dynamically load Particles to improve initial load time
 const Particles = dynamic(() => import('./Particles'), { ssr: false });
 
-import heroRightImage from './assets/hero_split_cards_with_buttons_1770619985697.png';
+// Using public folder path for image with spaces in filename
+const heroRightImage = '/hero-split-cards.png';
 import { motion } from 'framer-motion';
 import { GoArrowRight } from "react-icons/go";
 

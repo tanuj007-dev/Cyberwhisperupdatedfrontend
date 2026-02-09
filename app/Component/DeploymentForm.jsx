@@ -8,7 +8,12 @@ export const MultiSelectDropdown = ({ label, options, selected, onChange, requir
     const [showOtherInput, setShowOtherInput] = useState(false);
     const [otherValue, setOtherValue] = useState('');
 
-    const handleToggle = (option) => {
+    const handleToggle = (option, e) => {
+        // Prevent event from bubbling up to parent elements
+        if (e) {
+            e.stopPropagation();
+        }
+
         const newSelected = selected.includes(option)
             ? selected.filter(item => item !== option)
             : [...selected, option];
@@ -48,7 +53,7 @@ export const MultiSelectDropdown = ({ label, options, selected, onChange, requir
                                 <input
                                     type="checkbox"
                                     checked={selected.includes(option)}
-                                    onChange={() => handleToggle(option)}
+                                    onChange={(e) => handleToggle(option, e)}
                                     className="w-4 h-4 text-[#6B46E5] border-gray-300 rounded focus:ring-[#6B46E5]"
                                 />
                                 <span className="ml-3 text-gray-900 dark:text-white text-sm">{option}</span>
