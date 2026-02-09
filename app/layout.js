@@ -3,12 +3,12 @@ import "./globals.css";
 import dynamic from 'next/dynamic';
 import { ThemeProvider } from "./context/ThemeContext";
 
-// Load font with optimal settings
+// Load font with optimal settings (fewer weights = faster load)
 const poppins = Poppins({
     variable: "--font-poppins",
     subsets: ["latin"],
-    weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
-    display: 'swap', // Ensure text is visible during font load
+    weight: ["400", "600", "700"],
+    display: 'swap',
     preload: true,
 });
 
@@ -47,6 +47,7 @@ export default function RootLayout({ children }) {
             <head>
                 <link rel="preconnect" href="https://fonts.googleapis.com" />
                 <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+                <link rel="preload" href="/assets/cw_logo_sample_2.png" as="image" />
                 <meta name="apple-mobile-web-app-capable" content="yes" />
                 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
             </head>

@@ -7,8 +7,7 @@ import heroBg from './assets/hero-bg.png';
 // Dynamically load Particles to improve initial load time
 const Particles = dynamic(() => import('./Particles'), { ssr: false });
 
-import b2bCard from './assets/c2.png';
-import b2cCard from './assets/c1.png';
+import heroRightImage from './assets/hero_split_cards_with_buttons_1770619985697.png';
 import { motion } from 'framer-motion';
 import { GoArrowRight } from "react-icons/go";
 
@@ -216,44 +215,29 @@ function HeroLayout({ isVideoOpen, setIsVideoOpen }) {
           </div>
         </motion.div>
 
-        {/* Right Content Area - Staggered B2B/B2C Cards */}
-        <div className="hidden lg:flex lg:w-[45%] relative flex-col mt-12 lg:mt-0 w-full px-4 sm:px-0 items-center lg:items-center justify-center min-h-[500px]">
-          <div className="relative w-full max-w-[400px]">
-            {/* Upper B2B Card */}
-            <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              whileInView={{ opacity: 1, x: 40 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.8, duration: 0.8 }}
-              className="relative z-20"
-            >
-              <Link href="/b2b" className="block drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
-                <img
-                  src={b2bCard.src}
-                  alt="B2B Solutions"
-                  className="w-full h-auto object-cover ml-20 hover:scale-105 transition-transform duration-500 rounded-3xl"
-                />
-              </Link>
-            </motion.div>
-
-            {/* Lower B2C Card */}
-            <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: -40 }}
-              viewport={{ once: true }}
-              transition={{ delay: 1, duration: 0.8 }}
-              className="relative z-10   -mt-16 lg:-mt-16"
-            >
-              <Link href="/training" className="block drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
-                <img
-                  src={b2cCard.src}
-                  alt="Individual Training"
-                  className="w-full h-auto object-cover hover:scale-105 transition-transform duration-500 rounded-3xl"
-                />
-              </Link>
-            </motion.div>
+        {/* Right Content Area - Hero image with clickable left/right zones */}
+        <motion.div
+          initial={{ opacity: 0, x: 40 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.6, duration: 0.8 }}
+          className="hidden lg:flex lg:w-[45%] relative items-center justify-center min-h-[400px]"
+        >
+          <div className="relative w-full max-w-[480px] rounded-2xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.4)]">
+            <Image
+              src={heroRightImage}
+              alt="Enterprise B2B and Individuals B2C - Cybersecurity training and solutions"
+              width={600}
+              height={500}
+              className="w-full h-auto object-contain"
+              priority
+              sizes="(max-width: 1024px) 0px, 45vw"
+            />
+            {/* Left half → /b2b, right half → /training (no visible buttons) */}
+            <Link href="/b2b" className="absolute inset-0 left-0 w-1/2 h-full cursor-pointer" aria-label="Explore Enterprise Solutions" />
+            <Link href="/training" className="absolute left-1/2 top-0 w-1/2 h-full cursor-pointer" aria-label="Explore Training Programs" />
           </div>
-        </div>
+        </motion.div>
       </div>
 
       {/* Video Modal - Top Level for correct stacking context */}

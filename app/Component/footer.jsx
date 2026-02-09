@@ -90,6 +90,7 @@ export default function Footer() {
               <li><a href="/" className="hover:text-[#6b46e5] hover:translate-x-1 transition-all inline-block">Home</a></li>
               <li><a href="/about" className="hover:text-[#6b46e5] hover:translate-x-1 transition-all inline-block">About Us</a></li>
               <li><a href="/services" className="hover:text-[#6b46e5] hover:translate-x-1 transition-all inline-block">Our Services</a></li>
+              <li><a href="/b2b" className="hover:text-[#6b46e5] hover:translate-x-1 transition-all inline-block">Cyber Range</a></li>
               <li><a href="/training" className="hover:text-[#6b46e5] hover:translate-x-1 transition-all inline-block">Training</a></li>
               <li><a href="/gallery" className="hover:text-[#6b46e5] hover:translate-x-1 transition-all inline-block">Gallery</a></li>
             </ul>

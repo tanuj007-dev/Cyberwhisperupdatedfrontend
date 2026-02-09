@@ -39,6 +39,7 @@ const nextConfig = {
 
   // Production optimizations
   productionBrowserSourceMaps: false,
+  poweredByHeader: false,
 
   // Improve build performance
   onDemandEntries: {
