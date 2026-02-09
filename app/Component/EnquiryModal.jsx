@@ -5,13 +5,14 @@ import { X, Loader2, CheckCircle, AlertCircle } from 'lucide-react';
 import { useEnquiry } from '../context/EnquiryContext';
 
 export default function EnquiryModal() {
-    const { isOpen, closeEnquiry } = useEnquiry();
+    const { isOpen, isB2B, closeEnquiry } = useEnquiry();
     const [formData, setFormData] = useState({
         name: '',
         email: '',
         phone: '',
         subject: '',
-        message: ''
+        message: '',
+        budget: ''
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitStatus, setSubmitStatus] = useState(null); // 'success' | 'error' | null
@@ -45,7 +46,7 @@ export default function EnquiryModal() {
             console.log('Form submitted successfully:', data);
 
             setSubmitStatus('success');
-            setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
+            setFormData({ name: '', email: '', phone: '', subject: '', message: '', budget: '' });
 
             // Close modal after 2 seconds
             setTimeout(() => {
@@ -152,6 +153,24 @@ export default function EnquiryModal() {
                                         disabled={isSubmitting}
                                         className="w-full px-4 py-2 border border-gray-300 text-gray-900 placeholder:text-gray-500 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all disabled:bg-gray-100 disabled:cursor-not-allowed"
                                         placeholder="Enter your subject"
+                                    />
+                                </div>
+
+                                <div>
+                                    <label htmlFor="budget" className="block text-sm font-medium text-gray-700 mb-1">
+                                        Budget {isB2B && <span className="text-red-500">*</span>}
+                                        {!isB2B && <span className="text-gray-500 text-xs">(Optional)</span>}
+                                    </label>
+                                    <input
+                                        type="text"
+                                        id="budget"
+                                        name="budget"
+                                        required={isB2B}
+                                        value={formData.budget}
+                                        onChange={handleChange}
+                                        disabled={isSubmitting}
+                                        className="w-full px-4 py-2 border border-gray-300 text-gray-900 placeholder:text-gray-500 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all disabled:bg-gray-100 disabled:cursor-not-allowed"
+                                        placeholder={isB2B ? "Enter your budget (required for B2B)" : "Enter your budget (optional)"}
                                     />
                                 </div>
 

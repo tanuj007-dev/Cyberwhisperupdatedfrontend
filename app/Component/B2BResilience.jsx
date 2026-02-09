@@ -44,21 +44,21 @@ export default function B2BResilience() {
             title: "Immersive Cyber Range",
             description: "Your SOC team lacks live-fire experience? Our MITRE-mapped sandbox lets them battle APTs and ransomware safely, turning theory into battle-hardened reflexes.",
             bestFor: "SOC Teams, Universities & Cyber Defense Units",
-            cta: <button onClick={openEnquiry}>Book a Demo</button>
+            cta: <button onClick={() => openEnquiry(true)}>Book a Demo</button>
         },
         {
             icon: Key,
             title: "Strategic Cyber Consulting",
             description: "Security is costly when reactive. We provide architecture roadmaps and risk assessments tailored to your budget, translating technical gaps into a clear executive strategy.",
             bestFor: "CISOs, CTOs & Growth-Stage Startups",
-            cta: <button onClick={openEnquiry}>Book a Demo</button>
+            cta: <button onClick={() => openEnquiry(true)}>Book a Demo</button>
         },
         {
             icon: ShieldCheck,
             title: "Hands-On Workshops",
             description: "Slides don’t stop hackers—skills do. Our intensive bootcamps replace theory with keyboard time, delivering certifiable skills in SIEM, Red Teaming, and Forensics.",
             bestFor: "Corporate Training & Upskilling Teams",
-            cta: <button onClick={openEnquiry}>Book a Demo</button>
+            cta: <button onClick={() => openEnquiry(true)}>Book a Demo</button>
         }
     ];
 

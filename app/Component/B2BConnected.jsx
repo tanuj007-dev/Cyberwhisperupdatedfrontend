@@ -66,13 +66,15 @@ export default function B2BConnected() {
                         {/* CTA Buttons */}
                         <div className="flex flex-col sm:flex-row gap-3">
                             {/* Primary CTA - Book a Demo */}
-                            <button onClick={openEnquiry} className="group flex items-center justify-center gap-2 px-5 py-3 bg-[#a855f7] hover:bg-[#9333ea] text-white font-bold text-sm rounded-xl shadow-lg shadow-[#a855f7]/25 hover:shadow-xl hover:shadow-[#a855f7]/40 transition-all duration-300 hover:scale-105 w-full sm:w-auto">
-                                <Calendar size={16} className="group-hover:scale-110 transition-transform" />
+                            <button onClick={() => openEnquiry(true)} className="group flex items-center justify-center gap-2 px-5 py-3 bg-[#a855f7] hover:bg-[#9333ea] text-white font-bold text-sm rounded-xl shadow-lg shadow-[#a855f7]/25 hover:shadow-xl hover:shadow-[#a855f7]/40 transition-all duration-300 hover:scale-105 w-full sm:w-auto">
                                 <span>Book a Demo</span>
+                                <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                </svg>
                             </button>
 
                             {/* Secondary CTA - Get a Quote */}
-                            <button onClick={openEnquiry} className="group flex items-center justify-center gap-2 px-5 py-3 bg-white dark:bg-white/5 hover:bg-gray-50 dark:hover:bg-white/10 text-gray-900 dark:text-white font-bold text-sm rounded-xl border-2 border-gray-300 dark:border-white/20 hover:border-[#a855f7] dark:hover:border-[#a855f7] shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105 w-full sm:w-auto">
+                            <button onClick={() => openEnquiry(true)} className="group flex items-center justify-center gap-2 px-5 py-3 bg-white dark:bg-white/5 hover:bg-gray-50 dark:hover:bg-white/10 text-gray-900 dark:text-white font-bold text-sm rounded-xl border-2 border-gray-300 dark:border-white/20 hover:border-[#a855f7] dark:hover:border-[#a855f7] shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105 w-full sm:w-auto">
                                 <MessageSquare size={16} className="group-hover:scale-110 transition-transform" />
                                 <span>Get a Quote</span>
                             </button>

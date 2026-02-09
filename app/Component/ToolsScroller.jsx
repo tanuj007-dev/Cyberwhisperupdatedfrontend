@@ -5,13 +5,13 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 
 // Import assets
-import tool1 from './assets/1.webp';
-import tool2 from './assets/2.webp';
-import tool3 from './assets/3.webp';
-import tool4 from './assets/4.webp';
-import tool5 from './assets/5.webp';
-import tool6 from './assets/6.webp';
-import tool7 from './assets/7.webp';
+// import tool1 from './assets/1.webp';
+// import tool2 from './assets/2.webp';
+// import tool3 from './assets/3.webp';
+// import tool4 from './assets/4.webp';
+// import tool5 from './assets/5.webp';
+// import tool6 from './assets/6.webp';
+// import tool7 from './assets/7.webp';
 import unnamed from './assets/2249-unnamed.pngS.webp';
 import hash from './assets/5461df8fd2fe783981b0180332821184b729980e.webp';
 import opensearch from './assets/opensearch-logo-png_seeklogo-406743.webp';
@@ -35,16 +35,22 @@ import azure from './assets/Microsoft-Azure-Logo.webp';
 import terraform from './assets/terraform-icon-tew8r4clf5ocvoyj0o05j.webp';
 import images_2_jpg from './assets/18bd6100-ee3f-4702-b597-499e0da1a9e7.png';
 import kubernetes from './assets/cb26c468-4065-4491-bfd5-1debd688366c.png';
+import openai from './assets/openai_logo_icon_248315.png';
+import wazuh from './assets/wazuh.png';
+import misp from './assets/misp.png';
+import kali from './assets/15812df3-012f-4bfe-96f1-776bcd59d5e9.png';
+import atomic from './assets/atomic.png';
+import firewall from './assets/79-790653_next-generation-firewall-icon.png';
 
 const ToolsScroller = () => {
     const tools = [
-        { image: tool1, name: "Tool 1" },
-        { image: tool2, name: "Tool 2" },
-        { image: tool3, name: "Tool 3" },
-        { image: tool4, name: "Tool 4" },
-        { image: tool5, name: "Tool 5" },
-        { image: tool6, name: "Tool 6" },
-        { image: tool7, name: "Tool 7" },
+        // { image: tool1, name: "Tool 1" },
+        // { image: tool2, name: "Tool 2" },
+        // { image: tool3, name: "Tool 3" },
+        // { image: tool4, name: "Tool 4" },
+        // { image: tool5, name: "Tool 5" },
+        // { image: tool6, name: "Tool 6" },
+        // { image: tool7, name: "Tool 7" },
         { image: unnamed, name: "Tool 8" },
         { image: hash, name: "Hash" },
         { image: opensearch, name: "OpenSearch" },
@@ -67,7 +73,12 @@ const ToolsScroller = () => {
         { image: azure, name: "Azure" },
         { image: terraform, name: "Terraform" },
         { image: images_2_jpg, name: "Tool 29" },
-        { image: kubernetes, name: "Kubernetes" }
+        { image: kubernetes, name: "Kubernetes" },
+        { image: openai, name: "OpenAI" },
+        { image: wazuh, name: "Wazuh" },
+        { image: misp, name: "MISP" },
+        { image: kali, name: "Kali Linux" },
+        { image: atomic, name: "Atomic Red Team" },
     ];
 
     return (
@@ -133,7 +144,7 @@ const ToolsScroller = () => {
                                         alt={tool.name}
                                         width={80}
                                         height={80}
-                                        className="w-full h-full object-contain md:grayscale group-hover:grayscale-0 transition-all duration-300 group-hover:scale-110 relative z-10"
+                                        className="w-full h-full object-contain transition-all duration-300 group-hover:scale-110 relative z-10"
                                         loading="lazy"
                                     />
                                 </div>

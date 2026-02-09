@@ -119,13 +119,13 @@ export default function B2BHero() {
 
                             <div className="flex gap-3 mb-4 w-full">
                                 <button
-                                    onClick={openEnquiry}
+                                    onClick={() => openEnquiry(true)}
                                     className="flex-1 py-2.5 px-2 bg-purple-500 text-white font-extrabold rounded-xl shadow-lg transition-all text-[11px] uppercase tracking-wide whitespace-nowrap"
                                 >
                                     Book a Demo
                                 </button>
                                 <button
-                                    onClick={openEnquiry}
+                                    onClick={() => openEnquiry(true)}
                                     className="flex-1 py-2.5 px-2 bg-transparent border-2 border-purple-500 hover:border-purple-600 text-purple-600 dark:text-gray-300 hover:text-purple-700 dark:hover:text-white font-extrabold rounded-xl transition-all text-[11px] uppercase tracking-wide whitespace-nowrap"
                                 >
                                     Get a Quote

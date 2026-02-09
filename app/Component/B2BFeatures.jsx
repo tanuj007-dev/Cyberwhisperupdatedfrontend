@@ -119,7 +119,7 @@ export default function B2BFeatures() {
                                 </button>
                             </Link>
                             <button
-                                onClick={openEnquiry}
+                                onClick={() => openEnquiry(true)}
                                 className="px-8 py-3.5 bg-transparent border border-[#6B46E5] text-[#6B46E5] dark:text-white font-bold rounded-lg hover:bg-[#6B46E5]/10 hover:scale-105 active:scale-95 transition-all uppercase text-sm tracking-wide w-full sm:w-auto"
                             >
                                 Contact Us

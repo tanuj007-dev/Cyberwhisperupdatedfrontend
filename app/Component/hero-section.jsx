@@ -234,9 +234,43 @@ function HeroLayout({ isVideoOpen, setIsVideoOpen }) {
               priority
               sizes="(max-width: 1024px) 0px, 45vw"
             />
-            {/* Left half → /b2b, right half → /training (no visible buttons) */}
-            <Link href="/b2b" className="absolute inset-0 left-0 w-1/2 h-full cursor-pointer" aria-label="Explore Enterprise Solutions" />
-            <Link href="/training" className="absolute left-1/2 top-0 w-1/2 h-full cursor-pointer" aria-label="Explore Training Programs" />
+            {/* Left half → /b2b */}
+            <Link href="/b2b" className="absolute inset-0 left-0 w-1/2 h-full cursor-pointer z-0" aria-label="Explore Enterprise Solutions" />
+
+            {/* Left Button Interactive Pop Effect */}
+            <Link href="/b2b">
+              <motion.div
+                whileHover={{ scale: 1.05, boxShadow: "0 0 25px rgba(168, 85, 247, 0.5)" }}
+                whileTap={{ scale: 0.95 }}
+                className="absolute bottom-[2%] left-[4%] w-[40%] h-[11%] cursor-pointer z-20 rounded-xl"
+                style={{
+                  background: 'linear-gradient(90deg, rgba(168,85,247,0.01) 0%, rgba(168,85,247,0.1) 100%)', // Subtle tint
+                  border: '2px solid rgba(168,85,247,0.3)' // Subtle border
+                }}
+              >
+                {/* Shine effect on hover */}
+                <div className="absolute inset-0 bg-white/10 opacity-0 hover:opacity-100 rounded-xl transition-opacity duration-300" />
+              </motion.div>
+            </Link>
+
+            {/* Right half → /training */}
+            <Link href="/training" className="absolute left-1/2 top-0 w-1/2 h-full cursor-pointer z-0" aria-label="Explore Training Programs" />
+
+            {/* Right Button Interactive Pop Effect */}
+            <Link href="/training">
+              <motion.div
+                whileHover={{ scale: 1.05, boxShadow: "0 0 25px rgba(6, 182, 212, 0.5)" }}
+                whileTap={{ scale: 0.95 }}
+                className="absolute bottom-[2%] right-[4%] w-[40%] h-[11%] cursor-pointer z-20 rounded-xl"
+                style={{
+                  background: 'linear-gradient(90deg, rgba(6,182,212,0.01) 0%, rgba(6,182,212,0.1) 100%)', // Subtle tint
+                  border: '2px solid rgba(6,182,212,0.3)' // Subtle border
+                }}
+              >
+                {/* Shine effect on hover */}
+                <div className="absolute inset-0 bg-white/10 opacity-0 hover:opacity-100 rounded-xl transition-opacity duration-300" />
+              </motion.div>
+            </Link>
           </div>
         </motion.div>
       </div>
