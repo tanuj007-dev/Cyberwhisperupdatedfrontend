@@ -47,14 +47,14 @@ const nextConfig = {
     pagesBufferLength: 5,
   },
 
-  // API Proxy to bypass CORS issues (only for user-related APIs)
+  // API Proxy to bypass CORS (dev only; production uses backend URL directly)
   async rewrites() {
-    return [
-      {
-        source: '/api/users/:path*',
-        destination: 'http://localhost:3031/api/users/:path*',
-      },
-    ];
+    if (process.env.NODE_ENV === 'development' && !process.env.BACKEND_API_URL) {
+      return [
+        { source: '/api/users/:path*', destination: 'http://localhost:3031/api/users/:path*' },
+      ];
+    }
+    return [];
   },
 };
 
