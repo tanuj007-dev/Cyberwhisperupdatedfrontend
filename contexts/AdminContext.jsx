@@ -270,13 +270,16 @@ export const AdminProvider = ({ children }) => {
 
     const deleteBlog = async (blog_id) => {
         try {
-            const backendUrl = getBackendUrl();
-            const response = await fetch(`${backendUrl}/api/blogs?id=${blog_id}`, {
-                method: 'DELETE'
+            const backendUrl = getBackendUrl().replace(/\/$/, '');
+            const response = await fetch(`${backendUrl}/api/blogs/${blog_id}`, {
+                method: 'DELETE',
+                headers: getAdminHeaders(),
+                credentials: 'include'
             });
 
             if (!response.ok) {
-                throw new Error('Failed to delete blog');
+                const errText = await response.text();
+                throw new Error(errText || 'Failed to delete blog');
             }
 
             await fetchBlogs(); // Refresh list
@@ -315,8 +318,7 @@ export const AdminProvider = ({ children }) => {
                 linkedin_url: user.linkedin_url || '',
                 github_url: user.github_url || '',
                 is_instructor: user.is_instructor || false,
-                profile_image_url: user.profile_image_url || '',
-                skills: user.skills || []
+                profile_image_url: user.profile_image_url || ''
             };
 
             console.log('Creating user with payload:', payload);
@@ -363,14 +365,13 @@ export const AdminProvider = ({ children }) => {
                 linkedin_url: updatedUser.linkedin_url || '',
                 github_url: updatedUser.github_url || '',
                 is_instructor: updatedUser.is_instructor || false,
-                profile_image_url: updatedUser.profile_image_url || '',
-                skills: updatedUser.skills || []
+                profile_image_url: updatedUser.profile_image_url || ''
             };
 
             console.log('Updating user', id, 'with payload:', payload);
 
             const response = await fetch(`${apiUrl}/api/users/${id}/update`, {
-                method: 'PUT',
+                method: 'POST',
                 headers: getAdminHeaders(),
                 body: JSON.stringify(payload),
                 credentials: 'include',

@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, Save, Loader2, FileText, Upload } from 'lucide-react';
+import { Toast } from '@/components/ui';
 
 const getCoursesApiBase = () =>
     typeof window !== 'undefined'
@@ -22,8 +23,7 @@ const initialForm = {
     discounted_price: '',
     level: 'beginner',
     language: 'English',
-    category_id: 1,
-    sub_category_id: 5,
+    category: '',
     course_type: 'video',
     status: 'draft',
     is_free_course: 0,
@@ -44,6 +44,12 @@ export default function AddCoursePage() {
     const [courseThumbnailUrl, setCourseThumbnailUrl] = useState('');
     const [thumbnailUploading, setThumbnailUploading] = useState(false);
     const [thumbnailPreview, setThumbnailPreview] = useState('');
+    const [toast, setToast] = useState({ isVisible: false, message: '', type: 'success' });
+
+    const showToast = (message, type = 'success') => {
+        setToast({ isVisible: true, message, type });
+        setTimeout(() => setToast((t) => ({ ...t, isVisible: false })), 3000);
+    };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -59,7 +65,7 @@ export default function AddCoursePage() {
         e.preventDefault();
         const token = getAdminToken();
         if (!token) {
-            alert('Please log in again.');
+            showToast('Please log in again.', 'error');
             return;
         }
 
@@ -76,8 +82,7 @@ export default function AddCoursePage() {
                 discounted_price: formData.discounted_price ? parseFloat(formData.discounted_price) : undefined,
                 level: formData.level || 'beginner',
                 language: formData.language || 'English',
-                category_id: Number(formData.category_id) || 1,
-                sub_category_id: Number(formData.sub_category_id) || 5,
+                category: formData.category?.trim() || undefined,
                 course_type: formData.course_type || 'video',
                 status: formData.status || 'draft',
                 is_free_course: formData.is_free_course ?? 0,
@@ -105,11 +110,11 @@ export default function AddCoursePage() {
                 throw new Error(errData.message || errData.error || 'Failed to create course');
             }
 
-            alert('Course created successfully!');
+            showToast('Course created successfully!', 'success');
             router.push('/admin/courses');
         } catch (err) {
             console.error('Create course error:', err);
-            alert('Failed to create course: ' + err.message);
+            showToast(err.message || 'Failed to create course', 'error');
         } finally {
             setIsSubmitting(false);
         }
@@ -288,7 +293,7 @@ export default function AddCoursePage() {
                         </div>
                         <div className="md:col-span-2">
                             <label className="block text-sm font-semibold text-gray-700 mb-2">Course brochure (PDF)</label>
-                            <p className="text-xs text-gray-500 mb-2">Optional. Upload a PDF brochure for this course. Users can download it when they request the course brochure.</p>
+                            <p className="text-xs text-gray-500 mb-2">Upload one PDF per course. When a user downloads the brochure for this course, they will get this file. Optional.</p>
                             <label className="inline-flex items-center gap-2 px-4 py-2.5 border border-gray-300 rounded-xl font-medium text-gray-700 cursor-pointer hover:bg-gray-50 transition-colors">
                                 <Upload size={18} />
                                 {brochureUploading ? 'Uploading...' : 'Choose PDF'}
@@ -306,12 +311,24 @@ export default function AddCoursePage() {
                                         }
                                         setBrochureUploading(true);
                                         try {
+                                            const token = getAdminToken();
+                                            if (!token) {
+                                                alert('Please log in again.');
+                                                return;
+                                            }
                                             const fd = new FormData();
                                             fd.append('file', file);
-                                            const res = await fetch('/api/courses/brochure-upload', { method: 'POST', body: fd });
+                                            const base = getCoursesApiBase();
+                                            const res = await fetch(`${base}/api/brochure-downloads/upload`, {
+                                                method: 'POST',
+                                                headers: { 'Authorization': `Bearer ${token}` },
+                                                body: fd,
+                                            });
                                             const data = await res.json().catch(() => ({}));
-                                            if (!res.ok) throw new Error(data.error || 'Upload failed');
-                                            setBrochureUrl(data.url);
+                                            if (!res.ok) throw new Error(data.message || data.error || 'Upload failed');
+                                            const url = data.data?.presignedUrl ?? data.data?.fileUrl ?? data.url ?? data.brochure_url ?? data.data?.url;
+                                            if (!url) throw new Error('No brochure URL returned from server');
+                                            setBrochureUrl(url);
                                             setBrochureFileName(file.name);
                                         } catch (err) {
                                             alert(err.message || 'Upload failed');
@@ -322,19 +339,39 @@ export default function AddCoursePage() {
                                     }}
                                 />
                             </label>
-                            {brochureFileName && (
-                                <p className="mt-2 text-sm text-green-600 flex items-center gap-1">
-                                    <FileText size={14} />
-                                    {brochureFileName} — will be attached to this course
-                                </p>
+                            {(brochureFileName || brochureUrl) && (
+                                <div className="mt-2 flex items-center gap-3">
+                                    <p className="text-sm text-green-600 flex items-center gap-1">
+                                        <FileText size={14} />
+                                        {brochureFileName || 'Brochure attached'} — will be attached to this course
+                                    </p>
+                                    <button
+                                        type="button"
+                                        onClick={() => { setBrochureUrl(''); setBrochureFileName(''); }}
+                                        className="text-sm text-red-600 hover:underline"
+                                    >
+                                        Remove
+                                    </button>
+                                </div>
                             )}
                         </div>
                     </div>
                 </div>
 
                 <div className="space-y-4">
-                    <h2 className="text-xl font-bold text-gray-900 border-b pb-2">Pricing & IDs</h2>
+                    <h2 className="text-xl font-bold text-gray-900 border-b pb-2">Pricing & category</h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="md:col-span-2">
+                            <label className="block text-sm font-semibold text-gray-700 mb-2">Category / type</label>
+                            <input
+                                type="text"
+                                name="category"
+                                value={formData.category}
+                                onChange={handleChange}
+                                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent placeholder:text-gray-300 text-black"
+                                placeholder="e.g. Cybersecurity, Web Development, Cloud"
+                            />
+                        </div>
                         <div>
                             <label className="block text-sm font-semibold text-gray-700 mb-2">Price *</label>
                             <input
@@ -359,28 +396,6 @@ export default function AddCoursePage() {
                                 min="0"
                                 className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent placeholder:text-gray-300 text-black"
                                 placeholder="79.99"
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-2">Category ID</label>
-                            <input
-                                type="number"
-                                name="category_id"
-                                value={formData.category_id}
-                                onChange={handleChange}
-                                min="1"
-                                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent placeholder:text-gray-300 text-black"
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-2">Sub-category ID</label>
-                            <input
-                                type="number"
-                                name="sub_category_id"
-                                value={formData.sub_category_id}
-                                onChange={handleChange}
-                                min="1"
-                                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent placeholder:text-gray-300 text-black"
                             />
                         </div>
                         <div className="flex items-center gap-2">
@@ -477,6 +492,8 @@ export default function AddCoursePage() {
                     </button>
                 </div>
             </form>
+
+            <Toast isVisible={toast.isVisible} message={toast.message} type={toast.type} onClose={() => setToast((t) => ({ ...t, isVisible: false }))} />
         </div>
     );
 }

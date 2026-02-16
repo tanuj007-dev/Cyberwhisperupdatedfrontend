@@ -29,8 +29,7 @@ export default function EditCoursePage() {
         language: 'English',
         status: 'draft',
         course_type: 'video',
-        category_id: 1,
-        sub_category_id: 5,
+        category: '',
         outcomes: '',
         faqs: '',
         meta_keywords: '',
@@ -70,8 +69,7 @@ export default function EditCoursePage() {
                 language: course.language || 'English',
                 status: course.status || 'draft',
                 course_type: course.course_type || 'video',
-                category_id: course.category_id ?? 1,
-                sub_category_id: course.sub_category_id ?? 5,
+                category: course.category || course.category_name || course.type || '',
                 outcomes: course.outcomes || '',
                 faqs: course.faqs || '',
                 meta_keywords: course.meta_keywords || '',
@@ -120,8 +118,7 @@ export default function EditCoursePage() {
                 language: formData.language,
                 status: formData.status,
                 course_type: formData.course_type,
-                category_id: formData.category_id,
-                sub_category_id: formData.sub_category_id,
+                category: formData.category?.trim() || undefined,
                 outcomes: formData.outcomes || undefined,
                 faqs: formData.faqs || undefined,
                 meta_keywords: formData.meta_keywords || undefined,
@@ -191,7 +188,7 @@ export default function EditCoursePage() {
                                 value={formData.title}
                                 onChange={handleChange}
                                 required
-                                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                className="w-full px-4 py-3 border border-gray-300 rounded-xl text-gray-700 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                             />
                         </div>
                         <div className="md:col-span-2">
@@ -201,7 +198,7 @@ export default function EditCoursePage() {
                                 name="short_description"
                                 value={formData.short_description}
                                 onChange={handleChange}
-                                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                className="w-full px-4 py-3 border border-gray-300 rounded-xl text-gray-700 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                             />
                         </div>
                         <div className="md:col-span-2">
@@ -211,7 +208,7 @@ export default function EditCoursePage() {
                                 value={formData.description}
                                 onChange={handleChange}
                                 rows={4}
-                                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                className="w-full px-4 py-3 border border-gray-300 rounded-xl text-gray-700 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                             />
                         </div>
                         <div>
@@ -220,7 +217,7 @@ export default function EditCoursePage() {
                                 name="level"
                                 value={formData.level}
                                 onChange={handleChange}
-                                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                className="w-full px-4 py-3 border border-gray-300 rounded-xl text-gray-700 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                             >
                                 <option value="beginner">Beginner</option>
                                 <option value="intermediate">Intermediate</option>
@@ -235,7 +232,7 @@ export default function EditCoursePage() {
                                 name="language"
                                 value={formData.language}
                                 onChange={handleChange}
-                                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                className="w-full px-4 py-3 border border-gray-300 rounded-xl text-gray-700 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                             />
                         </div>
                         <div>
@@ -316,7 +313,7 @@ export default function EditCoursePage() {
                         </div>
                         <div className="md:col-span-2">
                             <label className="block text-sm font-semibold text-gray-700 mb-2">Course brochure (PDF)</label>
-                            <p className="text-xs text-gray-500 mb-2">Optional. Upload a PDF brochure for this course. Users can download it when they request the course brochure.</p>
+                            <p className="text-xs text-gray-500 mb-2">One brochure per course. When a user downloads the brochure for this course, they get this file. Optional.</p>
                             <label className="inline-flex items-center gap-2 px-4 py-2.5 border border-gray-300 rounded-xl font-medium text-gray-700 cursor-pointer hover:bg-gray-50 transition-colors">
                                 <Upload size={18} />
                                 {brochureUploading ? 'Uploading...' : 'Choose PDF'}
@@ -334,12 +331,24 @@ export default function EditCoursePage() {
                                         }
                                         setBrochureUploading(true);
                                         try {
+                                            const token = getAdminToken();
+                                            if (!token) {
+                                                alert('Please log in again.');
+                                                return;
+                                            }
                                             const fd = new FormData();
                                             fd.append('file', file);
-                                            const res = await fetch('/api/courses/brochure-upload', { method: 'POST', body: fd });
+                                            const base = getCoursesApiBase();
+                                            const res = await fetch(`${base}/api/brochure-downloads/upload`, {
+                                                method: 'POST',
+                                                headers: { 'Authorization': `Bearer ${token}` },
+                                                body: fd,
+                                            });
                                             const data = await res.json().catch(() => ({}));
-                                            if (!res.ok) throw new Error(data.error || 'Upload failed');
-                                            setFormData((prev) => ({ ...prev, brochure_url: data.url }));
+                                            if (!res.ok) throw new Error(data.message || data.error || 'Upload failed');
+                                            const url = data.data?.presignedUrl ?? data.data?.fileUrl ?? data.url ?? data.brochure_url ?? data.data?.url;
+                                            if (!url) throw new Error('No brochure URL returned from server');
+                                            setFormData((prev) => ({ ...prev, brochure_url: url }));
                                             setBrochureFileName(file.name);
                                         } catch (err) {
                                             alert(err.message || 'Upload failed');
@@ -351,18 +360,38 @@ export default function EditCoursePage() {
                                 />
                             </label>
                             {(brochureFileName || formData.brochure_url) && (
-                                <p className="mt-2 text-sm text-green-600 flex items-center gap-1">
-                                    <FileText size={14} />
-                                    {brochureFileName || 'Brochure attached'}
-                                </p>
+                                <div className="mt-2 flex items-center gap-3">
+                                    <p className="text-sm text-green-600 flex items-center gap-1">
+                                        <FileText size={14} />
+                                        {brochureFileName || 'Brochure attached'}
+                                    </p>
+                                    <button
+                                        type="button"
+                                        onClick={() => { setFormData((prev) => ({ ...prev, brochure_url: '' })); setBrochureFileName(''); }}
+                                        className="text-sm text-red-600 hover:underline"
+                                    >
+                                        Remove
+                                    </button>
+                                </div>
                             )}
                         </div>
                     </div>
                 </div>
 
                 <div className="space-y-4">
-                    <h2 className="text-xl font-bold text-gray-900 border-b pb-2">Pricing & IDs</h2>
+                    <h2 className="text-xl font-bold text-gray-900 border-b pb-2">Pricing & category</h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="md:col-span-2">
+                            <label className="block text-sm font-semibold text-gray-700 mb-2">Category / type</label>
+                            <input
+                                type="text"
+                                name="category"
+                                value={formData.category}
+                                onChange={handleChange}
+                                className="w-full px-4 py-3 border border-gray-300 text-gray-700 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                placeholder="e.g. Cybersecurity, Web Development, Cloud"
+                            />
+                        </div>
                         <div>
                             <label className="block text-sm font-semibold text-gray-700 mb-2">Price</label>
                             <input
@@ -372,7 +401,7 @@ export default function EditCoursePage() {
                                 onChange={handleChange}
                                 step="0.01"
                                 min="0"
-                                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                className="w-full px-4 py-3 border border-gray-300 text-gray-700 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                             />
                         </div>
                         <div>
@@ -384,29 +413,7 @@ export default function EditCoursePage() {
                                 onChange={handleChange}
                                 step="0.01"
                                 min="0"
-                                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-2">Category ID</label>
-                            <input
-                                type="number"
-                                name="category_id"
-                                value={formData.category_id}
-                                onChange={handleChange}
-                                min="1"
-                                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-2">Sub-category ID</label>
-                            <input
-                                type="number"
-                                name="sub_category_id"
-                                value={formData.sub_category_id}
-                                onChange={handleChange}
-                                min="1"
-                                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                className="w-full px-4 py-3 border border-gray-300 text-gray-700 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                             />
                         </div>
                         <div className="flex items-center gap-2">
@@ -432,7 +439,7 @@ export default function EditCoursePage() {
                             value={formData.outcomes}
                             onChange={handleChange}
                             rows={2}
-                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                            className="w-full px-4 py-3 border border-gray-300 text-gray-700 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                         />
                     </div>
                     <div>
@@ -442,7 +449,7 @@ export default function EditCoursePage() {
                             value={formData.faqs}
                             onChange={handleChange}
                             rows={3}
-                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                            className="w-full px-4 py-3 border border-gray-300 text-gray-700 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                         />
                     </div>
                 </div>
@@ -456,7 +463,7 @@ export default function EditCoursePage() {
                             name="meta_keywords"
                             value={formData.meta_keywords}
                             onChange={handleChange}
-                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                            className="w-full px-4 py-3 border border-gray-300 text-gray-700 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                         />
                     </div>
                     <div>
@@ -466,7 +473,7 @@ export default function EditCoursePage() {
                             value={formData.meta_description}
                             onChange={handleChange}
                             rows={2}
-                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                            className="w-full px-4 py-3 border border-gray-300 text-gray-700 resize-none rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                         />
                     </div>
                 </div>

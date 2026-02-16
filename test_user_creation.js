@@ -23,7 +23,7 @@ const testUserData = {
     role: "INSTRUCTOR",
     is_instructor: true,
     profile_image_url: "https://res.cloudinary.com/dwpkrvrfk/image/upload/v1767788923/cyberwhisper/users/profiles/ime2evfm62sb23xri2ee.jpg",
-    skills: []
+    
 };
 
 async function testCreateUser() {

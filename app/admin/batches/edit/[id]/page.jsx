@@ -180,7 +180,7 @@ export default function EditBatchPage() {
                                 value={formData.program_name}
                                 onChange={handleChange}
                                 required
-                                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                className="w-full px-4 py-3 border text-gray-700 border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                             />
                         </div>
 
@@ -192,7 +192,7 @@ export default function EditBatchPage() {
                                 name="program_type"
                                 value={formData.program_type}
                                 onChange={handleChange}
-                                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                className="w-full px-4 py-3 border text-gray-700 border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                             >
                                 <option>Professional Certification</option>
                                 <option>Diploma Program</option>
@@ -209,7 +209,7 @@ export default function EditBatchPage() {
                                 name="status"
                                 value={formData.status}
                                 onChange={handleChange}
-                                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                className="w-full px-4 py-3 border text-gray-700 border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                             >
                                 <option value="ACTIVE">Active</option>
                                 <option value="UPCOMING">Upcoming</option>
@@ -228,7 +228,7 @@ export default function EditBatchPage() {
                             value={formData.description}
                             onChange={handleChange}
                             rows={3}
-                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                            className="w-full px-4 py-3 border text-gray-700 border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                         />
                     </div>
                 </div>
@@ -248,7 +248,7 @@ export default function EditBatchPage() {
                                 value={formData.start_date}
                                 onChange={handleChange}
                                 required
-                                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                className="w-full px-4 py-3 border text-gray-700 border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                             />
                         </div>
 
@@ -262,7 +262,7 @@ export default function EditBatchPage() {
                                 value={formData.end_date}
                                 onChange={handleChange}
                                 required
-                                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                className="w-full px-4 py-3 border text-gray-700 border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                             />
                         </div>
 
@@ -276,7 +276,7 @@ export default function EditBatchPage() {
                                 value={formData.start_time}
                                 onChange={handleChange}
                                 required
-                                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                className="w-full px-4 py-3 border text-gray-700 border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                             />
                         </div>
 
@@ -290,7 +290,7 @@ export default function EditBatchPage() {
                                 value={formData.end_time}
                                 onChange={handleChange}
                                 required
-                                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                className="w-full px-4 py-3 border text-gray-700 border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                             />
                         </div>
 
@@ -305,7 +305,7 @@ export default function EditBatchPage() {
                                 onChange={handleChange}
                                 required
                                 min="1"
-                                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                className="w-full px-4 py-3 border text-gray-700 border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                             />
                         </div>
 
@@ -317,7 +317,7 @@ export default function EditBatchPage() {
                                 name="schedule_type"
                                 value={formData.schedule_type}
                                 onChange={handleChange}
-                                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                className="w-full px-4 py-3 border text-gray-700 border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                             >
                                 <option>Flexible Schedule</option>
                                 <option>Fixed Schedule</option>
@@ -345,7 +345,7 @@ export default function EditBatchPage() {
                                 required
                                 min="0"
                                 step="1"
-                                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                className="w-full px-4 py-3 border text-gray-700 border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                             />
                         </div>
 
@@ -360,7 +360,7 @@ export default function EditBatchPage() {
                                 onChange={handleChange}
                                 min="0"
                                 step="1"
-                                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                className="w-full px-4 py-3 border text-gray-700 border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                             />
                         </div>
 

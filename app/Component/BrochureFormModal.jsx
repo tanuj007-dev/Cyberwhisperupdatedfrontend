@@ -4,7 +4,7 @@ import React, { useEffect } from 'react'
 import { X } from 'lucide-react'
 import BrochureForm from './BrochureForm'
 
-export default function BrochureFormModal({ open, onClose }) {
+export default function BrochureFormModal({ open, onClose, brochureUrl, courseTitle }) {
     useEffect(() => {
         if (!open) return
         const handleEscape = (e) => { if (e.key === 'Escape') onClose() }
@@ -37,7 +37,7 @@ export default function BrochureFormModal({ open, onClose }) {
                     <X className="w-5 h-5" />
                 </button>
                 <div className="p-6 pt-10">
-                    <BrochureForm className="p-0! border-0! shadow-none!" onSuccess={onClose} />
+                    <BrochureForm className="p-0! border-0! shadow-none!" onSuccess={onClose} brochureUrl={brochureUrl} courseTitle={courseTitle} />
                 </div>
             </div>
         </div>

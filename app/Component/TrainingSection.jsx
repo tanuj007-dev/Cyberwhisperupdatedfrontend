@@ -22,6 +22,7 @@ export default function TrainingSection() {
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
     const [brochureModalOpen, setBrochureModalOpen] = useState(false)
+    const [brochureCourse, setBrochureCourse] = useState(null)
     const [enrollModalOpen, setEnrollModalOpen] = useState(false)
     const [enrollCourseTitle, setEnrollCourseTitle] = useState('')
     const [slideIndex, setSlideIndex] = useState(0)
@@ -245,7 +246,10 @@ export default function TrainingSection() {
                                                     </button>
                                                     <button
                                                         type="button"
-                                                        onClick={() => setBrochureModalOpen(true)}
+                                                        onClick={() => {
+                                                            setBrochureCourse(course)
+                                                            setBrochureModalOpen(true)
+                                                        }}
                                                         className="flex-1 border-2 border-[#6B46E5] dark:border-purple-400 text-[#6B46E5] dark:text-purple-300 py-2 rounded-lg text-xs font-bold hover:bg-[#6B46E5]/10 dark:hover:bg-purple-500/10 transition-colors"
                                                     >
                                                         Learn More
@@ -313,7 +317,12 @@ export default function TrainingSection() {
                     </div>
                 )}
 
-                <BrochureFormModal open={brochureModalOpen} onClose={() => setBrochureModalOpen(false)} />
+                <BrochureFormModal
+                    open={brochureModalOpen}
+                    onClose={() => { setBrochureModalOpen(false); setBrochureCourse(null) }}
+                    brochureUrl={brochureCourse?.brochure_url || brochureCourse?.brochure}
+                    courseTitle={brochureCourse?.title}
+                />
                 <EnrollModal open={enrollModalOpen} onClose={() => setEnrollModalOpen(false)} courseTitle={enrollCourseTitle} />
 
                 {/* View All Button */}

@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAdmin } from '@/contexts/AdminContext';
 import { Button, Input, Select, Textarea, Toggle, Card, Toast } from '@/components/ui';
-import { X } from 'lucide-react';
 
 const AddUser = () => {
     const router = useRouter();
@@ -17,7 +16,6 @@ const AddUser = () => {
         phone: '',
         address: '',
         password: '',
-        skills: [],
         biography: '',
         linkedin_url: '',
         github_url: '',
@@ -27,7 +25,6 @@ const AddUser = () => {
         title: ''
     });
 
-    const [skillInput, setSkillInput] = useState('');
     const [toast, setToast] = useState({ isVisible: false, message: '', type: 'success' });
     const [errors, setErrors] = useState({});
 
@@ -48,23 +45,6 @@ const AddUser = () => {
         } else if (platform === 'github') {
             setFormData({ ...formData, github_url: value });
         }
-    };
-
-    const addSkill = () => {
-        if (skillInput.trim() && !formData.skills.includes(skillInput.trim())) {
-            setFormData({
-                ...formData,
-                skills: [...formData.skills, skillInput.trim()]
-            });
-            setSkillInput('');
-        }
-    };
-
-    const removeSkill = (skillToRemove) => {
-        setFormData({
-            ...formData,
-            skills: formData.skills.filter(skill => skill !== skillToRemove)
-        });
     };
 
     const validateForm = () => {
@@ -221,38 +201,6 @@ const AddUser = () => {
                             placeholder="Brief bio about the user"
                             rows={4}
                         />
-
-                        {/* Skills */}
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">Skills</label>
-                            <div className="flex gap-2 mb-3">
-                                <input
-                                    type="text"
-                                    value={skillInput}
-                                    onChange={(e) => setSkillInput(e.target.value)}
-                                    onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addSkill())}
-                                    placeholder="Add a skill and press Enter"
-                                    className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                />
-                                <Button type="button" onClick={addSkill} variant="primary" size="md">
-                                    Add
-                                </Button>
-                            </div>
-                            <div className="flex flex-wrap gap-2">
-                                {formData.skills.map((skill, index) => (
-                                    <div key={index} className="inline-flex items-center gap-2 px-3 py-1.5 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
-                                        {skill}
-                                        <button
-                                            type="button"
-                                            onClick={() => removeSkill(skill)}
-                                            className="hover:text-blue-900"
-                                        >
-                                            <X size={14} />
-                                        </button>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
                     </div>
                 </Card>
 

@@ -36,6 +36,7 @@ export default function CourseSection() {
   const [error, setError] = useState(null);
   const [categoriesLoading, setCategoriesLoading] = useState(true);
   const [brochureModalOpen, setBrochureModalOpen] = useState(false);
+  const [brochureCourse, setBrochureCourse] = useState(null);
   const [enrollModalOpen, setEnrollModalOpen] = useState(false);
   const [enrollCourseTitle, setEnrollCourseTitle] = useState("");
   const [slideIndex, setSlideIndex] = useState(0);
@@ -434,7 +435,10 @@ export default function CourseSection() {
                                 </button>
                                 <button
                                   type="button"
-                                  onClick={() => setBrochureModalOpen(true)}
+                                  onClick={() => {
+                                    setBrochureCourse(course);
+                                    setBrochureModalOpen(true);
+                                  }}
                                   className="flex-1 border-2 border-[#6B46E5] text-[#6B46E5] py-2.5 rounded-lg text-sm font-bold hover:bg-[#6B46E5]/10 transition-colors dark:border-purple-400 dark:text-purple-300 dark:hover:bg-purple-500/10"
                                 >
                                   Learn More
@@ -509,7 +513,9 @@ export default function CourseSection() {
 
         <BrochureFormModal
           open={brochureModalOpen}
-          onClose={() => setBrochureModalOpen(false)}
+          onClose={() => { setBrochureModalOpen(false); setBrochureCourse(null); }}
+          brochureUrl={brochureCourse?.brochure_url || brochureCourse?.brochure}
+          courseTitle={brochureCourse?.title}
         />
         <EnrollModal
           open={enrollModalOpen}

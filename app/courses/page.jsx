@@ -18,6 +18,7 @@ export default function AllCoursesPage() {
     const [totalPages, setTotalPages] = useState(1)
     const [totalCourses, setTotalCourses] = useState(0)
     const [brochureModalOpen, setBrochureModalOpen] = useState(false)
+    const [brochureCourse, setBrochureCourse] = useState(null)
     const { openEnquiry } = useEnquiry()
     const limit = 10
 
@@ -110,7 +111,12 @@ export default function AllCoursesPage() {
                     </p>
                 </div>
 
-                <BrochureFormModal open={brochureModalOpen} onClose={() => setBrochureModalOpen(false)} />
+                <BrochureFormModal
+                    open={brochureModalOpen}
+                    onClose={() => { setBrochureModalOpen(false); setBrochureCourse(null) }}
+                    brochureUrl={brochureCourse?.brochure_url || brochureCourse?.brochure}
+                    courseTitle={brochureCourse?.title}
+                />
 
                 {/* Course Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
@@ -223,7 +229,10 @@ export default function AllCoursesPage() {
                                         </button>
                                         <button
                                             type="button"
-                                            onClick={() => setBrochureModalOpen(true)}
+                                            onClick={() => {
+                                                setBrochureCourse(course)
+                                                setBrochureModalOpen(true)
+                                            }}
                                             className="flex-1 border-2 border-[#310E3F] text-[#310E3F] py-3 rounded-full text-sm font-bold hover:border-[#6B46E5] hover:text-[#6B46E5] transition-all"
                                         >
                                             Learn More

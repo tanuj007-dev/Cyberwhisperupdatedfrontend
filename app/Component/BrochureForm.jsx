@@ -11,7 +11,7 @@ const getBackendBase = () =>
         ? (process.env.NEXT_PUBLIC_BACKEND_API_URL || process.env.NEXT_PUBLIC_BACKEND_URL || process.env.NEXT_PUBLIC_API_URL || 'https://darkred-mouse-801836.hostingersite.com').replace(/\/$/, '')
         : 'https://darkred-mouse-801836.hostingersite.com'
 
-export default function BrochureForm({ className = '', onSuccess }) {
+export default function BrochureForm({ className = '', onSuccess, brochureUrl: brochureUrlProp, courseTitle }) {
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -19,16 +19,19 @@ export default function BrochureForm({ className = '', onSuccess }) {
     })
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [message, setMessage] = useState(null)
-    const [brochureUrl, setBrochureUrl] = useState(DEFAULT_BROCHURE_URL)
+    const [fetchedUrl, setFetchedUrl] = useState(null)
+    // Use course brochure if provided, else fallback from API (global brochure)
+    const brochureUrl = brochureUrlProp ?? fetchedUrl ?? null
 
     useEffect(() => {
+        if (brochureUrlProp) return
         fetch('/api/brochure/current')
             .then((res) => res.ok ? res.json() : {})
             .then((data) => {
-                if (data?.url) setBrochureUrl(data.url)
+                if (data?.url) setFetchedUrl(data.url)
             })
             .catch(() => {})
-    }, [])
+    }, [brochureUrlProp])
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value })
@@ -37,6 +40,10 @@ export default function BrochureForm({ className = '', onSuccess }) {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
+        if (!brochureUrl) {
+            setMessage(courseTitle ? 'No brochure available for this course.' : 'No brochure available.')
+            return
+        }
         setIsSubmitting(true)
         setMessage(null)
         try {
@@ -47,7 +54,8 @@ export default function BrochureForm({ className = '', onSuccess }) {
                 body: JSON.stringify({
                     name: formData.name.trim(),
                     email: formData.email.trim(),
-                    mobile_number: formData.mobile.trim()
+                    mobile_number: formData.mobile.trim(),
+                    ...(courseTitle && { course_title: courseTitle })
                 })
             })
             if (!addRes.ok) {
@@ -56,8 +64,8 @@ export default function BrochureForm({ className = '', onSuccess }) {
             }
 
             const link = document.createElement('a')
-            link.href = brochureUrl
-            link.download = BROCHURE_FILENAME
+            link.href = brochureUrl.startsWith('http') ? brochureUrl : (typeof window !== 'undefined' ? window.location.origin : '') + brochureUrl
+            link.download = courseTitle ? `${courseTitle.replace(/[^a-zA-Z0-9.-]/g, '_').slice(0, 60)}_Brochure.pdf` : BROCHURE_FILENAME
             document.body.appendChild(link)
             link.click()
             document.body.removeChild(link)
@@ -72,12 +80,19 @@ export default function BrochureForm({ className = '', onSuccess }) {
         }
     }
 
+    const noBrochure = !brochureUrl
+
     return (
         <div className={`bg-card border border-[#7B2CFF]/30 rounded-2xl p-4 md:p-6 shadow-sm ${className}`}>
             <p className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
                 <FileDown className="w-4 h-4 text-[#6B46E5]" />
-                Download course brochure
+                {courseTitle ? `Download brochure: ${courseTitle}` : 'Download course brochure'}
             </p>
+            {noBrochure && (
+                <p className="text-sm text-amber-600 dark:text-amber-400 mb-3">
+                    {courseTitle ? 'No brochure available for this course.' : 'No brochure available.'}
+                </p>
+            )}
             <form onSubmit={handleSubmit} className="space-y-3">
                 <input
                     type="text"
@@ -108,7 +123,7 @@ export default function BrochureForm({ className = '', onSuccess }) {
                 />
                 <button
                     type="submit"
-                    disabled={isSubmitting}
+                    disabled={isSubmitting || noBrochure}
                     className="w-full flex items-center justify-center gap-2 bg-[#310E3F] dark:bg-[#6B46E5] text-white text-sm font-bold py-2.5 rounded-lg hover:bg-[#6B46E5] dark:hover:bg-[#7B5CF0] transition-colors disabled:opacity-70"
                 >
                     {isSubmitting ? (

@@ -38,10 +38,10 @@ export async function GET(request) {
                 duration: '3 Weeks', // Default as not in response
                 price: course.price,
                 discounted_price: course.discounted_price,
-                category_id: course.category_id,
-                category: course.category_name || course.category || 'General',
+                category: course.category || course.category_name || course.type || 'General',
                 thumbnail: course.thumbnail || course.thumbnail_url || course.course_thumbnail,
                 image: course.image || course.thumbnail || course.thumbnail_url || course.course_thumbnail,
+                brochure_url: course.brochure_url || course.brochure || undefined,
                 ...course
             })),
             pagination: data.pagination || { page: 1, limit: Number(limit), total: rawCourses.length }

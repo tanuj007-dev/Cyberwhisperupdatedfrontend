@@ -25,12 +25,10 @@ export default function AdminLogin() {
     const [registerForm, setRegisterForm] = useState({
         first_name: '', last_name: '', email: '', phone: '', password: '',
         title: '', address: '', biography: '', linkedin_url: '', github_url: '',
-        role: 'STUDENT', is_instructor: false, profile_image_url: '', skills: []
+        role: 'STUDENT', is_instructor: false, profile_image_url: ''
     });
-    const [registerSkillInput, setRegisterSkillInput] = useState('');
     const [registerErrors, setRegisterErrors] = useState({});
     const [registerSubmitting, setRegisterSubmitting] = useState(false);
-    const [registerSuccess, setRegisterSuccess] = useState('');
     const [toast, setToast] = useState({ isVisible: false, message: '', type: 'success' });
     const [profileImageUploading, setProfileImageUploading] = useState(false);
     const [profileImageError, setProfileImageError] = useState('');
@@ -225,15 +223,7 @@ export default function AdminLogin() {
         setRegisterForm((prev) => ({ ...prev, [name]: type === 'checkbox' ? checked : value }));
         if (registerErrors[name]) setRegisterErrors((prev) => ({ ...prev, [name]: '' }));
     };
-    const addRegisterSkill = () => {
-        if (registerSkillInput.trim() && !registerForm.skills.includes(registerSkillInput.trim())) {
-            setRegisterForm((prev) => ({ ...prev, skills: [...prev.skills, registerSkillInput.trim()] }));
-            setRegisterSkillInput('');
-        }
-    };
-    const removeRegisterSkill = (s) => {
-        setRegisterForm((prev) => ({ ...prev, skills: prev.skills.filter((x) => x !== s) }));
-    };
+    
     const uploadProfileImage = async (file) => {
         if (!file || !file.type.startsWith('image/')) {
             setProfileImageError('Please choose an image file.');

@@ -90,11 +90,6 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             path: '/admin/newsletter'
         },
         {
-            name: 'Brochures',
-            icon: FileText,
-            path: '/admin/brochures'
-        },
-        {
             name: 'Deploy Team Requests',
             icon: ClipboardList,
             path: '/admin/deploy-team-training'

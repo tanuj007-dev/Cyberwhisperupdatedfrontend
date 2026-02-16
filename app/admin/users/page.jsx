@@ -36,7 +36,7 @@ const UserList = () => {
         github_url: '',
         profile_image_url: '',
         password: '',
-        skills: []
+        
     });
     const [toast, setToast] = useState({ isVisible: false, message: '', type: 'success' });
     const [errors, setErrors] = useState({});
@@ -121,8 +121,7 @@ const UserList = () => {
             linkedin_url: '',
             github_url: '',
             profile_image_url: '',
-            password: '',
-            skills: []
+            password: ''
         });
         setImagePreview('');
         setErrors({});
@@ -146,8 +145,7 @@ const UserList = () => {
             linkedin_url: user.linkedin_url || '',
             github_url: user.github_url || '',
             profile_image_url: user.profile_image_url || '',
-            password: '',
-            skills: user.skills || []
+            password: ''
         });
         setImagePreview(user.profile_image_url || '');
         setErrors({});
@@ -228,7 +226,7 @@ const UserList = () => {
         <div className="p-8">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
                 <div>
-                    <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Users</h1>
+                    <h1 className="text-3xl font-bold text-gray-900">Users</h1>
                     <p className="text-gray-600 dark:text-gray-400 mt-1">Manage all users and their roles</p>
                 </div>
                 <Button onClick={handleOpenAdd} variant="primary" className="inline-flex items-center gap-2">
@@ -390,13 +388,7 @@ const UserList = () => {
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <Input label="Title" value={formData.title} onChange={(e) => setFormData({ ...formData, title: e.target.value })} placeholder="e.g. Senior Developer" />
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Status</label>
-                            <select value={formData.status} onChange={(e) => setFormData({ ...formData, status: e.target.value })} className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl text-black dark:text-white bg-white dark:bg-gray-800">
-                                <option value="active">Active</option>
-                                <option value="inactive">Inactive</option>
-                            </select>
-                        </div>
+                        
                     </div>
                     <div>
                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Role</label>
@@ -431,10 +423,7 @@ const UserList = () => {
                     <Input label="LinkedIn URL" value={formData.linkedin_url} onChange={(e) => setFormData({ ...formData, linkedin_url: e.target.value })} placeholder="https://linkedin.com/in/username" />
                     <Input label="GitHub URL" value={formData.github_url} onChange={(e) => setFormData({ ...formData, github_url: e.target.value })} placeholder="https://github.com/username" />
                     <Input label="Password" type="password" value={formData.password} onChange={(e) => setFormData({ ...formData, password: e.target.value })} placeholder={editMode ? 'Leave blank to keep current' : 'Enter password'} />
-                    <div className="flex items-center gap-3 p-4 bg-gray-50 dark:bg-gray-800 rounded-xl">
-                        <input type="checkbox" id="is_instructor" checked={formData.is_instructor} onChange={(e) => setFormData({ ...formData, is_instructor: e.target.checked })} className="w-4 h-4 rounded text-violet-600" />
-                        <label htmlFor="is_instructor" className="text-sm font-medium text-gray-700 dark:text-gray-300">Mark as Instructor</label>
-                    </div>
+                     
                 </div>
             </Modal>
 
@@ -464,7 +453,7 @@ const UserList = () => {
                         <dl className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
                             <div><dt className="text-gray-500 dark:text-gray-400">Email</dt><dd className="font-medium text-gray-900 dark:text-white">{viewUser.email}</dd></div>
                             <div><dt className="text-gray-500 dark:text-gray-400">Phone</dt><dd className="font-medium text-gray-900 dark:text-white">{viewUser.phone || '—'}</dd></div>
-                            <div><dt className="text-gray-500 dark:text-gray-400">Status</dt><dd className="font-medium text-gray-900 dark:text-white">{viewUser.status || 'active'}</dd></div>
+                          
                             {viewUser.address && <div className="sm:col-span-2"><dt className="text-gray-500 dark:text-gray-400">Address</dt><dd className="font-medium text-gray-900 dark:text-white">{viewUser.address}</dd></div>}
                             {viewUser.biography && <div className="sm:col-span-2"><dt className="text-gray-500 dark:text-gray-400">Biography</dt><dd className="text-gray-900 dark:text-white">{viewUser.biography}</dd></div>}
                         </dl>
