@@ -2,14 +2,10 @@
 
 import React, { useState, useEffect } from 'react'
 import { FileDown, Loader2 } from 'lucide-react'
+import { API_BASE_URL } from '../../lib/apiConfig'
 
 const DEFAULT_BROCHURE_URL = '/uploads/brochures/brochure.pdf'
 const BROCHURE_FILENAME = 'CyberWhisper_Brochure.pdf'
-
-const getBackendBase = () =>
-    typeof window !== 'undefined'
-        ? (process.env.NEXT_PUBLIC_BACKEND_API_URL || process.env.NEXT_PUBLIC_BACKEND_URL || process.env.NEXT_PUBLIC_API_URL || 'https://darkred-mouse-801836.hostingersite.com').replace(/\/$/, '')
-        : 'https://darkred-mouse-801836.hostingersite.com'
 
 export default function BrochureForm({ className = '', onSuccess, brochureUrl: brochureUrlProp, courseTitle }) {
     const [formData, setFormData] = useState({
@@ -47,8 +43,7 @@ export default function BrochureForm({ className = '', onSuccess, brochureUrl: b
         setIsSubmitting(true)
         setMessage(null)
         try {
-            const base = getBackendBase()
-            const addRes = await fetch(`${base}/api/brochure-downloads/add`, {
+            const addRes = await fetch(`${API_BASE_URL}/api/brochure-downloads/add`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

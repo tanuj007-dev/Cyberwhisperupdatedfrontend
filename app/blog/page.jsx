@@ -5,6 +5,7 @@ import BlogSidebar from '../Component/BlogSidebar'
 import { motion } from 'framer-motion'
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi'
 import { Loader2 } from 'lucide-react'
+import { API_BASE_URL } from '../../lib/apiConfig'
 
 export default function BlogPage() {
     const [blogs, setBlogs] = useState([])
@@ -22,11 +23,7 @@ export default function BlogPage() {
         try {
             setLoading(true)
             // Use current server in development, fallback to environment variable
-            const baseUrl = typeof window !== 'undefined'
-                ? `http://${window.location.hostname}:${window.location.port}`
-                : 'https://darkred-mouse-801836.hostingersite.com'
-
-            const apiUrl = `${baseUrl}/api/blogs/list?page=${currentPage}&limit=${blogsPerPage}`
+            const apiUrl = `${API_BASE_URL}/api/blogs/list?page=${currentPage}&limit=${blogsPerPage}`
             console.log('Fetching blogs from API:', apiUrl)
 
             const response = await fetch(apiUrl)

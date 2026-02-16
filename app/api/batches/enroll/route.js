@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 import { appendLocalBatchEnrollment } from '@/lib/batchEnrollmentStorage';
-
-const BACKEND_URL = process.env.BACKEND_API_URL || process.env.NEXT_PUBLIC_BACKEND_API_URL || 'https://darkred-mouse-801836.hostingersite.com';
+import { API_BASE_URL } from '@/lib/apiConfig';
 
 export async function POST(request) {
     try {
@@ -17,7 +16,7 @@ export async function POST(request) {
 
         let response;
         try {
-            response = await fetch(`${BACKEND_URL}/api/enroll`, {
+            response = await fetch(`${API_BASE_URL}/api/enroll`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload),

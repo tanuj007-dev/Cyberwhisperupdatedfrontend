@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { ArrowRight } from 'lucide-react';
 import newsletterBg from './assets/path.webp';
 import { useEnquiry } from '../context/EnquiryContext';
+import { API_BASE_URL } from '../../lib/apiConfig';
 
 // Single source of truth for heading to avoid server/client hydration mismatch
 const NEWSLETTER_HEADING = 'Stay ahead of threats with practical learning.';
@@ -37,7 +38,7 @@ export default function NewsletterSignup() {
     setMessage('');
 
     try {
-      const response = await fetch(`${typeof window !== 'undefined' ? window.location.origin : (process.env.NEXT_PUBLIC_APP_URL || 'https://darkred-mouse-801836.hostingersite.com')}/api/newsletter/subscribe`, {
+      const response = await fetch(`${API_BASE_URL}/api/newsletter/subscribe`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

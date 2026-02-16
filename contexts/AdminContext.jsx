@@ -6,11 +6,9 @@ import { mockCategories } from '@/data/mockCategories';
 import { mockTags } from '@/data/mockTags';
 import { mockMedia, mockSiteSettings } from '@/data/mockMedia';
 import { mockUsers } from '@/data/mockUsers';
+import { API_BASE_URL } from '@/lib/apiConfig';
 
 const AdminContext = createContext();
-
-// Backend base URL (admin APIs). Use 3001 by default so admin always hits your backend, not Next.js (3000).
-const getBackendUrl = () => process.env.NEXT_PUBLIC_BACKEND_API_URL || process.env.NEXT_PUBLIC_API_URL || 'https://darkred-mouse-801836.hostingersite.com';
 
 // Headers for admin API calls: include Bearer token when available (after MFA login)
 const getAdminHeaders = () => {
@@ -98,7 +96,7 @@ export const AdminProvider = ({ children }) => {
 
     // Fetch blogs: try backend GET /api/blogs/list first so newly added blogs render; fallback to Next.js /api/blogs/list (which also tries backend then local)
     const fetchBlogs = async () => {
-        const backendUrl = getBackendUrl();
+        const backendUrl = API_BASE_URL;
         const listUrl = `${backendUrl}/api/blogs/list?limit=1000&page=1&status=all`;
 
         try {
@@ -147,7 +145,7 @@ export const AdminProvider = ({ children }) => {
     // Fetch users from API
     const fetchUsers = async () => {
         try {
-            const apiUrl = getBackendUrl();
+            const apiUrl = API_BASE_URL;
             const response = await fetch(`${apiUrl}/api/users?page=1&limit=1000`, {
                 method: 'GET',
                 headers: getAdminHeaders(),
@@ -187,7 +185,7 @@ export const AdminProvider = ({ children }) => {
     // Fetch media from API
     const fetchMedia = async () => {
         try {
-            const apiUrl = getBackendUrl();
+            const apiUrl = API_BASE_URL;
             const response = await fetch(`${apiUrl}/api/media`, {
                 method: 'GET',
                 headers: getAdminHeaders(),
@@ -226,7 +224,7 @@ export const AdminProvider = ({ children }) => {
     // Blog CRUD operations - POST to backend (3001) to support thumbnail_url, banner_url, image_url, video_url
     const addBlog = async (blogData) => {
         try {
-            const backendUrl = getBackendUrl();
+            const backendUrl = API_BASE_URL;
 
             const response = await fetch(`${backendUrl}/api/blogs`, {
                 method: 'POST',
@@ -250,7 +248,7 @@ export const AdminProvider = ({ children }) => {
 
     const updateBlog = async (blog_id, updatedBlog) => {
         try {
-            const backendUrl = getBackendUrl();
+            const backendUrl = API_BASE_URL;
             const response = await fetch(`${backendUrl}/api/blogs`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
@@ -270,7 +268,7 @@ export const AdminProvider = ({ children }) => {
 
     const deleteBlog = async (blog_id) => {
         try {
-            const backendUrl = getBackendUrl().replace(/\/$/, '');
+            const backendUrl = API_BASE_URL.replace(/\/$/, '');
             const response = await fetch(`${backendUrl}/api/blogs/${blog_id}`, {
                 method: 'DELETE',
                 headers: getAdminHeaders(),
@@ -304,7 +302,7 @@ export const AdminProvider = ({ children }) => {
     // User CRUD operations
     const addUser = async (user) => {
         try {
-            const apiUrl = getBackendUrl();
+            const apiUrl = API_BASE_URL;
             const payload = {
                 first_name: user.first_name,
                 last_name: user.last_name,
@@ -352,7 +350,7 @@ export const AdminProvider = ({ children }) => {
 
     const updateUser = async (id, updatedUser) => {
         try {
-            const apiUrl = getBackendUrl();
+            const apiUrl = API_BASE_URL;
             const payload = {
                 first_name: updatedUser.first_name,
                 last_name: updatedUser.last_name,
@@ -396,7 +394,7 @@ export const AdminProvider = ({ children }) => {
 
     const deleteUser = async (id) => {
         try {
-            const apiUrl = getBackendUrl();
+            const apiUrl = API_BASE_URL;
 
             const response = await fetch(`${apiUrl}/api/users/${id}`, {
                 method: 'DELETE',
@@ -508,7 +506,7 @@ export const AdminProvider = ({ children }) => {
 
     const getUserById = async (id) => {
         try {
-            const apiUrl = getBackendUrl();
+            const apiUrl = API_BASE_URL;
             const response = await fetch(`${apiUrl}/api/users/${id}`, {
                 method: 'GET',
                 headers: getAdminHeaders(),

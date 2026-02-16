@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getUserById, deleteUser } from '@/lib/userStorage';
-
-const BACKEND_URL = process.env.BACKEND_API_URL || 'https://darkred-mouse-801836.hostingersite.com';
+import { API_BASE_URL } from '@/lib/apiConfig';
 
 const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
@@ -34,7 +33,7 @@ export async function GET(request, context) {
         
         // If not found locally, try backend server
         console.log('User not found locally, trying backend server');
-        const url = `${BACKEND_URL}/users/${id}`;
+        const url = `${API_BASE_URL}/users/${id}`;
         const res = await fetch(url, {
             headers: { 'Content-Type': 'application/json' },
             cache: 'no-store'
@@ -82,7 +81,7 @@ export async function DELETE(request, context) {
         
         // If not found locally, try backend server
         console.log('User not found locally, trying backend server');
-        const url = `${BACKEND_URL}/users/${id}`;
+        const url = `${API_BASE_URL}/users/${id}`;
         const res = await fetch(url, {
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json' }

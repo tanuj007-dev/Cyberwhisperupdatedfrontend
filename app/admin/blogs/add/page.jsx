@@ -5,17 +5,11 @@ import { useRouter } from 'next/navigation';
 import { useAdmin } from '@/contexts/AdminContext';
 import { Button, Input, Select, Textarea, Toggle, Toast } from '@/components/ui';
 import RichTextEditor from '@/components/ui/RichTextEditor';
-import API_CONFIG from '@/app/admin/config/api';
+import { API_BASE_URL } from '@/lib/apiConfig';
 import {
     Upload, X, FileText, Image as ImageIcon, User, Search, Settings,
     ChevronDown, ChevronUp, Save, Send, ArrowLeft, Calendar
 } from 'lucide-react';
-
-// Uploads go to backend so it can push to Cloudinary and return CDN URLs for DB
-const getUploadBaseUrl = () =>
-    typeof window !== 'undefined'
-        ? (process.env.NEXT_PUBLIC_BACKEND_API_URL || process.env.NEXT_PUBLIC_API_URL || API_CONFIG.baseURL || 'https://darkred-mouse-801836.hostingersite.com')
-        : API_CONFIG.baseURL || 'https://darkred-mouse-801836.hostingersite.com';
 
 // Section Component - Defined OUTSIDE the main component to prevent re-creation on every render
 const Section = ({ id, title, icon: Icon, children, isCollapsed, onToggle }) => {
@@ -156,7 +150,7 @@ const AddBlog = () => {
             const formDataUpload = new FormData();
             formDataUpload.append('thumbnail', file);
 
-            const uploadBaseUrl = getUploadBaseUrl();
+            const uploadBaseUrl = API_BASE_URL;
             const response = await fetch(`${uploadBaseUrl}${API_CONFIG.endpoints.uploadThumbnail}`, {
                 method: 'POST',
                 body: formDataUpload
@@ -202,7 +196,7 @@ const AddBlog = () => {
             showToast('Uploading banner...', 'info');
             const formDataUpload = new FormData();
             formDataUpload.append('banner', file);
-            const uploadBaseUrl = getUploadBaseUrl();
+            const uploadBaseUrl = API_BASE_URL;
             const endpoint = API_CONFIG.endpoints.uploadBanner || API_CONFIG.endpoints.uploadThumbnail;
             const response = await fetch(`${uploadBaseUrl}${endpoint}`, { method: 'POST', body: formDataUpload });
             if (!response.ok) {
@@ -236,7 +230,7 @@ const AddBlog = () => {
             showToast('Uploading image...', 'info');
             const formDataUpload = new FormData();
             formDataUpload.append('thumbnail', file);
-            const uploadBaseUrl = getUploadBaseUrl();
+            const uploadBaseUrl = API_BASE_URL;
             const response = await fetch(`${uploadBaseUrl}${API_CONFIG.endpoints.uploadThumbnail}`, { method: 'POST', body: formDataUpload });
             if (!response.ok) {
                 const err = await response.json().catch(() => ({}));

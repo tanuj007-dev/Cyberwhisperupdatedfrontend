@@ -20,7 +20,7 @@ import {
   useSliderSwipe,
   getCardWidthStyle,
 } from "../context/useSliderSwipe";
-
+import { API_BASE_URL } from '../../lib/apiConfig';
 // Import assets
 import thumb1 from "./assets/cyber_lab_1.webp";
 import thumb2 from "./assets/cyber_lab_2.webp";
@@ -84,7 +84,7 @@ export default function CourseSection() {
   const fetchCategories = async () => {
     setCategoriesLoading(true);
     try {
-      const response = await fetch("/api/courses?page=1&limit=100");
+      const response = await fetch(`${API_BASE_URL}/api/courses?page=1&limit=100`);
 
       if (!response.ok) {
         throw new Error(`Failed to fetch categories: ${response.status}`);
@@ -92,22 +92,22 @@ export default function CourseSection() {
 
       const data = await response.json();
 
-      if (data.success && data.courses) {
-        // Extract unique categories from courses
-        const uniqueCategories = [
-          ...new Set(
-            data.courses.map((course) => course.category).filter(Boolean),
-          ),
-        ];
+      // API returns { success, data: [...] } or { success, courses: [...] }
+      const rawList = Array.isArray(data.data) ? data.data : (Array.isArray(data.courses) ? data.courses : []);
+      const categoryLabel = (c) => c.category ?? (c.category_id != null ? `Category ${c.category_id}` : "General");
+      const uniqueCategories = ["All", ...new Set(rawList.map(categoryLabel).filter(Boolean))];
 
-        if (uniqueCategories.length > 0) {
-          setCategories(uniqueCategories);
-          setActiveCategory(uniqueCategories[0]);
-        }
+      if (uniqueCategories.length > 0) {
+        setCategories(uniqueCategories);
+        setActiveCategory(uniqueCategories[0]);
+      } else {
+        setCategories(["All"]);
+        setActiveCategory("All");
       }
     } catch (err) {
       console.warn("API unavailable, using fallback categories:", err.message);
-      setCategories([]);
+      setCategories(["All"]);
+      setActiveCategory("All");
     } finally {
       setCategoriesLoading(false);
     }
@@ -117,7 +117,7 @@ export default function CourseSection() {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch("/api/courses?page=1&limit=50");
+      const response = await fetch(`${API_BASE_URL}/api/courses?page=1&limit=50`);
 
       if (!response.ok) {
         throw new Error(`Failed to fetch courses: ${response.status}`);
@@ -125,37 +125,38 @@ export default function CourseSection() {
 
       const data = await response.json();
 
-      if (data.success && data.courses) {
-        // Filter courses by category
-        const filteredCourses = data.courses.filter(
-          (course) => course.category === category,
-        );
+      // API returns { success, data: [...] } or { success, courses: [...] }
+      const rawList = Array.isArray(data.data) ? data.data : (Array.isArray(data.courses) ? data.courses : []);
+      const categoryLabel = (c) => c.category ?? (c.category_id != null ? `Category ${c.category_id}` : "General");
 
-        const processedCourses = filteredCourses.map((course, idx) => ({
-          ...course,
-          image:
-            course.thumbnail ||
-            course.image ||
-            course.course_thumbnail ||
-            defaultImage,
-          rating: course.rating || 4.5,
-          lessons: course.lessons || 20,
-          level: course.level || "Beginner",
-          duration: course.duration || "3 Weeks",
-          category: course.category,
-          price: course.price,
-          mrp: course.mrp,
-          discounted_price: course.discounted_price,
-        }));
+      const filteredCourses =
+        !category || category === "All"
+          ? rawList
+          : rawList.filter((course) => categoryLabel(course) === category);
 
-        setCourses(processedCourses);
-      }
+      const processedCourses = filteredCourses.map((course) => ({
+        ...course,
+        category: categoryLabel(course),
+        image:
+          course.thumbnail ||
+          course.image ||
+          course.course_thumbnail ||
+          defaultImage,
+        rating: course.rating || 4.5,
+        lessons: course.lessons || 20,
+        level: course.level || "Beginner",
+        duration: course.duration || "3 Weeks",
+        price: course.price,
+        mrp: course.mrp,
+        discounted_price: course.discounted_price,
+      }));
+
+      setCourses(processedCourses);
     } catch (err) {
       console.warn(
         "API unavailable for courses, showing empty state:",
         err.message,
       );
-      // Don't set error state to avoid red error messages
       setCourses([]);
     } finally {
       setLoading(false);
@@ -349,7 +350,7 @@ export default function CourseSection() {
                   {slideChunks.map((slideCourses, slideIdx) => (
                     <div
                       key={slideIdx}
-                      className="flex gap-8 lg:gap-4 shrink-0 px-1 md:px-0 items-start justify-start w-full min-w-0"
+                      className="flex gap-8 lg:gap-4 shrink-0 px-1 md:px-0 items-start justify-center w-full min-w-0"
                       style={{ width: `${100 / totalSlides}%`, minWidth: `${100 / totalSlides}%` }}
                     >
                       {slideCourses.map((course, idx) => (

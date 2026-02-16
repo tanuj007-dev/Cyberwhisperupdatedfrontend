@@ -1,14 +1,13 @@
+import { API_BASE_URL } from '@/lib/apiConfig';
+
 export async function GET(request) {
     try {
         const { searchParams } = new URL(request.url);
         const page = searchParams.get('page') || 1;
         const limit = searchParams.get('limit') || 10;
 
-        // Call your backend API
-        // Call your backend API
-        const base = process.env.BACKEND_API_URL || 'https://darkred-mouse-801836.hostingersite.com';
         const response = await fetch(
-            `${base}/api/courses?page=${page}&limit=${limit}`,
+            `${API_BASE_URL}/api/courses?page=${page}&limit=${limit}`,
             {
                 method: 'GET',
                 headers: {

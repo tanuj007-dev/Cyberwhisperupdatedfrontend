@@ -1,6 +1,8 @@
+import { API_BASE_URL } from '../../../lib/apiConfig';
+
 // API Configuration
 export const API_CONFIG = {
-    baseURL: process.env.NEXT_PUBLIC_API_URL || process.env.NEXT_PUBLIC_BACKEND_API_URL || 'https://darkred-mouse-801836.hostingersite.com',
+    baseURL: API_BASE_URL,
     endpoints: {
         blogs: '/api/blogs',
         uploadThumbnail: '/api/blogs/upload-thumbnail',

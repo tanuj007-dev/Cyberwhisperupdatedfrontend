@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useAdmin } from '@/contexts/AdminContext';
+import { API_BASE_URL } from '@/lib/apiConfig';
 import { Button, Modal, Input, Toast } from '@/components/ui';
 import {
     Upload, Trash2, Eye, Copy, Check, Grid, List,
@@ -84,8 +85,7 @@ const MediaLibrary = () => {
 
         try {
             // Call backend API to add media
-            const apiUrl = process.env.NEXT_PUBLIC_API_URL || process.env.NEXT_PUBLIC_BACKEND_API_URL || 'https://darkred-mouse-801836.hostingersite.com';
-            const response = await fetch(`${apiUrl}/api/media`, {
+            const response = await fetch(`${API_BASE_URL}/api/media`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -1,13 +1,12 @@
 import { NextResponse } from 'next/server';
 import { addBlog, getAllBlogs, getBlogById, updateBlog, deleteBlog, getFilteredBlogs } from '@/lib/blogStorage';
+import { API_BASE_URL } from '@/lib/apiConfig';
 
 const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type',
 };
-
-const BACKEND_URL = process.env.BACKEND_API_URL || process.env.NEXT_PUBLIC_BACKEND_API_URL || 'https://darkred-mouse-801836.hostingersite.com';
 
 // Handle CORS preflight requests
 export async function OPTIONS() {
@@ -140,7 +139,7 @@ export async function GET(request) {
             const q = new URLSearchParams({ page: String(page), limit: String(limit) });
             if (status) q.set('status', status);
             if (category_id) q.set('category_id', category_id);
-            const res = await fetch(`${BACKEND_URL}/api/blogs?${q.toString()}`, { headers: { 'Content-Type': 'application/json' } });
+            const res = await fetch(`${API_BASE_URL}/api/blogs?${q.toString()}`, { headers: { 'Content-Type': 'application/json' } });
             if (res.ok) {
                 const json = await res.json();
                 return NextResponse.json(json, { status: 200, headers: corsHeaders });

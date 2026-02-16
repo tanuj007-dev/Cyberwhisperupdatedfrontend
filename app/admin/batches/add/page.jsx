@@ -3,11 +3,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, Save, Loader2 } from 'lucide-react';
-
-const getBatchesApiBase = () =>
-    typeof window !== 'undefined'
-        ? (process.env.NEXT_PUBLIC_BACKEND_API_URL || process.env.NEXT_PUBLIC_BACKEND_URL || process.env.NEXT_PUBLIC_API_URL || 'https://darkred-mouse-801836.hostingersite.com')
-        : 'https://darkred-mouse-801836.hostingersite.com';
+import { API_BASE_URL } from '../../../../lib/apiConfig';
 
 export default function AddBatchPage() {
     const router = useRouter();
@@ -56,8 +52,7 @@ export default function AddBatchPage() {
                 end_time: formData.end_time + ':00'
             };
 
-            const base = getBatchesApiBase().replace(/\/$/, '');
-            const response = await fetch(`${base}/api/batches`, {
+            const response = await fetch(`${API_BASE_URL}/api/batches`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

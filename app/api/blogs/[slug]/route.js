@@ -1,13 +1,12 @@
 import { NextResponse } from 'next/server';
 import { getBlogById, getAllBlogs } from '@/lib/blogStorage';
+import { API_BASE_URL } from '@/lib/apiConfig';
 
 const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'GET, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type',
 };
-
-const BACKEND_URL = process.env.BACKEND_API_URL || process.env.NEXT_PUBLIC_BACKEND_API_URL || 'https://darkred-mouse-801836.hostingersite.com';
 
 function mapBlogToFrontend(blog) {
     return {
@@ -36,7 +35,7 @@ export async function GET(request, context) {
         const { slug } = await context.params;
 
         try {
-            const res = await fetch(`${BACKEND_URL}/api/blogs/${encodeURIComponent(slug)}`, { headers: { 'Content-Type': 'application/json' } });
+            const res = await fetch(`${API_BASE_URL}/api/blogs/${encodeURIComponent(slug)}`, { headers: { 'Content-Type': 'application/json' } });
             if (res.ok) {
                 const json = await res.json();
                 const blog = json.data ?? json;

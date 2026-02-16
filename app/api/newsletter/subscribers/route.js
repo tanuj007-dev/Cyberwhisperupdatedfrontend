@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { API_BASE_URL } from '@/lib/apiConfig';
 
 export async function GET(request) {
     try {
@@ -6,8 +7,7 @@ export async function GET(request) {
         const limit = searchParams.get('limit') || '10';
         const offset = searchParams.get('offset') || '0';
 
-        const base = process.env.BACKEND_API_URL || 'https://darkred-mouse-801836.hostingersite.com';
-        const url = `${base}/api/newsletter/subscribers?limit=${limit}&offset=${offset}`;
+        const url = `${API_BASE_URL}/api/newsletter/subscribers?limit=${limit}&offset=${offset}`;
 
         console.log(`Proxying Newsletter Subscribers request to: ${url}`);
 

@@ -7,6 +7,7 @@ import { FaLinkedinIn, FaYoutube, FaTwitter, FaInstagram, FaFacebookF } from 're
 import ImageTrail from './ImageTrail';
 import GalleryThemeWrapper from './GalleryThemeWrapper';
 import Particles from './Particles';
+import { API_BASE_URL } from '../../lib/apiConfig';
 
 // Gallery data with categories
 // Imported Gallery Images
@@ -99,7 +100,7 @@ export default function GalleryPage() {
             try {
                 setLoading(true);
                 // Call backend API directly
-                const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API_URL || 'https://darkred-mouse-801836.hostingersite.com'}/api/gallery`);
+                const response = await fetch(`${API_BASE_URL}/api/gallery`);
 
                 if (!response.ok) {
                     throw new Error('Failed to fetch gallery images');

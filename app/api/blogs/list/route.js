@@ -1,13 +1,12 @@
 import { NextResponse } from 'next/server';
 import { getFilteredBlogs } from '@/lib/blogStorage';
+import { API_BASE_URL } from '@/lib/apiConfig';
 
 const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'GET, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type',
 };
-
-const BACKEND_URL = process.env.BACKEND_API_URL || process.env.NEXT_PUBLIC_BACKEND_API_URL || 'https://darkred-mouse-801836.hostingersite.com';
 
 function mapBlogToFrontend(blog) {
     const id = blog.id ?? blog.blog_id ?? blog._id;
@@ -47,10 +46,10 @@ export async function GET(request) {
             if (backendStatus && backendStatus !== 'all') q.set('status', backendStatus);
             if (category_id) q.set('category_id', category_id);
             // Backend: GET /api/blogs/list (then fallback to /api/blogs)
-            const listUrl = `${BACKEND_URL}/api/blogs/list${q.toString() ? `?${q.toString()}` : ''}`;
+            const listUrl = `${API_BASE_URL}/api/blogs/list${q.toString() ? `?${q.toString()}` : ''}`;
             const res = await fetch(listUrl, { headers: { 'Content-Type': 'application/json' }, cache: 'no-store' });
             if (!res.ok) {
-                const altUrl = `${BACKEND_URL}/api/blogs?${q.toString()}`;
+                const altUrl = `${API_BASE_URL}/api/blogs?${q.toString()}`;
                 const altRes = await fetch(altUrl, { headers: { 'Content-Type': 'application/json' }, cache: 'no-store' });
                 if (!altRes.ok) { backendFailed = true; } else {
                     const json = await altRes.json();

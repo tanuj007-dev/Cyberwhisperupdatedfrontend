@@ -1,12 +1,11 @@
 import { NextResponse } from 'next/server';
-
-const BACKEND_API_URL = process.env.BACKEND_API_URL || 'https://darkred-mouse-801836.hostingersite.com';
+import { API_BASE_URL } from '@/lib/apiConfig';
 
 export async function GET(request, { params }) {
     try {
-        const { id } = params;
+        const { id } = await params;
 
-        const response = await fetch(`${BACKEND_API_URL}/api/gallery/${id}`, {
+        const response = await fetch(`${API_BASE_URL}/api/gallery/${id}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -31,10 +30,10 @@ export async function GET(request, { params }) {
 
 export async function PUT(request, { params }) {
     try {
-        const { id } = params;
+        const { id } = await params;
         const body = await request.json();
 
-        const response = await fetch(`${BACKEND_API_URL}/api/gallery/${id}`, {
+        const response = await fetch(`${API_BASE_URL}/api/gallery/${id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -60,10 +59,10 @@ export async function PUT(request, { params }) {
 
 export async function DELETE(request, { params }) {
     try {
-        const { id } = params;
+        const { id } = await params;
         console.log('Attempting to delete image with ID:', id);
 
-        const response = await fetch(`${BACKEND_API_URL}/api/gallery/${id}`, {
+        const response = await fetch(`${API_BASE_URL}/api/gallery/${id}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',

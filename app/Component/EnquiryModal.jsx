@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Loader2, CheckCircle, AlertCircle } from 'lucide-react';
 import { useEnquiry } from '../context/EnquiryContext';
+import { API_BASE_URL } from '../../lib/apiConfig';
 
 export default function EnquiryModal() {
     const { isOpen, isB2B, closeEnquiry } = useEnquiry();
@@ -29,8 +30,7 @@ export default function EnquiryModal() {
         setErrorMessage('');
 
         try {
-            const apiUrl = process.env.NEXT_PUBLIC_API_URL || process.env.NEXT_PUBLIC_BACKEND_API_URL || 'https://darkred-mouse-801836.hostingersite.com';
-            const response = await fetch(`${apiUrl}/api/quotes`, {
+            const response = await fetch(`${API_BASE_URL}/api/quotes`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

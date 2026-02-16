@@ -1,10 +1,9 @@
 import { NextResponse } from 'next/server';
-
-const BACKEND_API_URL = process.env.BACKEND_API_URL || 'https://darkred-mouse-801836.hostingersite.com';
+import { API_BASE_URL } from '@/lib/apiConfig';
 
 export async function GET() {
     try {
-        const response = await fetch(`${BACKEND_API_URL}/api/gallery`, {
+        const response = await fetch(`${API_BASE_URL}/api/gallery`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

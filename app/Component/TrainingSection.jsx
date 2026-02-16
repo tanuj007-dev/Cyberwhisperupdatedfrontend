@@ -7,7 +7,7 @@ import BrochureFormModal from './BrochureFormModal'
 import EnrollModal from './EnrollModal'
 import { useEnquiry } from '../context/EnquiryContext'
 import { useVisibleCount, useSliderSwipe } from '../context/useSliderSwipe'
-
+import { API_BASE_URL } from '../../lib/apiConfig'
 // Import fallback assets
 import thumb1 from './assets/cyber_lab_1.webp'
 import thumb2 from './assets/cyber_lab_2.webp'
@@ -41,21 +41,24 @@ export default function TrainingSection() {
     const fetchCourses = async () => {
         try {
             setLoading(true)
-            const response = await fetch('/api/courses?page=1&limit=10')
-
+            const response = await fetch(`${API_BASE_URL}/api/courses?page=1&limit=10`)
             if (!response.ok) {
                 throw new Error('Failed to fetch courses')
             }
 
             const data = await response.json()
 
-            if (data.success && data.courses) {
-                setCourses(data.courses)
+            // API returns { success, data: [...] } or { success, courses: [...] }
+            const rawList = Array.isArray(data.data) ? data.data : (Array.isArray(data.courses) ? data.courses : [])
+            // Normalize: add category label (API has category_id, not category)
+            const normalized = rawList.map(course => ({
+                ...course,
+                category: course.category ?? (course.category_id != null ? `Category ${course.category_id}` : 'General')
+            }))
+            setCourses(normalized)
 
-                // Extract unique categories from courses
-                const uniqueCategories = ['All', ...new Set(data.courses.map(course => course.category).filter(Boolean))]
-                setCategories(uniqueCategories)
-            }
+            const uniqueCategories = ['All', ...new Set(normalized.map(c => c.category).filter(Boolean))]
+            setCategories(uniqueCategories)
         } catch (err) {
             console.error('Error fetching courses:', err)
             setError(err.message)
@@ -191,7 +194,7 @@ export default function TrainingSection() {
                                 {slideChunks.map((slideCourses, slideIdx) => (
                                     <div
                                         key={slideIdx}
-                                        className="flex gap-8 lg:gap-4 shrink-0 px-1 md:px-0 items-start justify-start w-full min-w-0"
+                                        className="flex gap-8 lg:gap-4 shrink-0 px-1 md:px-0 items-start justify-center w-full min-w-0"
                                         style={{ width: `${100 / totalSlides}%`, minWidth: `${100 / totalSlides}%` }}
                                     >
                                         {slideCourses.map((course, idx) => (

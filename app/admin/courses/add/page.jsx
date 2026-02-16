@@ -4,11 +4,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, Save, Loader2, FileText, Upload } from 'lucide-react';
 import { Toast } from '@/components/ui';
-
-const getCoursesApiBase = () =>
-    typeof window !== 'undefined'
-        ? (process.env.NEXT_PUBLIC_BACKEND_API_URL || process.env.NEXT_PUBLIC_BACKEND_URL || process.env.NEXT_PUBLIC_API_URL || 'https://darkred-mouse-801836.hostingersite.com').replace(/\/$/, '')
-        : 'https://darkred-mouse-801836.hostingersite.com';
+import { API_BASE_URL } from '../../../../lib/apiConfig';
 
 const getAdminToken = () => typeof window !== 'undefined' ? localStorage.getItem('adminToken') : null;
 
@@ -95,8 +91,7 @@ export default function AddCoursePage() {
                 course_thumbnail: courseThumbnailUrl || undefined,
             };
 
-            const base = getCoursesApiBase();
-            const response = await fetch(`${base}/api/courses/add/admin`, {
+            const response = await fetch(`${API_BASE_URL}/api/courses/add/admin`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -255,8 +250,7 @@ export default function AddCoursePage() {
                                             try {
                                                 const fd = new FormData();
                                                 fd.append('thumbnail', file);
-                                                const base = getCoursesApiBase();
-                                                const res = await fetch(`${base}/api/courses/upload-thumbnail`, {
+                                                const res = await fetch(`${API_BASE_URL}/api/courses/upload-thumbnail`, {
                                                     method: 'POST',
                                                     headers: { 'Authorization': `Bearer ${token}` },
                                                     body: fd,
@@ -318,8 +312,7 @@ export default function AddCoursePage() {
                                             }
                                             const fd = new FormData();
                                             fd.append('file', file);
-                                            const base = getCoursesApiBase();
-                                            const res = await fetch(`${base}/api/brochure-downloads/upload`, {
+                                            const res = await fetch(`${API_BASE_URL}/api/brochure-downloads/upload`, {
                                                 method: 'POST',
                                                 headers: { 'Authorization': `Bearer ${token}` },
                                                 body: fd,

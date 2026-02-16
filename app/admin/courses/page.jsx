@@ -3,11 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Edit, Trash2, BookOpen, Loader2, DollarSign, BarChart2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-
-const getCoursesApiBase = () =>
-    typeof window !== 'undefined'
-        ? (process.env.NEXT_PUBLIC_BACKEND_API_URL || process.env.NEXT_PUBLIC_BACKEND_URL || process.env.NEXT_PUBLIC_API_URL || 'https://darkred-mouse-801836.hostingersite.com').replace(/\/$/, '')
-        : 'https://darkred-mouse-801836.hostingersite.com';
+import { API_BASE_URL } from '../../../lib/apiConfig';
 
 const getAdminToken = () => typeof window !== 'undefined' ? localStorage.getItem('adminToken') : null;
 
@@ -32,7 +28,7 @@ export default function CoursesPage() {
     const fetchCourses = async () => {
         try {
             setLoading(true);
-            const response = await fetch('/api/courses?page=1&limit=100');
+            const response = await fetch(`${API_BASE_URL}/api/courses?page=1&limit=100`);
 
             if (!response.ok) {
                 throw new Error('Failed to fetch courses');
@@ -40,8 +36,10 @@ export default function CoursesPage() {
 
             const result = await response.json();
 
-            if (result.success && Array.isArray(result.courses)) {
-                setCourses(result.courses);
+            // Backend can return { data: [...] } or { courses: [...] }
+            const list = Array.isArray(result.data) ? result.data : (Array.isArray(result.courses) ? result.courses : []);
+            if (result.success !== false && list.length >= 0) {
+                setCourses(list);
             } else {
                 setCourses([]);
             }
@@ -65,8 +63,7 @@ export default function CoursesPage() {
 
         setDeletingId(id);
         try {
-            const base = getCoursesApiBase();
-            const response = await fetch(`${base}/api/courses/delete/admin/${id}`, {
+            const response = await fetch(`${API_BASE_URL}/api/courses/delete/admin/${id}`, {
                 method: 'DELETE',
                 headers: {
                     Authorization: `Bearer ${token}`,

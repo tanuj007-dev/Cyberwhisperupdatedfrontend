@@ -3,11 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { ArrowLeft, Save, Loader2 } from 'lucide-react';
-
-const getBatchesApiBase = () =>
-    typeof window !== 'undefined'
-        ? (process.env.NEXT_PUBLIC_BACKEND_API_URL || process.env.NEXT_PUBLIC_BACKEND_URL || process.env.NEXT_PUBLIC_API_URL || 'https://darkred-mouse-801836.hostingersite.com')
-        : 'https://darkred-mouse-801836.hostingersite.com';
+import { API_BASE_URL } from '../../../../../lib/apiConfig';
 
 export default function EditBatchPage() {
     const router = useRouter();
@@ -43,8 +39,7 @@ export default function EditBatchPage() {
     const fetchBatch = async () => {
         try {
             setLoading(true);
-            const base = getBatchesApiBase().replace(/\/$/, '');
-            const response = await fetch(`${base}/api/batches/${batchId}`);
+            const response = await fetch(`${API_BASE_URL}/api/batches/${batchId}`);
 
             if (!response.ok) {
                 throw new Error('Failed to fetch batch');
@@ -109,8 +104,7 @@ export default function EditBatchPage() {
                 status: formData.status
             };
 
-            const base = getBatchesApiBase().replace(/\/$/, '');
-            const response = await fetch(`${base}/api/batches/${batchId}`, {
+            const response = await fetch(`${API_BASE_URL}/api/batches/${batchId}`, {
                 method: 'POST', // As per your API spec
                 headers: {
                     'Content-Type': 'application/json',

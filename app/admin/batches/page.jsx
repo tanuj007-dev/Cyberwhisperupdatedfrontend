@@ -3,11 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Edit, Trash2, Calendar, Clock, Users, DollarSign, Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-
-const getBatchesApiBase = () =>
-    typeof window !== 'undefined'
-        ? (process.env.NEXT_PUBLIC_BACKEND_API_URL || process.env.NEXT_PUBLIC_BACKEND_URL || process.env.NEXT_PUBLIC_API_URL || 'https://darkred-mouse-801836.hostingersite.com')
-        : 'https://darkred-mouse-801836.hostingersite.com';
+import { API_BASE_URL } from '../../../lib/apiConfig';
 
 export default function BatchesPage() {
     const router = useRouter();
@@ -29,8 +25,7 @@ export default function BatchesPage() {
     const fetchBatches = async () => {
         try {
             setLoading(true);
-            const base = getBatchesApiBase().replace(/\/$/, '');
-            const response = await fetch(`${base}/api/batches`);
+            const response = await fetch(`${API_BASE_URL}/api/batches`);
 
             if (!response.ok) {
                 throw new Error('Failed to fetch batches');
@@ -61,8 +56,7 @@ export default function BatchesPage() {
         if (!confirm('Are you sure you want to delete this batch?')) return;
 
         try {
-            const base = getBatchesApiBase().replace(/\/$/, '');
-            const response = await fetch(`${base}/api/batches/${id}`, {
+            const response = await fetch(`${API_BASE_URL}/api/batches/${id}`, {
                 method: 'DELETE',
             });
 

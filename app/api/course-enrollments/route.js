@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getLocalEnrollments } from '@/lib/courseEnrollmentStorage';
-
-const BACKEND_URL = process.env.BACKEND_API_URL || 'https://darkred-mouse-801836.hostingersite.com';
+import { API_BASE_URL } from '@/lib/apiConfig';
 
 export async function GET(request) {
     try {
@@ -12,7 +11,7 @@ export async function GET(request) {
         let response;
         try {
             response = await fetch(
-                `${BACKEND_URL}/api/course-enrollments?page=${page}&limit=${limit}`,
+                `${API_BASE_URL}/api/course-enrollments?page=${page}&limit=${limit}`,
                 {
                     method: 'GET',
                     headers: { 'Content-Type': 'application/json' },

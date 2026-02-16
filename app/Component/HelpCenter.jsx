@@ -1,6 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import { useTheme } from '../context/ThemeContext';
+import { API_BASE_URL } from '../../lib/apiConfig';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Shield, Phone, Zap, CheckCircle, AlertCircle, ArrowRight, Lock } from 'lucide-react';
@@ -64,8 +65,7 @@ export default function CompactPremiumDemo() {
     setMessage('');
 
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || process.env.NEXT_PUBLIC_BACKEND_API_URL || 'https://darkred-mouse-801836.hostingersite.com';
-      const res = await fetch(`${apiUrl}/api/quotes`, {
+      const res = await fetch(`${API_BASE_URL}/api/quotes`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...formData, interest: 'Elite Cyber Demo' }),

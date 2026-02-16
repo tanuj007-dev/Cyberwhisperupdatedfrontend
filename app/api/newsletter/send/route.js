@@ -1,9 +1,5 @@
 import { NextResponse } from 'next/server';
-
-const getBackendBase = () => {
-    const url = process.env.BACKEND_API_URL || process.env.ADMIN_BACKEND_URL || 'https://darkred-mouse-801836.hostingersite.com';
-    return url.replace(/\/api\/?$/, '');
-};
+import { API_BASE_URL } from '@/lib/apiConfig';
 
 export async function POST(request) {
     try {
@@ -25,8 +21,7 @@ export async function POST(request) {
                 );
             }
         }
-        const base = getBackendBase();
-        const url = `${base}/api/newsletter/send`;
+        const url = `${API_BASE_URL}/api/newsletter/send`;
 
         const headers = {
             'Content-Type': 'application/json',
@@ -48,7 +43,7 @@ export async function POST(request) {
 
         if (res.status === 404) {
             return NextResponse.json(
-                { success: false, message: 'Newsletter send is not implemented on the backend. Add POST /api/newsletter/send to your API or configure BACKEND_API_URL.', error: 'Not implemented' },
+                { success: false, message: 'Newsletter send is not implemented on the backend. Add POST /api/newsletter/send to your API or set API base in lib/apiConfig.js.', error: 'Not implemented' },
                 { status: 501 }
             );
         }

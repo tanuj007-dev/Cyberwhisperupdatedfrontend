@@ -1,9 +1,5 @@
 import { NextResponse } from 'next/server';
-
-const getBackendBase = () => {
-    const url = process.env.BACKEND_API_URL || process.env.ADMIN_BACKEND_URL || 'https://darkred-mouse-801836.hostingersite.com';
-    return url.replace(/\/api\/?$/, '');
-};
+import { API_BASE_URL } from '@/lib/apiConfig';
 
 export async function GET(request, { params }) {
     try {
@@ -12,8 +8,7 @@ export async function GET(request, { params }) {
         if (!email) {
             return NextResponse.json({ message: 'Email is required' }, { status: 400 });
         }
-        const base = getBackendBase();
-        const url = `${base}/api/admin/otp-status/${encodeURIComponent(email)}`;
+        const url = `${API_BASE_URL}/api/admin/otp-status/${encodeURIComponent(email)}`;
 
         const response = await fetch(url, {
             method: 'GET',

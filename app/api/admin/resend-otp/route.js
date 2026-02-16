@@ -1,15 +1,10 @@
 import { NextResponse } from 'next/server';
-
-const getBackendBase = () => {
-    const url = process.env.BACKEND_API_URL || process.env.ADMIN_BACKEND_URL || 'https://darkred-mouse-801836.hostingersite.com';
-    return url.replace(/\/api\/?$/, '');
-};
+import { API_BASE_URL } from '@/lib/apiConfig';
 
 export async function POST(request) {
     try {
         const body = await request.json();
-        const base = getBackendBase();
-        const response = await fetch(`${base}/api/admin/resend-otp`, {
+        const response = await fetch(`${API_BASE_URL}/api/admin/resend-otp`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(body),

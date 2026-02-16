@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Calendar, Clock, Users, Sparkles, ArrowRight, Loader2, GraduationCap, IndianRupee, X, User, Mail, Phone as PhoneIcon } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
+import { API_BASE_URL } from '../../lib/apiConfig';
 
 export default function Batches() {
     const { theme } = useTheme();
@@ -31,8 +32,7 @@ export default function Batches() {
         e.preventDefault();
         setIsSubmitting(true);
         try {
-            const base = typeof window !== 'undefined' ? window.location.origin : '';
-            const response = await fetch(`${base}/api/batches/enroll`, {
+            const response = await fetch(`${API_BASE_URL}/api/batches/enroll`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -64,8 +64,7 @@ export default function Batches() {
     const fetchBatches = async () => {
         try {
             setLoading(true);
-            const apiBase = process.env.NEXT_PUBLIC_APP_URL || 'https://darkred-mouse-801836.hostingersite.com';
-            const apiUrl = `${apiBase}/api/batches`;
+            const apiUrl = `${API_BASE_URL}/api/batches`;
             console.log('Fetching batches from:', apiUrl);
 
             const response = await fetch(apiUrl);

@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getAllUsers, addUser, getFilteredUsers } from '@/lib/userStorage';
-
-const BACKEND_URL = process.env.BACKEND_API_URL || 'https://darkred-mouse-801836.hostingersite.com';
+import { API_BASE_URL } from '@/lib/apiConfig';
 
 const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
@@ -34,7 +33,7 @@ export async function GET(request) {
             console.log('No users in local storage, trying backend server');
             try {
                 const queryString = searchParams.toString();
-                const url = `${BACKEND_URL}/users${queryString ? `?${queryString}` : ''}`;
+                const url = `${API_BASE_URL}/users${queryString ? `?${queryString}` : ''}`;
                 const res = await fetch(url, {
                     method: 'GET',
                     headers: { 'Content-Type': 'application/json' },

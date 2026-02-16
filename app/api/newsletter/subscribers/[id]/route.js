@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server';
+import { API_BASE_URL } from '@/lib/apiConfig';
 
 export async function DELETE(request, { params }) {
     try {
-        const { id } = params;
-        const base = process.env.BACKEND_API_URL || 'https://darkred-mouse-801836.hostingersite.com';
-        const url = `${base}/api/newsletter/subscribers/${id}`;
+        const { id } = await params;
+        const url = `${API_BASE_URL}/api/newsletter/subscribers/${id}`;
 
         console.log(`Proxying DELETE Subscriber request to: ${url}`);
 

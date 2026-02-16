@@ -6,12 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Lock, ChevronRight, AlertCircle, ShieldCheck, Mail, KeyRound, Info, UserPlus, X, Upload, Loader2 } from 'lucide-react';
 import { getRoleFromToken } from '@/lib/jwt';
 import { Toast } from '@/components/ui';
-
-// Backend API base (port 3001). Browser calls backend directly.
-const getAdminApiBase = () =>
-    typeof window !== 'undefined'
-        ? (process.env.NEXT_PUBLIC_BACKEND_API_URL || process.env.NEXT_PUBLIC_BACKEND_URL || 'https://darkred-mouse-801836.hostingersite.com')
-        : 'https://darkred-mouse-801836.hostingersite.com';
+import { API_BASE_URL } from '@/lib/apiConfig';
 
 export default function AdminLogin() {
     const [step, setStep] = useState('login'); // 'login' | 'otp'
@@ -72,8 +67,7 @@ export default function AdminLogin() {
         setIsLoading(true);
         try {
             const payload = { email: trimmedEmail, password: trimmedPassword };
-            const base = getAdminApiBase().replace(/\/api\/?$/, '').replace(/\/$/, '');
-            const res = await fetch(`${base}/api/admin/login`, {
+            const res = await fetch(`${API_BASE_URL}/api/admin/login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
                 body: JSON.stringify(payload),
@@ -83,11 +77,11 @@ export default function AdminLogin() {
             if (!res.ok) {
                 const serverMsg = data?.message || data?.error || '';
                 const msg = res.status === 404
-                    ? 'Login endpoint not found (404). Set BACKEND_API_URL in .env.local to your auth backend (e.g. https://darkred-mouse-801836.hostingersite.com) and ensure it is running.'
+                    ? 'Login endpoint not found (404). Set API base in lib/apiConfig.js or NEXT_PUBLIC_BACKEND_API_URL in .env.local and ensure the backend is running.'
                     : res.status === 401
                         ? serverMsg
                             ? `${serverMsg} Use an account with admin role and the correct password.`
-                            : 'Invalid email or password. Use an admin account and ensure BACKEND_API_URL in .env.local points to your backend (e.g. https://darkred-mouse-801836.hostingersite.com).'
+                            : 'Invalid email or password. Use an admin account and ensure the API base in lib/apiConfig.js points to your backend.'
                         : (serverMsg || `Login failed (${res.status})`);
                 setError(msg);
                 return;
@@ -131,8 +125,7 @@ export default function AdminLogin() {
         setError('');
 
         try {
-            const base = getAdminApiBase().replace(/\/api\/?$/, '').replace(/\/$/, '');
-            const res = await fetch(`${base}/api/admin/verify-otp`, {
+            const res = await fetch(`${API_BASE_URL}/api/admin/verify-otp`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
                 body: JSON.stringify({ email: email.trim(), otp_code: otpCode.trim() }),
@@ -166,8 +159,7 @@ export default function AdminLogin() {
         setError('');
 
         try {
-            const base = getAdminApiBase().replace(/\/api\/?$/, '').replace(/\/$/, '');
-            const res = await fetch(`${base}/api/admin/resend-otp`, {
+            const res = await fetch(`${API_BASE_URL}/api/admin/resend-otp`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
                 body: JSON.stringify({ email: email.trim() }),
@@ -280,7 +272,6 @@ export default function AdminLogin() {
         if (!validateRegister()) return;
         setRegisterSubmitting(true);
         try {
-            const base = getAdminApiBase().replace(/\/api\/?$/, '').replace(/\/$/, '');
             const payload = {
                 first_name: registerForm.first_name.trim(),
                 last_name: registerForm.last_name.trim(),
@@ -297,7 +288,7 @@ export default function AdminLogin() {
                 profile_image_url: registerForm.profile_image_url.trim() || undefined,
                 skills: registerForm.skills
             };
-            const res = await fetch(`${base}/api/users`, {
+            const res = await fetch(`${API_BASE_URL}/api/users`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
                 body: JSON.stringify(payload)

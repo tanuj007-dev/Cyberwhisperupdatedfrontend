@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useMemo } from 'react';
 import { Button, Badge, Modal, Skeleton, Toast } from '@/components/ui';
+import { API_BASE_URL } from '../../../lib/apiConfig';
 import {
     Upload,
     Trash2,
@@ -65,8 +66,7 @@ const GalleryManagement = () => {
     const fetchImages = async () => {
         setLoading(true);
         try {
-            const base = process.env.NEXT_PUBLIC_BACKEND_API_URL || 'https://darkred-mouse-801836.hostingersite.com';
-            const response = await fetch(`${base}/api/gallery`);
+            const response = await fetch(`${API_BASE_URL}/api/gallery`);
             if (!response.ok) throw new Error('Failed to fetch images');
 
             const data = await response.json();
@@ -150,8 +150,7 @@ const GalleryManagement = () => {
 
         try {
             // Call backend API directly
-            const base = process.env.NEXT_PUBLIC_BACKEND_API_URL || 'https://darkred-mouse-801836.hostingersite.com';
-            const response = await fetch(`${base}/api/gallery/upload`, {
+            const response = await fetch(`${API_BASE_URL}/api/gallery/upload`, {
                 method: 'POST',
                 body: formData,
             });
@@ -174,8 +173,7 @@ const GalleryManagement = () => {
             console.log('Deleting image:', selectedImage);
             
             // Call backend API to delete image
-            const base = process.env.NEXT_PUBLIC_BACKEND_API_URL || 'https://darkred-mouse-801836.hostingersite.com';
-            const response = await fetch(`${base}/api/gallery/${selectedImage.id}/remove`, {
+            const response = await fetch(`${API_BASE_URL}/api/gallery/${selectedImage.id}/remove`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -206,8 +204,7 @@ const GalleryManagement = () => {
 
         try {
             // Call backend API to update image
-            const base = process.env.NEXT_PUBLIC_BACKEND_API_URL || 'https://darkred-mouse-801836.hostingersite.com';
-            const response = await fetch(`${base}/api/gallery/${selectedImage.id}`, {
+            const response = await fetch(`${API_BASE_URL}/api/gallery/${selectedImage.id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

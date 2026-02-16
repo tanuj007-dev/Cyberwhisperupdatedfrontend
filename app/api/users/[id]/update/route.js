@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 import { updateUser, getUserById } from '@/lib/userStorage';
-
-const BACKEND_URL = process.env.BACKEND_API_URL || 'https://darkred-mouse-801836.hostingersite.com';
+import { API_BASE_URL } from '@/lib/apiConfig';
 
 const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
@@ -52,7 +51,7 @@ export async function PUT(request, context) {
         
         // If not found locally, try backend server
         console.log('User not found locally, trying backend server');
-        const backendUrl = `${BACKEND_URL}/users/${id}`;
+        const backendUrl = `${API_BASE_URL}/users/${id}`;
         
         const res = await fetch(backendUrl, {
             method: 'PUT',

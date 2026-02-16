@@ -1,11 +1,9 @@
 import { NextResponse } from 'next/server';
-
-// Use server-side env variable for backend API
-const BACKEND_API_URL = process.env.BACKEND_API_URL || 'https://darkred-mouse-801836.hostingersite.com';
+import { API_BASE_URL } from '@/lib/apiConfig';
 
 export async function POST(request) {
     console.log('📤 Gallery Upload API Route Called');
-    console.log('🔗 Backend URL:', BACKEND_API_URL);
+    console.log('🔗 Backend URL:', API_BASE_URL);
 
     try {
         const formData = await request.formData();
@@ -21,7 +19,7 @@ export async function POST(request) {
             }
         }
 
-        const uploadUrl = `${BACKEND_API_URL}/api/gallery/upload`;
+        const uploadUrl = `${API_BASE_URL}/api/gallery/upload`;
         console.log('🎯 Uploading to:', uploadUrl);
 
         // Forward the FormData directly to the backend

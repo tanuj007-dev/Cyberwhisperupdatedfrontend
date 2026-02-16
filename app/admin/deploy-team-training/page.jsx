@@ -2,11 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Trash2, Loader2, Users, Mail, Phone, Building2, Briefcase } from 'lucide-react';
-
-const getApiBase = () =>
-    typeof window !== 'undefined'
-        ? (process.env.NEXT_PUBLIC_BACKEND_API_URL || process.env.NEXT_PUBLIC_BACKEND_URL || process.env.NEXT_PUBLIC_API_URL || 'https://darkred-mouse-801836.hostingersite.com').replace(/\/$/, '')
-        : 'https://darkred-mouse-801836.hostingersite.com';
+import { API_BASE_URL } from '../../../lib/apiConfig';
 
 const getAdminToken = () => typeof window !== 'undefined' ? localStorage.getItem('adminToken') : null;
 
@@ -27,8 +23,7 @@ export default function DeployTeamTrainingPage() {
         try {
             setLoading(true);
             setError(null);
-            const base = getApiBase();
-            const response = await fetch(`${base}/api/deploy-team-training?page=${page}&limit=${limit}`, {
+            const response = await fetch(`${API_BASE_URL}/api/deploy-team-training?page=${page}&limit=${limit}`, {
                 headers: { 'Content-Type': 'application/json' },
             });
 
@@ -66,8 +61,7 @@ export default function DeployTeamTrainingPage() {
         }
         setDeletingId(id);
         try {
-            const base = getApiBase();
-            const response = await fetch(`${base}/api/deploy-team-training/delete/${id}`, {
+            const response = await fetch(`${API_BASE_URL}/api/deploy-team-training/delete/${id}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',

@@ -8,6 +8,7 @@ import { FaQuoteLeft } from 'react-icons/fa'
 import { Loader2, ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
 import { use } from 'react'
+import { API_BASE_URL } from '@/lib/apiConfig'
 
 export default function BlogPostDetail({ params }) {
     // Unwrap the params Promise (Next.js 15+)
@@ -24,9 +25,7 @@ export default function BlogPostDetail({ params }) {
     const fetchBlogBySlug = async () => {
         try {
             setLoading(true)
-            const base = process.env.NEXT_PUBLIC_BACKEND_API_URL || process.env.NEXT_PUBLIC_API_URL || 'https://darkred-mouse-801836.hostingersite.com'
-            const backendUrl = base.replace(/\/$/, '')
-            const apiUrl = `${backendUrl}/api/blogs/${encodeURIComponent(slug)}`
+            const apiUrl = `${API_BASE_URL}/api/blogs/${encodeURIComponent(slug)}`
             console.log('Fetching blog from API:', apiUrl)
 
             const response = await fetch(apiUrl, { headers: { 'Content-Type': 'application/json' } })

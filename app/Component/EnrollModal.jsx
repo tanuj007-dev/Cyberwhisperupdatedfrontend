@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import { X } from 'lucide-react'
+import { API_BASE_URL } from '../../lib/apiConfig'
 
 export default function EnrollModal({ open, onClose, courseTitle }) {
     const [name, setName] = useState('')
@@ -35,8 +36,7 @@ export default function EnrollModal({ open, onClose, courseTitle }) {
         setSubmitting(true)
         setMessage({ type: '', text: '' })
         try {
-            const base = typeof window !== 'undefined' ? window.location.origin : ''
-            const response = await fetch(`${base}/api/course-enrollments/add`, {
+            const response = await fetch(`${API_BASE_URL}/api/course-enrollments/add`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

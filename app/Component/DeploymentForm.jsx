@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from 'react';
 import { ChevronDown, X } from 'lucide-react';
+import { API_BASE_URL } from '../../lib/apiConfig';
 
 // Multi-select Dropdown Component
 export const MultiSelectDropdown = ({ label, options, selected, onChange, required }) => {
@@ -143,11 +144,6 @@ export const DeploymentForm = ({ formType, onClose }) => {
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
-    const getDeployTeamApiBase = () =>
-        typeof window !== 'undefined'
-            ? (process.env.NEXT_PUBLIC_BACKEND_API_URL || process.env.NEXT_PUBLIC_BACKEND_URL || process.env.NEXT_PUBLIC_API_URL || 'https://darkred-mouse-801836.hostingersite.com').replace(/\/$/, '')
-            : 'https://darkred-mouse-801836.hostingersite.com';
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         setSubmitError('');
@@ -167,8 +163,7 @@ export const DeploymentForm = ({ formType, onClose }) => {
                     track_certification: Array.isArray(formData.tracksInterested) ? formData.tracksInterested.join(', ') : (formData.tracksInterested || ''),
                     message_requirement: formData.message.trim() || undefined
                 };
-                const base = getDeployTeamApiBase();
-                const response = await fetch(`${base}/api/deploy-team-training/add`, {
+                const response = await fetch(`${API_BASE_URL}/api/deploy-team-training/add`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload),
