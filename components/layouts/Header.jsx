@@ -113,7 +113,7 @@ const Header = ({ toggleSidebar }) => {
                     <div className="hidden sm:block w-px h-8 bg-gray-200 mx-2" />
 
                     {/* Admin Profile */}
-                    <div className="hidden sm:flex items-center gap-3 cursor-pointer group">
+                    {/* <div className="hidden sm:flex items-center gap-3 cursor-pointer group">
                         <div className="text-right">
                             <p className="text-sm font-semibold text-gray-800">Admin User</p>
                             <p className="text-xs text-gray-500">Administrator</p>
@@ -121,7 +121,7 @@ const Header = ({ toggleSidebar }) => {
                         <div className="w-10 h-10 bg-gradient-to-br from-violet-500 via-purple-500 to-fuchsia-500 rounded-xl flex items-center justify-center ring-2 ring-transparent group-hover:ring-violet-200 transition-all shadow-lg shadow-purple-500/20">
                             <span className="text-white font-semibold text-sm">AD</span>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </header>

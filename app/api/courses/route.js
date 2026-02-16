@@ -6,9 +6,9 @@ export async function GET(request) {
 
         // Call your backend API
         // Call your backend API
-        const backendUrl = process.env.BACKEND_API_URL || 'http://localhost:3001/api';
+        const base = process.env.BACKEND_API_URL || 'https://darkred-mouse-801836.hostingersite.com';
         const response = await fetch(
-            `${backendUrl}/courses?page=${page}&limit=${limit}`,
+            `${base}/api/courses?page=${page}&limit=${limit}`,
             {
                 method: 'GET',
                 headers: {
@@ -22,11 +22,12 @@ export async function GET(request) {
         }
 
         const data = await response.json();
+        const rawCourses = Array.isArray(data.data) ? data.data : (Array.isArray(data.courses) ? data.courses : []);
 
         // Transform the response to match our component structure
         const transformedData = {
-            success: data.success,
-            courses: data.data?.map(course => ({
+            success: data.success !== false,
+            courses: rawCourses.map(course => ({
                 id: course.id,
                 title: course.title,
                 short_description: course.short_description,
@@ -38,11 +39,12 @@ export async function GET(request) {
                 price: course.price,
                 discounted_price: course.discounted_price,
                 category_id: course.category_id,
-                category: course.category || 'General',
-                thumbnail: course.thumbnail,
+                category: course.category_name || course.category || 'General',
+                thumbnail: course.thumbnail || course.thumbnail_url || course.course_thumbnail,
+                image: course.image || course.thumbnail || course.thumbnail_url || course.course_thumbnail,
                 ...course
-            })) || [],
-            pagination: data.pagination
+            })),
+            pagination: data.pagination || { page: 1, limit: Number(limit), total: rawCourses.length }
         };
 
         return Response.json(transformedData, {

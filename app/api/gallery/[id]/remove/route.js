@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-const BACKEND_API_URL = process.env.BACKEND_API_URL || 'http://localhost:3001';
+const BACKEND_API_URL = process.env.BACKEND_API_URL || 'https://darkred-mouse-801836.hostingersite.com';
 
 export async function DELETE(request, { params }) {
     try {

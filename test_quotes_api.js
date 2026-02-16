@@ -36,7 +36,7 @@ async function testQuotesAPI() {
 
     } catch (error) {
         console.error('\n❌ FETCH ERROR:', error.message);
-        console.log('\nMake sure your Next.js dev server is running on http://localhost:3000');
+        console.log('\nMake sure your Next.js dev server is running on http://localhost:3001');
     }
 }
 

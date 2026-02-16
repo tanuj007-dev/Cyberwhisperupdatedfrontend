@@ -99,7 +99,7 @@ export default function GalleryPage() {
             try {
                 setLoading(true);
                 // Call backend API directly
-                const response = await fetch('http://localhost:3001/api/gallery');
+                const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API_URL || 'https://darkred-mouse-801836.hostingersite.com'}/api/gallery`);
 
                 if (!response.ok) {
                     throw new Error('Failed to fetch gallery images');
@@ -201,7 +201,7 @@ export default function GalleryPage() {
             <div ref={containerRef} className="overflow-hidden">
 
                 {/* Hero Section - Compact & Attractive */}
-                <section ref={heroRef} className="relative min-h-[60vh] flex items-center justify-center overflow-hidden py-20">
+                <section ref={heroRef} className="relative min-h-[40vh] md:min-h-[60vh] flex items-center justify-center overflow-hidden py-10 md:py-20">
                     {/* Animated Background */}
                     <div className="absolute inset-0">
                         {/* Gradient mesh background */}
@@ -258,7 +258,7 @@ export default function GalleryPage() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.6 }}
-                            className="inline-flex items-center gap-2 mb-6 px-5 py-2.5 rounded-full bg-gradient-to-r from-purple-500/10 via-violet-500/10 to-purple-500/10 border border-purple-500/20 backdrop-blur-sm"
+                            className="inline-flex items-center gap-2 mb-6 px-5 py-2.5 rounded-full bg-white/10 border border-white/20 backdrop-blur-md shadow-lg"
                         >
                             <motion.div
                                 animate={{
@@ -272,7 +272,7 @@ export default function GalleryPage() {
                                 }}
                                 className="w-2 h-2 bg-gradient-to-r from-green-400 to-emerald-400 rounded-full"
                             />
-                            <span className="text-purple-600 dark:text-purple-300 text-sm font-semibold tracking-wider uppercase">
+                            <span className="text-white text-sm font-semibold tracking-wider uppercase drop-shadow-md">
                                 Visual Journey
                             </span>
                         </motion.div>
@@ -282,21 +282,9 @@ export default function GalleryPage() {
                             initial={{ opacity: 0, y: 30 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.8, delay: 0.2 }}
-                            className="text-5xl md:text-6xl lg:text-7xl font-bold mb-4 leading-tight"
+                            className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold mb-2 md:mb-4 leading-tight text-white drop-shadow-lg"
                         >
-                            <motion.span
-                                animate={{
-                                    backgroundPosition: ['0% 50%', '100% 50%', '0% 50%']
-                                }}
-                                transition={{
-                                    duration: 5,
-                                    repeat: Infinity,
-                                    ease: "linear"
-                                }}
-                                className="bg-clip-text text-transparent bg-gradient-to-r from-purple-900 via-purple-600 to-violet-600 dark:from-white dark:via-purple-200 dark:to-violet-300 bg-[length:200%_auto]"
-                            >
-                                Our Gallery
-                            </motion.span>
+                            Our Gallery
                         </motion.h1>
 
                         {/* Animated Subtitle */}
@@ -304,7 +292,7 @@ export default function GalleryPage() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.8, delay: 0.4 }}
-                            className="text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto leading-relaxed mb-8"
+                            className="text-base md:text-xl text-gray-200 max-w-2xl mx-auto leading-relaxed mb-6 md:mb-8 font-medium drop-shadow-md"
                         >
                             Capturing moments of excellence, innovation, and achievement
                         </motion.p>
@@ -314,12 +302,10 @@ export default function GalleryPage() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.8, delay: 0.6 }}
-                            className="flex flex-wrap items-center justify-center gap-6 md:gap-8"
+                            className="flex flex-wrap items-center justify-center gap-4 md:gap-8"
                         >
                             {[
-                                { value: galleryImages.length, label: 'Images', icon: Camera },
-                                { value: new Set(galleryImages.map(img => img.category)).size, label: 'Categories', icon: Grid3X3 },
-                                { value: '100%', label: 'Dynamic', icon: Zap }
+                                 
                             ].map((stat, index) => (
                                 <motion.div
                                     key={stat.label}
@@ -327,7 +313,7 @@ export default function GalleryPage() {
                                     animate={{ opacity: 1, scale: 1 }}
                                     transition={{ duration: 0.5, delay: 0.8 + index * 0.1 }}
                                     whileHover={{ scale: 1.05 }}
-                                    className="flex items-center gap-3 px-4 py-2 rounded-xl bg-white/50 dark:bg-white/5 border border-gray-200 dark:border-white/10 backdrop-blur-sm"
+                                    className="flex items-center gap-2 md:gap-3 px-3 py-1.5 md:px-4 md:py-2 rounded-xl bg-white/50 dark:bg-white/5 border border-gray-200 dark:border-white/10 backdrop-blur-sm"
                                 >
                                     <stat.icon className="w-5 h-5 text-purple-600 dark:text-purple-400" />
                                     <div className="text-left">
@@ -347,7 +333,7 @@ export default function GalleryPage() {
 
 
                 {/* Category Filter */}
-                <section className="category-container py-12 px-6">
+                <section className="category-container py-6 md:py-12 px-4 md:px-6">
                     <div className="max-w-6xl mx-auto">
                         <div className="flex overflow-x-auto md:flex-wrap md:justify-center gap-4 pb-4 md:pb-0 scrollbar-hide">
                             {categories.map((cat) => {
@@ -356,7 +342,7 @@ export default function GalleryPage() {
                                     <button
                                         key={cat.id}
                                         onClick={() => setSelectedCategory(cat.id)}
-                                        className={`category-btn group flex items-center gap-3 px-6 py-3 rounded-full font-semibold text-sm transition-all duration-300 shrink-0 ${selectedCategory === cat.id
+                                        className={`category-btn group flex items-center gap-2 md:gap-3 px-4 py-2 md:px-6 md:py-3 rounded-full font-semibold text-xs md:text-sm transition-all duration-300 shrink-0 ${selectedCategory === cat.id
                                             ? 'bg-gradient-to-r from-purple-600 to-violet-600 text-white shadow-lg shadow-purple-500/25'
                                             : 'bg-gray-100 text-gray-600 border border-gray-200 hover:bg-gray-200 dark:bg-white/5 dark:text-gray-400 dark:border-white/10 dark:hover:bg-white/10 dark:hover:text-white dark:hover:border-purple-500/30'
                                             }`}
@@ -372,7 +358,7 @@ export default function GalleryPage() {
                 </section>
 
                 {/* Gallery Grid */}
-                <section className="py-16 px-6">
+                <section className="py-8 md:py-16 px-4 md:px-6">
                     <div ref={galleryGridRef} className="max-w-7xl mx-auto">
                         {/* Loading State */}
                         {loading && (
@@ -445,7 +431,7 @@ export default function GalleryPage() {
 
                                                     {/* Content */}
                                                     <div className="absolute inset-0 p-6 flex flex-col justify-end">
-                                                        <div className="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                                                        <div className="transform translate-y-0 md:translate-y-4 md:group-hover:translate-y-0 transition-transform duration-500">
                                                             {/* Category badge */}
                                                             <span className="inline-block px-3 py-1 mb-3 text-xs font-semibold text-purple-300 bg-purple-500/20 rounded-full border border-purple-500/30 backdrop-blur-sm">
                                                                 {image.category.charAt(0).toUpperCase() + image.category.slice(1)}
@@ -495,7 +481,7 @@ export default function GalleryPage() {
                             {/* Close button */}
                             <button
                                 onClick={closeLightbox}
-                                className="absolute top-6 right-6 z-50 w-12 h-12 rounded-full bg-gray-100 text-gray-900 hover:bg-gray-200 dark:bg-white/10 dark:backdrop-blur-sm dark:border dark:border-white/20 flex items-center justify-center dark:text-white dark:hover:bg-white/20 transition-colors"
+                                className="absolute top-4 right-4 md:top-6 md:right-6 z-50 w-10 h-10 md:w-12 md:h-12 rounded-full bg-gray-100 text-gray-900 hover:bg-gray-200 dark:bg-white/10 dark:backdrop-blur-sm dark:border dark:border-white/20 flex items-center justify-center dark:text-white dark:hover:bg-white/20 transition-colors"
                             >
                                 <X className="w-6 h-6" />
                             </button>
@@ -503,13 +489,13 @@ export default function GalleryPage() {
                             {/* Navigation arrows */}
                             <button
                                 onClick={(e) => { e.stopPropagation(); navigateImage('prev'); }}
-                                className="absolute left-6 top-1/2 -translate-y-1/2 z-50 w-12 h-12 rounded-full bg-gray-100 text-gray-900 hover:bg-gray-200 dark:bg-white/10 dark:backdrop-blur-sm dark:border dark:border-white/20 flex items-center justify-center dark:text-white dark:hover:bg-white/20 transition-colors"
+                                className="absolute left-2 md:left-6 top-1/2 -translate-y-1/2 z-50 w-10 h-10 md:w-12 md:h-12 rounded-full bg-gray-100/50 md:bg-gray-100 text-gray-900 hover:bg-gray-200 dark:bg-white/10 dark:backdrop-blur-sm dark:border dark:border-white/20 flex items-center justify-center dark:text-white dark:hover:bg-white/20 transition-colors"
                             >
                                 <ChevronLeft className="w-6 h-6" />
                             </button>
                             <button
                                 onClick={(e) => { e.stopPropagation(); navigateImage('next'); }}
-                                className="absolute right-6 top-1/2 -translate-y-1/2 z-50 w-12 h-12 rounded-full bg-gray-100 text-gray-900 hover:bg-gray-200 dark:bg-white/10 dark:backdrop-blur-sm dark:border dark:border-white/20 flex items-center justify-center dark:text-white dark:hover:bg-white/20 transition-colors"
+                                className="absolute right-2 md:right-6 top-1/2 -translate-y-1/2 z-50 w-10 h-10 md:w-12 md:h-12 rounded-full bg-gray-100/50 md:bg-gray-100 text-gray-900 hover:bg-gray-200 dark:bg-white/10 dark:backdrop-blur-sm dark:border dark:border-white/20 flex items-center justify-center dark:text-white dark:hover:bg-white/20 transition-colors"
                             >
                                 <ChevronRight className="w-6 h-6" />
                             </button>
@@ -551,7 +537,7 @@ export default function GalleryPage() {
                 </AnimatePresence>
 
                 {/* Gallery Footer with Links */}
-                <section className="relative py-24 px-6 border-t border-gray-200 dark:border-white/5 bg-white dark:bg-transparent transition-colors duration-300">
+                <section className="relative py-12 md:py-24 px-4 md:px-6 border-t border-gray-200 dark:border-white/5 bg-white dark:bg-transparent transition-colors duration-300">
                     {/* Background effects */}
                     <div className="absolute inset-0 pointer-events-none">
                         <div className="absolute bottom-0 left-1/4 w-[500px] h-[500px] bg-purple-600/10 rounded-full blur-[120px]" />
@@ -560,26 +546,26 @@ export default function GalleryPage() {
 
                     <div className="relative z-10 max-w-6xl mx-auto">
                         {/* CTA Section */}
-                        <div className="text-center mb-20">
-                            <h2 className="text-4xl md:text-5xl font-bold mb-6">
+                        <div className="text-center mb-10 md:mb-20">
+                            <h2 className="text-2xl md:text-5xl font-bold mb-4 md:mb-6">
                                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-900 via-purple-600 to-purple-400 dark:from-white dark:via-purple-200 dark:to-purple-400">
                                     Want to Be Part of Our Story?
                                 </span>
                             </h2>
-                            <p className="text-gray-600 dark:text-gray-400 text-lg max-w-2xl mx-auto mb-8">
+                            <p className="text-gray-600 dark:text-gray-400 text-base md:text-lg max-w-2xl mx-auto mb-6 md:mb-8">
                                 Join our community of cybersecurity professionals and be featured in our next chapter.
                             </p>
-                            <div className="flex justify-center gap-3 md:gap-4">
+                            <div className="flex flex-col sm:flex-row justify-center gap-3 md:gap-4 px-4 sm:px-0">
                                 <a
                                     href="/training"
-                                    className="group inline-flex items-center gap-2 px-5 py-3 md:px-8 md:py-4 text-sm md:text-base bg-gradient-to-r from-purple-600 to-violet-600 text-white font-semibold rounded-full shadow-lg shadow-purple-500/25 hover:shadow-purple-500/40 transition-all duration-300 hover:scale-105"
+                                    className="group inline-flex items-center justify-center gap-2 px-5 py-3 md:px-8 md:py-4 text-sm md:text-base bg-gradient-to-r from-purple-600 to-violet-600 text-white font-semibold rounded-full shadow-lg shadow-purple-500/25 hover:shadow-purple-500/40 transition-all duration-300 hover:scale-105 w-full sm:w-auto"
                                 >
                                     Start Training
                                     <ChevronRight className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-1 transition-transform" />
                                 </a>
                                 <a
                                     href="/services"
-                                    className="inline-flex items-center gap-2 px-5 py-3 md:px-8 md:py-4 text-sm md:text-base bg-gray-100 text-gray-900 border rounded-full border-gray-900 hover:bg-gray-200 dark:bg-white/5 dark:text-white dark:border-white/10 dark:hover:bg-white/10 dark:hover:border-purple-500/30 transition-all duration-300"
+                                    className="inline-flex items-center justify-center gap-2 px-5 py-3 md:px-8 md:py-4 text-sm md:text-base bg-gray-100 text-gray-900 border rounded-full border-gray-900 hover:bg-gray-200 dark:bg-white/5 dark:text-white dark:border-white/10 dark:hover:bg-white/10 dark:hover:border-purple-500/30 transition-all duration-300 w-full sm:w-auto"
                                 >
                                     Explore Services
                                 </a>

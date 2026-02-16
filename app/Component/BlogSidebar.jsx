@@ -18,7 +18,7 @@ export default function BlogSidebar() {
             setLoading(true)
             const baseUrl = typeof window !== 'undefined'
                 ? `http://${window.location.hostname}:${window.location.port}`
-                : 'http://localhost:3000'
+                : 'https://darkred-mouse-801836.hostingersite.com'
 
             // Fetch only 3 latest articles for sidebar
             const apiUrl = `${baseUrl}/api/blogs/list?page=1&limit=5`

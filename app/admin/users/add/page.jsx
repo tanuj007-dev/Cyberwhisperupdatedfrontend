@@ -22,7 +22,7 @@ const AddUser = () => {
         linkedin_url: '',
         github_url: '',
         profile_image_url: '',
-        role: 'USER',
+        role: 'STUDENT',
         is_instructor: false,
         title: ''
     });
@@ -114,9 +114,8 @@ const AddUser = () => {
 
     const roleOptions = [
         { value: 1, label: 'Admin' },
-        { value: 2, label: 'Instructor' },
-        { value: 3, label: 'Student' },
-        { value: 4, label: 'Guest' }
+        { value: 2, label: 'Student' },
+        { value: 3, label: 'Instructor' }
     ];
 
     return (
@@ -282,17 +281,28 @@ const AddUser = () => {
                     <div className="space-y-4">
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-2">Role</label>
-                            <div className="flex gap-4">
+                            <div className="flex flex-wrap gap-4">
                                 <label className="flex items-center gap-2 cursor-pointer">
                                     <input
                                         type="radio"
                                         name="role"
-                                        value="USER"
-                                        checked={formData.role === 'USER'}
+                                        value="ADMIN"
+                                        checked={formData.role === 'ADMIN'}
                                         onChange={handleChange}
                                         className="w-4 h-4 text-blue-600"
                                     />
-                                    <span className="text-sm">User</span>
+                                    <span className="text-sm">Admin</span>
+                                </label>
+                                <label className="flex items-center gap-2 cursor-pointer">
+                                    <input
+                                        type="radio"
+                                        name="role"
+                                        value="STUDENT"
+                                        checked={formData.role === 'STUDENT'}
+                                        onChange={handleChange}
+                                        className="w-4 h-4 text-blue-600"
+                                    />
+                                    <span className="text-sm">Student</span>
                                 </label>
                                 <label className="flex items-center gap-2 cursor-pointer">
                                     <input

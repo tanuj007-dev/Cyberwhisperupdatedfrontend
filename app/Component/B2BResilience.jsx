@@ -2,7 +2,7 @@
 import React from 'react';
 import { CloudLightning, Key, ShieldCheck } from 'lucide-react';
 import { useEnquiry } from '../context/EnquiryContext';
-const ResilienceCard = ({ icon: Icon, title, description, bestFor, cta }) => {
+const ResilienceCard = ({ icon: Icon, title, description, bestFor, ctaLabel, onCtaClick }) => {
     return (
         <div className="group relative flex flex-col justify-between p-6 md:p-8 rounded-2xl bg-white dark:bg-[#0B0420] border border-gray-200 dark:border-white/5 hover:border-[#6B46E5]/50 transition-all duration-300 h-full hover:-translate-y-2 hover:shadow-[0_0_30px_rgba(107,70,229,0.15)] shadow-lg dark:shadow-none">
             {/* Hover Glow */}
@@ -29,8 +29,12 @@ const ResilienceCard = ({ icon: Icon, title, description, bestFor, cta }) => {
                 </div>
             </div>
 
-            <button className="w-full py-3 px-4 rounded-lg border border-[#6B46E5]/30 text-[#6B46E5] text-xs font-bold uppercase tracking-wider hover:bg-[#6B46E5] hover:text-white transition-all duration-300">
-                {cta}
+            <button
+                type="button"
+                onClick={onCtaClick}
+                className="w-full py-3 px-4 rounded-lg border border-[#6B46E5]/30 text-[#6B46E5] text-xs font-bold uppercase tracking-wider hover:bg-[#6B46E5] hover:text-white transition-all duration-300"
+            >
+                {ctaLabel}
             </button>
         </div>
     );
@@ -38,27 +42,29 @@ const ResilienceCard = ({ icon: Icon, title, description, bestFor, cta }) => {
 
 export default function B2BResilience() {
     const { openEnquiry } = useEnquiry();
+    const handleBookDemo = () => openEnquiry(true);
+
     const cards = [
         {
             icon: CloudLightning,
             title: "Immersive Cyber Range",
             description: "Your SOC team lacks live-fire experience? Our MITRE-mapped sandbox lets them battle APTs and ransomware safely, turning theory into battle-hardened reflexes.",
             bestFor: "SOC Teams, Universities & Cyber Defense Units",
-            cta: <button onClick={() => openEnquiry(true)}>Book a Demo</button>
+            ctaLabel: "Book a Demo"
         },
         {
             icon: Key,
             title: "Strategic Cyber Consulting",
             description: "Security is costly when reactive. We provide architecture roadmaps and risk assessments tailored to your budget, translating technical gaps into a clear executive strategy.",
             bestFor: "CISOs, CTOs & Growth-Stage Startups",
-            cta: <button onClick={() => openEnquiry(true)}>Book a Demo</button>
+            ctaLabel: "Book a Demo"
         },
         {
             icon: ShieldCheck,
             title: "Hands-On Workshops",
             description: "Slides don’t stop hackers—skills do. Our intensive bootcamps replace theory with keyboard time, delivering certifiable skills in SIEM, Red Teaming, and Forensics.",
             bestFor: "Corporate Training & Upskilling Teams",
-            cta: <button onClick={() => openEnquiry(true)}>Book a Demo</button>
+            ctaLabel: "Book a Demo"
         }
     ];
 
@@ -85,6 +91,7 @@ export default function B2BResilience() {
                         <ResilienceCard
                             key={index}
                             {...card}
+                            onCtaClick={handleBookDemo}
                         />
                     ))}
                 </div>

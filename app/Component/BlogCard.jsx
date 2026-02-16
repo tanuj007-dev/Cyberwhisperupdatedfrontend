@@ -5,9 +5,9 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { GoArrowUpRight } from "react-icons/go"
 
-export default function BlogCard({ image, title, slug, description, short_description, onClick }) {
+export default function BlogCard({ image, title, slug, id, description, short_description, onClick }) {
     const displayDescription = description || short_description;
-    const blogLink = `/blog/${slug || '#'}`;
+    const blogLink = `/blog/${slug || id || ''}`;
 
     if (onClick) {
         return (

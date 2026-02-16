@@ -29,7 +29,7 @@ export default function EnquiryModal() {
         setErrorMessage('');
 
         try {
-            const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3031';
+            const apiUrl = process.env.NEXT_PUBLIC_API_URL || process.env.NEXT_PUBLIC_BACKEND_API_URL || 'https://darkred-mouse-801836.hostingersite.com';
             const response = await fetch(`${apiUrl}/api/quotes`, {
                 method: 'POST',
                 headers: {

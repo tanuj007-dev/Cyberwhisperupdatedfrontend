@@ -84,7 +84,7 @@ const MediaLibrary = () => {
 
         try {
             // Call backend API to add media
-            const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+            const apiUrl = process.env.NEXT_PUBLIC_API_URL || process.env.NEXT_PUBLIC_BACKEND_API_URL || 'https://darkred-mouse-801836.hostingersite.com';
             const response = await fetch(`${apiUrl}/api/media`, {
                 method: 'POST',
                 headers: {

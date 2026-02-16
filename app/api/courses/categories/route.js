@@ -2,11 +2,10 @@ import { NextResponse } from 'next/server';
 
 export async function GET(request) {
     try {
-        const backendUrl = process.env.BACKEND_API_URL || 'http://localhost:3001/api';
+        const base = process.env.BACKEND_API_URL || 'https://darkred-mouse-801836.hostingersite.com';
 
         // Fetch categories from the backend
-        // Assuming backend has an endpoint /courses/categories
-        const response = await fetch(`${backendUrl}/courses/categories`, {
+        const response = await fetch(`${base}/api/courses/categories`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

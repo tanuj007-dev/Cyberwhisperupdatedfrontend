@@ -22,7 +22,7 @@ import opencti from './assets/OpenCTI.webp';
 import mitre from './assets/5bfdce88cd3820f7c5c21e02_mitre.webp';
 import id8625 from './assets/1ff56c87-de11-4bb8-bb84-609cccd716c9.png';
 import suricata from './assets/Suricata_logo_600x600-1.webp';
-import logo_webp from './assets/logo.webp';
+ 
 import images_png from './assets/cf352209-6f33-4abc-92bb-b796e286e35c.png';
 import yara from './assets/Yara_logo.svg.webp';
 import images_1_png from './assets/8468d7a9-4618-40c3-9ab6-d4f6d4c1e067.png';
@@ -61,7 +61,6 @@ const ToolsScroller = () => {
         { image: mitre, name: "MITRE" },
         { image: id8625, name: "Tool 16" },
         { image: suricata, name: "Suricata" },
-        { image: logo_webp, name: "Logo" },
         { image: images_png, name: "Tool 19" },
         { image: yara, name: "YARA" },
         { image: images_1_png, name: "Tool 21" },

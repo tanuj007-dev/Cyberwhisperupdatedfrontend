@@ -3,10 +3,10 @@ import { NextResponse } from 'next/server';
 export async function GET(request, { params }) {
     try {
         const { category } = await params;
-        const backendUrl = process.env.BACKEND_API_URL || 'http://localhost:3001/api';
+        const base = process.env.BACKEND_API_URL || 'https://darkred-mouse-801836.hostingersite.com';
 
         // Fetch courses filtered by category from the backend
-        const response = await fetch(`${backendUrl}/courses?category=${encodeURIComponent(category)}`, {
+        const response = await fetch(`${base}/api/courses?category=${encodeURIComponent(category)}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

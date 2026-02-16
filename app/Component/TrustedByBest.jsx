@@ -93,7 +93,7 @@ const TrustedByBest = () => {
 
     return (
         <section className="relative py-8 md:py-12 bg-white dark:bg-black overflow-hidden transition-colors duration-300">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex flex-col items-center gap-8 md:gap-10">
 
                     {/* Top - Text Content */}

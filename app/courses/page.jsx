@@ -5,6 +5,8 @@ import { motion } from 'framer-motion'
 import { Star, BookOpen, BarChart2, Calendar, ChevronLeft, ChevronRight } from 'lucide-react'
 import Link from 'next/link'
 import thumb1 from '../Component/assets/cyber_lab_1.webp'
+import BrochureFormModal from '../Component/BrochureFormModal'
+import { useEnquiry } from '../context/EnquiryContext'
 
 const defaultImage = thumb1
 
@@ -15,6 +17,8 @@ export default function AllCoursesPage() {
     const [currentPage, setCurrentPage] = useState(1)
     const [totalPages, setTotalPages] = useState(1)
     const [totalCourses, setTotalCourses] = useState(0)
+    const [brochureModalOpen, setBrochureModalOpen] = useState(false)
+    const { openEnquiry } = useEnquiry()
     const limit = 10
 
     useEffect(() => {
@@ -106,6 +110,8 @@ export default function AllCoursesPage() {
                     </p>
                 </div>
 
+                <BrochureFormModal open={brochureModalOpen} onClose={() => setBrochureModalOpen(false)} />
+
                 {/* Course Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
                     {loading && (
@@ -142,10 +148,11 @@ export default function AllCoursesPage() {
                             <div className="px-6 pb-6 mt-6">
                                 <div className="relative aspect-video rounded-[1.5rem] overflow-hidden bg-gray-100">
                                     <Image
-                                        src={course.image && course.image.startsWith('/') ? course.image : defaultImage}
+                                        src={(course.image || course.thumbnail) || defaultImage}
                                         alt={course.title}
                                         fill
                                         className="object-cover transition-transform duration-700 group-hover:scale-110"
+                                        unoptimized={typeof (course.image || course.thumbnail) === 'string' && (course.image || course.thumbnail).startsWith('http')}
                                         onError={(e) => {
                                             // Fallback if image fails to load
                                             e.currentTarget.src = defaultImage.src
@@ -161,7 +168,7 @@ export default function AllCoursesPage() {
                                             {course.level || 'Beginner'}
                                         </span>
                                     </div>
-                                    <div className="flex items-center gap-1 flex-shrink-0">
+                                    <div className="flex items-center gap-1 shrink-0">
                                         <span className="text-sm text-slate-900">{course.rating || 4.5}</span>
                                         <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
                                     </div>
@@ -209,12 +216,25 @@ export default function AllCoursesPage() {
 
                             {/* Card Actions */}
                             <div className="px-8 pb-8 mt-auto">
-                                <div className="flex items-center gap-3">
-                                    <button className="flex-1 bg-[#310E3F] text-white py-3 rounded-full text-sm font-bold hover:bg-[#6B46E5] transition-colors">
-                                        Enroll Now
-                                    </button>
-                                    <button className="flex-1 border-2 border-[#310E3F] text-[#310E3F] py-3 rounded-full text-sm font-bold hover:border-[#6B46E5] hover:text-[#6B46E5] transition-all">
-                                        Learn More
+                                <div className="space-y-3">
+                                    <div className="flex items-center gap-3">
+                                        <button className="flex-1 bg-[#310E3F] text-white py-3 rounded-full text-sm font-bold hover:bg-[#6B46E5] transition-colors">
+                                            Enroll Now
+                                        </button>
+                                        <button
+                                            type="button"
+                                            onClick={() => setBrochureModalOpen(true)}
+                                            className="flex-1 border-2 border-[#310E3F] text-[#310E3F] py-3 rounded-full text-sm font-bold hover:border-[#6B46E5] hover:text-[#6B46E5] transition-all"
+                                        >
+                                            Learn More
+                                        </button>
+                                    </div>
+                                    <button
+                                        type="button"
+                                        onClick={() => openEnquiry(true)}
+                                        className="w-full py-2.5 rounded-full text-sm font-bold border border-[#6B46E5]/50 text-[#6B46E5] hover:bg-[#6B46E5] hover:text-white transition-all"
+                                    >
+                                        Book a demo
                                     </button>
                                 </div>
                             </div>

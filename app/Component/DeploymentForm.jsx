@@ -135,16 +135,60 @@ export const DeploymentForm = ({ formType, onClose }) => {
         message: '',
         onsiteLocation: ''
     });
+    const [submitting, setSubmitting] = useState(false);
+    const [submitError, setSubmitError] = useState('');
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
-    const handleSubmit = (e) => {
+    const getDeployTeamApiBase = () =>
+        typeof window !== 'undefined'
+            ? (process.env.NEXT_PUBLIC_BACKEND_API_URL || process.env.NEXT_PUBLIC_BACKEND_URL || process.env.NEXT_PUBLIC_API_URL || 'https://darkred-mouse-801836.hostingersite.com').replace(/\/$/, '')
+            : 'https://darkred-mouse-801836.hostingersite.com';
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        setSubmitError('');
+
+        if (formType === 'DEPLOY_TEAM') {
+            setSubmitting(true);
+            try {
+                const payload = {
+                    full_name: formData.fullName.trim(),
+                    work_email: formData.workEmail.trim(),
+                    phone_whatsapp: formData.phone.trim(),
+                    company_name: formData.companyName.trim(),
+                    job_title: formData.jobTitle.trim(),
+                    team_size: formData.teamSize || undefined,
+                    delivery_mode: (formData.deliveryMode || '').toLowerCase(),
+                    timeline: formData.timeline || undefined,
+                    track_certification: Array.isArray(formData.tracksInterested) ? formData.tracksInterested.join(', ') : (formData.tracksInterested || ''),
+                    message_requirement: formData.message.trim() || undefined
+                };
+                const base = getDeployTeamApiBase();
+                const response = await fetch(`${base}/api/deploy-team-training/add`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload),
+                });
+                if (!response.ok) {
+                    const errData = await response.json().catch(() => ({}));
+                    throw new Error(errData.message || errData.error || `Request failed (${response.status})`);
+                }
+                alert('Request submitted successfully! We will get in touch soon.');
+                onClose();
+            } catch (err) {
+                console.error('Deploy team training submit error:', err);
+                setSubmitError(err.message || 'Failed to submit. Please try again.');
+            } finally {
+                setSubmitting(false);
+            }
+            return;
+        }
+
         console.log('Form submitted:', formType, formData);
-        // Add your form submission logic here
         alert('Form submitted successfully!');
         onClose();
     };
@@ -621,18 +665,25 @@ export const DeploymentForm = ({ formType, onClose }) => {
                         {renderFormFields()}
                     </div>
 
+                    {submitError && (
+                        <div className="mt-4 p-3 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 text-sm">
+                            {submitError}
+                        </div>
+                    )}
                     {/* Submit Button */}
                     <div className="mt-8 flex gap-4">
                         <button
                             type="submit"
-                            className="flex-1 px-6 py-3 bg-[#6B46E5] text-white rounded-lg font-semibold hover:bg-[#5a38c7] transition-all shadow-lg shadow-[#6B46E5]/20"
+                            disabled={submitting}
+                            className="flex-1 px-6 py-3 bg-[#6B46E5] text-white rounded-lg font-semibold hover:bg-[#5a38c7] transition-all shadow-lg shadow-[#6B46E5]/20 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                            Submit Request
+                            {submitting ? 'Submitting...' : 'Submit Request'}
                         </button>
                         <button
                             type="button"
                             onClick={onClose}
-                            className="px-6 py-3 bg-gray-100 dark:bg-white/5 text-gray-700 dark:text-gray-300 rounded-lg font-semibold hover:bg-gray-200 dark:hover:bg-white/10 transition-all"
+                            disabled={submitting}
+                            className="px-6 py-3 bg-gray-100 dark:bg-white/5 text-gray-700 dark:text-gray-300 rounded-lg font-semibold hover:bg-gray-200 dark:hover:bg-white/10 transition-all disabled:opacity-50"
                         >
                             Cancel
                         </button>

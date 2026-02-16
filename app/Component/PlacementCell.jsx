@@ -98,7 +98,7 @@ export default function PlacementCell() {
                                     </div>
                                     <div>
                                         <h4 className={`text-xl md:text-2xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'} mb-1 transition-colors duration-300`}>Placement Coordinator</h4>
-                                        
+
                                     </div>
                                 </div>
 
@@ -124,7 +124,7 @@ export default function PlacementCell() {
                                             </div>
                                             <div className="flex flex-col">
                                                 <span className={`text-[10px] ${theme === 'dark' ? 'text-purple-300/70' : 'text-purple-600/70'} uppercase tracking-widest font-bold`}>Email Us</span>
-                                                <span className={`${theme === 'dark' ? 'text-white' : 'text-gray-900'} font-semibold transition-colors`}>Placement@cyberwhisper.tech</span>
+                                                <span className={`${theme === 'dark' ? 'text-white' : 'text-gray-900'} font-semibold transition-colors text-sm sm:text-base break-all`}>Placement@cyberwhisper.tech</span>
                                             </div>
                                         </div>
                                     </a>

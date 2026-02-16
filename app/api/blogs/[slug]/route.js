@@ -7,41 +7,54 @@ const corsHeaders = {
     'Access-Control-Allow-Headers': 'Content-Type',
 };
 
-// Handle CORS preflight requests
+const BACKEND_URL = process.env.BACKEND_API_URL || process.env.NEXT_PUBLIC_BACKEND_API_URL || 'https://darkred-mouse-801836.hostingersite.com';
+
+function mapBlogToFrontend(blog) {
+    return {
+        ...blog,
+        image: blog.banner_url || blog.thumbnail_url || blog.image,
+        content: blog.content || blog.description || '',
+        description: blog.short_description || (blog.description && blog.description.substring(0, 200)) || '',
+        excerpt: blog.short_description || (blog.description && blog.description.substring(0, 150)) || '',
+        date: blog.published_at || blog.created_at,
+        author: blog.author_name || 'CyberWhisper Team',
+        category: blog.category_name || 'Cybersecurity',
+        tags: blog.tags || []
+    };
+}
+
 export async function OPTIONS() {
     return NextResponse.json({}, { headers: corsHeaders });
 }
 
 /**
  * GET /api/blogs/[slug]
- * Fetch a single blog by slug or ID from local storage
- * 
- * Returns: { success: true, data: {...blog} }
+ * Fetch a single blog by slug or ID. Tries backend first, then local storage.
  */
 export async function GET(request, context) {
     try {
-        // Await params in Next.js 15+
         const { slug } = await context.params;
 
-        // Check if the parameter is a number (ID) or string (slug)
-        const isNumeric = /^\d+$/.test(slug);
-
-        console.log('=== FETCH BLOG BY SLUG/ID ===');
-        console.log('Parameter:', slug);
-        console.log('Type:', isNumeric ? 'ID' : 'Slug');
-
-        let blog;
-
-        if (isNumeric) {
-            // Fetch by ID
-            blog = await getBlogById(parseInt(slug));
-            console.log('Blog found by ID:', blog ? blog.title : 'Not found');
-        } else {
-            // Fetch by slug - need to search through all blogs
-            const blogs = await getAllBlogs();
-            blog = blogs.find(b => b.slug === slug);
-            console.log('Blog found by slug:', blog ? blog.title : 'Not found');
+        try {
+            const res = await fetch(`${BACKEND_URL}/api/blogs/${encodeURIComponent(slug)}`, { headers: { 'Content-Type': 'application/json' } });
+            if (res.ok) {
+                const json = await res.json();
+                const blog = json.data ?? json;
+                if (blog && (blog.id || blog.slug)) {
+                    return NextResponse.json(
+                        { success: true, message: 'Blog fetched successfully', data: mapBlogToFrontend(blog) },
+                        { status: 200, headers: corsHeaders }
+                    );
+                }
+            }
+        } catch (err) {
+            console.warn('Blog by slug: backend unreachable, using local:', err.message);
         }
+
+        const isNumeric = /^\d+$/.test(slug);
+        let blog = isNumeric
+            ? await getBlogById(parseInt(slug))
+            : (await getAllBlogs()).find(b => b.slug === slug);
 
         if (!blog) {
             return NextResponse.json(
@@ -50,30 +63,10 @@ export async function GET(request, context) {
             );
         }
 
-        // Map blog fields to match frontend expectations
-        const mappedBlog = {
-            ...blog,
-            image: blog.banner_url || blog.thumbnail_url || blog.image,
-            content: blog.content || blog.description || '',
-            description: blog.short_description || blog.description?.substring(0, 200) || '',
-            excerpt: blog.short_description || blog.description?.substring(0, 150) || '',
-            date: blog.published_at || blog.created_at,
-            author: blog.author_name || 'CyberWhisper Team',
-            category: blog.category_name || 'Cybersecurity',
-            tags: blog.tags || []
-        };
-
-        console.log('Blog fetched successfully:', mappedBlog.title);
-
         return NextResponse.json(
-            {
-                success: true,
-                message: 'Blog fetched successfully',
-                data: mappedBlog
-            },
+            { success: true, message: 'Blog fetched successfully', data: mapBlogToFrontend(blog) },
             { status: 200, headers: corsHeaders }
         );
-
     } catch (error) {
         console.error('Error fetching blog by slug:', error);
         return NextResponse.json(

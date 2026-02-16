@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getAllUsers, addUser, getFilteredUsers } from '@/lib/userStorage';
 
-const BACKEND_URL = process.env.BACKEND_API_URL || 'http://localhost:3001';
+const BACKEND_URL = process.env.BACKEND_API_URL || 'https://darkred-mouse-801836.hostingersite.com';
 
 const corsHeaders = {
     'Access-Control-Allow-Origin': '*',

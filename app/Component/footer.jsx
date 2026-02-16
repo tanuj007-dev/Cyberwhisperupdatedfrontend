@@ -1,9 +1,24 @@
+"use client";
+import Link from "next/link";
 import Image from "next/image"
 import footerBg from "./assets/footer-bg.webp";
 import { FaLinkedinIn, FaYoutube, FaInstagram, FaXTwitter } from "react-icons/fa6"
 import { MapPin, Phone, Mail } from "lucide-react"
+import { usePathname } from "next/navigation";
 
 export default function Footer() {
+  const pathname = usePathname();
+
+  const handleScrollToTop = (e) => {
+    if (pathname === '/') {
+      e.preventDefault();
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    }
+  };
+
   return (
     <footer className="relative w-full bg-white pt-12 pb-8 md:pt-24 md:pb-12 px-6 font-sans overflow-hidden border-t">
 
@@ -24,14 +39,16 @@ export default function Footer() {
           {/* Left Section: Branding */}
           <div className="sm:col-span-2 lg:col-span-5 flex flex-col">
             <div className="mb-4 md:mb-6">
-              <div className="relative w-32 h-32 md:w-40 md:h-40">
-                <Image
-                  src="/assets/cw_logo_sample_2.png"
-                  alt="Cyber Whisper"
-                  fill
-                  className="object-contain"
-                />
-              </div>
+              <Link href="/" onClick={handleScrollToTop}>
+                <div className="relative w-32 h-32 md:w-40 md:h-40 cursor-pointer">
+                  <Image
+                    src="/assets/cw_logo_sample_2.png"
+                    alt="Cyber Whisper"
+                    fill
+                    className="object-contain"
+                  />
+                </div>
+              </Link>
             </div>
 
             <p className="text-slate-600 text-sm md:text-[18px] leading-[1.6] max-w-[400px] mb-4 md:mb-6">

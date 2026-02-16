@@ -1,0 +1,132 @@
+'use client'
+
+import React, { useState, useEffect } from 'react'
+import { FileDown, Loader2 } from 'lucide-react'
+
+const DEFAULT_BROCHURE_URL = '/uploads/brochures/brochure.pdf'
+const BROCHURE_FILENAME = 'CyberWhisper_Brochure.pdf'
+
+const getBackendBase = () =>
+    typeof window !== 'undefined'
+        ? (process.env.NEXT_PUBLIC_BACKEND_API_URL || process.env.NEXT_PUBLIC_BACKEND_URL || process.env.NEXT_PUBLIC_API_URL || 'https://darkred-mouse-801836.hostingersite.com').replace(/\/$/, '')
+        : 'https://darkred-mouse-801836.hostingersite.com'
+
+export default function BrochureForm({ className = '', onSuccess }) {
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        mobile: ''
+    })
+    const [isSubmitting, setIsSubmitting] = useState(false)
+    const [message, setMessage] = useState(null)
+    const [brochureUrl, setBrochureUrl] = useState(DEFAULT_BROCHURE_URL)
+
+    useEffect(() => {
+        fetch('/api/brochure/current')
+            .then((res) => res.ok ? res.json() : {})
+            .then((data) => {
+                if (data?.url) setBrochureUrl(data.url)
+            })
+            .catch(() => {})
+    }, [])
+
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value })
+        setMessage(null)
+    }
+
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+        setIsSubmitting(true)
+        setMessage(null)
+        try {
+            const base = getBackendBase()
+            const addRes = await fetch(`${base}/api/brochure-downloads/add`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name: formData.name.trim(),
+                    email: formData.email.trim(),
+                    mobile_number: formData.mobile.trim()
+                })
+            })
+            if (!addRes.ok) {
+                const errData = await addRes.json().catch(() => ({}))
+                throw new Error(errData.message || errData.error || 'Request failed')
+            }
+
+            const link = document.createElement('a')
+            link.href = brochureUrl
+            link.download = BROCHURE_FILENAME
+            document.body.appendChild(link)
+            link.click()
+            document.body.removeChild(link)
+
+            setMessage('Brochure is downloading. Check your downloads.')
+            setFormData({ name: '', email: '', mobile: '' })
+            onSuccess?.()
+        } catch (err) {
+            setMessage(err.message || 'Something went wrong. Please try again.')
+        } finally {
+            setIsSubmitting(false)
+        }
+    }
+
+    return (
+        <div className={`bg-card border border-[#7B2CFF]/30 rounded-2xl p-4 md:p-6 shadow-sm ${className}`}>
+            <p className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
+                <FileDown className="w-4 h-4 text-[#6B46E5]" />
+                Download course brochure
+            </p>
+            <form onSubmit={handleSubmit} className="space-y-3">
+                <input
+                    type="text"
+                    name="name"
+                    required
+                    value={formData.name}
+                    onChange={handleChange}
+                    placeholder="Name"
+                    className="w-full px-3 py-2.5 text-sm bg-secondary border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-[#6B46E5] focus:border-transparent outline-none placeholder:text-muted-foreground"
+                />
+                <input
+                    type="email"
+                    name="email"
+                    required
+                    value={formData.email}
+                    onChange={handleChange}
+                    placeholder="Email"
+                    className="w-full px-3 py-2.5 text-sm bg-secondary border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-[#6B46E5] focus:border-transparent outline-none placeholder:text-muted-foreground"
+                />
+                <input
+                    type="tel"
+                    name="mobile"
+                    required
+                    value={formData.mobile}
+                    onChange={handleChange}
+                    placeholder="Mobile number"
+                    className="w-full px-3 py-2.5 text-sm bg-secondary border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-[#6B46E5] focus:border-transparent outline-none placeholder:text-muted-foreground"
+                />
+                <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="w-full flex items-center justify-center gap-2 bg-[#310E3F] dark:bg-[#6B46E5] text-white text-sm font-bold py-2.5 rounded-lg hover:bg-[#6B46E5] dark:hover:bg-[#7B5CF0] transition-colors disabled:opacity-70"
+                >
+                    {isSubmitting ? (
+                        <>
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                            Downloading…
+                        </>
+                    ) : (
+                        <>
+                            <FileDown className="w-4 h-4" />
+                            Download brochure
+                        </>
+                    )}
+                </button>
+            </form>
+            {message && (
+                <p className="text-xs text-[#6B46E5] dark:text-purple-400 mt-2">{message}</p>
+            )}
+        </div>
+    )
+}

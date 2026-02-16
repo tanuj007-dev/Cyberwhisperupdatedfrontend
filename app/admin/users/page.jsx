@@ -2,8 +2,8 @@
 
 import { useState, useMemo } from 'react';
 import { useAdmin } from '@/contexts/AdminContext';
-import { Button, Badge, Modal, Input, Select, Toast, Skeleton } from '@/components/ui';
-import { Edit2, Trash2, Eye, Search, CheckCircle, XCircle, PlusCircle, UserPlus } from 'lucide-react';
+import { Button, Badge, Modal, Input, Toast, Skeleton } from '@/components/ui';
+import { Edit2, Trash2, Eye, Search, PlusCircle, UserPlus } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 const UserList = () => {
@@ -26,7 +26,7 @@ const UserList = () => {
         last_name: '',
         email: '',
         phone: '',
-        role: 'USER',
+        role: 'STUDENT',
         status: 'active',
         is_instructor: false,
         title: '',
@@ -45,15 +45,15 @@ const UserList = () => {
 
     const itemsPerPage = 10;
 
-    // Filtered users
     const filteredUsers = useMemo(() => {
         return users.filter((user) => {
             const matchesSearch =
-                user.first_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                user.last_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                user.email.toLowerCase().includes(searchTerm.toLowerCase());
-            const matchesRole = !filterRole || user.role_id === parseInt(filterRole);
-            const matchesStatus = !filterStatus || user.status === filterStatus;
+                (user.first_name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+                (user.last_name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+                (user.email || '').toLowerCase().includes(searchTerm.toLowerCase());
+            const roleId = user.role_id != null ? user.role_id : (user.role === 'ADMIN' ? 1 : user.role === 'INSTRUCTOR' ? 3 : 2);
+            const matchesRole = !filterRole || roleId === parseInt(filterRole);
+            const matchesStatus = !filterStatus || (user.status || 'active') === filterStatus;
             const matchesInstructor = !filterInstructor ||
                 (filterInstructor === 'yes' ? user.is_instructor : !user.is_instructor);
 
@@ -61,7 +61,6 @@ const UserList = () => {
         });
     }, [users, searchTerm, filterRole, filterStatus, filterInstructor]);
 
-    // Pagination
     const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
     const paginatedUsers = filteredUsers.slice(
         (currentPage - 1) * itemsPerPage,
@@ -78,83 +77,28 @@ const UserList = () => {
             showToast('Please select a valid image file', 'error');
             return;
         }
-
         if (file.size > 5 * 1024 * 1024) {
             showToast('Image size must be less than 5MB', 'error');
             return;
         }
-
         setImageUploading(true);
-
         try {
             const formDataUpload = new FormData();
             formDataUpload.append('profile', file);
-
-            console.log('=== Image Upload Started ===');
-            console.log('File:', {
-                name: file.name,
-                size: file.size,
-                type: file.type
-            });
-            console.log('Upload URL:', `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/upload-profile`);
-
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/users/upload-profile`, {
+            const uploadUrl = typeof window !== 'undefined' ? `${window.location.origin}/api/users/upload-profile` : '/api/users/upload-profile';
+            const response = await fetch(uploadUrl, {
                 method: 'POST',
                 body: formDataUpload,
-                mode: 'cors',
-                credentials: 'include',
-                headers: {
-                    'Accept': 'application/json'
-                }
+                headers: { 'Accept': 'application/json' },
             });
-
-            console.log('Response Status:', response.status);
-            console.log('Response Headers:', Object.fromEntries(response.headers.entries()));
-
-            const responseText = await response.text();
-            console.log('Response Body:', responseText);
-
-            if (!response.ok) {
-                throw new Error(`Upload failed: ${response.status} - ${responseText}`);
-            }
-
-            let data;
-            try {
-                data = JSON.parse(responseText);
-            } catch (e) {
-                console.error('Failed to parse response:', e);
-                throw new Error('Invalid response format from server');
-            }
-
-            console.log('Parsed Response:', data);
-
-            // Try multiple possible response formats
-            const imageUrl = data.data?.profile_image_url ||
-                data.profile_image_url ||
-                data.url ||
-                data.data?.url ||
-                data.message ||
-                data.file_url ||
-                data.data?.file_url;
-
-            if (!imageUrl) {
-                console.warn('No image URL found in response. Full response:', data);
-                throw new Error('No image URL received from server');
-            }
-
-            console.log('Final Image URL:', imageUrl);
-            setFormData(prev => {
-                const updated = { ...prev, profile_image_url: imageUrl };
-                console.log('Updated FormData:', updated);
-                return updated;
-            });
+            if (!response.ok) throw new Error('Upload failed');
+            const data = await response.json();
+            const imageUrl = data.profile_image_url || data.url || data.data?.profile_image_url;
+            if (!imageUrl) throw new Error('No image URL received');
+            setFormData((prev) => ({ ...prev, profile_image_url: imageUrl }));
             setImagePreview(imageUrl);
             showToast('Image uploaded successfully', 'success');
-            console.log('=== Image Upload Completed ===');
         } catch (error) {
-            console.error('=== Image Upload Error ===');
-            console.error('Error:', error.message);
-            console.error('Full Error:', error);
             showToast(`Image upload failed: ${error.message}`, 'error');
         } finally {
             setImageUploading(false);
@@ -168,7 +112,7 @@ const UserList = () => {
             last_name: '',
             email: '',
             phone: '',
-            role: 'USER',
+            role: 'STUDENT',
             status: 'active',
             is_instructor: false,
             title: '',
@@ -189,11 +133,11 @@ const UserList = () => {
         setEditMode(true);
         setSelectedUser(user);
         setFormData({
-            first_name: user.first_name,
-            last_name: user.last_name,
-            email: user.email,
+            first_name: user.first_name || '',
+            last_name: user.last_name || '',
+            email: user.email || '',
             phone: user.phone || '',
-            role: user.role || 'USER',
+            role: user.role === 'USER' ? 'STUDENT' : (user.role || 'STUDENT'),
             status: user.status || 'active',
             is_instructor: user.is_instructor || false,
             title: user.title || '',
@@ -212,9 +156,9 @@ const UserList = () => {
 
     const validateForm = () => {
         const newErrors = {};
-        if (!formData.first_name.trim()) newErrors.first_name = 'First name is required';
-        if (!formData.last_name.trim()) newErrors.last_name = 'Last name is required';
-        if (!formData.email.trim()) newErrors.email = 'Email is required';
+        if (!formData.first_name?.trim()) newErrors.first_name = 'First name is required';
+        if (!formData.last_name?.trim()) newErrors.last_name = 'Last name is required';
+        if (!formData.email?.trim()) newErrors.email = 'Email is required';
         if (formData.email && !/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'Invalid email format';
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
@@ -222,24 +166,17 @@ const UserList = () => {
 
     const handleSubmit = async () => {
         if (!validateForm()) return;
-
-        const userData = {
-            ...formData
-        };
-
         try {
             if (editMode) {
-                await updateUser(selectedUser.id, userData);
+                await updateUser(selectedUser.id, formData);
                 showToast('User updated successfully', 'success');
             } else {
-                await addUser(userData);
+                await addUser(formData);
                 showToast('User created successfully', 'success');
             }
             setAddEditModalOpen(false);
         } catch (error) {
-            const errorMessage = error?.message || 'Error saving user';
-            showToast(errorMessage, 'error');
-            console.error('Submit error:', error);
+            showToast(error?.message || 'Error saving user', 'error');
         }
     };
 
@@ -250,225 +187,165 @@ const UserList = () => {
             setSelectedUser(null);
             showToast('User deleted successfully', 'success');
         } catch (error) {
-            const errorMessage = error?.message || 'Error deleting user';
-            showToast(errorMessage, 'error');
-            console.error('Delete error:', error);
+            showToast(error?.message || 'Error deleting user', 'error');
         }
     };
 
-    const handleView = (user) => {
+    const handleViewUser = (user) => {
         setViewUser(user);
         setViewModalOpen(true);
     };
 
-    const getRoleName = (roleId) => {
-        const roles = { 1: 'Admin', 2: 'Editor', 3: 'Author', 4: 'Guest' };
-        return roles[roleId] || 'Unknown';
+    const getRoleName = (user) => {
+        const roleId = user.role_id != null ? user.role_id : (user.role === 'ADMIN' ? 1 : user.role === 'INSTRUCTOR' ? 3 : 2);
+        const roles = { 1: 'Admin', 2: 'Student', 3: 'Instructor' };
+        return roles[roleId] || user.role || 'Unknown';
     };
 
-    const getRoleColor = (roleId) => {
-        const colors = { 1: 'purple', 2: 'info', 3: 'success', 4: 'default' };
+    const getRoleColor = (user) => {
+        const roleId = user.role_id != null ? user.role_id : (user.role === 'ADMIN' ? 1 : user.role === 'INSTRUCTOR' ? 3 : 2);
+        const colors = { 1: 'purple', 2: 'info', 3: 'success' };
         return colors[roleId] || 'default';
     };
 
-    if (loading) {
+    if (loading && users.length === 0) {
         return (
-            <div className="space-y-6">
-                <Skeleton variant="title" />
-                <div className="space-y-4">
-                    {[...Array(5)].map((_, i) => (
-                        <Skeleton key={i} className="h-16" />
-                    ))}
+            <div className="p-8">
+                <div className="flex flex-col gap-6">
+                    <Skeleton className="h-10 w-64" />
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <Skeleton className="h-24" />
+                        <Skeleton className="h-24" />
+                        <Skeleton className="h-24" />
+                    </div>
+                    <Skeleton className="h-96" />
                 </div>
             </div>
         );
     }
 
     return (
-        <div className="space-y-6">
-            {/* Header */}
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div className="p-8">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
                 <div>
-                    <h1 className="text-3xl font-bold text-gray-900 mb-1">Users</h1>
-                    <p className="text-gray-600">Manage all users and their roles</p>
+                    <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Users</h1>
+                    <p className="text-gray-600 dark:text-gray-400 mt-1">Manage all users and their roles</p>
                 </div>
-                <button
-                    onClick={handleOpenAdd}
-                    className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-violet-600 to-purple-600 text-white font-medium rounded-xl hover:shadow-lg hover:shadow-purple-500/25 transition-all"
-                >
-                    <UserPlus size={18} />
+                <Button onClick={handleOpenAdd} variant="primary" className="inline-flex items-center gap-2">
+                    <UserPlus size={20} />
                     Add New User
-                </button>
+                </Button>
             </div>
 
-            {/* Stats */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                <div className="bg-white rounded-xl border border-gray-100 p-4">
-                    <p className="text-3xl font-bold text-gray-900">{users.length}</p>
-                    <p className="text-sm text-gray-500">Total Users</p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-4">
+                    <p className="text-sm text-gray-500 dark:text-gray-400">Admins</p>
+                    <p className="text-3xl font-bold text-blue-600">{users.filter((u) => (u.role_id === 1) || (u.role === 'ADMIN')).length}</p>
                 </div>
-                <div className="bg-white rounded-xl border border-gray-100 p-4">
-                    <p className="text-3xl font-bold text-emerald-600">{users.filter(u => u.status === 'active').length}</p>
-                    <p className="text-sm text-gray-500">Active</p>
+                <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-4">
+                    <p className="text-sm text-gray-500 dark:text-gray-400">Students</p>
+                    <p className="text-3xl font-bold text-sky-600">{users.filter((u) => (u.role_id === 2) || (u.role === 'STUDENT') || (u.role === 'USER')).length}</p>
                 </div>
-                <div className="bg-white rounded-xl border border-gray-100 p-4">
-                    <p className="text-3xl font-bold text-violet-600">{users.filter(u => u.is_instructor).length}</p>
-                    <p className="text-sm text-gray-500">Instructors</p>
-                </div>
-                <div className="bg-white rounded-xl border border-gray-100 p-4">
-                    <p className="text-3xl font-bold text-blue-600">{users.filter(u => u.role_id === 1).length}</p>
-                    <p className="text-sm text-gray-500">Admins</p>
+                <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-4">
+                    <p className="text-sm text-gray-500 dark:text-gray-400">Instructors</p>
+                    <p className="text-3xl font-bold text-violet-600">{users.filter((u) => (u.role_id === 3) || u.is_instructor || (u.role === 'INSTRUCTOR')).length}</p>
                 </div>
             </div>
 
-            {/* Filters */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    {/* Search */}
-                    <div className="md:col-span-2 lg:col-span-1">
-                        <div className="relative">
-                            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
-                            <input
-                                type="text"
-                                placeholder="Search users..."
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                                className="w-full pl-11 pr-4 py-2.5 border border-gray-300 text-black rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-transparent"
-                            />
-                        </div>
-                    </div>
-
-                    {/* Role Filter */}
-                    <select
-                        value={filterRole}
-                        onChange={(e) => setFilterRole(e.target.value)}
-                        className="px-4 py-2.5 border border-gray-300 text-black  rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-transparent bg-white"
-                    >
-                        <option value="">All Roles</option>
-                        <option value="1">Admin</option>
-                        <option value="2">Editor</option>
-                        <option value="3">Author</option>
-                        <option value="4">Guest</option>
-                    </select>
-
-                    {/* Instructor Filter */}
-                    <select
-                        value={filterInstructor}
-                        onChange={(e) => setFilterInstructor(e.target.value)}
-                        className="px-4 py-2.5 border border-gray-300 text-black  rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-transparent bg-white"
-                    >
-                        <option value="">All Users</option>
-                        <option value="yes">Instructors Only</option>
-                        <option value="no">Non-Instructors</option>
-                    </select>
-
-                    {/* Status Filter */}
-                    <select
-                        value={filterStatus}
-                        onChange={(e) => setFilterStatus(e.target.value)}
-                        className="px-4 py-2.5 border border-gray-300 text-black  rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-transparent bg-white"
-                    >
-                        <option value="">All Status</option>
-                        <option value="active">Active</option>
-                        <option value="inactive">Inactive</option>
-                    </select>
+            <div className="flex flex-wrap gap-4 mb-6">
+                <div className="relative flex-1 min-w-[200px]">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                    <input
+                        type="text"
+                        placeholder="Search by name or email..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-900 text-gray-900 dark:text-white"
+                    />
                 </div>
+                <select
+                    value={filterRole}
+                    onChange={(e) => setFilterRole(e.target.value)}
+                    className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-900 text-gray-900 dark:text-white"
+                >
+                    <option value="">All Roles</option>
+                    <option value="1">Admin</option>
+                    <option value="2">Student</option>
+                    <option value="3">Instructor</option>
+                </select>
+                <select
+                    value={filterStatus}
+                    onChange={(e) => setFilterStatus(e.target.value)}
+                    className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-900 text-gray-900 dark:text-white"
+                >
+                    <option value="">All Status</option>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                </select>
+                <select
+                    value={filterInstructor}
+                    onChange={(e) => setFilterInstructor(e.target.value)}
+                    className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-900 text-gray-900 dark:text-white"
+                >
+                    <option value="">All</option>
+                    <option value="yes">Instructor</option>
+                    <option value="no">Not Instructor</option>
+                </select>
             </div>
 
-            {/* Results Count */}
-            <p className="text-sm text-gray-600">
-                Showing <span className="font-semibold">{paginatedUsers.length}</span> of <span className="font-semibold">{filteredUsers.length}</span> users
-            </p>
-
-            {/* Table */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 overflow-hidden">
                 <div className="overflow-x-auto">
                     <table className="w-full">
-                        <thead className="bg-gray-50 border-b border-gray-100">
-                            <tr>
-                                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">User</th>
-                                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">Email</th>
-                                <th className="px-6 py-4 text-center text-xs font-semibold text-gray-600 uppercase">Role</th>
-                                <th className="px-6 py-4 text-center text-xs font-semibold text-gray-600 uppercase">Instructor</th>
-                                <th className="px-6 py-4 text-center text-xs font-semibold text-gray-600 uppercase">Status</th>
-                                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">Joined</th>
-                                <th className="px-6 py-4 text-center text-xs font-semibold text-gray-600 uppercase">Actions</th>
+                        <thead>
+                            <tr className="border-b border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/50">
+                                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase">User</th>
+                                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase">Contact</th>
+                                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase">Role</th>
+                                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase">Status</th>
+                                <th className="px-6 py-4 text-right text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase">Actions</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-gray-100">
+                        <tbody>
                             {paginatedUsers.map((user) => (
-                                <tr key={user.id} className="hover:bg-gray-50/50 transition-colors">
+                                <tr key={user.id} className="border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800/30">
                                     <td className="px-6 py-4">
                                         <div className="flex items-center gap-3">
                                             {user.profile_image_url ? (
-                                                <img
-                                                    src={user.profile_image_url}
-                                                    alt={`${user.first_name} ${user.last_name}`}
-                                                    className="w-10 h-10 object-cover rounded-xl border border-gray-200"
-                                                />
+                                                <img src={user.profile_image_url} alt="" className="w-10 h-10 rounded-full object-cover" />
                                             ) : (
-                                                <div className="w-10 h-10 bg-gradient-to-br from-violet-500 to-purple-600 rounded-xl flex items-center justify-center text-white font-semibold text-sm">
-                                                    {user.first_name[0]}{user.last_name[0]}
+                                                <div className="w-10 h-10 rounded-full bg-violet-100 dark:bg-violet-900/30 flex items-center justify-center text-violet-600 dark:text-violet-400 font-semibold">
+                                                    {(user.first_name?.[0] || '?') + (user.last_name?.[0] || '')}
                                                 </div>
                                             )}
                                             <div>
-                                                <p className="font-semibold text-gray-900">
-                                                    {user.first_name} {user.last_name}
-                                                </p>
-                                                <p className="text-xs text-gray-500">{user.title || 'No title'}</p>
+                                                <p className="font-medium text-gray-900 dark:text-white">{user.first_name} {user.last_name}</p>
+                                                <p className="text-sm text-gray-500 dark:text-gray-400">{user.title || '—'}</p>
                                             </div>
                                         </div>
                                     </td>
-                                    <td className="px-6 py-4 text-sm text-gray-700">{user.email}</td>
-                                    <td className="px-6 py-4 text-center">
-                                        <Badge variant={getRoleColor(user.role_id)}>{getRoleName(user.role_id)}</Badge>
-                                    </td>
-                                    <td className="px-6 py-4 text-center">
-                                        {user.is_instructor ? (
-                                            <CheckCircle className="inline text-emerald-500" size={20} />
-                                        ) : (
-                                            <XCircle className="inline text-gray-300" size={20} />
-                                        )}
-                                    </td>
-                                    <td className="px-6 py-4 text-center">
-                                        <Badge variant={user.status === 'active' ? 'success' : 'danger'}>
-                                            {user.status}
-                                        </Badge>
-                                    </td>
-                                    <td className="px-6 py-4 text-sm text-gray-600">
-                                        {user.created_at
-                                            ? new Date(user.created_at).toLocaleDateString()
-                                            : user.date_added
-                                                ? new Date(user.date_added).toLocaleDateString()
-                                                : 'N/A'
-                                        }
+                                    <td className="px-6 py-4">
+                                        <p className="text-sm text-gray-900 dark:text-white">{user.email}</p>
+                                        <p className="text-sm text-gray-500 dark:text-gray-400">{user.phone || '—'}</p>
                                     </td>
                                     <td className="px-6 py-4">
-                                        <div className="flex items-center justify-center gap-1">
-                                            <button
-                                                onClick={() => handleView(user)}
-                                                className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                                                title="View"
-                                            >
+                                        <Badge variant={getRoleColor(user)}>{getRoleName(user)}</Badge>
+                                    </td>
+                                    <td className="px-6 py-4">
+                                        <span className={`text-sm font-medium ${(user.status || 'active') === 'active' ? 'text-green-600 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'}`}>
+                                            {(user.status || 'active') === 'active' ? 'Active' : 'Inactive'}
+                                        </span>
+                                    </td>
+                                    <td className="px-6 py-4 text-right">
+                                        <div className="flex items-center justify-end gap-2">
+                                            <Button variant="ghost" size="sm" onClick={() => handleViewUser(user)} title="View">
                                                 <Eye size={18} />
-                                            </button>
-                                            <button
-                                                onClick={() => handleOpenEdit(user)}
-                                                className="p-2 text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors"
-                                                title="Edit"
-                                            >
+                                            </Button>
+                                            <Button variant="ghost" size="sm" onClick={() => handleOpenEdit(user)} title="Edit">
                                                 <Edit2 size={18} />
-                                            </button>
-                                            <button
-                                                onClick={() => {
-                                                    setSelectedUser(user);
-                                                    setDeleteModalOpen(true);
-                                                }}
-                                                className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                                                title="Delete"
-                                            >
+                                            </Button>
+                                            <Button variant="ghost" size="sm" onClick={() => { setSelectedUser(user); setDeleteModalOpen(true); }} title="Delete" className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20">
                                                 <Trash2 size={18} />
-                                            </button>
+                                            </Button>
                                         </div>
                                     </td>
                                 </tr>
@@ -476,49 +353,16 @@ const UserList = () => {
                         </tbody>
                     </table>
                 </div>
-
-                {paginatedUsers.length === 0 && (
-                    <div className="text-center py-12">
-                        <p className="text-gray-500">No users found matching your criteria.</p>
-                    </div>
+                {filteredUsers.length === 0 && (
+                    <div className="text-center py-12 text-gray-500 dark:text-gray-400">No users found.</div>
                 )}
             </div>
 
-            {/* Pagination */}
             {totalPages > 1 && (
-                <div className="flex items-center justify-center gap-2">
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
-                        disabled={currentPage === 1}
-                    >
-                        Previous
-                    </Button>
-
-                    <div className="flex gap-1">
-                        {[...Array(totalPages)].map((_, i) => (
-                            <button
-                                key={i}
-                                onClick={() => setCurrentPage(i + 1)}
-                                className={`px-3.5 py-1.5 rounded-lg font-medium transition-all ${currentPage === i + 1
-                                    ? 'bg-gradient-to-r from-violet-600 to-purple-600 text-white'
-                                    : 'bg-white border border-gray-200 text-gray-700 hover:bg-gray-50'
-                                    }`}
-                            >
-                                {i + 1}
-                            </button>
-                        ))}
-                    </div>
-
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
-                        disabled={currentPage === totalPages}
-                    >
-                        Next
-                    </Button>
+                <div className="mt-6 flex justify-center gap-2">
+                    <Button variant="outline" onClick={() => setCurrentPage((p) => Math.max(1, p - 1))} disabled={currentPage <= 1}>Previous</Button>
+                    <span className="px-4 py-2 text-gray-600 dark:text-gray-400">Page {currentPage} of {totalPages}</span>
+                    <Button variant="outline" onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))} disabled={currentPage >= totalPages}>Next</Button>
                 </div>
             )}
 
@@ -537,319 +381,98 @@ const UserList = () => {
             >
                 <div className="space-y-5">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <Input
-                            label="First Name"
-                            value={formData.first_name}
-                            onChange={(e) => setFormData({ ...formData, first_name: e.target.value })}
-                            placeholder="Enter first name"
-                            required
-                            error={errors.first_name}
-                        />
-                        <Input
-                            label="Last Name"
-                            value={formData.last_name}
-                            onChange={(e) => setFormData({ ...formData, last_name: e.target.value })}
-                            placeholder="Enter last name"
-                            required
-                            error={errors.last_name}
-                        />
+                        <Input label="First Name" value={formData.first_name} onChange={(e) => setFormData({ ...formData, first_name: e.target.value })} placeholder="Enter first name" required error={errors.first_name} />
+                        <Input label="Last Name" value={formData.last_name} onChange={(e) => setFormData({ ...formData, last_name: e.target.value })} placeholder="Enter last name" required error={errors.last_name} />
                     </div>
-
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <Input
-                            label="Email"
-                            type="email"
-                            value={formData.email}
-                            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                            placeholder="Enter email address"
-                            required
-                            error={errors.email}
-                        />
-                        <Input
-                            label="Phone"
-                            value={formData.phone}
-                            onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                            placeholder="Enter phone number"
-                        />
+                        <Input label="Email" type="email" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} placeholder="Enter email" required error={errors.email} />
+                        <Input label="Phone" value={formData.phone} onChange={(e) => setFormData({ ...formData, phone: e.target.value })} placeholder="Enter phone" />
                     </div>
-
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <Input
-                            label="Title / Position"
-                            value={formData.title}
-                            onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                            placeholder="Senior Developer, Content Writer, etc."
-                        />
+                        <Input label="Title" value={formData.title} onChange={(e) => setFormData({ ...formData, title: e.target.value })} placeholder="e.g. Senior Developer" />
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
-                            <select
-                                value={formData.status}
-                                onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                                className="w-full px-4 py-2 border text-black border-gray-300 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent"
-                            >
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Status</label>
+                            <select value={formData.status} onChange={(e) => setFormData({ ...formData, status: e.target.value })} className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl text-black dark:text-white bg-white dark:bg-gray-800">
                                 <option value="active">Active</option>
                                 <option value="inactive">Inactive</option>
                             </select>
                         </div>
                     </div>
-
-                    <Input
-                        label="Address"
-                        value={formData.address}
-                        onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                        placeholder="City, Country"
-                    />
-
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Profile Image</label>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Role</label>
+                        <select value={formData.role} onChange={(e) => setFormData({ ...formData, role: e.target.value })} className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl text-black dark:text-white bg-white dark:bg-gray-800">
+                            <option value="STUDENT">Student</option>
+                            <option value="ADMIN">Admin</option>
+                            <option value="INSTRUCTOR">Instructor</option>
+                        </select>
+                    </div>
+                    <Input label="Address" value={formData.address} onChange={(e) => setFormData({ ...formData, address: e.target.value })} placeholder="City, Country" />
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Profile Image</label>
                         <div
-                            onDragOver={(e) => {
-                                e.preventDefault();
-                                e.currentTarget.classList.add('bg-violet-50', 'border-violet-500');
-                            }}
-                            onDragLeave={(e) => {
-                                e.currentTarget.classList.remove('bg-violet-50', 'border-violet-500');
-                            }}
-                            onDrop={(e) => {
-                                e.preventDefault();
-                                e.currentTarget.classList.remove('bg-violet-50', 'border-violet-500');
-                                const files = e.dataTransfer.files;
-                                if (files.length > 0) {
-                                    handleImageUpload(files[0]);
-                                }
-                            }}
-                            className="relative border-2 border-dashed border-gray-300 rounded-lg p-8 text-center cursor-pointer transition-colors hover:border-violet-500 hover:bg-violet-50"
+                            onDragOver={(e) => { e.preventDefault(); e.currentTarget.classList.add('border-violet-500', 'bg-violet-50'); }}
+                            onDragLeave={(e) => { e.currentTarget.classList.remove('border-violet-500', 'bg-violet-50'); }}
+                            onDrop={(e) => { e.preventDefault(); e.currentTarget.classList.remove('border-violet-500', 'bg-violet-50'); if (e.dataTransfer.files?.[0]) handleImageUpload(e.dataTransfer.files[0]); }}
+                            className="relative border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl p-6 text-center cursor-pointer hover:border-violet-500"
                         >
-                            <input
-                                type="file"
-                                accept="image/*"
-                                onChange={(e) => {
-                                    if (e.target.files?.[0]) {
-                                        handleImageUpload(e.target.files[0]);
-                                    }
-                                }}
-                                className="absolute inset-0 w-full h-full cursor-pointer opacity-0"
-                            />
-
+                            <input type="file" accept="image/*" className="absolute inset-0 w-full h-full cursor-pointer opacity-0" onChange={(e) => e.target.files?.[0] && handleImageUpload(e.target.files[0])} />
                             {imagePreview ? (
-                                <div className="space-y-3">
-                                    <div className="flex justify-center">
-                                        <img
-                                            src={imagePreview}
-                                            alt="Preview"
-                                            className="h-32 w-32 object-cover rounded-lg border border-gray-200"
-                                        />
-                                    </div>
-                                    <div className="text-sm text-gray-600">
-                                        <p className="font-medium">Image uploaded successfully</p>
-                                        <p className="text-xs text-gray-500 mt-1">Drag to replace or click to choose</p>
-                                    </div>
-                                </div>
+                                <div><img src={imagePreview} alt="Preview" className="h-24 w-24 object-cover rounded-lg mx-auto" /><p className="text-sm text-gray-500 mt-2">Click or drag to replace</p></div>
                             ) : (
-                                <div className="space-y-2">
-                                    <svg className="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
-                                        <path d="M28 8H12a4 4 0 00-4 4v20a4 4 0 004 4h24a4 4 0 004-4V20m-14-8l6 6m-6-6v12" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                        <circle cx="20" cy="24" r="3" strokeWidth="2" />
-                                    </svg>
-                                    <div className="text-sm text-gray-600">
-                                        <p className="font-medium">Drag and drop your image here</p>
-                                        <p className="text-xs text-gray-500">or click to select (max 5MB)</p>
-                                    </div>
-                                </div>
+                                <div><p className="text-gray-500">Drag and drop or click to upload (max 5MB)</p></div>
                             )}
-
-                            {imageUploading && (
-                                <div className="absolute inset-0 bg-white bg-opacity-75 rounded-lg flex items-center justify-center">
-                                    <div className="text-center">
-                                        <div className="animate-spin inline-block w-8 h-8 border-4 border-violet-200 border-t-violet-600 rounded-full"></div>
-                                        <p className="text-sm text-gray-600 mt-2">Uploading...</p>
-                                    </div>
-                                </div>
-                            )}
+                            {imageUploading && <div className="absolute inset-0 bg-white/80 dark:bg-gray-900/80 flex items-center justify-center rounded-xl"><span className="text-sm">Uploading...</span></div>}
                         </div>
                     </div>
-
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Biography</label>
-                        <textarea
-                            value={formData.biography}
-                            onChange={(e) => setFormData({ ...formData, biography: e.target.value })}
-                            placeholder="Enter user biography or professional background"
-                            rows="4"
-                            className="w-full px-4 py-2 border text-black border-gray-300 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent resize-none"
-                        />
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Biography</label>
+                        <textarea value={formData.biography} onChange={(e) => setFormData({ ...formData, biography: e.target.value })} placeholder="Brief bio" rows={3} className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl text-black dark:text-white bg-white dark:bg-gray-800 resize-none" />
                     </div>
-
-                    <Input
-                        label="LinkedIn URL"
-                        value={formData.linkedin_url}
-                        onChange={(e) => setFormData({ ...formData, linkedin_url: e.target.value })}
-                        placeholder="https://linkedin.com/in/username"
-                    />
-
-                    <Input
-                        label="GitHub URL"
-                        value={formData.github_url}
-                        onChange={(e) => setFormData({ ...formData, github_url: e.target.value })}
-                        placeholder="https://github.com/username"
-                    />
-
-                    <Input
-                        label="Password"
-                        type="password"
-                        value={formData.password}
-                        onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                        placeholder={editMode ? "Leave blank to keep current password" : "Enter password"}
-                    />
-
-                    <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-xl">
-                        <input
-                            type="checkbox"
-                            id="is_instructor"
-                            checked={formData.is_instructor}
-                            onChange={(e) => setFormData({ ...formData, is_instructor: e.target.checked })}
-                            className="w-4 h-4 text-violet-600 focus:ring-violet-500 rounded"
-                        />
-                        <label htmlFor="is_instructor" className="text-sm text-gray-700">
-                            <span className="font-medium">Mark as Instructor</span>
-                            <span className="block text-gray-500">Enable if this user can create and manage courses</span>
-                        </label>
+                    <Input label="LinkedIn URL" value={formData.linkedin_url} onChange={(e) => setFormData({ ...formData, linkedin_url: e.target.value })} placeholder="https://linkedin.com/in/username" />
+                    <Input label="GitHub URL" value={formData.github_url} onChange={(e) => setFormData({ ...formData, github_url: e.target.value })} placeholder="https://github.com/username" />
+                    <Input label="Password" type="password" value={formData.password} onChange={(e) => setFormData({ ...formData, password: e.target.value })} placeholder={editMode ? 'Leave blank to keep current' : 'Enter password'} />
+                    <div className="flex items-center gap-3 p-4 bg-gray-50 dark:bg-gray-800 rounded-xl">
+                        <input type="checkbox" id="is_instructor" checked={formData.is_instructor} onChange={(e) => setFormData({ ...formData, is_instructor: e.target.checked })} className="w-4 h-4 rounded text-violet-600" />
+                        <label htmlFor="is_instructor" className="text-sm font-medium text-gray-700 dark:text-gray-300">Mark as Instructor</label>
                     </div>
                 </div>
             </Modal>
 
             {/* Delete Modal */}
-            <Modal
-                isOpen={deleteModalOpen}
-                onClose={() => setDeleteModalOpen(false)}
-                title="Delete User"
-                footer={
-                    <>
-                        <Button variant="outline" onClick={() => setDeleteModalOpen(false)}>Cancel</Button>
-                        <Button variant="danger" onClick={handleDelete}>Delete</Button>
-                    </>
-                }
-            >
-                <p className="text-gray-700">
-                    Are you sure you want to delete <span className="font-semibold">{selectedUser?.first_name} {selectedUser?.last_name}</span>?
-                    This action cannot be undone.
-                </p>
+            <Modal isOpen={deleteModalOpen} onClose={() => setDeleteModalOpen(false)} title="Delete User" footer={<><Button variant="outline" onClick={() => setDeleteModalOpen(false)}>Cancel</Button><Button variant="danger" onClick={handleDelete}>Delete</Button></>}>
+                <p className="text-gray-600 dark:text-gray-400">Are you sure you want to delete <strong>{selectedUser?.first_name} {selectedUser?.last_name}</strong>? This action cannot be undone.</p>
             </Modal>
 
             {/* View User Modal */}
-            <Modal
-                isOpen={viewModalOpen}
-                onClose={() => setViewModalOpen(false)}
-                title="User Details"
-                size="lg"
-            >
+            <Modal isOpen={viewModalOpen} onClose={() => setViewModalOpen(false)} title="User Details" size="lg" footer={<Button variant="outline" onClick={() => setViewModalOpen(false)}>Close</Button>}>
                 {viewUser && (
                     <div className="space-y-4">
-                        <div className="flex items-center gap-4 pb-4 border-b">
+                        <div className="flex items-center gap-4">
                             {viewUser.profile_image_url ? (
-                                <img
-                                    src={viewUser.profile_image_url}
-                                    alt={`${viewUser.first_name} ${viewUser.last_name}`}
-                                    className="w-20 h-20 object-cover rounded-2xl border-2 border-gray-200"
-                                />
+                                <img src={viewUser.profile_image_url} alt="" className="w-20 h-20 rounded-full object-cover" />
                             ) : (
-                                <div className="w-20 h-20 bg-gradient-to-br from-violet-500 to-purple-600 rounded-2xl flex items-center justify-center text-white font-bold text-2xl">
-                                    {viewUser.first_name[0]}{viewUser.last_name[0]}
+                                <div className="w-20 h-20 rounded-full bg-violet-100 dark:bg-violet-900/30 flex items-center justify-center text-violet-600 text-xl font-semibold">
+                                    {(viewUser.first_name?.[0] || '') + (viewUser.last_name?.[0] || '')}
                                 </div>
                             )}
                             <div>
-                                <h3 className="text-xl font-bold text-gray-900">{viewUser.first_name} {viewUser.last_name}</h3>
-                                <p className="text-gray-600">{viewUser.title || 'No title'}</p>
-                                <div className="flex gap-2 mt-2">
-                                    <Badge variant={getRoleColor(viewUser.role_id)}>{getRoleName(viewUser.role_id)}</Badge>
-                                    <Badge variant={viewUser.status === 'active' ? 'success' : 'danger'}>{viewUser.status}</Badge>
-                                </div>
+                                <h3 className="text-xl font-bold text-gray-900 dark:text-white">{viewUser.first_name} {viewUser.last_name}</h3>
+                                <p className="text-gray-500 dark:text-gray-400">{viewUser.title || '—'}</p>
+                                <Badge variant={getRoleColor(viewUser)}>{getRoleName(viewUser)}</Badge>
                             </div>
                         </div>
-
-                        <div className="grid grid-cols-2 gap-4">
-                            <div>
-                                <label className="block text-sm font-semibold text-gray-700 mb-1">Email</label>
-                                <p className="text-gray-900">{viewUser.email}</p>
-                            </div>
-                            <div>
-                                <label className="block text-sm font-semibold text-gray-700 mb-1">Phone</label>
-                                <p className="text-gray-900">{viewUser.phone || 'N/A'}</p>
-                            </div>
-                            <div>
-                                <label className="block text-sm font-semibold text-gray-700 mb-1">Instructor</label>
-                                <p className="text-gray-900">{viewUser.is_instructor ? 'Yes' : 'No'}</p>
-                            </div>
-                            <div>
-                                <label className="block text-sm font-semibold text-gray-700 mb-1">Address</label>
-                                <p className="text-gray-900">{viewUser.address || 'N/A'}</p>
-                            </div>
-                        </div>
-
-                        {viewUser.biography && (
-                            <div>
-                                <label className="block text-sm font-semibold text-gray-700 mb-1">Biography</label>
-                                <p className="text-gray-900">{viewUser.biography}</p>
-                            </div>
-                        )}
-
-                        {viewUser.skills && viewUser.skills.length > 0 && (
-                            <div>
-                                <label className="block text-sm font-semibold text-gray-700 mb-2">Skills</label>
-                                <div className="flex flex-wrap gap-2">
-                                    {viewUser.skills.map((skill, i) => (
-                                        <Badge key={i} variant="info">{skill}</Badge>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
-
-                        {/* {viewUser.profile_image_url && (
-                            <div>
-                                <label className="block text-sm font-semibold text-gray-700 mb-2">Profile Image</label>
-                                <img
-                                    src={viewUser.profile_image_url}
-                                    alt={`${viewUser.first_name} ${viewUser.last_name}`}
-                                    className="w-full max-w-sm h-auto rounded-lg border border-gray-200 object-cover"
-                                />
-                            </div>
-                        )} */}
-
-                        <div className="grid grid-cols-2 gap-4 pt-4 border-t">
-                            <div>
-                                <label className="block text-sm font-semibold text-gray-700 mb-1">Date Added</label>
-                                <p className="text-sm text-gray-600">
-                                    {viewUser.created_at
-                                        ? new Date(viewUser.created_at).toLocaleString()
-                                        : viewUser.date_added
-                                            ? new Date(viewUser.date_added).toLocaleString()
-                                            : 'N/A'
-                                    }
-                                </p>
-                            </div>
-                            <div>
-                                <label className="block text-sm font-semibold text-gray-700 mb-1">Last Modified</label>
-                                <p className="text-sm text-gray-600">
-                                    {viewUser.updated_at
-                                        ? new Date(viewUser.updated_at).toLocaleString()
-                                        : viewUser.last_modified
-                                            ? new Date(viewUser.last_modified).toLocaleString()
-                                            : 'N/A'
-                                    }
-                                </p>
-                            </div>
-                        </div>
+                        <dl className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+                            <div><dt className="text-gray-500 dark:text-gray-400">Email</dt><dd className="font-medium text-gray-900 dark:text-white">{viewUser.email}</dd></div>
+                            <div><dt className="text-gray-500 dark:text-gray-400">Phone</dt><dd className="font-medium text-gray-900 dark:text-white">{viewUser.phone || '—'}</dd></div>
+                            <div><dt className="text-gray-500 dark:text-gray-400">Status</dt><dd className="font-medium text-gray-900 dark:text-white">{viewUser.status || 'active'}</dd></div>
+                            {viewUser.address && <div className="sm:col-span-2"><dt className="text-gray-500 dark:text-gray-400">Address</dt><dd className="font-medium text-gray-900 dark:text-white">{viewUser.address}</dd></div>}
+                            {viewUser.biography && <div className="sm:col-span-2"><dt className="text-gray-500 dark:text-gray-400">Biography</dt><dd className="text-gray-900 dark:text-white">{viewUser.biography}</dd></div>}
+                        </dl>
                     </div>
                 )}
             </Modal>
 
-            {/* Toast */}
-            <Toast
-                isVisible={toast.isVisible}
-                message={toast.message}
-                type={toast.type}
-                onClose={() => setToast({ ...toast, isVisible: false })}
-            />
+            <Toast isVisible={toast.isVisible} message={toast.message} type={toast.type} onClose={() => setToast({ ...toast, isVisible: false })} />
         </div>
     );
 };

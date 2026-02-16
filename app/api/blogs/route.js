@@ -1,11 +1,13 @@
 import { NextResponse } from 'next/server';
-import { addBlog, getAllBlogs, getBlogById, updateBlog, deleteBlog } from '@/lib/blogStorage';
+import { addBlog, getAllBlogs, getBlogById, updateBlog, deleteBlog, getFilteredBlogs } from '@/lib/blogStorage';
 
 const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type',
 };
+
+const BACKEND_URL = process.env.BACKEND_API_URL || process.env.NEXT_PUBLIC_BACKEND_API_URL || 'https://darkred-mouse-801836.hostingersite.com';
 
 // Handle CORS preflight requests
 export async function OPTIONS() {
@@ -63,6 +65,8 @@ export async function POST(request) {
             reading_time: body.reading_time || '5 min read',
             thumbnail_url: body.thumbnail_url || '',
             banner_url: body.banner_url || '',
+            image_url: body.image_url || '',
+            video_url: body.video_url || '',
             image_alt_text: body.image_alt_text || title,
             image_caption: body.image_caption || '',
 
@@ -123,7 +127,7 @@ export async function POST(request) {
     }
 }
 
-// GET /api/blogs - Get all blog posts
+// GET /api/blogs - Get all blog posts (try backend first, then local storage)
 export async function GET(request) {
     try {
         const { searchParams } = new URL(request.url);
@@ -132,37 +136,42 @@ export async function GET(request) {
         const limit = parseInt(searchParams.get('limit') || '10');
         const page = parseInt(searchParams.get('page') || '1');
 
-        // TODO: Fetch from database with filters
-        // Example:
-        // const blogs = await db.blogs.findMany({
-        //     where: {
-        //         ...(status && { status }),
-        //         ...(category_id && { category_id: parseInt(category_id) })
-        //     },
-        //     take: limit,
-        //     skip: (page - 1) * limit,
-        //     orderBy: { created_at: 'desc' }
-        // });
+        try {
+            const q = new URLSearchParams({ page: String(page), limit: String(limit) });
+            if (status) q.set('status', status);
+            if (category_id) q.set('category_id', category_id);
+            const res = await fetch(`${BACKEND_URL}/api/blogs?${q.toString()}`, { headers: { 'Content-Type': 'application/json' } });
+            if (res.ok) {
+                const json = await res.json();
+                return NextResponse.json(json, { status: 200, headers: corsHeaders });
+            }
+        } catch (err) {
+            console.warn('Blogs GET: backend unreachable, using local storage:', err.message);
+        }
+
+        const filterOptions = {};
+        if (status) filterOptions.status = status;
+        if (category_id) filterOptions.category_id = category_id;
+        let blogs = await getFilteredBlogs(filterOptions);
+        blogs = blogs.sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0));
+        const total = blogs.length;
+        const start = (page - 1) * limit;
+        const data = blogs.slice(start, start + limit);
 
         return NextResponse.json(
             {
                 success: true,
                 message: 'Blogs fetched successfully',
-                data: [],
-                pagination: {
-                    page,
-                    limit,
-                    total: 0,
-                    totalPages: 0
-                }
+                data,
+                pagination: { page, limit, total, totalPages: Math.ceil(total / limit) }
             },
-            { status: 200 }
+            { status: 200, headers: corsHeaders }
         );
     } catch (error) {
         console.error('Error fetching blogs:', error);
         return NextResponse.json(
             { error: 'Internal server error', details: error.message },
-            { status: 500 }
+            { status: 500, headers: corsHeaders }
         );
     }
 }

@@ -30,32 +30,28 @@ export default function Batches() {
     const handleRegister = async (e) => {
         e.preventDefault();
         setIsSubmitting(true);
-
-        // Simulate registration process
         try {
-            // Here you would normally send the data to an API
-            const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3031';
-            await fetch(`${apiUrl}/api/enroll`, {
+            const base = typeof window !== 'undefined' ? window.location.origin : '';
+            const response = await fetch(`${base}/api/batches/enroll`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ ...formData, batch_id: selectedBatch?.id })
-            }).catch(err => console.log("API not reachable, continuing with brochure download"));
-
-            // After registration, trigger brochure download
-            const brochureUrl = '/assets/brochure.pdf'; // Path to your brochure
-            const link = document.createElement('a');
-            link.href = brochureUrl;
-            link.download = 'CyberWhisper_Brochure.pdf';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-
-            // Reset and close
-            alert('Registration successful! Your brochure is downloading.');
+                body: JSON.stringify({
+                    name: formData.name,
+                    email: formData.email,
+                    phone: formData.phone,
+                    batch_id: selectedBatch?.id,
+                }),
+            });
+            const data = await response.json().catch(() => ({}));
+            if (!response.ok) {
+                throw new Error(data.message || data.error || 'Registration failed');
+            }
+            alert(data.message || 'Registration successful! We will contact you soon.');
             setIsModalOpen(false);
             setFormData({ name: '', email: '', phone: '' });
         } catch (err) {
-            console.error("Registration failed", err);
+            console.error('Registration failed', err);
+            alert(err.message || 'Registration failed. Please try again.');
         } finally {
             setIsSubmitting(false);
         }
@@ -68,9 +64,11 @@ export default function Batches() {
     const fetchBatches = async () => {
         try {
             setLoading(true);
-            console.log('Fetching batches from: /api/batches');
+            const apiBase = process.env.NEXT_PUBLIC_APP_URL || 'https://darkred-mouse-801836.hostingersite.com';
+            const apiUrl = `${apiBase}/api/batches`;
+            console.log('Fetching batches from:', apiUrl);
 
-            const response = await fetch('/api/batches');
+            const response = await fetch(apiUrl);
 
             if (!response.ok) {
                 throw new Error('Failed to fetch batches');
@@ -391,7 +389,7 @@ export default function Batches() {
                                     </div>
                                     <h3 className="text-2xl font-bold text-gray-900 dark:text-white">Enroll Now</h3>
                                     <p className="text-gray-500 dark:text-gray-400 mt-2 text-sm">
-                                        Register to enroll in <span className="text-purple-600 dark:text-purple-400 font-semibold">{selectedBatch?.program_name}</span> and download the brochure.
+                                        Register to enroll in <span className="text-purple-600 dark:text-purple-400 font-semibold">{selectedBatch?.program_name}</span>
                                     </p>
                                 </div>
 
@@ -444,7 +442,7 @@ export default function Batches() {
                                             </>
                                         ) : (
                                             <>
-                                                <span>Register & Download Brochure</span>
+                                                <span>Register</span>
                                                 <ArrowRight className="w-5 h-5" />
                                             </>
                                         )}

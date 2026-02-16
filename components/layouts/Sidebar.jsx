@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import {
     LayoutDashboard,
@@ -15,18 +16,27 @@ import {
     X,
     ChevronDown,
     Image as ImageIcon,
-    Shield,
     Calendar,
     Mail,
-    LogOut
+    LogOut,
+    BookOpen,
+    ClipboardList
 } from 'lucide-react';
+
+const ADMIN_LOGO = '/assets/cw_logo_sample_2.png';
 
 const Sidebar = ({ isOpen, setIsOpen }) => {
     const pathname = usePathname();
     const [blogMenuOpen, setBlogMenuOpen] = useState(true);
     const [batchMenuOpen, setBatchMenuOpen] = useState(true);
+    const [courseMenuOpen, setCourseMenuOpen] = useState(true);
+    const [role, setRole] = useState(null);
 
-    const menuItems = [
+    useEffect(() => {
+        setRole(typeof window !== 'undefined' ? localStorage.getItem('adminRole') : null);
+    }, [pathname]);
+
+    const allMenuItems = [
         /* {
              name: 'Dashboard',
              icon: LayoutDashboard,
@@ -51,6 +61,15 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             ]
         },
         {
+            name: 'Courses',
+            icon: BookOpen,
+            hasSubmenu: true,
+            submenu: [
+                { name: 'All Courses', icon: List, path: '/admin/courses' },
+                { name: 'Add Course', icon: PlusCircle, path: '/admin/courses/add' }
+            ]
+        },
+        {
             name: 'Categories',
             icon: FolderOpen,
             path: '/admin/categories'
@@ -71,6 +90,21 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             path: '/admin/newsletter'
         },
         {
+            name: 'Brochures',
+            icon: FileText,
+            path: '/admin/brochures'
+        },
+        {
+            name: 'Deploy Team Requests',
+            icon: ClipboardList,
+            path: '/admin/deploy-team-training'
+        },
+        {
+            name: 'Course Enrollments',
+            icon: Users,
+            path: '/admin/course-enrollments'
+        },
+        {
             name: 'Gallery',
             icon: ImageIcon,
             path: '/admin/gallery'
@@ -87,12 +121,30 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
         }*/
     ];
 
+    // Role-based menu: Student = Blogs + Batches (view only); Instructor = Blogs + Batches (full); Admin = full
+    const menuItems = (() => {
+        if (role === 'STUDENT') {
+            const blogs = allMenuItems.find((item) => item.name === 'Blogs');
+            const batches = allMenuItems.find((item) => item.name === 'Batches');
+            const batchesViewOnly = batches && batches.submenu
+                ? { ...batches, submenu: batches.submenu.filter((s) => s.path === '/admin/batches') }
+                : batches;
+            return [blogs, batchesViewOnly].filter(Boolean);
+        }
+        if (role === 'INSTRUCTOR') {
+            return allMenuItems.filter((item) => item.name === 'Blogs' || item.name === 'Batches' || item.name === 'Courses' || item.name === 'Course Enrollments');
+        }
+        return allMenuItems;
+    })();
+
     const isActive = (path) => pathname === path;
     const isParentActive = (submenu) => submenu?.some(item => pathname === item.path);
 
     const router = useRouter();
     const handleLogout = () => {
         localStorage.removeItem('adminAuth');
+        localStorage.removeItem('adminToken');
+        localStorage.removeItem('adminRole');
         router.push('/admin/login');
     };
 
@@ -108,33 +160,34 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
 
             {/* Sidebar */}
             <aside
-                className={`fixed top-0 left-0 h-full bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 text-white w-72 transform transition-transform duration-300 ease-in-out z-50 shadow-2xl ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
+                className={`fixed top-0 left-0 h-full flex flex-col bg-white text-gray-900 w-72 transform transition-transform duration-300 ease-in-out z-50 shadow-2xl border-r border-gray-200 ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
                     }`}
             >
                 {/* Logo Section */}
-                <div className="h-20 flex items-center justify-between px-6 border-b border-slate-700/50 bg-slate-900/50">
+                <div className="h-20 shrink-0 flex items-center justify-center px-6 border-b border-gray-200 bg-white">
                     <Link href="/admin/blogs" className="flex items-center gap-3 group">
-                        <div className="w-10 h-10 bg-gradient-to-br from-violet-500 via-purple-500 to-fuchsia-500 rounded-xl flex items-center justify-center transform group-hover:scale-110 group-hover:rotate-3 transition-all shadow-lg shadow-purple-500/30">
-                            <Shield className="w-5 h-5 text-white" />
-                        </div>
-                        <div>
-                            <span className="font-bold text-xl bg-gradient-to-r from-violet-400 via-purple-400 to-fuchsia-400 bg-clip-text text-transparent">
-                                CyberWhisper
-                            </span>
-                            <p className="text-[10px] text-slate-400 font-medium tracking-wider uppercase">Admin Panel</p>
+                        <div className="relative h-12 w-[140px] shrink-0">
+                            <Image
+                                src={ADMIN_LOGO}
+                                alt="CyberWhisper"
+                                fill
+                                className="object-contain object-left transition-transform group-hover:scale-105"
+                                sizes="140px"
+                                priority
+                            />
                         </div>
                     </Link>
                     <button
                         onClick={() => setIsOpen(false)}
-                        className="lg:hidden p-2 text-slate-400 hover:text-white hover:bg-slate-700 rounded-lg transition-all"
+                        className="lg:hidden p-2 text-gray-500 hover:text-gray-900 hover:bg-gray-200 rounded-lg transition-all"
                     >
                         <X size={20} />
                     </button>
                 </div>
 
-                {/* Navigation */}
-                <nav className="flex-1 overflow-y-auto py-6 px-4 scrollbar-hide">
-                    <p className="px-3 mb-3 text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Main Menu</p>
+                {/* Navigation - scrollable when menu is long */}
+                <nav className="flex-1 min-h-0 overflow-y-auto py-6 px-4 scrollbar-hide">
+                    <p className="px-3 mb-3 text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Main Menu</p>
                     <ul className="space-y-1">
                         {menuItems.map((item) => (
                             <li key={item.name}>
@@ -144,16 +197,17 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                                             onClick={() => {
                                                 if (item.name === 'Blogs') setBlogMenuOpen(!blogMenuOpen);
                                                 if (item.name === 'Batches') setBatchMenuOpen(!batchMenuOpen);
+                                                if (item.name === 'Courses') setCourseMenuOpen(!courseMenuOpen);
                                             }}
                                             className={`w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all group ${isParentActive(item.submenu)
-                                                ? 'bg-gradient-to-r from-violet-600/20 to-purple-600/20 text-white'
-                                                : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
+                                                ? 'bg-violet-50 text-violet-700'
+                                                : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
                                                 }`}
                                         >
                                             <div className="flex items-center gap-3">
                                                 <div className={`p-2 rounded-lg ${isParentActive(item.submenu)
-                                                    ? 'bg-gradient-to-br from-violet-500 to-purple-600 shadow-lg shadow-purple-500/30'
-                                                    : 'bg-slate-700/50 group-hover:bg-slate-600'
+                                                    ? 'bg-gradient-to-br from-violet-500 to-purple-600 text-white shadow-lg shadow-purple-500/30'
+                                                    : 'bg-gray-200 text-gray-600 group-hover:bg-gray-300'
                                                     } transition-all`}>
                                                     <item.icon size={18} />
                                                 </div>
@@ -161,24 +215,26 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                                             </div>
                                             <ChevronDown
                                                 size={16}
-                                                className={`transition-transform text-slate-400 ${(item.name === 'Blogs' && blogMenuOpen) ||
-                                                    (item.name === 'Batches' && batchMenuOpen)
+                                                className={`transition-transform text-gray-500 ${(item.name === 'Blogs' && blogMenuOpen) ||
+                                                    (item.name === 'Batches' && batchMenuOpen) ||
+                                                    (item.name === 'Courses' && courseMenuOpen)
                                                     ? 'rotate-180' : ''
                                                     }`}
                                             />
                                         </button>
                                         <div className={`overflow-hidden transition-all duration-300 ${(item.name === 'Blogs' && blogMenuOpen) ||
-                                            (item.name === 'Batches' && batchMenuOpen)
+                                            (item.name === 'Batches' && batchMenuOpen) ||
+                                            (item.name === 'Courses' && courseMenuOpen)
                                             ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0'
                                             }`}>
-                                            <ul className="mt-2 ml-4 pl-4 border-l border-slate-700 space-y-1">
+                                            <ul className="mt-2 ml-4 pl-4 border-l border-gray-200 space-y-1">
                                                 {item.submenu.map((subItem) => (
                                                     <li key={subItem.name}>
                                                         <Link
                                                             href={subItem.path}
                                                             className={`flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all ${isActive(subItem.path)
                                                                 ? 'bg-gradient-to-r from-violet-600 to-purple-600 text-white shadow-lg shadow-purple-500/20'
-                                                                : 'text-slate-400 hover:bg-slate-700/50 hover:text-white'
+                                                                : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
                                                                 }`}
                                                         >
                                                             <subItem.icon size={16} />
@@ -194,12 +250,12 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                                         href={item.path}
                                         className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all group ${isActive(item.path)
                                             ? 'bg-gradient-to-r from-violet-600 to-purple-600 text-white shadow-lg shadow-purple-500/20'
-                                            : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
+                                            : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
                                             }`}
                                     >
                                         <div className={`p-2 rounded-lg ${isActive(item.path)
                                             ? 'bg-white/20'
-                                            : 'bg-slate-700/50 group-hover:bg-slate-600'
+                                            : 'bg-gray-200 text-gray-600 group-hover:bg-gray-300'
                                             } transition-all`}>
                                             <item.icon size={18} />
                                         </div>
@@ -212,18 +268,14 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                 </nav>
 
                 {/* User Profile Section */}
-                <div className="p-4 border-t border-slate-700/50 bg-slate-900/30">
-                    <div className="flex items-center gap-3 px-3 py-3 rounded-xl bg-gradient-to-r from-slate-800/80 to-slate-700/50 transition-all group">
-                        <div className="w-11 h-11 bg-gradient-to-br from-violet-500 via-purple-500 to-fuchsia-500 rounded-xl flex items-center justify-center shadow-lg shadow-purple-500/20 transition-all">
-                            <span className="text-white font-bold text-sm">AD</span>
-                        </div>
-                        <div className="flex-1 min-w-0">
-                            <p className="text-sm font-semibold text-white truncate">Admin User</p>
-                            <p className="text-xs text-slate-400 truncate">admin@cyberwhisper.com</p>
+                <div className="shrink-0 p-4 border-t border-gray-200 bg-gray-50">
+                    <div className="flex items-center gap-3 px-3 py-3 rounded-xl bg-gray-100 transition-all group">
+                        <div className="flex-1 items-center justify-center min-w-0">
+                            <p className="text-sm font-semibold text-gray-900 truncate">Logout</p>
                         </div>
                         <button
                             onClick={handleLogout}
-                            className="p-2 text-slate-400 hover:text-white hover:bg-slate-700 rounded-lg transition-all"
+                            className="p-2 text-gray-500 hover:text-gray-900 hover:bg-gray-200 rounded-lg transition-all"
                             title="Logout"
                         >
                             <LogOut size={18} />

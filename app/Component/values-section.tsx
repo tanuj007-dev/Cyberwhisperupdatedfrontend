@@ -54,16 +54,16 @@ export function ValuesSection() {
   }
 
   return (
-    <section className="py-24 relative">
+    <section className="py-12 md:py-2 relative">
       <div className="w-full max-w-7xl mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center mb-8 md:mb-16"
         >
-          <h2 className="text-3xl md:text-5xl font-bold mb-4 text-gray-900 dark:text-white">Our Core Values</h2>
+          <h2 className="text-2xl md:text-5xl font-bold mb-2 md:mb-4  text-gray-900 dark:text-white">Our Core Values</h2>
           <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
             The principles that guide how we build security programs and train defenders.
           </p>
@@ -74,23 +74,23 @@ export function ValuesSection() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-50px" }}
-          className="grid md:grid-cols-2 lg:grid-cols-4 gap-6"
+          className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6"
         >
           {values.map((value, index) => (
             <motion.div
               key={index}
               variants={itemVariants}
               whileHover={{ y: -5, transition: { duration: 0.2 } }}
-              className="glass-panel p-8 rounded-2xl group cursor-default bg-white border border-gray-200 dark:bg-white/5 dark:border-white/10 shadow-sm dark:shadow-none"
+              className="glass-panel p-5 md:p-8 rounded-2xl group cursor-default bg-white border border-gray-200 dark:bg-white/5 dark:border-white/10 shadow-sm dark:shadow-none"
             >
               <div
-                className={`p-3 rounded-xl bg-gray-100 dark:bg-white/5 w-fit mb-6 transition-transform duration-300 ${value.color}`}
+                className={`p-3 rounded-xl bg-gray-100 dark:bg-white/5 w-fit mb-3 md:mb-6 transition-transform duration-300 ${value.color}`}
               >
                 <value.icon className="w-8 h-8" />
               </div>
               <h3 className="text-xl font-semibold mb-3 text-gray-900 dark:text-white">{value.title}</h3>
               <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">{value.description}</p>
-              <div className="mt-6 flex items-center text-xs font-mono text-primary opacity-100 transition-opacity">
+              <div className="mt-3 md:mt-6 flex items-center text-xs font-mono text-primary opacity-100 transition-opacity">
                 <span>SYSTEM_CHECK: STABLE</span>
               </div>
             </motion.div>

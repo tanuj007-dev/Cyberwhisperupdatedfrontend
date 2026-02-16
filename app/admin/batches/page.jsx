@@ -4,20 +4,33 @@ import React, { useState, useEffect } from 'react';
 import { Plus, Edit, Trash2, Calendar, Clock, Users, DollarSign, Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
+const getBatchesApiBase = () =>
+    typeof window !== 'undefined'
+        ? (process.env.NEXT_PUBLIC_BACKEND_API_URL || process.env.NEXT_PUBLIC_BACKEND_URL || process.env.NEXT_PUBLIC_API_URL || 'https://darkred-mouse-801836.hostingersite.com')
+        : 'https://darkred-mouse-801836.hostingersite.com';
+
 export default function BatchesPage() {
     const router = useRouter();
     const [batches, setBatches] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [role, setRole] = useState(null);
+
+    useEffect(() => {
+        setRole(typeof window !== 'undefined' ? localStorage.getItem('adminRole') : null);
+    }, []);
 
     useEffect(() => {
         fetchBatches();
     }, []);
 
+    const isStudent = role === 'STUDENT';
+
     const fetchBatches = async () => {
         try {
             setLoading(true);
-            const response = await fetch('/api/batches');
+            const base = getBatchesApiBase().replace(/\/$/, '');
+            const response = await fetch(`${base}/api/batches`);
 
             if (!response.ok) {
                 throw new Error('Failed to fetch batches');
@@ -48,7 +61,8 @@ export default function BatchesPage() {
         if (!confirm('Are you sure you want to delete this batch?')) return;
 
         try {
-            const response = await fetch(`/api/batches/${id}`, {
+            const base = getBatchesApiBase().replace(/\/$/, '');
+            const response = await fetch(`${base}/api/batches/${id}`, {
                 method: 'DELETE',
             });
 
@@ -112,13 +126,15 @@ export default function BatchesPage() {
                     <h1 className="text-3xl font-bold text-gray-900">Batch Management</h1>
                     <p className="text-gray-600 mt-2">Manage all training batches and schedules</p>
                 </div>
-                <button
-                    onClick={() => router.push('/admin/batches/add')}
-                    className="mt-4 md:mt-0 flex items-center gap-2 bg-purple-600 text-white px-6 py-3 rounded-xl hover:bg-purple-700 transition-colors font-semibold"
-                >
-                    <Plus size={20} />
-                    Add New Batch
-                </button>
+                {!isStudent && (
+                    <button
+                        onClick={() => router.push('/admin/batches/add')}
+                        className="mt-4 md:mt-0 flex items-center gap-2 bg-purple-600 text-white px-6 py-3 rounded-xl hover:bg-purple-700 transition-colors font-semibold"
+                    >
+                        <Plus size={20} />
+                        Add New Batch
+                    </button>
+                )}
             </div>
 
             {/* Error Message */}
@@ -134,14 +150,16 @@ export default function BatchesPage() {
                 <div className="text-center py-12 bg-gray-50 rounded-xl">
                     <Calendar className="w-16 h-16 text-gray-400 mx-auto mb-4" />
                     <h3 className="text-xl font-semibold text-gray-900 mb-2">No Batches Found</h3>
-                    <p className="text-gray-600 mb-6">Get started by creating your first batch</p>
-                    <button
-                        onClick={() => router.push('/admin/batches/add')}
-                        className="inline-flex items-center gap-2 bg-purple-600 text-white px-6 py-3 rounded-xl hover:bg-purple-700 transition-colors font-semibold"
-                    >
-                        <Plus size={20} />
-                        Add New Batch
-                    </button>
+                    <p className="text-gray-600 mb-6">{isStudent ? 'No batches available at the moment.' : 'Get started by creating your first batch'}</p>
+                    {!isStudent && (
+                        <button
+                            onClick={() => router.push('/admin/batches/add')}
+                            className="inline-flex items-center gap-2 bg-purple-600 text-white px-6 py-3 rounded-xl hover:bg-purple-700 transition-colors font-semibold"
+                        >
+                            <Plus size={20} />
+                            Add New Batch
+                        </button>
+                    )}
                 </div>
             ) : (
                 <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
@@ -156,22 +174,24 @@ export default function BatchesPage() {
                                     <span className={`px-3 py-1 rounded-full text-xs font-bold border ${getStatusBadge(batch.status)}`}>
                                         {batch.status}
                                     </span>
-                                    <div className="flex gap-2">
-                                        <button
-                                            onClick={() => router.push(`/admin/batches/edit/${batch.id}`)}
-                                            className="p-2 bg-white/20 hover:bg-white/30 rounded-lg transition-colors"
-                                            title="Edit"
-                                        >
-                                            <Edit size={16} />
-                                        </button>
-                                        <button
-                                            onClick={() => handleDelete(batch.id)}
-                                            className="p-2 bg-white/20 hover:bg-red-500 rounded-lg transition-colors"
-                                            title="Delete"
-                                        >
-                                            <Trash2 size={16} />
-                                        </button>
-                                    </div>
+                                    {!isStudent && (
+                                        <div className="flex gap-2">
+                                            <button
+                                                onClick={() => router.push(`/admin/batches/edit/${batch.id}`)}
+                                                className="p-2 bg-white/20 hover:bg-white/30 rounded-lg transition-colors"
+                                                title="Edit"
+                                            >
+                                                <Edit size={16} />
+                                            </button>
+                                            <button
+                                                onClick={() => handleDelete(batch.id)}
+                                                className="p-2 bg-white/20 hover:bg-red-500 rounded-lg transition-colors"
+                                                title="Delete"
+                                            >
+                                                <Trash2 size={16} />
+                                            </button>
+                                        </div>
+                                    )}
                                 </div>
                                 <h3 className="text-xl font-bold mb-1">{batch.program_name}</h3>
                                 <p className="text-purple-100 text-sm">{batch.program_type || 'Professional Certification'}</p>

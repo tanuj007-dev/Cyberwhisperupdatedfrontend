@@ -5,6 +5,9 @@ import { ArrowRight } from 'lucide-react';
 import newsletterBg from './assets/path.webp';
 import { useEnquiry } from '../context/EnquiryContext';
 
+// Single source of truth for heading to avoid server/client hydration mismatch
+const NEWSLETTER_HEADING = 'Stay ahead of threats with practical learning.';
+
 export default function NewsletterSignup() {
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
@@ -34,7 +37,7 @@ export default function NewsletterSignup() {
     setMessage('');
 
     try {
-      const response = await fetch('http://localhost:3000/api/newsletter/subscribe', {
+      const response = await fetch(`${typeof window !== 'undefined' ? window.location.origin : (process.env.NEXT_PUBLIC_APP_URL || 'https://darkred-mouse-801836.hostingersite.com')}/api/newsletter/subscribe`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -83,7 +86,7 @@ export default function NewsletterSignup() {
         {/* Content */}
         <div className="relative z-10 text-center max-w-5xl mx-auto">
           <h2 className="text-2xl md:text-3xl font-bold text-white mb-2 leading-tight">
-          Stay ahead of threats with practical learning.
+            {NEWSLETTER_HEADING}
           </h2>
 
           <p className="text-white/90 mb-6 text-sm md:text-base font-medium">

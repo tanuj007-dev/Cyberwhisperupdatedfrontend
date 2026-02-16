@@ -23,7 +23,9 @@ const EditUser = () => {
             try {
                 const user = await getUserById(parseInt(params.id));
                 if (user) {
-                    setFormData(user);
+                    const roleByRoleId = { 1: 'ADMIN', 2: 'STUDENT', 3: 'INSTRUCTOR' };
+                    const roleFromApi = user.role === 'USER' ? 'STUDENT' : (user.role || roleByRoleId[user.role_id] || 'STUDENT');
+                    setFormData({ ...user, role: roleFromApi });
                 } else {
                     showToast('User not found', 'error');
                 }
@@ -129,9 +131,8 @@ const EditUser = () => {
 
     const roleOptions = [
         { value: 1, label: 'Admin' },
-        { value: 2, label: 'Instructor' },
-        { value: 3, label: 'Student' },
-        { value: 4, label: 'Guest' }
+        { value: 2, label: 'Student' },
+        { value: 3, label: 'Instructor' }
     ];
 
     return (
@@ -276,17 +277,28 @@ const EditUser = () => {
                     <div className="space-y-4">
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-2">Role</label>
-                            <div className="flex gap-4">
+                            <div className="flex flex-wrap gap-4">
                                 <label className="flex items-center gap-2 cursor-pointer">
                                     <input
                                         type="radio"
                                         name="role"
-                                        value="USER"
-                                        checked={formData.role === 'USER'}
+                                        value="ADMIN"
+                                        checked={formData.role === 'ADMIN'}
                                         onChange={handleChange}
                                         className="w-4 h-4 text-blue-600"
                                     />
-                                    <span className="text-sm">User</span>
+                                    <span className="text-sm">Admin</span>
+                                </label>
+                                <label className="flex items-center gap-2 cursor-pointer">
+                                    <input
+                                        type="radio"
+                                        name="role"
+                                        value="STUDENT"
+                                        checked={formData.role === 'STUDENT'}
+                                        onChange={handleChange}
+                                        className="w-4 h-4 text-blue-600"
+                                    />
+                                    <span className="text-sm">Student</span>
                                 </label>
                                 <label className="flex items-center gap-2 cursor-pointer">
                                     <input
@@ -302,12 +314,7 @@ const EditUser = () => {
                             </div>
                         </div>
 
-                        <Toggle
-                            label="Is Instructor"
-                            name="is_instructor"
-                            checked={formData.is_instructor}
-                            onChange={handleChange}
-                        />
+                        
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t">
                             <div>
@@ -331,7 +338,7 @@ const EditUser = () => {
                         Update User
                     </Button>
                 </div>
-            </form>
+            </form> 
 
             <Toast
                 isVisible={toast.isVisible}

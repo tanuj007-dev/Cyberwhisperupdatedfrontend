@@ -26,7 +26,7 @@ export default function BlogPostDetail({ params }) {
             setLoading(true)
             const baseUrl = typeof window !== 'undefined'
                 ? `http://${window.location.hostname}:${window.location.port}`
-                : 'http://localhost:3000'
+                : 'https://darkred-mouse-801836.hostingersite.com'
 
             const apiUrl = `${baseUrl}/api/blogs/${slug}`
             console.log('Fetching blog from API:', apiUrl)

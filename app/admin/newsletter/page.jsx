@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
-import { Button, Badge, Modal, Skeleton, Toast } from '@/components/ui';
-import { Trash2, Search, Download, Mail, Calendar, Filter } from 'lucide-react';
+import { Button, Badge, Modal, Skeleton, Toast, Input, Textarea } from '@/components/ui';
+import { Trash2, Search, Download, Mail, Calendar, Filter, Send } from 'lucide-react';
 
 const NewsletterSubscribers = () => {
     const [subscribers, setSubscribers] = useState([]);
@@ -13,6 +13,14 @@ const NewsletterSubscribers = () => {
     const [selectedSubscriber, setSelectedSubscriber] = useState(null);
     const [toast, setToast] = useState({ isVisible: false, message: '', type: 'success' });
     const [totalCount, setTotalCount] = useState(0);
+
+    const [sendModalOpen, setSendModalOpen] = useState(false);
+    const [sendLoading, setSendLoading] = useState(false);
+    const [sendForm, setSendForm] = useState({
+        subject: '',
+        content: '',
+        plainText: ''
+    });
 
     const itemsPerPage = 10;
 
@@ -80,6 +88,49 @@ const NewsletterSubscribers = () => {
         }
     };
 
+    const handleSendNewsletter = async () => {
+        if (!sendForm.subject.trim()) {
+            showToast('Please enter a subject', 'error');
+            return;
+        }
+        if (!sendForm.content.trim() && !sendForm.plainText.trim()) {
+            showToast('Please enter HTML content or plain text', 'error');
+            return;
+        }
+        const token = typeof window !== 'undefined' ? localStorage.getItem('adminToken') : null;
+        if (!token) {
+            showToast('Please log in again to send emails', 'error');
+            return;
+        }
+        setSendLoading(true);
+        try {
+            const response = await fetch('/api/newsletter/send', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+                body: JSON.stringify({
+                    subject: sendForm.subject.trim(),
+                    content: sendForm.content.trim() || sendForm.plainText.trim(),
+                    plainText: sendForm.plainText.trim() || (sendForm.content || '').replace(/<[^>]*>/g, '').trim(),
+                }),
+            });
+            const data = await response.json().catch(() => ({}));
+            if (!response.ok) {
+                throw new Error(data?.message || data?.error || `Failed to send (${response.status})`);
+            }
+            showToast(data?.message || 'Newsletter sent successfully to all subscribers', 'success');
+            setSendModalOpen(false);
+            setSendForm({ subject: '', content: '', plainText: '' });
+        } catch (error) {
+            console.error('Error sending newsletter:', error);
+            showToast(error?.message || 'Failed to send newsletter', 'error');
+        } finally {
+            setSendLoading(false);
+        }
+    };
+
     const handleExportCSV = () => {
         const csvContent = [
             ['Email', 'Subscribed Date'],
@@ -120,14 +171,23 @@ const NewsletterSubscribers = () => {
                     <h1 className="text-3xl font-bold text-gray-900 mb-1">Newsletter Subscribers</h1>
                     <p className="text-gray-600">Manage your newsletter subscription list</p>
                 </div>
-                <button
-                    onClick={handleExportCSV}
-                    disabled={filteredSubscribers.length === 0}
-                    className="px-5 py-2.5 bg-gradient-to-r from-violet-600 to-purple-600 text-white font-medium rounded-xl hover:shadow-lg hover:shadow-purple-500/25 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
-                >
-                    <Download size={18} />
-                    Export CSV
-                </button>
+                <div className="flex items-center gap-2">
+                    <button
+                        onClick={() => setSendModalOpen(true)}
+                        className="px-5 py-2.5 bg-gradient-to-r from-emerald-600 to-green-600 text-white font-medium rounded-xl hover:shadow-lg hover:shadow-emerald-500/25 transition-all flex items-center gap-2"
+                    >
+                        <Send size={18} />
+                        Send newsletter
+                    </button>
+                    <button
+                        onClick={handleExportCSV}
+                        disabled={filteredSubscribers.length === 0}
+                        className="px-5 py-2.5 bg-gradient-to-r from-violet-600 to-purple-600 text-white font-medium rounded-xl hover:shadow-lg hover:shadow-purple-500/25 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                    >
+                        <Download size={18} />
+                        Export CSV
+                    </button>
+                </div>
             </div>
 
             {/* Stats Cards */}
@@ -322,6 +382,61 @@ const NewsletterSubscribers = () => {
                     </Button>
                 </div>
             )}
+
+            {/* Send Newsletter Modal */}
+            <Modal
+                isOpen={sendModalOpen}
+                onClose={() => !sendLoading && setSendModalOpen(false)}
+                title="Send newsletter to subscribers"
+                footer={
+                    <>
+                        <Button variant="outline" onClick={() => setSendModalOpen(false)} disabled={sendLoading}>
+                            Cancel
+                        </Button>
+                        <Button variant="primary" onClick={handleSendNewsletter} disabled={sendLoading}>
+                            {sendLoading ? (
+                                <span className="flex items-center gap-2">
+                                    <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                                    Sending…
+                                </span>
+                            ) : (
+                                'Send to all'
+                            )}
+                        </Button>
+                    </>
+                }
+            >
+                <div className="space-y-4">
+                    <p className="text-sm text-gray-600">Compose an email to send to all newsletter subscribers. HTML is supported for the content.</p>
+                    {typeof window !== 'undefined' && localStorage.getItem('adminToken') === 'dev-bypass' && (
+                        <div className="rounded-lg bg-amber-50 border border-amber-200 p-3 text-sm text-amber-800">
+                            <p className="font-medium">Newsletter send requires a real admin login.</p>
+                            <p className="mt-1 text-amber-700">You’re using Dev login. Either log in with your admin email + password + OTP, or add <code className="bg-amber-100 px-1 rounded">NEWSLETTER_SERVICE_TOKEN</code> to <code className="bg-amber-100 px-1 rounded">.env.local</code> (valid JWT) and restart the server.</p>
+                        </div>
+                    )}
+                    <Input
+                        label="Subject"
+                        value={sendForm.subject}
+                        onChange={(e) => setSendForm({ ...sendForm, subject: e.target.value })}
+                        placeholder="e.g. Welcome to CyberWhisper Newsletter"
+                        required
+                    />
+                    <Textarea
+                        label="HTML content"
+                        value={sendForm.content}
+                        onChange={(e) => setSendForm({ ...sendForm, content: e.target.value })}
+                        placeholder="<h2>Hello!</h2><p>Your HTML content here...</p>"
+                        rows={6}
+                    />
+                    <Textarea
+                        label="Plain text (fallback for email clients)"
+                        value={sendForm.plainText}
+                        onChange={(e) => setSendForm({ ...sendForm, plainText: e.target.value })}
+                        placeholder="Plain text version of your message"
+                        rows={3}
+                    />
+                </div>
+            </Modal>
 
             {/* Delete Confirmation Modal */}
             <Modal

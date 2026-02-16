@@ -5,10 +5,17 @@ import { useRouter } from 'next/navigation';
 import { useAdmin } from '@/contexts/AdminContext';
 import { Button, Input, Select, Textarea, Toggle, Toast } from '@/components/ui';
 import RichTextEditor from '@/components/ui/RichTextEditor';
+import API_CONFIG from '@/app/admin/config/api';
 import {
     Upload, X, FileText, Image as ImageIcon, User, Search, Settings,
     ChevronDown, ChevronUp, Save, Send, ArrowLeft, Calendar
 } from 'lucide-react';
+
+// Uploads go to backend so it can push to Cloudinary and return CDN URLs for DB
+const getUploadBaseUrl = () =>
+    typeof window !== 'undefined'
+        ? (process.env.NEXT_PUBLIC_BACKEND_API_URL || process.env.NEXT_PUBLIC_API_URL || API_CONFIG.baseURL || 'https://darkred-mouse-801836.hostingersite.com')
+        : API_CONFIG.baseURL || 'https://darkred-mouse-801836.hostingersite.com';
 
 // Section Component - Defined OUTSIDE the main component to prevent re-creation on every render
 const Section = ({ id, title, icon: Icon, children, isCollapsed, onToggle }) => {
@@ -52,6 +59,9 @@ const AddBlog = () => {
 
         // Featured Image
         thumbnail: '',
+        banner: '',
+        image_url: '',
+        video_url: '',
         imageAltText: '',
         imageCaption: '',
 
@@ -78,8 +88,7 @@ const AddBlog = () => {
         pinPost: false,
 
         // Legacy fields
-        keywords: '',
-        banner: ''
+        keywords: ''
     });
 
     // Section collapse state
@@ -88,6 +97,8 @@ const AddBlog = () => {
         settings: true
     });
     const [thumbnailPreview, setThumbnailPreview] = useState('');
+    const [bannerPreview, setBannerPreview] = useState('');
+    const [imageUrlPreview, setImageUrlPreview] = useState('');
     const [toast, setToast] = useState({ isVisible: false, message: '', type: 'success' });
     const [errors, setErrors] = useState({});
 
@@ -141,15 +152,12 @@ const AddBlog = () => {
         try {
             showToast('Uploading image...', 'info');
 
-            // Create FormData for backend upload
+            // Create FormData for backend upload (backend uploads to Cloudinary, returns CDN URL)
             const formDataUpload = new FormData();
             formDataUpload.append('thumbnail', file);
 
-            // Upload to backend API - use current server
-            const baseUrl = typeof window !== 'undefined' 
-                ? `http://${window.location.hostname}:${window.location.port}`
-                : 'http://localhost:3001';
-            const response = await fetch(`${baseUrl}/api/blogs/upload-thumbnail`, {
+            const uploadBaseUrl = getUploadBaseUrl();
+            const response = await fetch(`${uploadBaseUrl}${API_CONFIG.endpoints.uploadThumbnail}`, {
                 method: 'POST',
                 body: formDataUpload
             });
@@ -171,17 +179,80 @@ const AddBlog = () => {
 
             // Update form data with the uploaded image URL
             setThumbnailPreview(imageUrl);
-            setFormData(prev => ({
-                ...prev,
-                thumbnail: imageUrl,
-                banner: imageUrl // Using same image for banner as well
-            }));
+            setFormData(prev => ({ ...prev, thumbnail: imageUrl }));
 
-            showToast('Image uploaded successfully!', 'success');
+            showToast('Thumbnail uploaded successfully!', 'success');
         } catch (error) {
             console.error('Error uploading image:', error);
             showToast('Failed to upload image. Please try again.', 'error');
         }
+    }, []);
+
+    const handleBannerChange = useCallback(async (e) => {
+        const file = e.target.files?.[0];
+        if (!file || !file.type.startsWith('image/')) {
+            showToast('Please select an image file', 'error');
+            return;
+        }
+        if (file.size > 10 * 1024 * 1024) {
+            showToast('Image size must be less than 10MB', 'error');
+            return;
+        }
+        try {
+            showToast('Uploading banner...', 'info');
+            const formDataUpload = new FormData();
+            formDataUpload.append('banner', file);
+            const uploadBaseUrl = getUploadBaseUrl();
+            const endpoint = API_CONFIG.endpoints.uploadBanner || API_CONFIG.endpoints.uploadThumbnail;
+            const response = await fetch(`${uploadBaseUrl}${endpoint}`, { method: 'POST', body: formDataUpload });
+            if (!response.ok) {
+                const err = await response.json().catch(() => ({}));
+                throw new Error(err.error || 'Upload failed');
+            }
+            const data = await response.json();
+            const imageUrl = data.banner_url || data.url || data.thumbnail_url || data.data?.url;
+            if (!imageUrl) throw new Error('No image URL received');
+            setBannerPreview(imageUrl);
+            setFormData(prev => ({ ...prev, banner: imageUrl }));
+            showToast('Banner uploaded successfully!', 'success');
+        } catch (error) {
+            console.error('Error uploading banner:', error);
+            showToast('Failed to upload banner.', 'error');
+        }
+        e.target.value = '';
+    }, []);
+
+    const handleImageUrlUpload = useCallback(async (e) => {
+        const file = e.target.files?.[0];
+        if (!file || !file.type.startsWith('image/')) {
+            showToast('Please select an image file', 'error');
+            return;
+        }
+        if (file.size > 10 * 1024 * 1024) {
+            showToast('Image size must be less than 10MB', 'error');
+            return;
+        }
+        try {
+            showToast('Uploading image...', 'info');
+            const formDataUpload = new FormData();
+            formDataUpload.append('thumbnail', file);
+            const uploadBaseUrl = getUploadBaseUrl();
+            const response = await fetch(`${uploadBaseUrl}${API_CONFIG.endpoints.uploadThumbnail}`, { method: 'POST', body: formDataUpload });
+            if (!response.ok) {
+                const err = await response.json().catch(() => ({}));
+                throw new Error(err.error || 'Upload failed');
+            }
+            const data = await response.json();
+            const imageUrl = data.url || data.thumbnail_url || data.data?.url;
+            if (!imageUrl) throw new Error('No image URL received');
+            setImageUrlPreview(imageUrl);
+            setFormData(prev => ({ ...prev, image_url: imageUrl }));
+            showToast('Content image uploaded!', 'success');
+        } catch (error) {
+            console.error('Error uploading image:', error);
+            showToast('Failed to upload image.', 'error');
+        }
+        e.target.value = '';
     }, []);
 
     const handleTagAdd = useCallback((tagId) => {
@@ -217,30 +288,32 @@ const AddBlog = () => {
         }
 
         try {
-            // Prepare blog data for API
+            // Payload matches backend POST /api/blogs (Cloudinary CDN URLs from uploads, saved to DB)
             const blogPost = {
                 title: formData.title,
                 slug: formData.slug,
                 category_id: parseInt(formData.blog_category_id),
                 author_id: parseInt(formData.user_id),
-                content: formData.description, // API expects 'content' or 'description'
-                keywords: formData.selectedTags.map(id => tags.find(t => t.id === id)?.name).join(', '),
+                content: formData.description,
+                keywords: (formData.keywords && formData.keywords.trim()) || formData.selectedTags.map(id => tags.find(t => t.id === id)?.name).filter(Boolean).join(', '),
                 short_description: formData.shortDescription,
                 reading_time: formData.readingTime || '5 min read',
                 thumbnail_url: formData.thumbnail || '',
                 banner_url: formData.banner || '',
+                image_url: formData.image_url || '',
+                video_url: formData.video_url || '',
                 image_alt_text: formData.imageAltText || formData.title,
-                image_caption: formData.imageCaption,
-                is_popular: formData.is_popular,
-                status: status === 'publish' ? 'ACTIVE' : 'DRAFT',
-                visibility: formData.visibility.toUpperCase(),
+                image_caption: formData.imageCaption || '',
+                is_popular: !!formData.is_popular,
+                status: status === 'publish' ? 'PUBLISHED' : status === 'scheduled' ? 'SCHEDULED' : 'DRAFT',
+                visibility: (formData.visibility || 'public').toUpperCase() === 'PUBLIC' ? 'PUBLIC' : 'PRIVATE',
                 seo_title: formData.seoTitle || formData.title,
                 seo_description: formData.seoDescription || formData.shortDescription,
-                focus_keyword: formData.focusKeyword,
-                meta_robots: formData.metaRobots.toUpperCase(),
-                allow_comments: formData.allowComments,
-                show_on_homepage: formData.showOnHomepage,
-                is_sticky: formData.pinPost
+                focus_keyword: formData.focusKeyword || '',
+                meta_robots: (formData.metaRobots || 'index').toUpperCase() === 'NOINDEX' ? 'NOINDEX' : 'INDEX',
+                allow_comments: !!formData.allowComments,
+                show_on_homepage: !!formData.showOnHomepage,
+                is_sticky: !!formData.pinPost
             };
 
             // Show loading state
@@ -511,6 +584,61 @@ const AddBlog = () => {
                                 value={formData.imageCaption}
                                 onChange={handleChange}
                                 placeholder="Optional caption for the image"
+                            />
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">Banner Image</label>
+                            <p className="text-xs text-gray-500 mb-2">Optional. Shown as header/banner for the post.</p>
+                            {bannerPreview ? (
+                                <div className="relative inline-block">
+                                    <img src={bannerPreview} alt="Banner" className="h-32 object-cover rounded-xl border" />
+                                    <button type="button" onClick={() => { setBannerPreview(''); setFormData(prev => ({ ...prev, banner: '' })); }} className="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-lg hover:bg-red-600"><X size={16} /></button>
+                                </div>
+                            ) : (
+                                <label className="inline-flex items-center gap-2 px-4 py-2.5 border border-gray-300 rounded-xl cursor-pointer hover:bg-gray-50">
+                                    <Upload size={18} /> Choose banner image
+                                    <input type="file" accept="image/*" className="hidden" onChange={handleBannerChange} />
+                                </label>
+                            )}
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">Content Image (image_url)</label>
+                            <p className="text-xs text-gray-500 mb-2">Optional. Image used in the post body.</p>
+                            <div className="flex flex-wrap gap-3 items-start">
+                                {imageUrlPreview ? (
+                                    <div className="relative inline-block">
+                                        <img src={imageUrlPreview} alt="Content" className="h-24 object-cover rounded-xl border" />
+                                        <button type="button" onClick={() => { setImageUrlPreview(''); setFormData(prev => ({ ...prev, image_url: '' })); }} className="absolute -top-1 -right-1 p-1 bg-red-500 text-white rounded-full"><X size={14} /></button>
+                                    </div>
+                                ) : (
+                                    <label className="inline-flex items-center gap-2 px-4 py-2.5 border border-gray-300 rounded-xl cursor-pointer hover:bg-gray-50">
+                                        <Upload size={18} /> Upload image
+                                        <input type="file" accept="image/*" className="hidden" onChange={handleImageUrlUpload} />
+                                    </label>
+                                )}
+                                <input
+                                    type="url"
+                                    name="image_url"
+                                    value={formData.image_url}
+                                    onChange={handleChange}
+                                    placeholder="Or paste image URL"
+                                    className="flex-1 min-w-[200px] px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-violet-500"
+                                />
+                            </div>
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">Video URL (video_url)</label>
+                            <p className="text-xs text-gray-500 mb-2">Optional. Paste a video URL (e.g. Cloudinary, YouTube).</p>
+                            <input
+                                type="url"
+                                name="video_url"
+                                value={formData.video_url}
+                                onChange={handleChange}
+                                placeholder="https://..."
+                                className="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-violet-500 text-black"
                             />
                         </div>
                     </div>

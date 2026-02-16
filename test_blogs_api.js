@@ -32,7 +32,7 @@ async function testBlogsAPI() {
         console.log('📤 Sending data:', JSON.stringify(testBlogData, null, 2));
         console.log('\n' + '='.repeat(60) + '\n');
 
-        const response = await fetch('http://localhost:3000/api/blogs', {
+        const response = await fetch('http://localhost:3001/api/blogs', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -61,7 +61,7 @@ async function testBlogsAPI() {
 
     } catch (error) {
         console.error('\n❌ FETCH ERROR:', error.message);
-        console.log('\n⚠️  Make sure your Next.js dev server is running on http://localhost:3000');
+        console.log('\n⚠️  Make sure your Next.js dev server is running on http://localhost:3001');
         console.log('   Run: npm run dev');
     }
 }
@@ -71,7 +71,7 @@ async function testGetBlogs() {
     try {
         console.log('\n\n🧪 Testing GET /api/blogs endpoint...\n');
 
-        const response = await fetch('http://localhost:3000/api/blogs?limit=5&page=1');
+        const response = await fetch('http://localhost:3001/api/blogs?limit=5&page=1');
         const data = await response.json();
 
         console.log('📥 Response:', JSON.stringify(data, null, 2));

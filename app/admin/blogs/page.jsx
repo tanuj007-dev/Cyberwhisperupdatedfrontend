@@ -25,7 +25,7 @@ const BlogList = () => {
     const filteredBlogs = useMemo(() => {
         return blogs.filter((blog) => {
             const matchesSearch = blog.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                blog.keywords.toLowerCase().includes(searchTerm.toLowerCase());
+                (blog.keywords && String(blog.keywords).toLowerCase().includes(searchTerm.toLowerCase()));
             const matchesCategory = !filterCategory || blog.blog_category_id === parseInt(filterCategory);
             const matchesStatus = !filterStatus || blog.status === filterStatus;
 

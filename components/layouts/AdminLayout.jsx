@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import Sidebar from './Sidebar';
 import Header from './Header';
 import { AdminProvider } from '@/contexts/AdminContext';
@@ -10,6 +10,7 @@ const AdminLayout = ({ children }) => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const router = useRouter();
+    const pathname = usePathname();
 
     useEffect(() => {
         const isAuth = localStorage.getItem('adminAuth');
@@ -19,6 +20,25 @@ const AdminLayout = ({ children }) => {
             setIsAuthenticated(true);
         }
     }, [router]);
+
+    // Role-based route protection: Student = blogs + view batches (no add/edit); Instructor = blogs + batches; Admin = all
+    useEffect(() => {
+        if (!isAuthenticated || typeof window === 'undefined') return;
+        const role = localStorage.getItem('adminRole');
+        const path = pathname || '';
+        if (role === 'STUDENT') {
+            const allowedBlogs = path.startsWith('/admin/blogs');
+            const allowedBatchesList = path === '/admin/batches';
+            const blockedBatchesModify = path.startsWith('/admin/batches/add') || path.startsWith('/admin/batches/edit');
+            if (!allowedBlogs && !allowedBatchesList) {
+                router.replace('/admin/blogs');
+            } else if (blockedBatchesModify) {
+                router.replace('/admin/batches');
+            }
+        } else if (role === 'INSTRUCTOR' && !path.startsWith('/admin/blogs') && !path.startsWith('/admin/batches') && !path.startsWith('/admin/courses') && !path.startsWith('/admin/course-enrollments') && !path.startsWith('/admin/deploy-team-training') && !path.startsWith('/admin/brochures')) {
+            router.replace('/admin/blogs');
+        }
+    }, [isAuthenticated, pathname, router]);
 
     if (!isAuthenticated) {
         return (
@@ -41,24 +61,14 @@ const AdminLayout = ({ children }) => {
                 {/* Main Content Area */}
                 <div className="lg:ml-72 min-h-screen flex flex-col relative">
                     {/* Header */}
-                    <Header toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
+                    {/* <Header toggleSidebar={() => setSidebarOpen(!sidebarOpen)} /> */}
 
                     {/* Page Content */}
                     <main className="flex-1 p-4 lg:p-8">
                         {children}
                     </main>
 
-                    {/* Footer */}
-                    <footer className="bg-white/50 backdrop-blur-sm border-t border-gray-200/80 py-4 px-6">
-                        <div className="flex flex-col sm:flex-row items-center justify-between gap-2">
-                            <p className="text-sm text-gray-600">
-                                © 2026 <span className="font-semibold bg-gradient-to-r from-violet-600 to-purple-600 bg-clip-text text-transparent">CyberWhisper</span>. All rights reserved.
-                            </p>
-                            <p className="text-sm text-gray-500 flex items-center gap-1">
-                                Built with <span className="text-rose-500">❤</span> using Next.js & Tailwind CSS
-                            </p>
-                        </div>
-                    </footer>
+
                 </div>
             </div>
         </AdminProvider>

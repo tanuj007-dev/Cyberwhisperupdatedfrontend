@@ -52,13 +52,13 @@ export default function B2BStats() {
 
                     {/* Left Card Area */}
                     <div className="w-full lg:w-1/2 flex">
-                        <div className="bg-white dark:bg-[#0B0420] rounded-3xl p-8 md:p-10 border border-gray-200 dark:border-white/5 relative overflow-hidden group shadow-2xl w-full flex items-center justify-center transition-colors duration-300">
+                        <div className="bg-white dark:bg-[#0B0420] rounded-3xl p-8 md:p-10 border border-gray-200 dark:border-white/5 relative overflow-hidden group shadow-2xl w-full min-h-[400px] flex items-center justify-center transition-colors duration-300">
                             {/* Card Glow */}
                             <div className="absolute top-[-50%] left-[-50%] w-[200%] h-[200%] bg-gradient-to-br from-[#6B46E5]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
 
-                            <div className="flex flex-col sm:flex-row items-center gap-8 relative z-10">
+                            <div className="flex flex-col items-center gap-8 relative z-10 text-center">
                                 {/* Thumbnail Image */}
-                                <div className="relative w-32 h-32 md:w-40 md:h-40 shrink-0 rounded-2xl overflow-hidden shadow-lg border border-gray-200 dark:border-white/10">
+                                <div className="relative w-32 h-32 md:w-100 md:h-60 shrink-0 rounded-2xl overflow-hidden shadow-lg border border-gray-200 dark:border-white/10">
                                     <Image
                                         src={analystImage}
                                         alt="Work Process"
@@ -70,8 +70,8 @@ export default function B2BStats() {
                                 </div>
 
                                 {/* Content */}
-                                <div className="flex flex-col items-center sm:items-start text-center sm:text-left">
-                                    <h3 className="text-2xl md:text-3xl font-bold leading-tight mb-6 transition-colors duration-300">
+                                <div className="flex flex-col items-center gap-2">
+                                    <h3 className="text-2xl md:text-3xl font-bold leading-tight mb-4 transition-colors duration-300">
                                         <span className="text-gray-900 dark:text-white">Our Work Process </span><br />
                                         <span className="bg-gradient-to-r from-purple-600 via-purple-700 to-purple-900 dark:from-purple-400 dark:via-purple-500 dark:to-purple-700 bg-clip-text text-transparent">With Clients</span>
                                     </h3>

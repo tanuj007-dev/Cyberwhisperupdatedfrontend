@@ -65,7 +65,8 @@ const GalleryManagement = () => {
     const fetchImages = async () => {
         setLoading(true);
         try {
-            const response = await fetch('http://localhost:3001/api/gallery');
+            const base = process.env.NEXT_PUBLIC_BACKEND_API_URL || 'https://darkred-mouse-801836.hostingersite.com';
+            const response = await fetch(`${base}/api/gallery`);
             if (!response.ok) throw new Error('Failed to fetch images');
 
             const data = await response.json();
@@ -149,7 +150,8 @@ const GalleryManagement = () => {
 
         try {
             // Call backend API directly
-            const response = await fetch('http://localhost:3001/api/gallery/upload', {
+            const base = process.env.NEXT_PUBLIC_BACKEND_API_URL || 'https://darkred-mouse-801836.hostingersite.com';
+            const response = await fetch(`${base}/api/gallery/upload`, {
                 method: 'POST',
                 body: formData,
             });
@@ -172,7 +174,8 @@ const GalleryManagement = () => {
             console.log('Deleting image:', selectedImage);
             
             // Call backend API to delete image
-            const response = await fetch(`http://localhost:3001/api/gallery/${selectedImage.id}/remove`, {
+            const base = process.env.NEXT_PUBLIC_BACKEND_API_URL || 'https://darkred-mouse-801836.hostingersite.com';
+            const response = await fetch(`${base}/api/gallery/${selectedImage.id}/remove`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -203,7 +206,8 @@ const GalleryManagement = () => {
 
         try {
             // Call backend API to update image
-            const response = await fetch(`http://localhost:3001/api/gallery/${selectedImage.id}`, {
+            const base = process.env.NEXT_PUBLIC_BACKEND_API_URL || 'https://darkred-mouse-801836.hostingersite.com';
+            const response = await fetch(`${base}/api/gallery/${selectedImage.id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

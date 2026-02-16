@@ -222,7 +222,7 @@ function HeroLayout({ isVideoOpen, setIsVideoOpen }) {
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.6, duration: 0.8 }}
-          className="hidden lg:flex lg:w-[45%] relative items-center justify-center min-h-[400px]"
+          className="flex w-full lg:w-[45%] relative items-center justify-center min-h-[300px] lg:min-h-[400px] mt-8 lg:mt-0"
         >
           <div className="relative w-full max-w-[480px] rounded-2xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.4)]">
             <Image
@@ -240,7 +240,7 @@ function HeroLayout({ isVideoOpen, setIsVideoOpen }) {
             {/* Left Button Interactive Pop Effect */}
             <Link href="/b2b">
               <motion.div
-                whileHover={{ scale: 1.05, boxShadow: "0 0 25px rgba(168, 85, 247, 0.5)" }}
+                whileHover={{ scale: 1.05, boxShadow: "0 0 5px rgba(168, 85, 247, 0.5)" }}
                 whileTap={{ scale: 0.95 }}
                 className="absolute bottom-[2%] left-[4%] w-[40%] h-[11%] cursor-pointer z-20 rounded-xl"
                 style={{
@@ -259,7 +259,7 @@ function HeroLayout({ isVideoOpen, setIsVideoOpen }) {
             {/* Right Button Interactive Pop Effect */}
             <Link href="/training">
               <motion.div
-                whileHover={{ scale: 1.05, boxShadow: "0 0 25px rgba(6, 182, 212, 0.5)" }}
+                whileHover={{ scale: 1.05, boxShadow: "0 0 5px rgba(6, 182, 212, 0.5)" }}
                 whileTap={{ scale: 0.95 }}
                 className="absolute bottom-[2%] right-[4%] w-[40%] h-[11%] cursor-pointer z-20 rounded-xl"
                 style={{

@@ -9,6 +9,19 @@ import { mockUsers } from '@/data/mockUsers';
 
 const AdminContext = createContext();
 
+// Backend base URL (admin APIs). Use 3001 by default so admin always hits your backend, not Next.js (3000).
+const getBackendUrl = () => process.env.NEXT_PUBLIC_BACKEND_API_URL || process.env.NEXT_PUBLIC_API_URL || 'https://darkred-mouse-801836.hostingersite.com';
+
+// Headers for admin API calls: include Bearer token when available (after MFA login)
+const getAdminHeaders = () => {
+    const headers = { 'Content-Type': 'application/json', 'Accept': 'application/json' };
+    if (typeof window !== 'undefined') {
+        const token = localStorage.getItem('adminToken');
+        if (token) headers['Authorization'] = `Bearer ${token}`;
+    }
+    return headers;
+};
+
 export const useAdmin = () => {
     const context = useContext(AdminContext);
     if (!context) {
@@ -47,65 +60,67 @@ export const AdminProvider = ({ children }) => {
         initializeData();
     }, []);
 
-    // Fetch blogs from API
+    const mapBlogsForAdmin = (blogsList) =>
+        (blogsList || []).map(blog => ({
+            ...blog,
+            blog_id: blog.id,
+            thumbnail: blog.thumbnail_url || blog.image,
+            added_date: blog.created_at,
+            updated_date: blog.updated_at,
+            likes: blog.likes || 0,
+            blog_category_id: blog.category_id,
+            user_id: blog.author_id,
+            status: (blog.status && blog.status.toLowerCase()) || 'inactive'
+        }));
+
+    const parseBlogsResponse = (result) => {
+        if (result.success && result.data) return Array.isArray(result.data) ? result.data : [result.data];
+        if (result.data && !Array.isArray(result.data)) return [result.data];
+        if (Array.isArray(result)) return result;
+        if (result.blogs) return Array.isArray(result.blogs) ? result.blogs : [result.blogs];
+        return [];
+    };
+
+    // Fetch blogs: try backend first, then Next.js /api/blogs (local storage) so API works when backend is down
     const fetchBlogs = async () => {
+        const backendUrl = getBackendUrl();
+        const backendApiUrl = `${backendUrl}/api/blogs?limit=1000&page=1`;
+
         try {
-            const baseUrl = typeof window !== 'undefined'
-                ? `http://${window.location.hostname}:${window.location.port}`
-                : 'http://localhost:3000';
-
-            // Fetch all blogs (both ACTIVE and DRAFT/INACTIVE)
-            const apiUrl = `${baseUrl}/api/blogs/list?limit=1000&status=all`;
-            console.log('Fetching all blogs for admin:', apiUrl);
-
-            const response = await fetch(apiUrl);
-            if (!response.ok) {
-                throw new Error(`Failed to fetch blogs: ${response.status}`);
+            const response = await fetch(backendApiUrl);
+            if (response.ok) {
+                const result = await response.json();
+                const blogsList = parseBlogsResponse(result);
+                setBlogs(mapBlogsForAdmin(blogsList));
+                return;
             }
-
-            const result = await response.json();
-            let blogsList = [];
-
-            if (result.success && result.data) {
-                blogsList = Array.isArray(result.data) ? result.data : [result.data];
-            } else if (Array.isArray(result)) {
-                blogsList = result;
-            }
-
-            console.log('Blogs fetched successfully for admin:', blogsList.length);
-            
-            // Map the blog data to match the admin panel's expectations if needed
-            const mappedBlogs = blogsList.map(blog => ({
-                ...blog,
-                blog_id: blog.id, // Admin uses blog_id
-                thumbnail: blog.thumbnail_url || blog.image,
-                added_date: blog.created_at,
-                updated_date: blog.updated_at,
-                likes: blog.likes || 0,
-                blog_category_id: blog.category_id,
-                user_id: blog.author_id,
-                status: blog.status?.toLowerCase() || 'inactive'
-            }));
-
-            setBlogs(mappedBlogs);
-        } catch (error) {
-            console.error('Error fetching blogs for admin:', error);
-            // Fallback to mock blogs
-            setBlogs(mockBlogs);
+        } catch (err) {
+            console.warn('Blogs: backend unreachable, trying Next.js API:', err.message);
         }
+
+        try {
+            const baseUrl = typeof window !== 'undefined' ? `${window.location.origin}` : 'http://localhost:3000';
+            const response = await fetch(`${baseUrl}/api/blogs?limit=1000&page=1`);
+            if (response.ok) {
+                const result = await response.json();
+                const blogsList = parseBlogsResponse(result);
+                setBlogs(mapBlogsForAdmin(blogsList));
+                return;
+            }
+        } catch (err) {
+            console.error('Error fetching blogs:', err);
+        }
+
+        setBlogs(mockBlogs);
     };
 
     // Fetch users from API
     const fetchUsers = async () => {
         try {
-            const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
-            console.log('Fetching users from API:', `${apiUrl}/api/users?page=1&limit=1000`);
-
+            const apiUrl = getBackendUrl();
             const response = await fetch(`${apiUrl}/api/users?page=1&limit=1000`, {
                 method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
+                headers: getAdminHeaders(),
             });
 
             console.log('Fetch users response status:', response.status);
@@ -142,14 +157,10 @@ export const AdminProvider = ({ children }) => {
     // Fetch media from API
     const fetchMedia = async () => {
         try {
-            const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
-            console.log('Fetching media from API:', `${apiUrl}/api/media`);
-
+            const apiUrl = getBackendUrl();
             const response = await fetch(`${apiUrl}/api/media`, {
                 method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
+                headers: getAdminHeaders(),
             });
 
             console.log('Fetch media response status:', response.status);
@@ -182,26 +193,25 @@ export const AdminProvider = ({ children }) => {
         }
     };
 
-    // Blog CRUD operations
+    // Blog CRUD operations - POST to backend (3001) to support thumbnail_url, banner_url, image_url, video_url
     const addBlog = async (blogData) => {
         try {
-            const baseUrl = typeof window !== 'undefined'
-                ? `http://${window.location.hostname}:${window.location.port}`
-                : 'http://localhost:3000';
+            const backendUrl = getBackendUrl();
 
-            const response = await fetch(`${baseUrl}/api/blogs`, {
+            const response = await fetch(`${backendUrl}/api/blogs`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(blogData)
             });
 
             if (!response.ok) {
-                throw new Error('Failed to add blog');
+                const errData = await response.json().catch(() => ({}));
+                throw new Error(errData.message || errData.error || 'Failed to add blog');
             }
 
             const result = await response.json();
             await fetchBlogs(); // Refresh list
-            return result.data;
+            return result.data || result;
         } catch (error) {
             console.error('Error adding blog:', error);
             throw error;
@@ -210,11 +220,8 @@ export const AdminProvider = ({ children }) => {
 
     const updateBlog = async (blog_id, updatedBlog) => {
         try {
-            const baseUrl = typeof window !== 'undefined'
-                ? `http://${window.location.hostname}:${window.location.port}`
-                : 'http://localhost:3000';
-
-            const response = await fetch(`${baseUrl}/api/blogs`, {
+            const backendUrl = getBackendUrl();
+            const response = await fetch(`${backendUrl}/api/blogs`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ id: blog_id, ...updatedBlog })
@@ -233,11 +240,8 @@ export const AdminProvider = ({ children }) => {
 
     const deleteBlog = async (blog_id) => {
         try {
-            const baseUrl = typeof window !== 'undefined'
-                ? `http://${window.location.hostname}:${window.location.port}`
-                : 'http://localhost:3000';
-
-            const response = await fetch(`${baseUrl}/api/blogs?id=${blog_id}`, {
+            const backendUrl = getBackendUrl();
+            const response = await fetch(`${backendUrl}/api/blogs?id=${blog_id}`, {
                 method: 'DELETE'
             });
 
@@ -267,13 +271,14 @@ export const AdminProvider = ({ children }) => {
     // User CRUD operations
     const addUser = async (user) => {
         try {
-            const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+            const apiUrl = getBackendUrl();
             const payload = {
                 first_name: user.first_name,
                 last_name: user.last_name,
                 email: user.email,
                 phone: user.phone || '',
                 password: user.password || 'TempPass@123',
+                role: user.role || 'STUDENT',
                 title: user.title || '',
                 address: user.address || '',
                 biography: user.biography || '',
@@ -288,10 +293,7 @@ export const AdminProvider = ({ children }) => {
 
             const response = await fetch(`${apiUrl}/api/users`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                },
+                headers: getAdminHeaders(),
                 body: JSON.stringify(payload),
                 credentials: 'include',
                 mode: 'cors'
@@ -318,12 +320,13 @@ export const AdminProvider = ({ children }) => {
 
     const updateUser = async (id, updatedUser) => {
         try {
-            const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+            const apiUrl = getBackendUrl();
             const payload = {
                 first_name: updatedUser.first_name,
                 last_name: updatedUser.last_name,
                 email: updatedUser.email,
                 phone: updatedUser.phone || '',
+                role: updatedUser.role || 'STUDENT',
                 title: updatedUser.title || '',
                 address: updatedUser.address || '',
                 biography: updatedUser.biography || '',
@@ -338,10 +341,7 @@ export const AdminProvider = ({ children }) => {
 
             const response = await fetch(`${apiUrl}/api/users/${id}/update`, {
                 method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                },
+                headers: getAdminHeaders(),
                 body: JSON.stringify(payload),
                 credentials: 'include',
                 mode: 'cors'
@@ -365,15 +365,11 @@ export const AdminProvider = ({ children }) => {
 
     const deleteUser = async (id) => {
         try {
-            const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
-            console.log('Deleting user:', id);
+            const apiUrl = getBackendUrl();
 
             const response = await fetch(`${apiUrl}/api/users/${id}`, {
                 method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                },
+                headers: getAdminHeaders(),
                 credentials: 'include',
                 mode: 'cors'
             });
@@ -481,13 +477,10 @@ export const AdminProvider = ({ children }) => {
 
     const getUserById = async (id) => {
         try {
-            const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+            const apiUrl = getBackendUrl();
             const response = await fetch(`${apiUrl}/api/users/${id}`, {
                 method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                },
+                headers: getAdminHeaders(),
                 credentials: 'include',
                 mode: 'cors'
             });

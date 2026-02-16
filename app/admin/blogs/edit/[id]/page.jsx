@@ -153,10 +153,12 @@ const EditBlog = () => {
                 reading_time: formData.readingTime || '5 min read',
                 thumbnail_url: formData.thumbnail || '',
                 banner_url: formData.banner || '',
+                image_url: formData.image_url || '',
+                video_url: formData.video_url || '',
                 image_alt_text: formData.imageAltText || formData.title,
                 image_caption: formData.imageCaption,
                 is_popular: formData.is_popular,
-                status: formData.status === 'active' || formData.status === 'ACTIVE' ? 'ACTIVE' : 'DRAFT',
+                status: formData.status === 'active' || formData.status === 'ACTIVE' || formData.status === 'PUBLISHED' ? 'PUBLISHED' : formData.status === 'scheduled' || formData.status === 'SCHEDULED' ? 'SCHEDULED' : 'DRAFT',
                 visibility: formData.visibility.toUpperCase(),
                 seo_title: formData.seoTitle || formData.title,
                 seo_description: formData.seoDescription || formData.shortDescription,
@@ -425,6 +427,14 @@ const EditBlog = () => {
                                 onChange={handleChange}
                                 placeholder="Optional caption for the image"
                             />
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Content Image URL (image_url)</label>
+                            <input type="url" name="image_url" value={formData.image_url || ''} onChange={handleChange} placeholder="https://..." className="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-violet-500 text-black" />
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Video URL (video_url)</label>
+                            <input type="url" name="video_url" value={formData.video_url || ''} onChange={handleChange} placeholder="https://..." className="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-violet-500 text-black" />
                         </div>
                     </div>
                 </Section>
