@@ -10,8 +10,10 @@ const corsHeaders = {
 const BACKEND_URL = process.env.BACKEND_API_URL || process.env.NEXT_PUBLIC_BACKEND_API_URL || 'https://darkred-mouse-801836.hostingersite.com';
 
 function mapBlogToFrontend(blog) {
+    const id = blog.id ?? blog.blog_id ?? blog._id;
     return {
         ...blog,
+        id,
         image: blog.banner_url || blog.thumbnail_url || blog.image,
         description: blog.short_description || (typeof blog.content === 'string' ? blog.content.substring(0, 200) : '') || '',
         excerpt: blog.short_description || (typeof blog.content === 'string' ? blog.content.substring(0, 150) : '') || '',
@@ -44,14 +46,29 @@ export async function GET(request) {
             const q = new URLSearchParams({ page: String(page), limit: String(limit) });
             if (backendStatus && backendStatus !== 'all') q.set('status', backendStatus);
             if (category_id) q.set('category_id', category_id);
-            // Backend exposes GET /api/blogs (not /api/blogs/list)
-            const listUrl = `${BACKEND_URL}/api/blogs?${q.toString()}`;
-            const res = await fetch(listUrl, { headers: { 'Content-Type': 'application/json' } });
-            if (res.ok) {
-                const json = await res.json();
-                const raw = json.data ?? json.blogs ?? (Array.isArray(json) ? json : []);
+            // Backend: GET /api/blogs/list (then fallback to /api/blogs)
+            const listUrl = `${BACKEND_URL}/api/blogs/list${q.toString() ? `?${q.toString()}` : ''}`;
+            const res = await fetch(listUrl, { headers: { 'Content-Type': 'application/json' }, cache: 'no-store' });
+            if (!res.ok) {
+                const altUrl = `${BACKEND_URL}/api/blogs?${q.toString()}`;
+                const altRes = await fetch(altUrl, { headers: { 'Content-Type': 'application/json' }, cache: 'no-store' });
+                if (!altRes.ok) { backendFailed = true; } else {
+                    const json = await altRes.json();
+                    const raw = json.data ?? json.blogs ?? json.result ?? json.items ?? (Array.isArray(json) ? json : []);
+                    const list = Array.isArray(raw) ? raw : [];
+                    const total = json.pagination?.total ?? list.length;
+                    const totalPages = json.pagination?.totalPages ?? Math.ceil(total / limit);
+                    const data = list.map(mapBlogToFrontend);
+                    return NextResponse.json(
+                        { success: true, message: 'Blogs fetched successfully', data, pagination: { page, limit, total, totalPages, hasNextPage: page < totalPages, hasPrevPage: page > 1 } },
+                        { status: 200, headers: corsHeaders }
+                    );
+                }
+            } else {
+            const json = await res.json();
+                const raw = json.data ?? json.blogs ?? json.result ?? json.items ?? json.posts ?? (Array.isArray(json) ? json : []);
                 const list = Array.isArray(raw) ? raw : [];
-                const total = json.pagination?.total ?? list.length;
+                const total = json.pagination?.total ?? json.total ?? list.length;
                 const totalPages = json.pagination?.totalPages ?? Math.ceil(total / limit);
                 const data = list.map(mapBlogToFrontend);
                 return NextResponse.json(
@@ -71,7 +88,6 @@ export async function GET(request) {
                     { status: 200, headers: corsHeaders }
                 );
             }
-            backendFailed = true;
         } catch (err) {
             console.warn('Blogs list: backend unreachable, using local:', err.message);
             backendFailed = true;

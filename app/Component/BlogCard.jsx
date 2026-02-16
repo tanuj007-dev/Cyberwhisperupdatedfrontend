@@ -7,7 +7,7 @@ import { GoArrowUpRight } from "react-icons/go"
 
 export default function BlogCard({ image, title, slug, id, description, short_description, onClick }) {
     const displayDescription = description || short_description;
-    const blogLink = `/blog/${slug || id || ''}`;
+    const blogLink = `/blog/${id ?? slug ?? ''}`;
 
     if (onClick) {
         return (

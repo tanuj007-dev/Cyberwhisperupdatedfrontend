@@ -190,7 +190,7 @@ export default function TrainingSection() {
                                 {slideChunks.map((slideCourses, slideIdx) => (
                                     <div
                                         key={slideIdx}
-                                        className="flex gap-8 lg:gap-4 shrink-0 px-1 md:px-0 items-start justify-center w-full min-w-0"
+                                        className="flex gap-8 lg:gap-4 shrink-0 px-1 md:px-0 items-start justify-start w-full min-w-0"
                                         style={{ width: `${100 / totalSlides}%`, minWidth: `${100 / totalSlides}%` }}
                                     >
                                         {slideCourses.map((course, idx) => (

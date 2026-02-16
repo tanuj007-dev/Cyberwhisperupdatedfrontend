@@ -24,10 +24,12 @@ const BlogList = () => {
     // Filtered and searched blogs
     const filteredBlogs = useMemo(() => {
         return blogs.filter((blog) => {
-            const matchesSearch = blog.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            const title = blog.title ?? blog.name ?? '';
+            const matchesSearch = !searchTerm || title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                 (blog.keywords && String(blog.keywords).toLowerCase().includes(searchTerm.toLowerCase()));
-            const matchesCategory = !filterCategory || blog.blog_category_id === parseInt(filterCategory);
-            const matchesStatus = !filterStatus || blog.status === filterStatus;
+            const catId = blog.blog_category_id ?? blog.category_id;
+            const matchesCategory = !filterCategory || catId == filterCategory || String(catId) === String(filterCategory);
+            const matchesStatus = !filterStatus || (blog.status && String(blog.status).toLowerCase() === String(filterStatus).toLowerCase());
 
             return matchesSearch && matchesCategory && matchesStatus;
         });

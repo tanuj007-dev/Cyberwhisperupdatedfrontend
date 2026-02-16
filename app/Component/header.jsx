@@ -43,23 +43,24 @@ export default function Header() {
   const [isProductsOpen, setIsProductsOpen] = useState(false);
 
   return (
-    <header className="fixed top-0 z-50 w-full bg-transparent font-sans">
+    <header className="fixed top-0 z-50 w-full bg-transparent font-sans min-h-[72px]">
 
-      <div className="w-full px-4 py-4">
-        <div className="mx-auto max-w-7xl">
-          {/* Centered white navbar container */}
-          <nav className="mx-auto flex max-w-6xl items-center justify-between rounded-full bg-white px-6 py-3 shadow-lg transition-all duration-300 hover:shadow-xl">
+      <div className="w-full px-4 py-4 min-h-[72px] flex items-center">
+        <div className="mx-auto max-w-7xl w-full">
+          {/* Centered navbar: fixed min-height to prevent layout shift when fonts/images load */}
+          <nav className="mx-auto flex h-14 min-h-14 max-w-6xl items-center justify-between rounded-full bg-white dark:bg-white/95 px-6 py-0 shadow-lg transition-shadow duration-300 hover:shadow-xl">
 
-            {/* Logo Section */}
-            <div className="flex items-center space-x-2">
-              <Link href="/" onClick={(e) => handleScrollToTop(e, '/')}>
-                {/* Logo Image */}
+            {/* Logo Section - fixed size to prevent enlarge then shrink */}
+            <div className="flex h-9 w-[120px] shrink-0 items-center">
+              <Link href="/" onClick={(e) => handleScrollToTop(e, '/')} className="block h-full w-full">
                 <Image
                   src={logo}
                   alt="Cyber Whisper Logo"
                   width={100}
-                  height={100}
-                  className="rounded-lg object-contain"
+                  height={40}
+                  className="h-9 w-auto max-w-[100px] rounded-lg object-contain object-left"
+                  priority
+                  sizes="120px"
                 />
               </Link>
             </div>

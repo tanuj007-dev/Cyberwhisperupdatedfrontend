@@ -60,52 +60,82 @@ export const AdminProvider = ({ children }) => {
         initializeData();
     }, []);
 
+    const normalizeStatus = (s) => {
+        if (!s) return 'inactive';
+        const v = String(s).toLowerCase();
+        if (v === 'published' || v === 'active' || v === 'live') return 'active';
+        return v;
+    };
     const mapBlogsForAdmin = (blogsList) =>
-        (blogsList || []).map(blog => ({
-            ...blog,
-            blog_id: blog.id,
-            thumbnail: blog.thumbnail_url || blog.image,
-            added_date: blog.created_at,
-            updated_date: blog.updated_at,
-            likes: blog.likes || 0,
-            blog_category_id: blog.category_id,
-            user_id: blog.author_id,
-            status: (blog.status && blog.status.toLowerCase()) || 'inactive'
-        }));
+        (blogsList || []).map(blog => {
+            const id = blog.id ?? blog.blog_id ?? blog._id;
+            return {
+                ...blog,
+                id,
+                blog_id: id,
+                title: blog.title ?? blog.name,
+                thumbnail: blog.thumbnail_url ?? blog.thumbnail ?? blog.image ?? blog.banner_url,
+                added_date: blog.created_at ?? blog.added_date ?? blog.createdAt,
+                updated_date: blog.updated_at ?? blog.updated_date ?? blog.updatedAt,
+                likes: blog.likes ?? 0,
+                blog_category_id: blog.category_id ?? blog.blog_category_id ?? blog.categoryId,
+                user_id: blog.author_id ?? blog.user_id ?? blog.authorId,
+                status: normalizeStatus(blog.status)
+            };
+        });
 
     const parseBlogsResponse = (result) => {
-        if (result.success && result.data) return Array.isArray(result.data) ? result.data : [result.data];
-        if (result.data && !Array.isArray(result.data)) return [result.data];
+        if (!result || typeof result !== 'object') return [];
         if (Array.isArray(result)) return result;
+        const arr = result.data ?? result.blogs ?? result.result ?? result.items ?? result.posts ?? result.records;
+        if (Array.isArray(arr)) return arr;
+        if (arr && !Array.isArray(arr)) return [arr];
+        if (result.success && result.data) return Array.isArray(result.data) ? result.data : [result.data];
+        if (result.data) return Array.isArray(result.data) ? result.data : [result.data];
         if (result.blogs) return Array.isArray(result.blogs) ? result.blogs : [result.blogs];
         return [];
     };
 
-    // Fetch blogs: try backend first, then Next.js /api/blogs (local storage) so API works when backend is down
+    // Fetch blogs: try backend GET /api/blogs/list first so newly added blogs render; fallback to Next.js /api/blogs/list (which also tries backend then local)
     const fetchBlogs = async () => {
         const backendUrl = getBackendUrl();
-        const backendApiUrl = `${backendUrl}/api/blogs?limit=1000&page=1`;
+        const listUrl = `${backendUrl}/api/blogs/list?limit=1000&page=1&status=all`;
 
         try {
-            const response = await fetch(backendApiUrl);
+            const response = await fetch(listUrl, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json', ...getAdminHeaders() },
+            });
             if (response.ok) {
                 const result = await response.json();
-                const blogsList = parseBlogsResponse(result);
+                let blogsList = parseBlogsResponse(result);
+                if (blogsList.length === 0 && listUrl.includes('?')) {
+                    const bareUrl = `${backendUrl}/api/blogs/list`;
+                    const bareRes = await fetch(bareUrl, { method: 'GET', headers: { 'Content-Type': 'application/json', ...getAdminHeaders() } });
+                    if (bareRes.ok) {
+                        const bareResult = await bareRes.json();
+                        blogsList = parseBlogsResponse(bareResult);
+                    }
+                }
                 setBlogs(mapBlogsForAdmin(blogsList));
                 return;
             }
         } catch (err) {
-            console.warn('Blogs: backend unreachable, trying Next.js API:', err.message);
+            console.warn('Blogs list: backend unreachable, trying Next.js API:', err.message);
         }
 
         try {
-            const baseUrl = typeof window !== 'undefined' ? `${window.location.origin}` : 'http://localhost:3000';
-            const response = await fetch(`${baseUrl}/api/blogs?limit=1000&page=1`);
-            if (response.ok) {
-                const result = await response.json();
-                const blogsList = parseBlogsResponse(result);
-                setBlogs(mapBlogsForAdmin(blogsList));
-                return;
+            const baseUrl = typeof window !== 'undefined' ? window.location.origin : '';
+            if (baseUrl) {
+                const response = await fetch(`${baseUrl}/api/blogs/list?limit=1000&page=1&status=all`, {
+                    headers: { 'Content-Type': 'application/json' },
+                });
+                if (response.ok) {
+                    const result = await response.json();
+                    const blogsList = parseBlogsResponse(result);
+                    setBlogs(mapBlogsForAdmin(blogsList));
+                    return;
+                }
             }
         } catch (err) {
             console.error('Error fetching blogs:', err);

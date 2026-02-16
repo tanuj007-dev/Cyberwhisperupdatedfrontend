@@ -79,7 +79,7 @@ export default function BlogSidebar() {
                         {latestArticles.map((article, idx) => (
                             <Link
                                 key={article.id || idx}
-                                href={`/blog/${article.slug}`}
+                                href={`/blog/${article.id ?? article.slug ?? article.blog_id ?? ''}`}
                                 className="group flex gap-4 items-start"
                             >
                                 {/* Article Image */}

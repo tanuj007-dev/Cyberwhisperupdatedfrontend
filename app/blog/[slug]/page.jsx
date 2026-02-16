@@ -24,14 +24,12 @@ export default function BlogPostDetail({ params }) {
     const fetchBlogBySlug = async () => {
         try {
             setLoading(true)
-            const baseUrl = typeof window !== 'undefined'
-                ? `http://${window.location.hostname}:${window.location.port}`
-                : 'https://darkred-mouse-801836.hostingersite.com'
-
-            const apiUrl = `${baseUrl}/api/blogs/${slug}`
+            const base = process.env.NEXT_PUBLIC_BACKEND_API_URL || process.env.NEXT_PUBLIC_API_URL || 'https://darkred-mouse-801836.hostingersite.com'
+            const backendUrl = base.replace(/\/$/, '')
+            const apiUrl = `${backendUrl}/api/blogs/${encodeURIComponent(slug)}`
             console.log('Fetching blog from API:', apiUrl)
 
-            const response = await fetch(apiUrl)
+            const response = await fetch(apiUrl, { headers: { 'Content-Type': 'application/json' } })
 
             if (!response.ok) {
                 throw new Error(`Failed to fetch blog: ${response.statusText}`)
@@ -40,13 +38,9 @@ export default function BlogPostDetail({ params }) {
             const result = await response.json()
             console.log('Blog API response:', result)
 
-            // Handle API response structure
-            if (result.success && result.data) {
-                setBlog(result.data)
-                console.log('Blog data set:', result.data.title)
-            } else if (result.id || result.slug) {
-                setBlog(result)
-                console.log('Blog data set (direct):', result.title)
+            const blogData = result.data ?? result.blog ?? result.post ?? result
+            if (blogData && (blogData.id || blogData.slug || blogData.title)) {
+                setBlog(blogData)
             } else {
                 console.error('Invalid blog data format:', result)
                 throw new Error('Invalid blog data format')

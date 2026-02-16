@@ -14,7 +14,7 @@ async function testQuotesAPI() {
         console.log('Testing POST /api/quotes endpoint...\n');
         console.log('Sending data:', JSON.stringify(testData, null, 2));
 
-        const response = await fetch('http://localhost:3031/api/quotes', {
+        const response = await fetch('https://darkred-mouse-801836.hostingersite.com/api/quotes', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -36,7 +36,7 @@ async function testQuotesAPI() {
 
     } catch (error) {
         console.error('\n❌ FETCH ERROR:', error.message);
-        console.log('\nMake sure your Next.js dev server is running on http://localhost:3001');
+        console.log('\nMake sure your Next.js dev server is running on https://darkred-mouse-801836.hostingersite.com');
     }
 }
 
