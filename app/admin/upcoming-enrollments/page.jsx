@@ -20,6 +20,7 @@ export default function UpcomingEnrollmentsPage() {
             setLoading(true);
             setError(null);
 
+
             // Call the local Next.js API route
             const url = `/api/batch-enrollments?page=${page}&limit=${limit}`;
             console.log('Fetching enrollments from:', url);
