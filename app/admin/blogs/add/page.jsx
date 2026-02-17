@@ -6,6 +6,7 @@ import { useAdmin } from '@/contexts/AdminContext';
 import { Button, Input, Select, Textarea, Toggle, Toast } from '@/components/ui';
 import RichTextEditor from '@/components/ui/RichTextEditor';
 import { API_BASE_URL } from '@/lib/apiConfig';
+import API_CONFIG from '@/app/admin/config/api';
 import {
     Upload, X, FileText, Image as ImageIcon, User, Search, Settings,
     ChevronDown, ChevronUp, Save, Send, ArrowLeft, Calendar
@@ -146,18 +147,18 @@ const AddBlog = () => {
         try {
             showToast('Uploading image...', 'info');
 
-            // Create FormData for backend upload (backend uploads to Cloudinary, returns CDN URL)
+            // Use same-origin so Next.js API route handles upload (saves to public/uploads/thumbnails)
             const formDataUpload = new FormData();
             formDataUpload.append('thumbnail', file);
 
-            const uploadBaseUrl = API_BASE_URL;
-            const response = await fetch(`${uploadBaseUrl}${API_CONFIG.endpoints.uploadThumbnail}`, {
+            const uploadUrl = API_CONFIG.endpoints.uploadThumbnail;
+            const response = await fetch(uploadUrl, {
                 method: 'POST',
                 body: formDataUpload
             });
 
             if (!response.ok) {
-                const errorData = await response.json();
+                const errorData = await response.json().catch(() => ({}));
                 throw new Error(errorData.error || 'Failed to upload image');
             }
 
@@ -196,9 +197,8 @@ const AddBlog = () => {
             showToast('Uploading banner...', 'info');
             const formDataUpload = new FormData();
             formDataUpload.append('banner', file);
-            const uploadBaseUrl = API_BASE_URL;
             const endpoint = API_CONFIG.endpoints.uploadBanner || API_CONFIG.endpoints.uploadThumbnail;
-            const response = await fetch(`${uploadBaseUrl}${endpoint}`, { method: 'POST', body: formDataUpload });
+            const response = await fetch(endpoint, { method: 'POST', body: formDataUpload });
             if (!response.ok) {
                 const err = await response.json().catch(() => ({}));
                 throw new Error(err.error || 'Upload failed');
@@ -230,8 +230,7 @@ const AddBlog = () => {
             showToast('Uploading image...', 'info');
             const formDataUpload = new FormData();
             formDataUpload.append('thumbnail', file);
-            const uploadBaseUrl = API_BASE_URL;
-            const response = await fetch(`${uploadBaseUrl}${API_CONFIG.endpoints.uploadThumbnail}`, { method: 'POST', body: formDataUpload });
+            const response = await fetch(API_CONFIG.endpoints.uploadThumbnail, { method: 'POST', body: formDataUpload });
             if (!response.ok) {
                 const err = await response.json().catch(() => ({}));
                 throw new Error(err.error || 'Upload failed');
