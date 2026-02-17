@@ -35,7 +35,7 @@ const AdminLayout = ({ children }) => {
             } else if (blockedBatchesModify) {
                 router.replace('/admin/batches');
             }
-        } else if (role === 'INSTRUCTOR' && !path.startsWith('/admin/blogs') && !path.startsWith('/admin/batches') && !path.startsWith('/admin/courses') && !path.startsWith('/admin/course-enrollments') && !path.startsWith('/admin/deploy-team-training')) {
+        } else if (role === 'INSTRUCTOR' && !path.startsWith('/admin/blogs') && !path.startsWith('/admin/batches') && !path.startsWith('/admin/courses') && !path.startsWith('/admin/course-enrollments') && !path.startsWith('/admin/upcoming-enrollments') && !path.startsWith('/admin/deploy-team-training')) {
             router.replace('/admin/blogs');
         }
     }, [isAuthenticated, pathname, router]);

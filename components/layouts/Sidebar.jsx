@@ -57,7 +57,8 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             hasSubmenu: true,
             submenu: [
                 { name: 'All Batches', icon: List, path: '/admin/batches' },
-                { name: 'Add Batch', icon: PlusCircle, path: '/admin/batches/add' }
+                { name: 'Add Batch', icon: PlusCircle, path: '/admin/batches/add' },
+                { name: 'Batch Enrollments', icon: Users, path: '/admin/upcoming-enrollments' }
             ]
         },
         {

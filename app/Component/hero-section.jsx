@@ -290,7 +290,7 @@ function HeroLayout({ isVideoOpen, setIsVideoOpen }) {
             <div className="aspect-video w-full">
               <video
                 className="w-full h-full"
-                src="/assets/Cyber%20Whisper.mp4"
+                src="https://res.cloudinary.com/dwpkrvrfk/video/upload/v1771334342/Cyber_Whisper_nobf1y.mp4"
                 controls
                 autoPlay
                 playsInline

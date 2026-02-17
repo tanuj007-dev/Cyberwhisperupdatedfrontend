@@ -149,7 +149,7 @@ export default function B2BHero() {
                         <div className="relative mx-auto w-full max-w-[350px] aspect-square mt-2 min-h-[200px]">
                             <div className="absolute inset-0 w-full h-full rounded-lg border border-gray-400 dark:border-gray-700/50 overflow-hidden shadow-[0_-10px_40px_rgba(0,0,0,0.3)] dark:shadow-[0_-10px_40px_rgba(0,0,0,0.5)] bg-gray-200 dark:bg-[#0B0F19]">
                                 <video
-                                    src="/assets/enterprise-fortress.mp4"
+                                    src="https://res.cloudinary.com/dwpkrvrfk/video/upload/v1771334697/enterprise-fortress_1_ddfgcf.mp4"
                                     autoPlay
                                     loop
                                     muted

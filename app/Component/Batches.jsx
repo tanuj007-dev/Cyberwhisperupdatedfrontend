@@ -32,20 +32,28 @@ export default function Batches() {
         e.preventDefault();
         setIsSubmitting(true);
         try {
+            const payload = {
+                batch_id: selectedBatch?.id,
+                name: formData.name,
+                email: formData.email,
+                phone_number: formData.phone
+            };
+
+            console.log('Enrolling with payload:', payload);
+
             const response = await fetch(`${API_BASE_URL}/api/batches/enroll`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    name: formData.name,
-                    email: formData.email,
-                    phone: formData.phone,
-                    batch_id: selectedBatch?.id,
-                }),
+                body: JSON.stringify(payload),
             });
+
             const data = await response.json().catch(() => ({}));
+
             if (!response.ok) {
                 throw new Error(data.message || data.error || 'Registration failed');
             }
+
+            console.log('Enrollment response:', data);
             alert(data.message || 'Registration successful! We will contact you soon.');
             setIsModalOpen(false);
             setFormData({ name: '', email: '', phone: '' });

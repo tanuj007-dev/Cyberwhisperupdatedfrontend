@@ -129,7 +129,7 @@ export default function B2BStats() {
                             <X size={24} />
                         </button>
                         <video
-                            src="/assets/Cyber%20Whisper.mp4"
+                            src="https://res.cloudinary.com/dwpkrvrfk/video/upload/v1771334342/Cyber_Whisper_nobf1y.mp4"
                             controls
                             autoPlay
                             playsInline

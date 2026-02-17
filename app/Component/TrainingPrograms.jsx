@@ -1,15 +1,13 @@
 "use client"
-import React, { useState } from 'react';
+import React from 'react';
 import Image from 'next/image';
 import path from "./assets/path.webp";
 
-// Video from public/assets/cyber_promo.mp4 (served as /assets/cyber_promo.mp4)
-const TRAINING_VIDEO_SRC = "/assets/cyber_promo.mp4";
+// Video from Cloudinary CDN
+const TRAINING_VIDEO_SRC = "https://res.cloudinary.com/dwpkrvrfk/video/upload/v1771334344/cyber_promo_w3stgo.mp4"
 
 
 export default function TrainingPrograms() {
-    const [useFallback, setUseFallback] = useState(false);
-    const videoSrc = useFallback ? FALLBACK_VIDEO_SRC : TRAINING_VIDEO_SRC;
 
     return (
         <section className="relative w-full bg-background py-6 md:py-10 px-3 md:px-6 overflow-hidden font-sans transition-colors duration-300">
@@ -40,20 +38,19 @@ export default function TrainingPrograms() {
                             </h2>
                         </div>
 
-                        {/* Video Container - tries local file first, then fallback sample so video always renders */}
+                        {/* Video Container - Cloudinary CDN hosted video */}
                         <div className="relative w-full max-w-3xl mx-auto rounded-xl md:rounded-[2rem] overflow-hidden border-2 md:border-4 border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.3)] md:shadow-[0_20px_60px_rgba(0,0,0,0.3)] bg-black/20 backdrop-blur-sm group translate-y-2 aspect-video min-h-[200px]">
 
                             <video
-                                key={videoSrc}
                                 className="w-full h-full object-cover absolute inset-0"
                                 autoPlay
                                 loop
                                 muted
                                 playsInline
                                 preload="auto"
-                                
+
                             >
-                                <source src={videoSrc} type="video/mp4" />
+                                <source src={TRAINING_VIDEO_SRC} type="video/mp4" />
                                 Your browser does not support the video tag.
                             </video>
                         </div>

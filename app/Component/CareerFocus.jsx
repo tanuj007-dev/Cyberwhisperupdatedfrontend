@@ -3,6 +3,7 @@ import React from 'react'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { Radar } from 'lucide-react'
+import { useEnquiry } from '../context/EnquiryContext'
 
 // Using existing assets
 import okayAsset from './assets/mynaui_briefcase.webp'
@@ -36,6 +37,8 @@ const careerCards = [
 ]
 
 export default function CareerFocus() {
+    const { openEnquiry } = useEnquiry();
+
     return (
         <section id="career-focus" className="relative w-full bg-white dark:bg-black py-12 md:py-24 px-6 overflow-hidden font-sans transition-colors duration-300">
             {/* Decorative Gradients */}
@@ -127,7 +130,10 @@ export default function CareerFocus() {
                                     </ul>
 
                                     <div className="mt-auto w-full">
-                                        <button className="w-full py-2.5 md:py-3 px-6 rounded-xl bg-[#6B46E5] hover:bg-[#5a3bc4] text-white font-semibold text-sm transition-all duration-300 shadow-lg shadow-purple-500/20 active:scale-95 border border-transparent hover:border-purple-400/30">
+                                        <button
+                                            onClick={() => openEnquiry(true)}
+                                            className="w-full py-2.5 md:py-3 px-6 rounded-xl bg-[#6B46E5] hover:bg-[#5a3bc4] text-white font-semibold text-sm transition-all duration-300 shadow-lg shadow-purple-500/20 active:scale-95 border border-transparent hover:border-purple-400/30"
+                                        >
                                             {card.cta}
                                         </button>
                                     </div>
