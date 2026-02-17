@@ -5,7 +5,7 @@ import path from "./assets/path.webp";
 
 // Video from public/assets/cyber_promo.mp4 (served as /assets/cyber_promo.mp4)
 const TRAINING_VIDEO_SRC = "/assets/cyber_promo.mp4";
-const FALLBACK_VIDEO_SRC = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4";
+
 
 export default function TrainingPrograms() {
     const [useFallback, setUseFallback] = useState(false);
@@ -51,9 +51,7 @@ export default function TrainingPrograms() {
                                 muted
                                 playsInline
                                 preload="auto"
-                                onError={() => {
-                                    if (!useFallback) setUseFallback(true);
-                                }}
+                                
                             >
                                 <source src={videoSrc} type="video/mp4" />
                                 Your browser does not support the video tag.

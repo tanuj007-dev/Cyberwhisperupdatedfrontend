@@ -163,6 +163,13 @@ export default function EditBatchPage() {
                 <div className="space-y-4">
                     <h2 className="text-xl font-bold text-gray-900 border-b pb-2">Program Details</h2>
 
+                    <div className="pb-4 border-b border-gray-100">
+                        <label className="block text-sm font-semibold text-gray-700 mb-2">
+                            Batch ID <span className="text-gray-400 font-normal">(read-only)</span>
+                        </label>
+                        <p className="text-sm text-gray-700 bg-gray-50 px-3 py-2.5 rounded-xl w-fit">{batchId ?? '—'}</p>
+                    </div>
+
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="md:col-span-2">
                             <label className="block text-sm font-semibold text-gray-700 mb-2">

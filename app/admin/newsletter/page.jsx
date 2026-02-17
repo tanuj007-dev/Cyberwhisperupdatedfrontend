@@ -3,6 +3,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { Button, Badge, Modal, Skeleton, Toast, Input, Textarea } from '@/components/ui';
 import { Trash2, Search, Download, Mail, Calendar, Filter, Send } from 'lucide-react';
+import { API_BASE_URL } from '@/lib/apiConfig';
 
 const NewsletterSubscribers = () => {
     const [subscribers, setSubscribers] = useState([]);
@@ -33,7 +34,8 @@ const NewsletterSubscribers = () => {
         setLoading(true);
         try {
             const offset = (currentPage - 1) * itemsPerPage;
-            const response = await fetch(`/api/newsletter/subscribers?limit=${itemsPerPage}&offset=${offset}`);
+            const base = (API_BASE_URL || '').replace(/\/$/, '');
+            const response = await fetch(`${base}/api/newsletter/subscribers?limit=${itemsPerPage}&offset=${offset}`);
 
             if (!response.ok) {
                 const errBody = await response.json().catch(() => ({}));
@@ -73,7 +75,8 @@ const NewsletterSubscribers = () => {
 
     const handleDelete = async () => {
         try {
-            const response = await fetch(`/api/newsletter/subscribers/${selectedSubscriber.id}`, {
+            const base = (API_BASE_URL || '').replace(/\/$/, '');
+            const response = await fetch(`${base}/api/newsletter/subscribers/${selectedSubscriber.id}`, {
                 method: 'DELETE',
             });
 
@@ -107,7 +110,8 @@ const NewsletterSubscribers = () => {
         }
         setSendLoading(true);
         try {
-            const response = await fetch('/api/newsletter/send', {
+            const base = (API_BASE_URL || '').replace(/\/$/, '');
+            const response = await fetch(`${base}/api/newsletter/send`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

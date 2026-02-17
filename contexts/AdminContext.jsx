@@ -96,17 +96,29 @@ export const AdminProvider = ({ children }) => {
 
     const fetchBlogs = async () => {
         const base = (API_BASE_URL || '').replace(/\/$/, '');
-        if (!base) {
-            setBlogs(mockBlogs);
-            return;
-        }
+        const listUrl = base ? `${base}/api/blogs/list?page=1&limit=1000` : null;
         try {
-            const response = await fetch(`${base}/api/blogs/list?limit=1000&page=1&status=all`, {
+            if (listUrl) {
+                const response = await fetch(listUrl, {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' },
+                });
+                if (response.ok) {
+                    const result = await response.json();
+                    const blogsList = parseBlogsResponse(result);
+                    if (blogsList.length > 0) {
+                        setBlogs(mapBlogsForAdmin(blogsList));
+                        return;
+                    }
+                }
+            }
+            // Fallback: Next.js proxy (same as public site server-side) — no status param
+            const proxyRes = await fetch('/api/blogs/list?page=1&limit=1000', {
                 method: 'GET',
                 headers: { 'Content-Type': 'application/json' },
             });
-            if (response.ok) {
-                const result = await response.json();
+            if (proxyRes.ok) {
+                const result = await proxyRes.json();
                 const blogsList = parseBlogsResponse(result);
                 setBlogs(mapBlogsForAdmin(blogsList));
                 return;
@@ -120,7 +132,8 @@ export const AdminProvider = ({ children }) => {
     // Fetch users from API (Next.js proxy calls backend at API_BASE_URL so users render on admin panel)
     const fetchUsers = async () => {
         try {
-            const response = await fetch('/api/users?page=1&limit=1000', {
+            const base = (API_BASE_URL || '').replace(/\/$/, '');
+            const response = await fetch(`${base}/api/users?page=1&limit=1000`, {
                 method: 'GET',
                 headers: getAdminHeaders(),
             });

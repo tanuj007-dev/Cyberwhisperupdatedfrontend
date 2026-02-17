@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { ArrowLeft, Save, Loader2, FileText, Upload } from 'lucide-react';
 import { API_BASE_URL } from '../../../../../lib/apiConfig';
@@ -11,6 +11,8 @@ export default function EditCoursePage() {
     const router = useRouter();
     const params = useParams();
     const id = params?.id;
+    const lastFetchedIdRef = useRef(null);
+    const errorShownRef = useRef(false);
 
     const [loading, setLoading] = useState(true);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -38,7 +40,10 @@ export default function EditCoursePage() {
     const [thumbnailUploading, setThumbnailUploading] = useState(false);
 
     useEffect(() => {
-        if (id) fetchCourse();
+        if (!id) return;
+        if (lastFetchedIdRef.current === id) return;
+        lastFetchedIdRef.current = id;
+        fetchCourse();
     }, [id]);
 
     const fetchCourse = async () => {
@@ -48,14 +53,21 @@ export default function EditCoursePage() {
             const response = await fetch(`${base}/api/courses?page=1&limit=500`);
             if (!response.ok) throw new Error('Failed to fetch courses');
             const result = await response.json();
-            const courses = result?.courses || [];
-            const course = courses.find((c) => String(c.id) === String(id));
+            // Backend returns { data: [...] }; Next.js proxy may return { courses: [...] }
+            const list = Array.isArray(result?.data) ? result.data : (Array.isArray(result?.courses) ? result.courses : []);
+            const course = list.find((c) => String(c.id) === String(id));
             if (!course) {
-                alert('Course not found');
+                if (!errorShownRef.current) {
+                    errorShownRef.current = true;
+                    alert('Course not found');
+                }
                 router.push('/admin/courses');
                 return;
             }
             setFormData({
+                id: course.id,
+                date_added: course.date_added,
+                last_modified: course.last_modified,
                 title: course.title || '',
                 short_description: course.short_description || '',
                 description: course.description || '',
@@ -77,7 +89,10 @@ export default function EditCoursePage() {
             setCourseThumbnailUrl(course.thumbnail || course.course_thumbnail || course.thumbnail_url || '');
         } catch (err) {
             console.error('Error fetching course:', err);
-            alert('Failed to load course');
+            if (!errorShownRef.current) {
+                errorShownRef.current = true;
+                alert('Failed to load course');
+            }
             router.push('/admin/courses');
         } finally {
             setLoading(false);
@@ -175,6 +190,20 @@ export default function EditCoursePage() {
             <form onSubmit={handleSubmit} className="bg-white rounded-2xl border border-gray-200 p-8 space-y-6">
                 <div className="space-y-4">
                     <h2 className="text-xl font-bold text-gray-900 border-b pb-2">Basic Info</h2>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pb-4 border-b border-gray-100">
+                        <div>
+                            <label className="block text-sm font-semibold text-gray-700 mb-2">Course ID <span className="text-gray-400 font-normal">(read-only)</span></label>
+                            <p className="text-sm text-gray-700 bg-gray-50 px-3 py-2.5 rounded-xl">{id ?? formData.id ?? '—'}</p>
+                        </div>
+                        <div>
+                            <label className="block text-sm font-semibold text-gray-700 mb-2">Date Added <span className="text-gray-400 font-normal">(read-only)</span></label>
+                            <p className="text-sm text-gray-700 bg-gray-50 px-3 py-2.5 rounded-xl">{formData.date_added ? new Date(formData.date_added * 1000).toLocaleString() : '—'}</p>
+                        </div>
+                        <div>
+                            <label className="block text-sm font-semibold text-gray-700 mb-2">Last Modified <span className="text-gray-400 font-normal">(read-only)</span></label>
+                            <p className="text-sm text-gray-700 bg-gray-50 px-3 py-2.5 rounded-xl">{formData.last_modified ? new Date(formData.last_modified * 1000).toLocaleString() : '—'}</p>
+                        </div>
+                    </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="md:col-span-2">
                             <label className="block text-sm font-semibold text-gray-700 mb-2">Title *</label>

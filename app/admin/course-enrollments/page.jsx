@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Loader2, Users, Mail, Phone, BookOpen } from 'lucide-react';
+import { API_BASE_URL } from '@/lib/apiConfig';
 
 export default function CourseEnrollmentsPage() {
     const [enrollments, setEnrollments] = useState([]);
@@ -19,7 +20,8 @@ export default function CourseEnrollmentsPage() {
         try {
             setLoading(true);
             setError(null);
-            const response = await fetch(`/api/course-enrollments?page=${page}&limit=${limit}`);
+            const base = (API_BASE_URL || '').replace(/\/$/, '');
+            const response = await fetch(`${base}/api/course-enrollments?page=${page}&limit=${limit}`);
 
             if (!response.ok) {
                 throw new Error(`Failed to load enrollments (${response.status})`);

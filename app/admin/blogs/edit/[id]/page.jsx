@@ -298,18 +298,19 @@ const EditBlog = () => {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                                    Slug
+                                    Slug <span className="text-gray-400 font-normal">(read-only)</span>
                                 </label>
                                 <div className="flex items-center">
                                     <span className="px-3 py-2.5 bg-gray-100 border border-r-0 border-gray-300 rounded-l-xl text-gray-500 text-sm">/blog/</span>
                                     <input
                                         name="slug"
-                                        value={formData.slug || formData.title.toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-')}
-                                        onChange={handleChange}
+                                        readOnly
+                                        value={formData.slug || formData.title?.toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-') || ''}
                                         placeholder="your-blog-slug"
-                                        className="w-full px-4 py-2.5 border border-gray-300 rounded-r-xl focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                                        className="w-full px-4 py-2.5 border border-gray-300 rounded-r-xl bg-gray-50 text-gray-600 cursor-not-allowed"
                                     />
                                 </div>
+                                <p className="mt-1 text-xs text-gray-500">Slug cannot be changed after creation.</p>
                             </div>
                             <Input
                                 label="Reading Time"
@@ -563,12 +564,16 @@ const EditBlog = () => {
 
                         <div className="grid grid-cols-2 gap-4 pt-4 border-t border-gray-100">
                             <div>
-                                <label className="block text-sm font-medium text-gray-500 mb-1">Created</label>
-                                <p className="text-sm text-gray-900">{new Date(formData.added_date).toLocaleString()}</p>
+                                <label className="block text-sm font-medium text-gray-500 mb-1">Blog ID <span className="text-gray-400 font-normal">(read-only)</span></label>
+                                <p className="text-sm text-gray-900 bg-gray-50 px-3 py-2 rounded-lg">{formData.id ?? formData.blog_id ?? '—'}</p>
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-gray-500 mb-1">Last Updated</label>
-                                <p className="text-sm text-gray-900">{new Date(formData.updated_date).toLocaleString()}</p>
+                                <label className="block text-sm font-medium text-gray-500 mb-1">Created <span className="text-gray-400 font-normal">(read-only)</span></label>
+                                <p className="text-sm text-gray-900 bg-gray-50 px-3 py-2 rounded-lg">{formData.added_date ? new Date(formData.added_date).toLocaleString() : '—'}</p>
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-500 mb-1">Last Updated <span className="text-gray-400 font-normal">(read-only)</span></label>
+                                <p className="text-sm text-gray-900 bg-gray-50 px-3 py-2 rounded-lg">{formData.updated_date ? new Date(formData.updated_date).toLocaleString() : '—'}</p>
                             </div>
                         </div>
                     </div>

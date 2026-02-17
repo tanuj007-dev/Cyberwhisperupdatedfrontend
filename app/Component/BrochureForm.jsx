@@ -21,7 +21,7 @@ export default function BrochureForm({ className = '', onSuccess, brochureUrl: b
 
     useEffect(() => {
         if (brochureUrlProp) return
-        fetch('/api/brochure/current')
+        fetch(`${(API_BASE_URL || '').replace(/\/$/, '')}/api/brochure/current`)
             .then((res) => res.ok ? res.json() : {})
             .then((data) => {
                 if (data?.url) setFetchedUrl(data.url)
@@ -59,7 +59,8 @@ export default function BrochureForm({ className = '', onSuccess, brochureUrl: b
             }
 
             const link = document.createElement('a')
-            link.href = brochureUrl.startsWith('http') ? brochureUrl : (typeof window !== 'undefined' ? window.location.origin : '') + brochureUrl
+            const base = (API_BASE_URL || '').replace(/\/$/, '');
+            link.href = brochureUrl.startsWith('http') ? brochureUrl : (base ? base : (typeof window !== 'undefined' ? window.location.origin : '')) + brochureUrl
             link.download = courseTitle ? `${courseTitle.replace(/[^a-zA-Z0-9.-]/g, '_').slice(0, 60)}_Brochure.pdf` : BROCHURE_FILENAME
             document.body.appendChild(link)
             link.click()

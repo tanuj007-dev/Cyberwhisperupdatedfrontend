@@ -227,7 +227,7 @@ const GalleryManagement = () => {
     // View single image
     const handleViewImage = async (image) => {
         try {
-            const response = await fetch(`/api/gallery/${image.id}`);
+            const response = await fetch(`${API_BASE_URL.replace(/\/$/, '')}/api/gallery/${image.id}`);
             if (!response.ok) throw new Error('Failed to fetch image details');
 
             const data = await response.json();

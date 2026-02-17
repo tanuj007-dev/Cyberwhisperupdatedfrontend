@@ -128,7 +128,7 @@ const EditUser = () => {
                 <Card title="Basic Information">
                     <div className="space-y-4">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <Input label="User ID" name="id" value={formData.id} disabled />
+                            <Input label="User ID (read-only)" name="id" value={formData.id} disabled />
                             <Input
                                 label="Title"
                                 name="title"
@@ -166,6 +166,7 @@ const EditUser = () => {
                                 onChange={handleChange}
                                 required
                                 error={errors.email}
+                                disabled
                             />
                             <Input
                                 label="Phone"
@@ -271,12 +272,12 @@ const EditUser = () => {
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t">
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Date Added</label>
-                                <p className="text-sm text-gray-600">{new Date(formData.date_added).toLocaleString()}</p>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Date Added <span className="text-gray-400 font-normal">(read-only)</span></label>
+                                <p className="text-sm text-gray-600 bg-gray-50 px-3 py-2 rounded-lg">{formData.date_added ? new Date(formData.date_added).toLocaleString() : '—'}</p>
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Last Modified</label>
-                                <p className="text-sm text-gray-600">{new Date(formData.last_modified).toLocaleString()}</p>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Last Modified <span className="text-gray-400 font-normal">(read-only)</span></label>
+                                <p className="text-sm text-gray-600 bg-gray-50 px-3 py-2 rounded-lg">{formData.last_modified ? new Date(formData.last_modified).toLocaleString() : '—'}</p>
                             </div>
                         </div>
                     </div>

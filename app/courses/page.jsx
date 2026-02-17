@@ -6,6 +6,7 @@ import { Star, BookOpen, BarChart2, Calendar, ChevronLeft, ChevronRight } from '
 import Link from 'next/link'
 import thumb1 from '../Component/assets/cyber_lab_1.webp'
 import BrochureFormModal from '../Component/BrochureFormModal'
+import EnrollModal from '../Component/EnrollModal'
 import { useEnquiry } from '../context/EnquiryContext'
 import { API_BASE_URL } from '@/lib/apiConfig'
 
@@ -20,7 +21,14 @@ export default function AllCoursesPage() {
     const [totalCourses, setTotalCourses] = useState(0)
     const [brochureModalOpen, setBrochureModalOpen] = useState(false)
     const [brochureCourse, setBrochureCourse] = useState(null)
+    const [enrollModalOpen, setEnrollModalOpen] = useState(false)
+    const [enrollCourseTitle, setEnrollCourseTitle] = useState('')
     const { openEnquiry } = useEnquiry()
+
+    const openEnrollModal = (title) => {
+        setEnrollCourseTitle(title || '')
+        setEnrollModalOpen(true)
+    }
     const limit = 10
 
     useEffect(() => {
@@ -228,7 +236,11 @@ export default function AllCoursesPage() {
                             <div className="px-8 pb-8 mt-auto">
                                 <div className="space-y-3">
                                     <div className="flex items-center gap-3">
-                                        <button className="flex-1 bg-[#310E3F] text-white py-3 rounded-full text-sm font-bold hover:bg-[#6B46E5] transition-colors">
+                                        <button
+                                            type="button"
+                                            onClick={() => openEnrollModal(course.title)}
+                                            className="flex-1 bg-[#310E3F] text-white py-3 rounded-full text-sm font-bold hover:bg-[#6B46E5] transition-colors"
+                                        >
                                             Enroll Now
                                         </button>
                                         <button
@@ -308,6 +320,12 @@ export default function AllCoursesPage() {
                         </div>
                     </div>
                 )}
+
+                <EnrollModal
+                    open={enrollModalOpen}
+                    onClose={() => setEnrollModalOpen(false)}
+                    courseTitle={enrollCourseTitle}
+                />
             </div>
         </section>
     )

@@ -20,9 +20,11 @@ export default function AdminLogin() {
     const [registerForm, setRegisterForm] = useState({
         first_name: '', last_name: '', email: '', phone: '', password: '',
         title: '', address: '', biography: '', linkedin_url: '', github_url: '',
-        role: 'STUDENT', is_instructor: false, profile_image_url: ''
+        role: 'STUDENT', is_instructor: false, profile_image_url: '', skills: []
     });
+    const [registerSkillInput, setRegisterSkillInput] = useState('');
     const [registerErrors, setRegisterErrors] = useState({});
+    const [registerSuccess, setRegisterSuccess] = useState('');
     const [registerSubmitting, setRegisterSubmitting] = useState(false);
     const [toast, setToast] = useState({ isVisible: false, message: '', type: 'success' });
     const [profileImageUploading, setProfileImageUploading] = useState(false);
@@ -230,7 +232,8 @@ export default function AdminLogin() {
         try {
             const formData = new FormData();
             formData.append('profile', file);
-            const res = await fetch('/api/users/upload-profile', { method: 'POST', body: formData });
+            const base = (API_BASE_URL || '').replace(/\/$/, '');
+            const res = await fetch(`${base}/api/users/upload-profile`, { method: 'POST', body: formData });
             const data = await res.json().catch(() => ({}));
             if (!res.ok) {
                 setProfileImageError(data?.message || data?.error || 'Upload failed');
@@ -254,6 +257,19 @@ export default function AdminLogin() {
         const file = e.target?.files?.[0];
         if (file) uploadProfileImage(file);
         e.target.value = '';
+    };
+    const addRegisterSkill = () => {
+        const s = (registerSkillInput || '').trim();
+        if (!s) return;
+        if (Array.isArray(registerForm.skills) && registerForm.skills.includes(s)) return;
+        setRegisterForm((prev) => ({ ...prev, skills: [...(prev.skills || []), s] }));
+        setRegisterSkillInput('');
+    };
+    const removeRegisterSkill = (skill) => {
+        setRegisterForm((prev) => ({
+            ...prev,
+            skills: (prev.skills || []).filter((x) => x !== skill)
+        }));
     };
     const validateRegister = () => {
         const err = {};
