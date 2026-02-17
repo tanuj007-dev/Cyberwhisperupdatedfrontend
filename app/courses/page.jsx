@@ -7,6 +7,7 @@ import Link from 'next/link'
 import thumb1 from '../Component/assets/cyber_lab_1.webp'
 import BrochureFormModal from '../Component/BrochureFormModal'
 import { useEnquiry } from '../context/EnquiryContext'
+import { API_BASE_URL } from '@/lib/apiConfig'
 
 const defaultImage = thumb1
 
@@ -30,8 +31,9 @@ export default function AllCoursesPage() {
         setLoading(true)
         setError(null)
         try {
+            const base = (API_BASE_URL || '').replace(/\/$/, '')
             const response = await fetch(
-                `/api/courses?page=${page}&limit=${limit}`,
+                `${base}/api/courses?page=${page}&limit=${limit}`,
                 {
                     method: 'GET',
                     headers: {
@@ -50,7 +52,9 @@ export default function AllCoursesPage() {
                 throw new Error('API returned unsuccessful response')
             }
 
-            setCourses(data.courses || [])
+            // API returns { data: [...] } or { courses: [...] }
+            const list = Array.isArray(data.data) ? data.data : (data.courses || [])
+            setCourses(list)
             setTotalPages(data.pagination?.pages || 1)
             setTotalCourses(data.pagination?.total || 0)
         } catch (err) {
@@ -154,11 +158,11 @@ export default function AllCoursesPage() {
                             <div className="px-6 pb-6 mt-6">
                                 <div className="relative aspect-video rounded-[1.5rem] overflow-hidden bg-gray-100">
                                     <Image
-                                        src={(course.image || course.thumbnail) || defaultImage}
+                                        src={(course.course_thumbnail || course.image || course.thumbnail) || defaultImage}
                                         alt={course.title}
                                         fill
                                         className="object-cover transition-transform duration-700 group-hover:scale-110"
-                                        unoptimized={typeof (course.image || course.thumbnail) === 'string' && (course.image || course.thumbnail).startsWith('http')}
+                                        unoptimized={typeof (course.course_thumbnail || course.image || course.thumbnail) === 'string' && (course.course_thumbnail || course.image || course.thumbnail)?.startsWith('http')}
                                         onError={(e) => {
                                             // Fallback if image fails to load
                                             e.currentTarget.src = defaultImage.src

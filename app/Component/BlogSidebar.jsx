@@ -4,6 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Loader2 } from 'lucide-react'
+import { API_BASE_URL } from '@/lib/apiConfig'
 
 export default function BlogSidebar() {
     const [latestArticles, setLatestArticles] = useState([])
@@ -16,11 +17,9 @@ export default function BlogSidebar() {
     const fetchLatestArticles = async () => {
         try {
             setLoading(true)
-            const baseUrl = typeof window !== 'undefined'
-                ? `http://${window.location.hostname}:${window.location.port}`
-                : 'https://darkred-mouse-801836.hostingersite.com'
+            const baseUrl = (API_BASE_URL || '').replace(/\/$/, '')
 
-            // Fetch only 3 latest articles for sidebar
+            // Fetch from hosting API
             const apiUrl = `${baseUrl}/api/blogs/list?page=1&limit=5`
             console.log('Fetching latest articles for sidebar:', apiUrl)
 

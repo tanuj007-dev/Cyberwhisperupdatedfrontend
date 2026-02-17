@@ -44,7 +44,8 @@ export default function EditCoursePage() {
     const fetchCourse = async () => {
         try {
             setLoading(true);
-            const response = await fetch('/api/courses?page=1&limit=500');
+            const base = (API_BASE_URL || '').replace(/\/$/, '');
+            const response = await fetch(`${base}/api/courses?page=1&limit=500`);
             if (!response.ok) throw new Error('Failed to fetch courses');
             const result = await response.json();
             const courses = result?.courses || [];

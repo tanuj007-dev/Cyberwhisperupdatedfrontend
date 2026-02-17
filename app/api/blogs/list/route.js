@@ -40,55 +40,50 @@ export async function GET(request) {
         // Backend may expect PUBLISHED for public list
         const backendStatus = statusParam === 'all' ? 'all' : statusParam === 'ACTIVE' ? 'PUBLISHED' : statusParam;
 
+        const base = (API_BASE_URL || '').replace(/\/$/, '');
+        const headers = { 'Content-Type': 'application/json' };
         let backendFailed = false;
-        try {
-            const q = new URLSearchParams({ page: String(page), limit: String(limit) });
-            if (backendStatus && backendStatus !== 'all') q.set('status', backendStatus);
-            if (category_id) q.set('category_id', category_id);
-            // Backend: GET /api/blogs/list (then fallback to /api/blogs)
-            const listUrl = `${API_BASE_URL}/api/blogs/list${q.toString() ? `?${q.toString()}` : ''}`;
-            const res = await fetch(listUrl, { headers: { 'Content-Type': 'application/json' }, cache: 'no-store' });
-            if (!res.ok) {
-                const altUrl = `${API_BASE_URL}/api/blogs?${q.toString()}`;
-                const altRes = await fetch(altUrl, { headers: { 'Content-Type': 'application/json' }, cache: 'no-store' });
-                if (!altRes.ok) { backendFailed = true; } else {
-                    const json = await altRes.json();
-                    const raw = json.data ?? json.blogs ?? json.result ?? json.items ?? (Array.isArray(json) ? json : []);
-                    const list = Array.isArray(raw) ? raw : [];
-                    const total = json.pagination?.total ?? list.length;
-                    const totalPages = json.pagination?.totalPages ?? Math.ceil(total / limit);
-                    const data = list.map(mapBlogToFrontend);
-                    return NextResponse.json(
-                        { success: true, message: 'Blogs fetched successfully', data, pagination: { page, limit, total, totalPages, hasNextPage: page < totalPages, hasPrevPage: page > 1 } },
-                        { status: 200, headers: corsHeaders }
-                    );
+
+        const normalizeAndReturn = (json) => {
+            const raw = json.data ?? json.blogs ?? json.result ?? json.items ?? json.posts ?? (Array.isArray(json) ? json : []);
+            const list = Array.isArray(raw) ? raw : [];
+            const total = json.pagination?.total ?? json.total ?? list.length;
+            const totalPages = json.pagination?.totalPages ?? (Math.ceil(total / limit) || 1);
+            const data = list.map(mapBlogToFrontend);
+            return NextResponse.json(
+                {
+                    success: true,
+                    message: 'Blogs fetched successfully',
+                    data,
+                    pagination: { page, limit, total, totalPages, hasNextPage: page < totalPages, hasPrevPage: page > 1 },
+                },
+                { status: 200, headers: corsHeaders }
+            );
+        };
+
+        if (base) {
+            try {
+                // When status=all, try backend with no query first (matches Postman: GET /api/blogs/list)
+                const urlsToTry = backendStatus === 'all'
+                    ? [
+                        `${base}/api/blogs/list`,
+                        `${base}/api/blogs/list?page=${page}&limit=${limit}`,
+                    ]
+                    : [
+                        `${base}/api/blogs/list?page=${page}&limit=${limit}${backendStatus && backendStatus !== 'all' ? `&status=${backendStatus}` : ''}${category_id ? `&category_id=${category_id}` : ''}`,
+                    ];
+                for (const listUrl of urlsToTry) {
+                    const res = await fetch(listUrl, { headers, cache: 'no-store' });
+                    if (!res.ok) continue;
+                    const json = await res.json().catch(() => ({}));
+                    return normalizeAndReturn(json);
                 }
-            } else {
-            const json = await res.json();
-                const raw = json.data ?? json.blogs ?? json.result ?? json.items ?? json.posts ?? (Array.isArray(json) ? json : []);
-                const list = Array.isArray(raw) ? raw : [];
-                const total = json.pagination?.total ?? json.total ?? list.length;
-                const totalPages = json.pagination?.totalPages ?? Math.ceil(total / limit);
-                const data = list.map(mapBlogToFrontend);
-                return NextResponse.json(
-                    {
-                        success: true,
-                        message: 'Blogs fetched successfully',
-                        data,
-                        pagination: {
-                            page,
-                            limit,
-                            total,
-                            totalPages,
-                            hasNextPage: page < totalPages,
-                            hasPrevPage: page > 1,
-                        },
-                    },
-                    { status: 200, headers: corsHeaders }
-                );
+                backendFailed = true;
+            } catch (err) {
+                console.warn('Blogs list: backend unreachable, using local:', err.message);
+                backendFailed = true;
             }
-        } catch (err) {
-            console.warn('Blogs list: backend unreachable, using local:', err.message);
+        } else {
             backendFailed = true;
         }
 

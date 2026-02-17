@@ -94,89 +94,55 @@ export const AdminProvider = ({ children }) => {
         return [];
     };
 
-    // Fetch blogs: try backend GET /api/blogs/list first so newly added blogs render; fallback to Next.js /api/blogs/list (which also tries backend then local)
     const fetchBlogs = async () => {
-        const backendUrl = API_BASE_URL;
-        const listUrl = `${backendUrl}/api/blogs/list?limit=1000&page=1&status=all`;
-
+        const base = (API_BASE_URL || '').replace(/\/$/, '');
+        if (!base) {
+            setBlogs(mockBlogs);
+            return;
+        }
         try {
-            const response = await fetch(listUrl, {
+            const response = await fetch(`${base}/api/blogs/list?limit=1000&page=1&status=all`, {
                 method: 'GET',
-                headers: { 'Content-Type': 'application/json', ...getAdminHeaders() },
+                headers: { 'Content-Type': 'application/json' },
             });
             if (response.ok) {
                 const result = await response.json();
-                let blogsList = parseBlogsResponse(result);
-                if (blogsList.length === 0 && listUrl.includes('?')) {
-                    const bareUrl = `${backendUrl}/api/blogs/list`;
-                    const bareRes = await fetch(bareUrl, { method: 'GET', headers: { 'Content-Type': 'application/json', ...getAdminHeaders() } });
-                    if (bareRes.ok) {
-                        const bareResult = await bareRes.json();
-                        blogsList = parseBlogsResponse(bareResult);
-                    }
-                }
+                const blogsList = parseBlogsResponse(result);
                 setBlogs(mapBlogsForAdmin(blogsList));
                 return;
             }
         } catch (err) {
-            console.warn('Blogs list: backend unreachable, trying Next.js API:', err.message);
+            console.warn('Blogs list: backend unreachable', err.message);
         }
-
-        try {
-            const baseUrl = typeof window !== 'undefined' ? window.location.origin : '';
-            if (baseUrl) {
-                const response = await fetch(`${baseUrl}/api/blogs/list?limit=1000&page=1&status=all`, {
-                    headers: { 'Content-Type': 'application/json' },
-                });
-                if (response.ok) {
-                    const result = await response.json();
-                    const blogsList = parseBlogsResponse(result);
-                    setBlogs(mapBlogsForAdmin(blogsList));
-                    return;
-                }
-            }
-        } catch (err) {
-            console.error('Error fetching blogs:', err);
-        }
-
         setBlogs(mockBlogs);
     };
 
-    // Fetch users from API
+    // Fetch users from API (Next.js proxy calls backend at API_BASE_URL so users render on admin panel)
     const fetchUsers = async () => {
         try {
-            const apiUrl = API_BASE_URL;
-            const response = await fetch(`${apiUrl}/api/users?page=1&limit=1000`, {
+            const response = await fetch('/api/users?page=1&limit=1000', {
                 method: 'GET',
                 headers: getAdminHeaders(),
             });
-
-            console.log('Fetch users response status:', response.status);
 
             if (!response.ok) {
                 throw new Error(`Failed to fetch users: ${response.status}`);
             }
             const result = await response.json();
-            console.log('Full users API response:', result);
 
-            // Handle API response structure: { success: true, data: [...] }
             let usersList = [];
-
             if (result.success && result.data) {
                 usersList = Array.isArray(result.data) ? result.data : [result.data];
             } else if (Array.isArray(result)) {
                 usersList = result;
             } else if (result.users) {
-                usersList = result.users;
+                usersList = Array.isArray(result.users) ? result.users : [result.users];
             }
 
-            console.log('Users fetched successfully from API:', usersList.length, 'users');
             setUsers(usersList);
             setLoading(false);
         } catch (error) {
             console.error('Error fetching users from API:', error.message);
-            console.log('Falling back to mock users data');
-            // Fallback to mock users
             setUsers(mockUsers);
             setLoading(false);
         }

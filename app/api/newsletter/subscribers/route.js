@@ -7,41 +7,48 @@ export async function GET(request) {
         const limit = searchParams.get('limit') || '10';
         const offset = searchParams.get('offset') || '0';
 
-        const url = `${API_BASE_URL}/api/newsletter/subscribers?limit=${limit}&offset=${offset}`;
+        const base = (API_BASE_URL || '').replace(/\/$/, '');
+        if (!base) {
+            return NextResponse.json({ subscribers: [], total: 0, message: 'API_BASE_URL not configured' }, { status: 502 });
+        }
 
-        console.log(`Proxying Newsletter Subscribers request to: ${url}`);
+        const url = `${base}/api/newsletter/subscribers?limit=${limit}&offset=${offset}`;
 
         const res = await fetch(url, {
             method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            cache: 'no-store'
+            headers: { 'Content-Type': 'application/json' },
+            cache: 'no-store',
         });
 
-        if (!res.ok) {
-            console.error(`Backend returned ${res.status}`);
-            return NextResponse.json({ subscribers: [], total: 0 }, { status: res.status });
+        const text = await res.text();
+        let data = {};
+        try {
+            data = text ? JSON.parse(text) : {};
+        } catch {
+            console.error('Backend returned non-JSON:', text?.slice(0, 200));
         }
 
-        const data = await res.json();
+        if (!res.ok) {
+            console.error('Newsletter subscribers backend error:', res.status, data);
+            return NextResponse.json({
+                subscribers: [],
+                total: 0,
+                error: data.message || data.error || `Backend returned ${res.status}`,
+            }, { status: res.status >= 500 ? 502 : res.status });
+        }
 
-        // Ensure the response matches what the frontend expects { subscribers: [], total: number }
-        // If backend returns { success: true, data: [...] }, we might need mapping.
-        // Let's assume backend returns consistent structure or we pass it through if it matches.
-        // If we look at other APIs in this project, they often structure as { success, data, pagination }.
-
-        // Mapping attempt (safe fallback)
-        const subscribers = data.subscribers || data.data || data;
-        const total = data.total || data.count || (Array.isArray(subscribers) ? subscribers.length : 0);
+        const subscribers = data.subscribers ?? data.data ?? (Array.isArray(data) ? data : []);
+        const total = data.total ?? data.count ?? (Array.isArray(subscribers) ? subscribers.length : 0);
 
         return NextResponse.json({
             subscribers: Array.isArray(subscribers) ? subscribers : [],
-            total: total
-        }, { status: 200 });
-
+            total: Number(total) || 0,
+        });
     } catch (error) {
-        console.error('Proxy Error:', error);
-        return NextResponse.json({ subscribers: [], total: 0 }, { status: 500 });
+        console.error('Newsletter subscribers proxy error:', error);
+        return NextResponse.json(
+            { subscribers: [], total: 0, error: error.message || 'Proxy error' },
+            { status: 500 }
+        );
     }
 }

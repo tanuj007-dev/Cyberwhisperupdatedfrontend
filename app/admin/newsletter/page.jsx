@@ -36,15 +36,18 @@ const NewsletterSubscribers = () => {
             const response = await fetch(`/api/newsletter/subscribers?limit=${itemsPerPage}&offset=${offset}`);
 
             if (!response.ok) {
-                throw new Error('Failed to fetch subscribers');
+                const errBody = await response.json().catch(() => ({}));
+                throw new Error(errBody.message || errBody.error || `Failed to fetch subscribers (${response.status})`);
             }
 
             const data = await response.json();
-            setSubscribers(data.subscribers || []);
-            setTotalCount(data.total || 0);
+            const list = data.subscribers ?? data.data ?? (Array.isArray(data) ? data : []);
+            const total = data.total ?? data.count ?? (Array.isArray(list) ? list.length : 0);
+            setSubscribers(Array.isArray(list) ? list : []);
+            setTotalCount(Number(total) || 0);
         } catch (error) {
             console.error('Error fetching subscribers:', error);
-            showToast('Failed to load subscribers', 'error');
+            showToast(error.message || 'Failed to load subscribers', 'error');
             setSubscribers([]);
         } finally {
             setLoading(false);

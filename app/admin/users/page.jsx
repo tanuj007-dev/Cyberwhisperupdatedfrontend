@@ -5,6 +5,7 @@ import { useAdmin } from '@/contexts/AdminContext';
 import { Button, Badge, Modal, Input, Toast, Skeleton } from '@/components/ui';
 import { Edit2, Trash2, Eye, Search, PlusCircle, UserPlus } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { API_BASE_URL } from '@/lib/apiConfig';
 
 const UserList = () => {
     const router = useRouter();
@@ -85,7 +86,8 @@ const UserList = () => {
         try {
             const formDataUpload = new FormData();
             formDataUpload.append('profile', file);
-            const uploadUrl = typeof window !== 'undefined' ? `${window.location.origin}/api/users/upload-profile` : '/api/users/upload-profile';
+            const base = (API_BASE_URL || '').replace(/\/$/, '');
+            const uploadUrl = base ? `${base}/api/users/upload-profile` : '/api/users/upload-profile';
             const response = await fetch(uploadUrl, {
                 method: 'POST',
                 body: formDataUpload,

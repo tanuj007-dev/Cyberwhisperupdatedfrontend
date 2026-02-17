@@ -20,52 +20,56 @@ export async function GET(request) {
         const limit = parseInt(searchParams.get('limit') || '10');
         const status = searchParams.get('status');
         const role = searchParams.get('role');
-        
-        console.log('=== GET USERS ===');
-        console.log('Page:', page, 'Limit:', limit);
-        
-        // Get users from local storage
+
         let users = await getAllUsers();
-        console.log('Found', users.length, 'users in local storage');
-        
-        // If no users in local storage, try backend server
+
         if (users.length === 0) {
-            console.log('No users in local storage, trying backend server');
             try {
+                const base = (API_BASE_URL || '').replace(/\/$/, '');
                 const queryString = searchParams.toString();
-                const url = `${API_BASE_URL}/users${queryString ? `?${queryString}` : ''}`;
-                const res = await fetch(url, {
-                    method: 'GET',
-                    headers: { 'Content-Type': 'application/json' },
-                    cache: 'no-store'
-                });
-                
+                const url = `${base}/api/users${queryString ? `?${queryString}` : ''}`;
+                const auth = request.headers.get('Authorization');
+                const headers = { 'Content-Type': 'application/json' };
+                if (auth) headers['Authorization'] = auth;
+                const res = await fetch(url, { method: 'GET', headers, cache: 'no-store' });
                 if (res.ok) {
-                    const data = await res.json();
-                    return NextResponse.json(data, { status: res.status, headers: corsHeaders });
+                    const data = await res.json().catch(() => ({}));
+                    const list = Array.isArray(data?.data) ? data.data : Array.isArray(data?.users) ? data.users : Array.isArray(data) ? data : [];
+                    const total = data?.pagination?.total ?? data?.total ?? list.length;
+                    const startIndex = (page - 1) * limit;
+                    const endIndex = startIndex + limit;
+                    const paginatedUsers = list.slice(startIndex, endIndex);
+                    return NextResponse.json({
+                        success: true,
+                        message: 'Users fetched successfully',
+                        data: paginatedUsers,
+                        pagination: {
+                            page,
+                            limit,
+                            total,
+                            totalPages: Math.ceil(Number(total) / limit) || 1,
+                            hasNextPage: endIndex < total,
+                            hasPrevPage: page > 1,
+                        },
+                    }, { status: 200, headers: corsHeaders });
                 }
-            } catch (error) {
-                console.log('Backend server not available:', error.message);
+            } catch (e) {
+                // fall through to local
             }
         }
-        
-        // Filter users if needed
+
         if (status || role) {
             const filters = {};
             if (status) filters.status = status;
             if (role) filters.role = role;
             users = await getFilteredUsers(filters);
         }
-        
-        // Sort by created_at descending
-        users = users.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-        
-        // Calculate pagination
+        users = users.sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0));
         const total = users.length;
         const startIndex = (page - 1) * limit;
         const endIndex = startIndex + limit;
         const paginatedUsers = users.slice(startIndex, endIndex);
-        
+
         return NextResponse.json(
             {
                 success: true,
@@ -77,8 +81,8 @@ export async function GET(request) {
                     total,
                     totalPages: Math.ceil(total / limit),
                     hasNextPage: endIndex < total,
-                    hasPrevPage: page > 1
-                }
+                    hasPrevPage: page > 1,
+                },
             },
             { status: 200, headers: corsHeaders }
         );

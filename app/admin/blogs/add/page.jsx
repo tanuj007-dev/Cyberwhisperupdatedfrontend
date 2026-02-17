@@ -147,11 +147,11 @@ const AddBlog = () => {
         try {
             showToast('Uploading image...', 'info');
 
-            // Use same-origin so Next.js API route handles upload (saves to public/uploads/thumbnails)
             const formDataUpload = new FormData();
             formDataUpload.append('thumbnail', file);
 
-            const uploadUrl = API_CONFIG.endpoints.uploadThumbnail;
+            const base = (API_BASE_URL || '').replace(/\/$/, '');
+            const uploadUrl = base ? `${base}${API_CONFIG.endpoints.uploadThumbnail}` : API_CONFIG.endpoints.uploadThumbnail;
             const response = await fetch(uploadUrl, {
                 method: 'POST',
                 body: formDataUpload
@@ -197,8 +197,10 @@ const AddBlog = () => {
             showToast('Uploading banner...', 'info');
             const formDataUpload = new FormData();
             formDataUpload.append('banner', file);
+            const base = (API_BASE_URL || '').replace(/\/$/, '');
             const endpoint = API_CONFIG.endpoints.uploadBanner || API_CONFIG.endpoints.uploadThumbnail;
-            const response = await fetch(endpoint, { method: 'POST', body: formDataUpload });
+            const uploadUrl = base ? `${base}${endpoint}` : endpoint;
+            const response = await fetch(uploadUrl, { method: 'POST', body: formDataUpload });
             if (!response.ok) {
                 const err = await response.json().catch(() => ({}));
                 throw new Error(err.error || 'Upload failed');
@@ -230,7 +232,9 @@ const AddBlog = () => {
             showToast('Uploading image...', 'info');
             const formDataUpload = new FormData();
             formDataUpload.append('thumbnail', file);
-            const response = await fetch(API_CONFIG.endpoints.uploadThumbnail, { method: 'POST', body: formDataUpload });
+            const base = (API_BASE_URL || '').replace(/\/$/, '');
+            const uploadUrl = base ? `${base}${API_CONFIG.endpoints.uploadThumbnail}` : API_CONFIG.endpoints.uploadThumbnail;
+            const response = await fetch(uploadUrl, { method: 'POST', body: formDataUpload });
             if (!response.ok) {
                 const err = await response.json().catch(() => ({}));
                 throw new Error(err.error || 'Upload failed');
