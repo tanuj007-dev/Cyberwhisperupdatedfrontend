@@ -275,7 +275,7 @@ function HeroLayout({ isVideoOpen, setIsVideoOpen }) {
         </motion.div>
       </div>
 
-      {/* Video Modal - Top Level for correct stacking context */}
+      {/* Video Modal - Top Level for correct stacking context. Path without spaces for Vercel. */}
       {isVideoOpen && (
         <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/90 backdrop-blur-md" onClick={() => setIsVideoOpen(false)}>
           <div className="relative w-full max-w-5xl bg-black rounded-3xl overflow-hidden shadow-[0_0_50px_rgba(168,85,247,0.3)] border border-purple-500/20" onClick={e => e.stopPropagation()}>
@@ -290,9 +290,11 @@ function HeroLayout({ isVideoOpen, setIsVideoOpen }) {
             <div className="aspect-video w-full">
               <video
                 className="w-full h-full"
-                src="/Cyber Whisper.mp4"
+                src="/assets/Cyber%20Whisper.mp4"
                 controls
                 autoPlay
+                playsInline
+                preload="metadata"
               >
                 Your browser does not support the video tag.
               </video>

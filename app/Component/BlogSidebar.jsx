@@ -82,12 +82,12 @@ export default function BlogSidebar() {
                                 href={`/blog/${article.id ?? article.slug ?? article.blog_id ?? ''}`}
                                 className="group flex gap-4 items-start"
                             >
-                                {/* Article Image */}
-                                {article.image && (
-                                    <div className="relative w-20 h-20 shrink-0 rounded-xl overflow-hidden border border-slate-100">
+                                {/* Article Image - support backend shape (thumbnail_url/banner_url) or mapped (image) */}
+                                {(article.image || article.thumbnail_url || article.banner_url) && String(article.image || article.thumbnail_url || article.banner_url).trim() && (
+                                    <div className="relative w-20 h-20 shrink-0 rounded-xl overflow-hidden border border-slate-100 bg-gray-100 dark:bg-gray-800">
                                         <Image
-                                            src={article.image}
-                                            alt={article.title}
+                                            src={article.image || article.thumbnail_url || article.banner_url}
+                                            alt={article.title || 'Article'}
                                             fill
                                             className="object-cover transition-transform duration-500 group-hover:scale-110"
                                         />

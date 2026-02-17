@@ -182,40 +182,37 @@ export const AdminProvider = ({ children }) => {
         }
     };
 
-    // Fetch media from API
+    // Fetch media from API (backend may not have /api/media — 404 is expected, use mock)
     const fetchMedia = async () => {
         try {
-            const apiUrl = API_BASE_URL;
+            const apiUrl = API_BASE_URL.replace(/\/$/, '');
             const response = await fetch(`${apiUrl}/api/media`, {
                 method: 'GET',
                 headers: getAdminHeaders(),
             });
 
-            console.log('Fetch media response status:', response.status);
+            if (response.status === 404) {
+                setMedia(mockMedia);
+                setLoading(false);
+                return;
+            }
 
             if (!response.ok) {
                 throw new Error(`Failed to fetch media: ${response.status}`);
             }
-            const result = await response.json();
-            console.log('Full media API response:', result);
 
-            // Handle API response structure
+            const result = await response.json();
             let mediaList = [];
             if (result.success && result.data) {
                 mediaList = Array.isArray(result.data) ? result.data : [result.data];
             } else if (Array.isArray(result)) {
                 mediaList = result;
             } else if (result.media) {
-                mediaList = result.media;
+                mediaList = Array.isArray(result.media) ? result.media : [result.media];
             }
-
-            console.log('Media fetched successfully from API:', mediaList.length, 'items');
             setMedia(mediaList);
             setLoading(false);
         } catch (error) {
-            console.error('Error fetching media from API:', error.message);
-            console.log('Falling back to mock media data');
-            // Fallback to mock media
             setMedia(mockMedia);
             setLoading(false);
         }
@@ -248,15 +245,17 @@ export const AdminProvider = ({ children }) => {
 
     const updateBlog = async (blog_id, updatedBlog) => {
         try {
-            const backendUrl = API_BASE_URL;
-            const response = await fetch(`${backendUrl}/api/blogs`, {
+            const backendUrl = API_BASE_URL.replace(/\/$/, '');
+            const response = await fetch(`${backendUrl}/api/blogs/${blog_id}`, {
                 method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ id: blog_id, ...updatedBlog })
+                headers: getAdminHeaders(),
+                credentials: 'include',
+                body: JSON.stringify(updatedBlog)
             });
 
             if (!response.ok) {
-                throw new Error('Failed to update blog');
+                const errText = await response.text();
+                throw new Error(errText || 'Failed to update blog');
             }
 
             await fetchBlogs(); // Refresh list

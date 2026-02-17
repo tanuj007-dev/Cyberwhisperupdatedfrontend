@@ -42,15 +42,23 @@ export default function BlogPage() {
             if (result.success && result.data) {
                 blogsList = Array.isArray(result.data) ? result.data : [result.data]
                 if (result.pagination) {
-                    totalPages = result.pagination.totalPages || 1
+                    totalPages = (result.pagination.totalPages ?? result.pagination.pages ?? Math.ceil((result.pagination.total || blogsList.length) / blogsPerPage)) || 1
                 }
             } else if (Array.isArray(result)) {
                 blogsList = result
                 totalPages = Math.ceil(result.length / blogsPerPage)
             }
 
-            console.log('Fetched blogs:', blogsList.length, 'Total pages:', totalPages)
-            setBlogs(blogsList)
+            // Normalize for BlogCard: backend sends thumbnail_url/banner_url/image_url, component expects image
+            const normalized = blogsList.map((post) => ({
+                ...post,
+                image: post.image || post.thumbnail_url || post.banner_url || post.image_url || '',
+                description: post.description || post.short_description || (typeof post.content === 'string' ? post.content.substring(0, 200) : ''),
+                slug: post.slug ?? post.id,
+            }))
+
+            console.log('Fetched blogs:', normalized.length, 'Total pages:', totalPages)
+            setBlogs(normalized)
             setTotalPages(totalPages)
         } catch (err) {
             console.error('Error fetching blogs:', err)

@@ -1,10 +1,12 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { useAdmin } from '@/contexts/AdminContext';
 import { Button, Input, Select, Textarea, Toggle, Toast, Skeleton } from '@/components/ui';
 import RichTextEditor from '@/components/ui/RichTextEditor';
+import { API_BASE_URL } from '@/lib/apiConfig';
+import API_CONFIG from '@/app/admin/config/api';
 import {
     Upload, X, FileText, Image as ImageIcon, User, Search, Settings,
     ChevronDown, ChevronUp, Save, ArrowLeft, Calendar
@@ -50,11 +52,15 @@ const EditBlog = () => {
     const [toast, setToast] = useState({ isVisible: false, message: '', type: 'success' });
     const [errors, setErrors] = useState({});
     const [loading, setLoading] = useState(true);
+    const [uploadingImage, setUploadingImage] = useState(false);
+    const initialImageUrlsRef = useRef({ thumbnail_url: '', banner_url: '' });
 
     useEffect(() => {
         const blog = getBlogById(parseInt(params.id));
         if (blog) {
-            // Map existing blog data to form fields
+            const thumb = blog.thumbnail_url || blog.thumbnail || '';
+            const banner = blog.banner_url || blog.banner || '';
+            initialImageUrlsRef.current = { thumbnail_url: thumb, banner_url: banner };
             setFormData({
                 ...blog,
                 shortDescription: blog.shortDescription || '',
@@ -73,7 +79,7 @@ const EditBlog = () => {
                 pinPost: blog.pinPost ?? false,
                 selectedTags: blog.selectedTags || []
             });
-            setThumbnailPreview(blog.thumbnail);
+            setThumbnailPreview(thumb || banner || blog.thumbnail);
         }
         setLoading(false);
     }, [params.id, getBlogById]);
@@ -96,16 +102,42 @@ const EditBlog = () => {
         }
     }, [errors]);
 
-    const handleImageChange = useCallback((e) => {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                const imageUrl = reader.result;
-                setThumbnailPreview(imageUrl);
-                setFormData(prev => ({ ...prev, thumbnail: imageUrl, banner: imageUrl }));
-            };
-            reader.readAsDataURL(file);
+    const handleImageChange = useCallback(async (e) => {
+        const file = e.target.files?.[0];
+        if (!file || !file.type.startsWith('image/')) {
+            showToast('Please select an image file', 'error');
+            return;
+        }
+        if (file.size > 10 * 1024 * 1024) {
+            showToast('Image must be under 10MB', 'error');
+            return;
+        }
+        setUploadingImage(true);
+        try {
+            showToast('Uploading image...', 'info');
+            const formDataUpload = new FormData();
+            formDataUpload.append('thumbnail', file);
+            const base = (API_BASE_URL || '').replace(/\/$/, '');
+            const response = await fetch(`${base}${API_CONFIG.endpoints.uploadThumbnail}`, {
+                method: 'POST',
+                body: formDataUpload
+            });
+            if (!response.ok) {
+                const err = await response.json().catch(() => ({}));
+                throw new Error(err.error || err.message || 'Upload failed');
+            }
+            const data = await response.json();
+            const imageUrl = data.url || data.thumbnail_url || data.data?.url;
+            if (!imageUrl) throw new Error('No image URL received');
+            setThumbnailPreview(imageUrl);
+            setFormData(prev => ({ ...prev, thumbnail: imageUrl, thumbnail_url: imageUrl, banner: imageUrl, banner_url: imageUrl }));
+            showToast('Image uploaded. Update blog to save.', 'success');
+        } catch (error) {
+            console.error('Image upload error:', error);
+            showToast(error.message || 'Upload failed', 'error');
+        } finally {
+            setUploadingImage(false);
+            e.target.value = '';
         }
     }, []);
 
@@ -142,31 +174,38 @@ const EditBlog = () => {
         }
 
         try {
+            const rawThumb = (formData.thumbnail_url || formData.thumbnail || '').trim();
+            const rawBanner = (formData.banner_url || formData.banner || '').trim();
+            const isDataUrl = (s) => typeof s === 'string' && s.startsWith('data:');
+            const thumbnail_url = isDataUrl(rawThumb) ? (initialImageUrlsRef.current.thumbnail_url || '') : rawThumb;
+            const banner_url = isDataUrl(rawBanner) ? (initialImageUrlsRef.current.banner_url || '') : rawBanner;
+
             const blogData = {
                 title: formData.title,
                 slug: formData.slug,
                 category_id: parseInt(formData.blog_category_id),
                 author_id: parseInt(formData.user_id),
                 content: formData.description,
-                keywords: formData.selectedTags?.map(id => tags.find(t => t.id === id)?.name).filter(Boolean).join(', ') || formData.keywords,
-                short_description: formData.shortDescription,
+                keywords: formData.selectedTags?.map(id => tags.find(t => t.id === id)?.name).filter(Boolean).join(', ') || formData.keywords || '',
+                short_description: formData.shortDescription || '',
                 reading_time: formData.readingTime || '5 min read',
-                thumbnail_url: formData.thumbnail || '',
-                banner_url: formData.banner || '',
+                thumbnail_url,
+                banner_url,
                 image_url: formData.image_url || '',
                 video_url: formData.video_url || '',
-                image_alt_text: formData.imageAltText || formData.title,
-                image_caption: formData.imageCaption,
-                is_popular: formData.is_popular,
+                image_alt_text: formData.imageAltText || formData.title || '',
+                image_caption: formData.imageCaption || null,
+                is_popular: !!formData.is_popular,
                 status: formData.status === 'active' || formData.status === 'ACTIVE' || formData.status === 'PUBLISHED' ? 'PUBLISHED' : formData.status === 'scheduled' || formData.status === 'SCHEDULED' ? 'SCHEDULED' : 'DRAFT',
-                visibility: formData.visibility.toUpperCase(),
-                seo_title: formData.seoTitle || formData.title,
-                seo_description: formData.seoDescription || formData.shortDescription,
-                focus_keyword: formData.focusKeyword,
-                meta_robots: formData.metaRobots.toUpperCase(),
-                allow_comments: formData.allowComments,
-                show_on_homepage: formData.showOnHomepage,
-                is_sticky: formData.pinPost
+                visibility: (formData.visibility || 'PUBLIC').toUpperCase(),
+                seo_title: formData.seoTitle || formData.title || '',
+                seo_description: formData.seoDescription || formData.shortDescription || '',
+                focus_keyword: formData.focusKeyword || null,
+                canonical_url: formData.canonicalUrl || null,
+                meta_robots: (formData.metaRobots || 'INDEX').toUpperCase(),
+                allow_comments: !!formData.allowComments,
+                show_on_homepage: !!formData.showOnHomepage,
+                is_sticky: !!formData.pinPost
             };
 
             showToast('Updating blog post...', 'info');

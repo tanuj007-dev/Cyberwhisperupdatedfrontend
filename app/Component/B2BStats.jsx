@@ -129,9 +129,11 @@ export default function B2BStats() {
                             <X size={24} />
                         </button>
                         <video
-                            src="/Cyber Whisper.mp4"
+                            src="/assets/Cyber%20Whisper.mp4"
                             controls
                             autoPlay
+                            playsInline
+                            preload="metadata"
                             className="w-full h-full object-contain"
                         />
                     </div>

@@ -8,6 +8,7 @@ import { GoArrowUpRight } from "react-icons/go"
 export default function BlogCard({ image, title, slug, id, description, short_description, onClick }) {
     const displayDescription = description || short_description;
     const blogLink = `/blog/${id ?? slug ?? ''}`;
+    const hasValidImage = image && String(image).trim();
 
     if (onClick) {
         return (
@@ -19,13 +20,21 @@ export default function BlogCard({ image, title, slug, id, description, short_de
                     className="group bg-white rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-2xl border border-transparent hover:border-purple-100 flex flex-col h-full"
                 >
                     {/* Image Container */}
-                    <div className="relative aspect-16/10 overflow-hidden shrink-0">
-                        <Image
-                            src={image}
-                            alt={title}
-                            fill
-                            className="object-cover transition-transform duration-500 group-hover:scale-110"
-                        />
+                    <div className="relative aspect-16/10 overflow-hidden shrink-0 bg-gray-100 dark:bg-gray-800">
+                        {hasValidImage ? (
+                            <Image
+                                src={image}
+                                alt={title || 'Blog post'}
+                                fill
+                                className="object-cover transition-transform duration-500 group-hover:scale-110"
+                            />
+                        ) : (
+                            <div className="absolute inset-0 flex items-center justify-center text-gray-400 dark:text-gray-500">
+                                <svg className="w-12 h-12" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden>
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14" />
+                                </svg>
+                            </div>
+                        )}
                         {/* Subtle overlay */}
                         <div className="absolute inset-0 bg-linear-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     </div>
@@ -63,13 +72,21 @@ export default function BlogCard({ image, title, slug, id, description, short_de
                 className="group bg-white rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-2xl border border-transparent hover:border-purple-100 flex flex-col h-full"
             >
                 {/* Image Container */}
-                <div className="relative aspect-16/10 overflow-hidden shrink-0">
-                    <Image
-                        src={image}
-                        alt={title}
-                        fill
-                        className="object-cover transition-transform duration-500 group-hover:scale-110"
-                    />
+                <div className="relative aspect-16/10 overflow-hidden shrink-0 bg-gray-100 dark:bg-gray-800">
+                    {hasValidImage ? (
+                        <Image
+                            src={image}
+                            alt={title || 'Blog post'}
+                            fill
+                            className="object-cover transition-transform duration-500 group-hover:scale-110"
+                        />
+                    ) : (
+                        <div className="absolute inset-0 flex items-center justify-center text-gray-400 dark:text-gray-500">
+                            <svg className="w-12 h-12" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden>
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14" />
+                            </svg>
+                        </div>
+                    )}
                     {/* Subtle overlay */}
                     <div className="absolute inset-0 bg-linear-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 </div>
