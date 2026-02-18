@@ -12,7 +12,7 @@ function mapBlogToFrontend(blog) {
     const firstName = blog.author_first_name ?? blog.authorFirstName ?? '';
     const lastName = blog.author_last_name ?? blog.authorLastName ?? '';
     const authorFromNames = [firstName, lastName].filter(Boolean).join(' ').trim();
-    const author = blog.author_name ?? blog.authorName ?? authorFromNames || 'CyberWhisper Team';
+    const author = (blog.author_name ?? blog.authorName ?? authorFromNames) || 'CyberWhisper Team';
 
     return {
         ...blog,
