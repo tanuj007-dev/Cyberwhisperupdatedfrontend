@@ -2,7 +2,7 @@
 import { useState, useRef, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { motion, useMotionValue, useTransform, animate } from 'framer-motion'
+import { motion, useMotionValue, animate } from 'framer-motion'
 import { ArrowLeft, ArrowRight, Zap, MessageCircle } from 'lucide-react'
 import { useEnquiry } from '../context/EnquiryContext'
 
@@ -72,11 +72,6 @@ export default function CoreServicesOverview() {
     const carouselRef = useRef();
     const x = useMotionValue(0);
     const { openEnquiry } = useEnquiry();
-
-    // Scroll Indicator Logic
-    const indicatorWidth = 40; // percent
-    const trackWidth = 64; // px
-    const indicatorX = useTransform(x, [0, -width], [0, trackWidth * (1 - indicatorWidth / 100)]);
 
     useEffect(() => {
         const updateWidth = () => {
@@ -303,7 +298,7 @@ export default function CoreServicesOverview() {
                     </button>
                 </div>
 
-                {/* Mobile Navigation & Scroll Indicator */}
+                {/* Navigation & Dots Indicator */}
                 <div className="flex flex-col items-center justify-center gap-6 mt-8">
 
                     {/* Mobile Navigation Buttons */}
@@ -316,12 +311,20 @@ export default function CoreServicesOverview() {
                             <ArrowLeft className="w-5 h-5" />
                         </button>
 
-                        {/* Mobile Scroll Indicator */}
-                        <div className="w-16 h-1 rounded-full bg-gray-200 dark:bg-white/10 overflow-hidden">
-                            <motion.div
-                                className="h-full bg-linear-to-r from-purple-500 to-blue-500"
-                                style={{ width: `${indicatorWidth}%`, x: indicatorX }}
-                            />
+                        {/* Dots (mobile) */}
+                        <div className="flex items-center gap-2">
+                            {services.map((_, idx) => (
+                                <button
+                                    key={idx}
+                                    onClick={() => setCurrentIndex(idx)}
+                                    aria-label={`Go to slide ${idx + 1}`}
+                                    className={`rounded-full transition-all duration-300 ${
+                                        currentIndex === idx
+                                            ? 'w-2.5 h-2.5 bg-purple-500 dark:bg-purple-400'
+                                            : 'w-2 h-2 bg-gray-300 dark:bg-white/30 hover:bg-gray-400 dark:hover:bg-white/50'
+                                    }`}
+                                />
+                            ))}
                         </div>
 
                         <button
@@ -333,14 +336,20 @@ export default function CoreServicesOverview() {
                         </button>
                     </div>
 
-                    {/* Desktop Scroll Indicator (Centered) */}
-                    <div className="hidden md:flex items-center">
-                        <div className="w-32 h-1.5 rounded-full bg-gray-200 dark:bg-white/10 overflow-hidden">
-                            <motion.div
-                                className="h-full bg-linear-to-r from-purple-500 to-blue-500"
-                                style={{ width: `${indicatorWidth}%`, x: indicatorX }}
+                    {/* Desktop Dots (centered) */}
+                    <div className="hidden md:flex items-center justify-center gap-2">
+                        {services.map((_, idx) => (
+                            <button
+                                key={idx}
+                                onClick={() => setCurrentIndex(idx)}
+                                aria-label={`Go to slide ${idx + 1}`}
+                                className={`rounded-full transition-all duration-300 ${
+                                    currentIndex === idx
+                                        ? 'w-2.5 h-2.5 bg-purple-500 dark:bg-purple-400'
+                                        : 'w-2 h-2 bg-gray-300 dark:bg-white/30 hover:bg-gray-400 dark:hover:bg-white/50'
+                                }`}
                             />
-                        </div>
+                        ))}
                     </div>
                 </div>
 

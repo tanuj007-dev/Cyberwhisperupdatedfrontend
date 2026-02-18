@@ -259,7 +259,7 @@ export default function GalleryPage() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.6 }}
-                            className="inline-flex items-center gap-2 mb-6 px-5 py-2.5 rounded-full bg-white/10 border border-white/20 backdrop-blur-md shadow-lg"
+                            className="inline-flex items-center gap-2 mb-6 px-5 py-2.5 rounded-full bg-white/90 dark:bg-white/10 border border-gray-200 dark:border-white/20 backdrop-blur-md shadow-lg"
                         >
                             <motion.div
                                 animate={{
@@ -271,9 +271,9 @@ export default function GalleryPage() {
                                     repeat: Infinity,
                                     ease: "easeInOut"
                                 }}
-                                className="w-2 h-2 bg-gradient-to-r from-green-400 to-emerald-400 rounded-full"
+                                className="w-2 h-2 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full"
                             />
-                            <span className="text-white text-sm font-semibold tracking-wider uppercase drop-shadow-md">
+                            <span className="text-gray-800 dark:text-white text-sm font-semibold tracking-wider uppercase drop-shadow-sm dark:drop-shadow-md">
                                 Visual Journey
                             </span>
                         </motion.div>
@@ -283,7 +283,7 @@ export default function GalleryPage() {
                             initial={{ opacity: 0, y: 30 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.8, delay: 0.2 }}
-                            className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold mb-2 md:mb-4 leading-tight text-white drop-shadow-lg"
+                            className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold mb-2 md:mb-4 leading-tight text-gray-900 dark:text-white drop-shadow-sm dark:drop-shadow-lg"
                         >
                             Our Gallery
                         </motion.h1>
@@ -293,7 +293,7 @@ export default function GalleryPage() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.8, delay: 0.4 }}
-                            className="text-base md:text-xl text-gray-200 max-w-2xl mx-auto leading-relaxed mb-6 md:mb-8 font-medium drop-shadow-md"
+                            className="text-base md:text-xl text-gray-600 dark:text-gray-200 max-w-2xl mx-auto leading-relaxed mb-6 md:mb-8 font-medium drop-shadow-sm dark:drop-shadow-md"
                         >
                             Capturing moments of excellence, innovation, and achievement
                         </motion.p>
@@ -326,15 +326,15 @@ export default function GalleryPage() {
                         </motion.div>
                     </div>
 
-                    {/* Bottom gradient fade */}
-                    <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-white dark:from-[#1B0D37] to-transparent" />
+                    {/* Bottom gradient fade - matches section bg for clean transition */}
+                    <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-purple-50 via-white to-transparent dark:from-[#1B0D37] dark:via-[#1B0D37] dark:to-transparent" />
                 </section>
 
 
 
 
                 {/* Category Filter */}
-                <section className="category-container py-6 md:py-12 px-4 md:px-6">
+                <section className="category-container py-6 md:py-12 px-4 md:px-6 bg-white dark:bg-transparent">
                     <div className="max-w-6xl mx-auto">
                         <div className="flex overflow-x-auto md:flex-wrap md:justify-center gap-4 pb-4 md:pb-0 scrollbar-hide">
                             {categories.map((cat) => {
@@ -359,7 +359,7 @@ export default function GalleryPage() {
                 </section>
 
                 {/* Gallery Grid */}
-                <section className="py-8 md:py-16 px-4 md:px-6">
+                <section className="py-8 md:py-16 px-4 md:px-6 bg-white dark:bg-transparent">
                     <div ref={galleryGridRef} className="max-w-7xl mx-auto">
                         {/* Loading State */}
                         {loading && (
@@ -410,8 +410,8 @@ export default function GalleryPage() {
                                                     }`}
                                                 onClick={() => openLightbox(image, index)}
                                             >
-                                                {/* Image container */}
-                                                <div className={`relative ${index === 0 ? 'aspect-square' : 'aspect-[4/3]'} overflow-hidden`}>
+                                                {/* Image container - light bg fallback when image loads or fails */}
+                                                <div className={`relative ${index === 0 ? 'aspect-square' : 'aspect-[4/3]'} overflow-hidden bg-gray-200 dark:bg-gray-900`}>
                                                     <Image
                                                         src={image.src}
                                                         alt={image.title}
@@ -419,8 +419,8 @@ export default function GalleryPage() {
                                                         className="object-cover transition-transform duration-700 group-hover:scale-110"
                                                     />
 
-                                                    {/* Overlay */}
-                                                    <div className="absolute inset-0 bg-gradient-to-t from-[#0E0429] via-[#0E0429]/20 to-transparent opacity-60 group-hover:opacity-90 transition-opacity duration-500" />
+                                                    {/* Overlay - lighter in light mode so content is visible */}
+                                                    <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-gray-900/30 to-transparent dark:from-[#0E0429] dark:via-[#0E0429]/20 to-transparent opacity-70 group-hover:opacity-90 transition-opacity duration-500" />
 
                                                     {/* Scan line effect */}
                                                     <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
@@ -434,12 +434,12 @@ export default function GalleryPage() {
                                                     <div className="absolute inset-0 p-6 flex flex-col justify-end">
                                                         <div className="transform translate-y-0 md:translate-y-4 md:group-hover:translate-y-0 transition-transform duration-500">
                                                             {/* Category badge */}
-                                                            <span className="inline-block px-3 py-1 mb-3 text-xs font-semibold text-purple-300 bg-purple-500/20 rounded-full border border-purple-500/30 backdrop-blur-sm">
+                                                            <span className="inline-block px-3 py-1 mb-3 text-xs font-semibold text-purple-200 dark:text-purple-300 bg-purple-500/30 dark:bg-purple-500/20 rounded-full border border-purple-400/40 dark:border-purple-500/30 backdrop-blur-sm">
                                                                 {image.category.charAt(0).toUpperCase() + image.category.slice(1)}
                                                             </span>
 
                                                             {/* Title */}
-                                                            <h3 className=" text-lg md:text-xl  font-bold text-white mb-2 group-hover:text-purple-200 transition-colors">
+                                                            <h3 className="text-lg md:text-xl font-bold text-white mb-2 group-hover:text-purple-100 dark:group-hover:text-purple-200 transition-colors">
                                                                 {image.title}
                                                             </h3>
 

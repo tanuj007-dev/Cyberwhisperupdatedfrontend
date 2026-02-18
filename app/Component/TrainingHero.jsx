@@ -1,11 +1,9 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { FaDownload, FaWhatsapp, FaCalendarAlt, FaLanguage, FaGlobe, FaLaptopCode, FaCertificate, FaBriefcase } from 'react-icons/fa';
-// Assuming the image will be placed in assets
-// For now using the generated path directly or a placeholder if path is tricky
 import { IoLogoWhatsapp } from "react-icons/io";
 import heroImg from './assets/cyber_classroom.png';
 import crackImg from './assets/crack.webp';
@@ -14,9 +12,13 @@ import Particles from './Particles';
 import gridImage from './assets/grid.webp';
 import essentialsBg from './assets/essentials_bg.png';
 import Hyperspeed from './hyperspeedPresets';
+import EnrollModal from './EnrollModal';
+
+const TRAINING_TITLE = '1 Year Cyber Security Diploma Training';
 
 export default function TrainingHero() {
-    const [billingCycle, setBillingCycle] = React.useState('monthly');
+    const [billingCycle, setBillingCycle] = useState('monthly');
+    const [enrollModalOpen, setEnrollModalOpen] = useState(false);
 
     return (
         <section className="relative w-full pt-20 md:pt-12 pb-8 md:pb-12 overflow-hidden bg-[#02000d] font-sans transition-colors duration-500">
@@ -68,8 +70,8 @@ export default function TrainingHero() {
                 <div className="absolute inset-0 bg-radial-gradient from-transparent via-[#02000d]/60 to-[#02000d] z-20" />
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,#6F2DFF15,transparent_70%)] z-20" />
 
-                {/* Futuristic Grid */}
-                <div className="absolute inset-0 opacity-[0.05] dark:opacity-[0.1] bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-size-[40px_40px] z-20" />
+                {/* Futuristic Grid - dark theme only */}
+                <div className="absolute inset-0 opacity-[0.1] bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-size-[40px_40px] z-20" />
 
                 {/* Scanlines Effect */}
                 <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.1)_50%)] bg-size-[100%_4px] opacity-10 z-20" />
@@ -85,7 +87,7 @@ export default function TrainingHero() {
                     particleBaseSize={50}
                     moveParticlesOnHover={true}
                     alphaParticles={true}
-                    className="opacity-20 dark:opacity-30"
+                    className="opacity-30"
                 />
             </div>
 
@@ -109,10 +111,10 @@ export default function TrainingHero() {
 
                     {/* High-Tech Heading */}
                     <div className="space-y-5 max-w-7xl">
-                        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[54px] font-bold text-white leading-tight md:leading-[1.1] tracking-tight drop-shadow-2xl px-2">
+                            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[54px] font-bold text-white leading-tight md:leading-[1.1] tracking-tight drop-shadow-2xl px-2">
                             1 Year Cyber Security <br className="hidden md:block" />
                             Diploma Training + <span className="relative inline-block mt-1 md:mt-0">
-                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-gray-900 via-purple-700 to-purple-900 dark:from-white dark:via-purple-200 dark:to-purple-400">Expert AI Skills</span>
+                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-purple-200 to-purple-400">Expert AI Skills</span>
                                 <span className="absolute -bottom-1 md:-bottom-2 left-0 w-full h-1 bg-purple-600 rounded-full shadow-[0_4px_10px_rgba(251,191,36,0.5)]" />
                             </span>
                         </h1>
@@ -192,7 +194,11 @@ export default function TrainingHero() {
                             </div>
 
                             <div className="flex items-center gap-2 md:gap-3 w-full md:w-auto">
-                                <button className="flex-1 md:flex-none px-4 py-2.5 rounded-lg bg-purple-600 text-white font-bold text-[13px] md:text-sm hover:bg-purple-700 transition-all shadow-lg shadow-purple-600/20">
+                                <button
+                                    type="button"
+                                    onClick={() => setEnrollModalOpen(true)}
+                                    className="flex-1 md:flex-none px-4 py-2.5 rounded-lg bg-purple-600 text-white font-bold text-[13px] md:text-sm hover:bg-purple-700 transition-all shadow-lg shadow-purple-600/20"
+                                >
                                     Join Now
                                 </button>
                                 <Link href="https://ctf.cyberwhisper.in/" className="flex-1 md:flex-none px-4 py-2.5 rounded-lg border border-purple-500/30 text-white font-bold text-[13px] md:text-sm hover:bg-white/5 transition-all text-center">
@@ -264,10 +270,16 @@ export default function TrainingHero() {
                 </motion.div>
             </div>
 
-
+            <EnrollModal
+                open={enrollModalOpen}
+                onClose={() => setEnrollModalOpen(false)}
+                courseTitle={TRAINING_TITLE}
+                modalTitle="Join Now"
+                submitLabel="Join Now"
+            />
 
             {/* Custom Animations */}
-            < style jsx > {`
+            <style jsx>{`
                 @keyframes beam-slow {
                     0% { transform: translateX(-100%) rotate(-12deg); }
                     100% { transform: translateX(100%) rotate(-12deg); }
@@ -288,8 +300,8 @@ export default function TrainingHero() {
                 .animate-beam-fast { animation: beam-fast 10s linear infinite; }
                 .animate-spin-slow { animation: spin-slow 8s linear infinite; }
                 .animate-spin-reverse-slow { animation: spin-reverse-slow 12s linear infinite; }
-            `}</style >
-        </section >
+            `}</style>
+        </section>
     );
 }
 

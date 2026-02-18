@@ -24,7 +24,7 @@ export const metadata = {
 
 export default function TrainingPage() {
     return (
-        <main className="bg-white dark:bg-black transition-colors duration-300">
+        <main className="bg-[#02000d] min-h-screen">
             <TrainingHero />
             <LearningJourney />
             {/* <Banner /> */}

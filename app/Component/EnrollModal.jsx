@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react'
 import { X } from 'lucide-react'
 import { API_BASE_URL } from '../../lib/apiConfig'
 
-export default function EnrollModal({ open, onClose, courseTitle }) {
+export default function EnrollModal({ open, onClose, courseTitle, modalTitle = 'Enroll Now', submitLabel = 'Register' }) {
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [phone, setPhone] = useState('')
@@ -86,7 +86,7 @@ export default function EnrollModal({ open, onClose, courseTitle }) {
                     <X className="w-5 h-5" />
                 </button>
                 <div className="p-6 pt-10">
-                    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-1">Enroll Now</h3>
+                    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-1">{modalTitle}</h3>
                     {courseTitle && (
                         <p className="text-sm text-gray-500 dark:text-gray-400 mb-6 truncate" title={courseTitle}>{courseTitle}</p>
                     )}
@@ -137,7 +137,7 @@ export default function EnrollModal({ open, onClose, courseTitle }) {
                             disabled={submitting}
                             className="w-full py-3 rounded-xl bg-[#6B46E5] hover:bg-[#5a3ac4] text-white font-bold transition-colors disabled:opacity-50"
                         >
-                            {submitting ? 'Registering...' : 'Register'}
+                            {submitting ? (submitLabel === 'Join Now' ? 'Joining...' : 'Registering...') : submitLabel}
                         </button>
                     </form>
                 </div>

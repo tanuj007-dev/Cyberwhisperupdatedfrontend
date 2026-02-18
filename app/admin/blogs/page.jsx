@@ -202,7 +202,7 @@ const BlogList = () => {
                                                 <p className="font-semibold text-gray-900 truncate max-w-xs mb-0.5">
                                                     {blog.title}
                                                 </p>
-                                                <p className="text-xs text-gray-500">ID: {blog.blog_id} • {blog.likes} likes</p>
+                                                <p className="text-xs text-gray-500">ID: {blog.blog_id}</p>
                                             </div>
                                         </div>
                                     </td>

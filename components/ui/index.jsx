@@ -29,6 +29,7 @@ export const Button = ({ children, variant = 'primary', size = 'md', onClick, di
 };
 
 export const Input = ({ label, name, type = 'text', value, onChange, placeholder, required, error, className = '', disabled }) => {
+    const safeValue = value ?? '';
     return (
         <div className="w-full">
             {label && (
@@ -40,7 +41,7 @@ export const Input = ({ label, name, type = 'text', value, onChange, placeholder
                 id={name}
                 name={name}
                 type={type}
-                value={value}
+                value={safeValue}
                 onChange={onChange}
                 placeholder={placeholder}
                 required={required}
@@ -53,6 +54,7 @@ export const Input = ({ label, name, type = 'text', value, onChange, placeholder
 };
 
 export const Textarea = ({ label, name, value, onChange, placeholder, required, error, rows = 4, className = '' }) => {
+    const safeValue = value ?? '';
     return (
         <div className="w-full">
             {label && (
@@ -63,7 +65,7 @@ export const Textarea = ({ label, name, value, onChange, placeholder, required, 
             <textarea
                 id={name}
                 name={name}
-                value={value}
+                value={safeValue}
                 onChange={onChange}
                 placeholder={placeholder}
                 required={required}

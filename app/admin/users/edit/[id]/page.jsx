@@ -1,27 +1,34 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { useAdmin } from '@/contexts/AdminContext';
-import { Button, Input, Select, Textarea, Toggle, Card, Toast, Skeleton } from '@/components/ui';
+import { Button, Input, Textarea, Card, Toast, Skeleton } from '@/components/ui';
 import { getUserIdFromToken, getRoleFromToken } from '@/lib/jwt';
+import { API_BASE_URL } from '@/lib/apiConfig';
 
 const EditUser = () => {
     const router = useRouter();
     const params = useParams();
     const { getUserById, updateUser } = useAdmin();
+    const profileFileInputRef = useRef(null);
 
     const [formData, setFormData] = useState(null);
     const [toast, setToast] = useState({ isVisible: false, message: '', type: 'success' });
     const [errors, setErrors] = useState({});
     const [loading, setLoading] = useState(true);
     const [isOwnProfile, setIsOwnProfile] = useState(false);
+    const [currentUserRole, setCurrentUserRole] = useState(null);
+    const [profileUploading, setProfileUploading] = useState(false);
+    const [profileDragActive, setProfileDragActive] = useState(false);
+    const [submitting, setSubmitting] = useState(false);
 
     useEffect(() => {
         if (typeof window === 'undefined') return;
         const role = getRoleFromToken(localStorage.getItem('adminToken'));
         const currentUserId = getUserIdFromToken(localStorage.getItem('adminToken'));
         const editingId = params.id != null ? parseInt(params.id, 10) : null;
+        setCurrentUserRole(role || localStorage.getItem('adminRole'));
         if (role === 'STUDENT' || role === 'INSTRUCTOR') {
             if (currentUserId != null && String(editingId) !== String(currentUserId)) {
                 router.replace('/admin/profile');
@@ -46,9 +53,27 @@ const EditUser = () => {
                 const user = await getUserById(parseInt(params.id));
                 if (user) {
                     const roleByRoleId = { 1: 'ADMIN', 2: 'STUDENT', 3: 'INSTRUCTOR' };
-                    const roleFromApi = user.role === 'USER' ? 'STUDENT' : (user.role || roleByRoleId[user.role_id] || 'STUDENT');
+                    const r = (user.role || '').toUpperCase().replace(/\s/g, '');
+                    const roleFromApi = user.role === 'USER' ? 'STUDENT' : (r === 'SUPERADMIN' ? 'SUPERADMIN' : (user.role || roleByRoleId[user.role_id] || 'STUDENT'));
                     const statusNorm = (user.status || 'active').toLowerCase();
-                    setFormData({ ...user, role: roleFromApi, status: statusNorm });
+                    const editId = params.id != null ? parseInt(params.id, 10) : null;
+                    setFormData({
+                        ...user,
+                        id: user.id ?? user.user_id ?? editId ?? params.id,
+                        user_id: user.user_id ?? user.id ?? editId ?? params.id,
+                        role: roleFromApi,
+                        status: statusNorm,
+                        title: user.title ?? '',
+                        first_name: user.first_name ?? '',
+                        last_name: user.last_name ?? '',
+                        email: user.email ?? '',
+                        phone: user.phone ?? '',
+                        address: user.address ?? '',
+                        biography: user.biography ?? '',
+                        linkedin_url: user.linkedin_url ?? '',
+                        github_url: user.github_url ?? '',
+                        profile_image_url: user.profile_image_url ?? '',
+                    });
                 } else {
                     showToast('User not found', 'error');
                 }
@@ -82,6 +107,57 @@ const EditUser = () => {
         }
     };
 
+    const handleProfileUpload = async (file) => {
+        if (!file?.type?.startsWith('image/')) {
+            showToast('Please select a valid image file (JPEG, PNG, etc.)', 'error');
+            return;
+        }
+        if (file.size > 5 * 1024 * 1024) {
+            showToast('Image size must be less than 5MB', 'error');
+            return;
+        }
+        setProfileUploading(true);
+        try {
+            const formDataUpload = new FormData();
+            formDataUpload.append('profile', file);
+            const base = (API_BASE_URL || '').replace(/\/$/, '');
+            const uploadUrl = base ? `${base}/api/users/upload-profile` : '/api/users/upload-profile';
+            const token = typeof window !== 'undefined' ? localStorage.getItem('adminToken') : null;
+            const response = await fetch(uploadUrl, {
+                method: 'POST',
+                body: formDataUpload,
+                headers: {
+                    Accept: 'application/json',
+                    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+                },
+            });
+            if (!response.ok) throw new Error('Upload failed');
+            const data = await response.json();
+            const imageUrl = data.profile_image_url || data.url || data.data?.profile_image_url;
+            if (!imageUrl) throw new Error('No image URL received');
+            setFormData((prev) => ({ ...prev, profile_image_url: imageUrl }));
+            showToast('Profile image uploaded', 'success');
+        } catch (err) {
+            showToast(err.message || 'Image upload failed', 'error');
+        } finally {
+            setProfileUploading(false);
+        }
+    };
+
+    const onProfileDrop = (e) => {
+        e.preventDefault();
+        setProfileDragActive(false);
+        const file = e.dataTransfer?.files?.[0];
+        if (file) handleProfileUpload(file);
+    };
+
+    const onProfileDragOver = (e) => {
+        e.preventDefault();
+        setProfileDragActive(true);
+    };
+
+    const onProfileDragLeave = () => setProfileDragActive(false);
+
     const validateForm = () => {
         const newErrors = {};
         if (!formData.first_name.trim()) newErrors.first_name = 'First name is required';
@@ -104,12 +180,17 @@ const EditUser = () => {
             return;
         }
 
-        const userData = {
-            ...formData
-        };
+        const userId = formData.id ?? formData.user_id ?? params.id;
+        if (userId == null || userId === '') {
+            showToast('Invalid user data: missing user ID', 'error');
+            return;
+        }
 
+        const userData = { ...formData };
+
+        setSubmitting(true);
         try {
-            await updateUser(formData.id, userData);
+            await updateUser(userId, userData);
             showToast('User updated successfully!', 'success');
 
             const role = typeof window !== 'undefined' ? getRoleFromToken(localStorage.getItem('adminToken')) : null;
@@ -118,8 +199,10 @@ const EditUser = () => {
                 router.push(redirectTo);
             }, 1500);
         } catch (error) {
-            showToast('Error updating user', 'error');
+            showToast(error?.message || 'Error updating user', 'error');
             console.error(error);
+        } finally {
+            setSubmitting(false);
         }
     };
 
@@ -137,25 +220,24 @@ const EditUser = () => {
         );
     }
 
-    const roleOptions = [
-        { value: 1, label: 'Admin' },
-        { value: 2, label: 'Student' },
-        { value: 3, label: 'Instructor' }
-    ];
-
     return (
         <div className="max-w-4xl mx-auto space-y-6">
             <div>
-                <h1 className="text-3xl font-bold text-gray-900 mb-2">Edit User</h1>
-                <p className="text-gray-600">Update user information</p>
+                <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Edit User</h1>
+                <p className="text-gray-600 dark:text-gray-400">Update user information</p>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-6" noValidate>
                 {/* Basic Information */}
                 <Card title="Basic Information">
                     <div className="space-y-4">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <Input label="User ID (read-only)" name="id" value={formData.id} disabled />
+                            <Input
+                                label="User ID (read-only)"
+                                name="id"
+                                value={formData.id ?? formData.user_id ?? params.id ?? ''}
+                                disabled
+                            />
                             <Input
                                 label="Title"
                                 name="title"
@@ -193,7 +275,6 @@ const EditUser = () => {
                                 onChange={handleChange}
                                 required
                                 error={errors.email}
-                                disabled
                             />
                             <Input
                                 label="Phone"
@@ -213,12 +294,56 @@ const EditUser = () => {
                             rows={2}
                         />
 
-                        <Input
-                            label="Profile Image URL"
-                            name="profile_image_url"
-                            value={formData.profile_image_url || ''}
-                            onChange={handleChange}
-                        />
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Profile Image</label>
+                            <div
+                                onDrop={onProfileDrop}
+                                onDragOver={onProfileDragOver}
+                                onDragLeave={onProfileDragLeave}
+                                onClick={() => profileFileInputRef.current?.click()}
+                                className={`border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-colors ${
+                                    profileDragActive
+                                        ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+                                        : 'border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500'
+                                } ${profileUploading ? 'pointer-events-none opacity-70' : ''}`}
+                            >
+                                <input
+                                    ref={profileFileInputRef}
+                                    type="file"
+                                    accept="image/*"
+                                    className="hidden"
+                                    onChange={(e) => {
+                                        const file = e.target.files?.[0];
+                                        if (file) handleProfileUpload(file);
+                                        e.target.value = '';
+                                    }}
+                                />
+                                {formData.profile_image_url ? (
+                                    <div className="space-y-2">
+                                        <img
+                                            src={formData.profile_image_url}
+                                            alt="Profile"
+                                            className="mx-auto h-24 w-24 rounded-full object-cover border border-gray-200 dark:border-gray-600"
+                                        />
+                                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                                            {profileUploading ? 'Uploading…' : 'Drop a new image or click to change'}
+                                        </p>
+                                    </div>
+                                ) : (
+                                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                                        {profileUploading ? 'Uploading…' : 'Drop an image here or click to upload'}
+                                    </p>
+                                )}
+                            </div>
+                            <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">Or paste URL below</p>
+                            <Input
+                                className="mt-1"
+                                name="profile_image_url"
+                                value={formData.profile_image_url || ''}
+                                onChange={handleChange}
+                                placeholder="https://…"
+                            />
+                        </div>
                     </div>
                 </Card>
 
@@ -253,8 +378,8 @@ const EditUser = () => {
                     </div>
                 </Card>
 
-                {/* Status – Admin can set Active/Inactive (Superadmin can delete; both can edit status) */}
-                {!isOwnProfile && (
+                {/* Status – hidden for own profile and when logged in as Superadmin (superadmin is always active) */}
+                {!isOwnProfile && currentUserRole !== 'SUPERADMIN' && (
                 <Card title="Status">
                     <div className="space-y-2">
                         <label className="block text-sm font-medium text-gray-700 mb-2">Account status</label>
@@ -287,8 +412,8 @@ const EditUser = () => {
                 </Card>
                 )}
 
-                {/* Role & Permissions – hidden when student/instructor editing own profile */}
-                {!isOwnProfile && (
+                {/* Role & Permissions – hidden when editing own profile or when logged in as Superadmin */}
+                {!isOwnProfile && currentUserRole !== 'SUPERADMIN' && (
                 <Card title="Role & Permissions">
                     <div className="space-y-4">
                         <div>
@@ -346,11 +471,11 @@ const EditUser = () => {
 
                 {/* Actions */}
                 <div className="flex items-center justify-end gap-3">
-                    <Button type="button" variant="outline" onClick={() => router.push(isOwnProfile ? '/admin/profile' : '/admin/users')}>
+                    <Button type="button" variant="outline" onClick={() => router.push(isOwnProfile ? '/admin/profile' : '/admin/users')} disabled={submitting}>
                         Cancel
                     </Button>
-                    <Button type="submit" variant="primary">
-                        Update User
+                    <Button type="submit" variant="primary" disabled={submitting}>
+                        {submitting ? 'Updating…' : 'Update User'}
                     </Button>
                 </div>
             </form> 
