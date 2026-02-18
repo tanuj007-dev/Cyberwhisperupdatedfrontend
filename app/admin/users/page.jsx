@@ -6,14 +6,20 @@ import { Button, Badge, Modal, Input, Toast, Skeleton } from '@/components/ui';
 import { Edit2, Trash2, Eye, Search, PlusCircle, UserPlus, UserX, UserCheck, UserCircle } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { API_BASE_URL } from '@/lib/apiConfig';
+import { getUserIdFromToken } from '@/lib/jwt';
 
 const UserList = () => {
     const router = useRouter();
     const { users, addUser, updateUser, deleteUser, loading } = useAdmin();
     const [currentUserRole, setCurrentUserRole] = useState(null);
+    const [currentUserId, setCurrentUserId] = useState(null);
 
     useEffect(() => {
-        setCurrentUserRole(typeof window !== 'undefined' ? localStorage.getItem('adminRole') : null);
+        if (typeof window === 'undefined') return;
+        setCurrentUserRole(localStorage.getItem('adminRole'));
+        const token = localStorage.getItem('adminToken');
+        const id = token ? getUserIdFromToken(token) : null;
+        setCurrentUserId(id != null ? String(id) : null);
     }, []);
 
     const isSuperAdmin = currentUserRole === 'SUPERADMIN';
@@ -22,10 +28,18 @@ const UserList = () => {
         const r = String(user.role || '').toUpperCase().replace(/\s/g, '');
         return r === 'SUPERADMIN' || r === 'ADMIN' || user.role_id === 1;
     };
+    // Superadmin can activate/deactivate any user; Admin can only non-admin users
     const canToggleStatusForUser = (user) => {
         if (!canManageStatus) return false;
         if (isSuperAdmin) return true;
         return !isTargetAdminOrSuperadmin(user);
+    };
+    // Only superadmin can delete users; cannot delete own account
+    const canDeleteUser = (user) => {
+        if (!isSuperAdmin) return false;
+        const id = user?.id ?? user?.user_id;
+        if (id == null || currentUserId == null) return true;
+        return String(id) !== String(currentUserId);
     };
 
     const [togglingStatusId, setTogglingStatusId] = useState(null);
@@ -205,8 +219,13 @@ const UserList = () => {
     };
 
     const handleDelete = async () => {
+        if (!selectedUser) return;
+        if (!canDeleteUser(selectedUser)) {
+            showToast('You cannot delete your own account.', 'error');
+            return;
+        }
         try {
-            await deleteUser(selectedUser.id);
+            await deleteUser(selectedUser.id ?? selectedUser.user_id);
             setDeleteModalOpen(false);
             setSelectedUser(null);
             showToast('User deleted successfully', 'success');
@@ -413,7 +432,14 @@ const UserList = () => {
                                                 </Button>
                                             )}
                                             {isSuperAdmin && (
-                                                <Button variant="ghost" size="sm" onClick={() => { setSelectedUser(user); setDeleteModalOpen(true); }} title="Delete (Superadmin only)" className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20">
+                                                <Button
+                                                    variant="ghost"
+                                                    size="sm"
+                                                    onClick={() => { setSelectedUser(user); setDeleteModalOpen(true); }}
+                                                    disabled={!canDeleteUser(user)}
+                                                    title={canDeleteUser(user) ? 'Delete user' : 'You cannot delete your own account'}
+                                                    className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20 disabled:opacity-50 disabled:pointer-events-none"
+                                                >
                                                     <Trash2 size={18} />
                                                 </Button>
                                             )}
@@ -505,9 +531,23 @@ const UserList = () => {
                 </div>
             </Modal>
 
-            {/* Delete Modal */}
-            <Modal isOpen={deleteModalOpen} onClose={() => setDeleteModalOpen(false)} title="Delete User" footer={<><Button variant="outline" onClick={() => setDeleteModalOpen(false)}>Cancel</Button><Button variant="danger" onClick={handleDelete}>Delete</Button></>}>
-                <p className="text-gray-600 dark:text-gray-400">Are you sure you want to delete <strong>{selectedUser?.first_name} {selectedUser?.last_name}</strong>? This action cannot be undone.</p>
+            {/* Delete Modal — only superadmin sees delete; cannot delete own account */}
+            <Modal
+                isOpen={deleteModalOpen}
+                onClose={() => setDeleteModalOpen(false)}
+                title="Delete User"
+                footer={
+                    <>
+                        <Button variant="outline" onClick={() => setDeleteModalOpen(false)}>Cancel</Button>
+                        <Button variant="danger" onClick={handleDelete} disabled={selectedUser && !canDeleteUser(selectedUser)}>Delete</Button>
+                    </>
+                }
+            >
+                <p className="text-gray-600 dark:text-gray-400">
+                    {selectedUser && !canDeleteUser(selectedUser)
+                        ? "You cannot delete your own account."
+                        : <>Are you sure you want to delete <strong>{selectedUser?.first_name} {selectedUser?.last_name}</strong>? This action cannot be undone.</>}
+                </p>
             </Modal>
 
             {/* View User Modal */}
