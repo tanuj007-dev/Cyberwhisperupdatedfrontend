@@ -3,7 +3,7 @@
 import { useState, useMemo, useEffect } from 'react';
 import { useAdmin } from '@/contexts/AdminContext';
 import { Button, Badge, Modal, Input, Toast, Skeleton } from '@/components/ui';
-import { Edit2, Trash2, Eye, Search, PlusCircle, UserPlus, UserX, UserCheck } from 'lucide-react';
+import { Edit2, Trash2, Eye, Search, PlusCircle, UserPlus, UserX, UserCheck, UserCircle } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { API_BASE_URL } from '@/lib/apiConfig';
 
@@ -342,8 +342,8 @@ const UserList = () => {
                                             {user.profile_image_url ? (
                                                 <img src={user.profile_image_url} alt="" className="w-10 h-10 rounded-full object-cover" />
                                             ) : (
-                                                <div className="w-10 h-10 rounded-full bg-violet-100 dark:bg-violet-900/30 flex items-center justify-center text-violet-600 dark:text-violet-400 font-semibold">
-                                                    {(user.first_name?.[0] || '?') + (user.last_name?.[0] || '')}
+                                                <div className="w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-500 dark:text-gray-400">
+                                                    <UserCircle className="w-10 h-10" strokeWidth={1.25} />
                                                 </div>
                                             )}
                                             <div>
@@ -464,7 +464,12 @@ const UserList = () => {
                             {imagePreview ? (
                                 <div><img src={imagePreview} alt="Preview" className="h-24 w-24 object-cover rounded-lg mx-auto" /><p className="text-sm text-gray-500 mt-2">Click or drag to replace</p></div>
                             ) : (
-                                <div><p className="text-gray-500">Drag and drop or click to upload (max 5MB)</p></div>
+                                <div className="flex flex-col items-center gap-2">
+                                    <div className="w-24 h-24 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-400 dark:text-gray-500">
+                                        <UserCircle className="w-16 h-16" strokeWidth={1.25} />
+                                    </div>
+                                    <p className="text-gray-500">Drag and drop or click to upload (max 5MB)</p>
+                                </div>
                             )}
                             {imageUploading && <div className="absolute inset-0 bg-white/80 dark:bg-gray-900/80 flex items-center justify-center rounded-xl"><span className="text-sm">Uploading...</span></div>}
                         </div>
@@ -493,8 +498,8 @@ const UserList = () => {
                             {viewUser.profile_image_url ? (
                                 <img src={viewUser.profile_image_url} alt="" className="w-20 h-20 rounded-full object-cover" />
                             ) : (
-                                <div className="w-20 h-20 rounded-full bg-violet-100 dark:bg-violet-900/30 flex items-center justify-center text-violet-600 text-xl font-semibold">
-                                    {(viewUser.first_name?.[0] || '') + (viewUser.last_name?.[0] || '')}
+                                <div className="w-20 h-20 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-500 dark:text-gray-400">
+                                    <UserCircle className="w-16 h-16" strokeWidth={1.25} />
                                 </div>
                             )}
                             <div>

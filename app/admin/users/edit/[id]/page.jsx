@@ -6,6 +6,7 @@ import { useAdmin } from '@/contexts/AdminContext';
 import { Button, Input, Textarea, Card, Toast, Skeleton } from '@/components/ui';
 import { getUserIdFromToken, getRoleFromToken } from '@/lib/jwt';
 import { API_BASE_URL } from '@/lib/apiConfig';
+import { UserCircle } from 'lucide-react';
 
 const EditUser = () => {
     const router = useRouter();
@@ -50,11 +51,12 @@ const EditUser = () => {
             }
             setLoading(true);
             try {
-                const user = await getUserById(parseInt(params.id));
-                if (user) {
+                const result = await getUserById(parseInt(params.id));
+                const user = result?.data ?? result?.user ?? result;
+                if (user && typeof user === 'object') {
                     const roleByRoleId = { 1: 'ADMIN', 2: 'STUDENT', 3: 'INSTRUCTOR' };
                     const r = (user.role || '').toUpperCase().replace(/\s/g, '');
-                    const roleFromApi = user.role === 'USER' ? 'STUDENT' : (r === 'SUPERADMIN' ? 'SUPERADMIN' : (user.role || roleByRoleId[user.role_id] || 'STUDENT'));
+                    const roleFromApi = user.role === 'USER' ? 'STUDENT' : (r === 'SUPERADMIN' ? 'SUPERADMIN' : (user.role || roleByRoleId[user.role_id] || roleByRoleId[user.roleId] || 'STUDENT'));
                     const statusNorm = (user.status || 'active').toLowerCase();
                     const editId = params.id != null ? parseInt(params.id, 10) : null;
                     setFormData({
@@ -64,15 +66,15 @@ const EditUser = () => {
                         role: roleFromApi,
                         status: statusNorm,
                         title: user.title ?? '',
-                        first_name: user.first_name ?? '',
-                        last_name: user.last_name ?? '',
+                        first_name: user.first_name ?? user.firstName ?? '',
+                        last_name: user.last_name ?? user.lastName ?? '',
                         email: user.email ?? '',
                         phone: user.phone ?? '',
                         address: user.address ?? '',
                         biography: user.biography ?? '',
-                        linkedin_url: user.linkedin_url ?? '',
-                        github_url: user.github_url ?? '',
-                        profile_image_url: user.profile_image_url ?? '',
+                        linkedin_url: user.linkedin_url ?? user.linkedinUrl ?? '',
+                        github_url: user.github_url ?? user.githubUrl ?? '',
+                        profile_image_url: user.profile_image_url ?? user.profileImageUrl ?? user.profile_image ?? '',
                     });
                 } else {
                     showToast('User not found', 'error');
@@ -330,9 +332,14 @@ const EditUser = () => {
                                         </p>
                                     </div>
                                 ) : (
-                                    <p className="text-sm text-gray-600 dark:text-gray-400">
-                                        {profileUploading ? 'Uploading…' : 'Drop an image here or click to upload'}
-                                    </p>
+                                    <div className="space-y-2">
+                                        <div className="mx-auto w-24 h-24 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-400 dark:text-gray-500">
+                                            <UserCircle className="w-16 h-16" strokeWidth={1.25} />
+                                        </div>
+                                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                                            {profileUploading ? 'Uploading…' : 'Drop an image here or click to upload'}
+                                        </p>
+                                    </div>
                                 )}
                             </div>
                             <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">Or paste URL below</p>

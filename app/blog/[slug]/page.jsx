@@ -10,6 +10,35 @@ import Link from 'next/link'
 import { use } from 'react'
 import { API_BASE_URL } from '@/lib/apiConfig'
 
+function SocialShareLinks({ blog }) {
+    const [pageUrl, setPageUrl] = useState('')
+    useEffect(() => {
+        if (typeof window !== 'undefined') setPageUrl(window.location.href)
+    }, [])
+    const encodedUrl = encodeURIComponent(pageUrl)
+    const links = [
+        { Icon: FaFacebook, url: (blog?.facebook_url && blog.facebook_url.trim()) || `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}` },
+        { Icon: FaLinkedin, url: (blog?.linkedin_url && blog.linkedin_url.trim()) || `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}` },
+        { Icon: FaXTwitter, url: (blog?.twitter_url && blog.twitter_url.trim()) || `https://twitter.com/intent/tweet?url=${encodedUrl}` },
+        { Icon: FaInstagram, url: (blog?.instagram_url && blog.instagram_url.trim()) || '#' }
+    ]
+    return (
+        <>
+            {links.map(({ Icon, url }, idx) => (
+                <a
+                    key={idx}
+                    href={url}
+                    target={url === '#' ? undefined : '_blank'}
+                    rel={url === '#' ? undefined : 'noopener noreferrer'}
+                    className="w-10 h-10 rounded-lg bg-[#F4F7FF] text-[#1C2D5A] flex items-center justify-center hover:bg-[#6B46E5] hover:text-white transition-all transform hover:-translate-y-1"
+                >
+                    <Icon size={18} />
+                </a>
+            ))}
+        </>
+    )
+}
+
 export default function BlogPostDetail({ params }) {
     // Unwrap the params Promise (Next.js 15+)
     const { slug } = use(params)
@@ -183,25 +212,10 @@ export default function BlogPostDetail({ params }) {
                                     </div>
                                 )}
 
-                                {/* Social Share */}
+                                {/* Social Share — use blog's custom links when set, else default share URLs */}
                                 <div className="flex gap-4 items-center">
                                     <span className="text-sm font-bold text-[#1C0F2D]">Share:</span>
-                                    {[
-                                        { Icon: FaFacebook, url: `https://facebook.com/sharer/sharer.php?u=${typeof window !== 'undefined' ? window.location.href : ''}` },
-                                        { Icon: FaLinkedin, url: `https://linkedin.com/sharing/share-offsite/?url=${typeof window !== 'undefined' ? window.location.href : ''}` },
-                                        { Icon: FaXTwitter, url: `https://twitter.com/intent/tweet?url=${typeof window !== 'undefined' ? window.location.href : ''}` },
-                                        { Icon: FaInstagram, url: '#' }
-                                    ].map(({ Icon, url }, idx) => (
-                                        <a
-                                            key={idx}
-                                            href={url}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="w-10 h-10 rounded-lg bg-[#F4F7FF] text-[#1C2D5A] flex items-center justify-center hover:bg-[#6B46E5] hover:text-white transition-all transform hover:-translate-y-1"
-                                        >
-                                            <Icon size={18} />
-                                        </a>
-                                    ))}
+                                    <SocialShareLinks blog={blog} />
                                 </div>
                             </div>
                         </div>

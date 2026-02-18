@@ -21,6 +21,8 @@ const RichTextEditor = ({ value, onChange, placeholder = "Write your content her
     const [imageUrlInput, setImageUrlInput] = useState('');
     const [imageAltInput, setImageAltInput] = useState('');
     const [imageUploading, setImageUploading] = useState(false);
+    const [videoModalOpen, setVideoModalOpen] = useState(false);
+    const [videoUrlInput, setVideoUrlInput] = useState('');
 
     // Initialize and sync editor content when value loads (e.g. existing blog content when editing)
     useEffect(() => {
@@ -240,24 +242,58 @@ const RichTextEditor = ({ value, onChange, placeholder = "Write your content her
         if (ytMatch) return { src: `https://www.youtube.com/embed/${ytMatch[1]}`, title: 'YouTube' };
         const vimeoMatch = u.match(/vimeo\.com\/(?:video\/)?(\d+)/);
         if (vimeoMatch) return { src: `https://player.vimeo.com/video/${vimeoMatch[1]}`, title: 'Vimeo' };
-        if (u.includes('youtube.com/embed/') || u.includes('youtu.be/')) return { src: u, title: 'Video' };
+        if (u.includes('youtube.com/embed/')) return { src: u, title: 'YouTube' };
         return null;
     };
 
-    // Insert video embed at cursor (YouTube / Vimeo)
-    const insertVideo = useCallback(() => {
-        const url = prompt('Enter video URL (YouTube or Vimeo):', 'https://');
-        if (!url || !url.trim()) return;
-        const embed = getVideoEmbedSrc(url);
-        if (!embed) {
-            alert('Please enter a valid YouTube or Vimeo URL.');
-            return;
+    const openVideoModal = useCallback(() => {
+        const sel = window.getSelection();
+        if (editorRef.current && sel && sel.rangeCount > 0) {
+            try {
+                savedSelectionRef.current = sel.getRangeAt(0).cloneRange();
+            } catch (_) { savedSelectionRef.current = null; }
+        } else {
+            savedSelectionRef.current = null;
         }
-        const iframeHtml = `<p><iframe src="${embed.src}" title="${embed.title}" width="560" height="315" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="max-width: 100%; border-radius: 8px;"></iframe></p>`;
-        document.execCommand('insertHTML', false, iframeHtml);
+        setVideoUrlInput('');
+        setVideoModalOpen(true);
+    }, []);
+
+    const closeVideoModal = useCallback(() => {
+        setVideoModalOpen(false);
+        setVideoUrlInput('');
         editorRef.current?.focus();
+    }, []);
+
+    // Insert video embed at cursor (YouTube / Vimeo) — restores saved selection so it works in middle of content
+    const insertVideoAtCursor = useCallback((url) => {
+        const embed = getVideoEmbedSrc(url);
+        if (!embed) return false;
+        const safeSrc = String(embed.src).replace(/"/g, '&quot;');
+        const safeTitle = String(embed.title || 'Video').replace(/"/g, '&quot;');
+        const iframeHtml = `<p class="video-embed-wrapper"><iframe src="${safeSrc}" title="${safeTitle}" width="560" height="315" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="max-width: 100%; border-radius: 8px;"></iframe></p>`;
+        editorRef.current?.focus();
+        const sel = window.getSelection();
+        if (savedSelectionRef.current && sel) {
+            try {
+                sel.removeAllRanges();
+                sel.addRange(savedSelectionRef.current);
+            } catch (_) { /* ignore */ }
+        }
+        document.execCommand('insertHTML', false, iframeHtml);
         handleInput();
+        return true;
     }, [handleInput]);
+
+    const insertVideoFromModal = useCallback(() => {
+        const url = videoUrlInput?.trim();
+        if (!url) return;
+        if (insertVideoAtCursor(url)) {
+            closeVideoModal();
+        } else {
+            alert('Please enter a valid YouTube or Vimeo URL.');
+        }
+    }, [videoUrlInput, insertVideoAtCursor, closeVideoModal]);
 
     // Clear ALL formatting from selected text
     const clearFormatting = useCallback(() => {
@@ -308,13 +344,37 @@ const RichTextEditor = ({ value, onChange, placeholder = "Write your content her
         }
     }, [execCommand]);
 
-    // Handle paste - remove formatting
-    const handlePaste = useCallback((e) => {
+    // Handle paste — strip formatting for text; if image and onUploadImage provided, save selection, upload, insert at cursor
+    const handlePaste = useCallback(async (e) => {
+        const items = e.clipboardData?.items;
+        const file = items && Array.from(items).find(item => item.kind === 'file' && item.type.startsWith('image/'));
+        if (file && onUploadImage) {
+            e.preventDefault();
+            const sel = window.getSelection();
+            if (editorRef.current && sel && sel.rangeCount > 0) {
+                try {
+                    savedSelectionRef.current = sel.getRangeAt(0).cloneRange();
+                } catch (_) { savedSelectionRef.current = null; }
+            }
+            const blob = file.getAsFile();
+            if (!blob) return;
+            try {
+                const url = await onUploadImage(blob);
+                if (url) {
+                    insertImageAtCursor(url, 'Pasted image');
+                }
+            } catch (err) {
+                console.error('Paste image upload failed:', err);
+                document.execCommand('insertText', false, e.clipboardData.getData('text/plain'));
+                handleInput();
+            }
+            return;
+        }
         e.preventDefault();
         const text = e.clipboardData.getData('text/plain');
         document.execCommand('insertText', false, text);
         handleInput();
-    }, [handleInput]);
+    }, [handleInput, onUploadImage, insertImageAtCursor]);
 
     // Toolbar button component
     const ToolbarButton = ({ icon: Icon, title, onClick, active = false, disabled = false, danger = false }) => (
@@ -492,8 +552,8 @@ const RichTextEditor = ({ value, onChange, placeholder = "Write your content her
 
                 {/* Insert Elements */}
                 <ToolbarButton icon={LinkIcon} title="Insert/Remove Link" onClick={insertLink} />
-                <ToolbarButton icon={ImageIcon} title="Insert Image (drag & drop or paste URL)" onClick={openImageModal} />
-                <ToolbarButton icon={Video} title="Insert Video (YouTube or Vimeo)" onClick={insertVideo} />
+                <ToolbarButton icon={ImageIcon} title="Insert Image — upload or paste URL (inserts at cursor)" onClick={openImageModal} />
+                <ToolbarButton icon={Video} title="Insert Video — YouTube or Vimeo URL (inserts at cursor)" onClick={openVideoModal} />
 
                 <Divider />
 
@@ -510,6 +570,46 @@ const RichTextEditor = ({ value, onChange, placeholder = "Write your content her
                     danger
                 />
             </div>
+
+            {/* Video insert modal — paste YouTube/Vimeo URL, inserts at cursor */}
+            {videoModalOpen && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50" onClick={closeVideoModal}>
+                    <div className="bg-white rounded-2xl shadow-xl border border-gray-200 w-full max-w-md overflow-hidden" onClick={e => e.stopPropagation()}>
+                        <div className="flex items-center justify-between px-5 py-4 border-b border-gray-200">
+                            <h3 className="text-lg font-semibold text-gray-900">Insert video</h3>
+                            <button type="button" onClick={closeVideoModal} className="p-2 rounded-lg text-gray-500 hover:bg-gray-100 hover:text-gray-700" aria-label="Close">
+                                <X size={20} />
+                            </button>
+                        </div>
+                        <div className="p-5 space-y-4">
+                            <p className="text-sm text-gray-600">Paste a YouTube or Vimeo URL. The video will be inserted at your cursor position in the content.</p>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Video URL</label>
+                                <input
+                                    type="url"
+                                    value={videoUrlInput}
+                                    onChange={e => setVideoUrlInput(e.target.value)}
+                                    placeholder="https://www.youtube.com/watch?v=... or https://vimeo.com/..."
+                                    className="w-full px-3 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-violet-500 text-gray-900"
+                                />
+                            </div>
+                            <div className="flex gap-2 pt-2">
+                                <button
+                                    type="button"
+                                    onClick={insertVideoFromModal}
+                                    disabled={!videoUrlInput?.trim()}
+                                    className="flex-1 px-4 py-2.5 bg-violet-600 text-white font-medium rounded-xl hover:bg-violet-700 disabled:opacity-50 disabled:pointer-events-none"
+                                >
+                                    Insert video
+                                </button>
+                                <button type="button" onClick={closeVideoModal} className="px-4 py-2.5 border border-gray-300 text-gray-700 font-medium rounded-xl hover:bg-gray-50">
+                                    Cancel
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             {/* Image insert modal – drag & drop or paste URL */}
             {imageModalOpen && (
@@ -554,7 +654,7 @@ const RichTextEditor = ({ value, onChange, placeholder = "Write your content her
                                 <p className="text-sm text-gray-600">
                                     {imageUploading ? 'Uploading…' : <>Drag & drop or <span className="font-semibold text-violet-600">click to upload</span></>}
                                 </p>
-                                <p className="text-xs text-gray-500 mt-0.5">PNG, JPG, WebP up to 10MB</p>
+                                <p className="text-xs text-gray-500 mt-0.5">Image is inserted at your cursor. PNG, JPG, WebP up to 10MB</p>
                             </div>
                             {/* Or paste URL */}
                             <div>
@@ -718,6 +818,19 @@ const RichTextEditor = ({ value, onChange, placeholder = "Write your content her
                     border-radius: 0.5rem;
                     margin: 0.75rem 0;
                     box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+                }
+                [contenteditable] iframe,
+                [contenteditable] .video-embed-wrapper {
+                    max-width: 100%;
+                    margin: 0.75rem 0;
+                    border-radius: 0.5rem;
+                    overflow: hidden;
+                }
+                [contenteditable] .video-embed-wrapper iframe {
+                    aspect-ratio: 16/9;
+                    width: 100%;
+                    height: auto;
+                    min-height: 200px;
                 }
                 [contenteditable]:focus {
                     outline: none;

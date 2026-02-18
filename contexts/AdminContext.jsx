@@ -483,7 +483,8 @@ export const AdminProvider = ({ children }) => {
         } catch (error) {
             console.error('Error fetching user by ID:', error);
             // Fallback to local state
-            return users.find(user => user.id === id);
+            const sid = String(id);
+            return users.find(user => String(user.id) === sid || String(user.user_id) === sid) || null;
         }
     };
 

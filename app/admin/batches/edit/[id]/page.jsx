@@ -45,30 +45,72 @@ export default function EditBatchPage() {
                 throw new Error('Failed to fetch batch');
             }
 
-            const batch = await response.json();
+            const result = await response.json();
+            // Unwrap: API may return { data: { ... } } or { batch: { ... } } or the batch object directly
+            const batch = result.data ?? result.batch ?? result;
 
-            // Format data for form
+            if (!batch || typeof batch !== 'object') {
+                throw new Error('Invalid batch data');
+            }
+
+            // Format data for form — support alternate field names so previous content always loads
             setFormData({
-                course_id: batch.course_id || '',
-                program_name: batch.program_name || '',
-                program_type: batch.program_type || 'Professional Certification',
-                start_date: batch.start_date ? batch.start_date.split('T')[0] : '',
-                end_date: batch.end_date ? batch.end_date.split('T')[0] : '',
-                start_time: batch.start_time ? batch.start_time.slice(0, 5) : '10:00',
-                end_time: batch.end_time ? batch.end_time.slice(0, 5) : '12:00',
-                schedule_type: batch.schedule_type || 'Flexible Schedule',
-                max_students: batch.max_students || 50,
-                duration_weeks: batch.duration_weeks || 52,
-                instructor_id: batch.instructor_id || '',
-                price: batch.price || '',
-                discount_price: batch.discount_price || '',
-                description: batch.description || '',
-                status: batch.status || 'ACTIVE'
+                course_id: batch.course_id ?? batch.courseId ?? '',
+                program_name: batch.program_name ?? batch.name ?? batch.programName ?? '',
+                program_type: batch.program_type ?? batch.programType ?? 'Professional Certification',
+                start_date: batch.start_date ? String(batch.start_date).split('T')[0] : (batch.startDate ? String(batch.startDate).split('T')[0] : ''),
+                end_date: batch.end_date ? String(batch.end_date).split('T')[0] : (batch.endDate ? String(batch.endDate).split('T')[0] : ''),
+                start_time: batch.start_time ? String(batch.start_time).slice(0, 5) : (batch.startTime ? String(batch.startTime).slice(0, 5) : '10:00'),
+                end_time: batch.end_time ? String(batch.end_time).slice(0, 5) : (batch.endTime ? String(batch.endTime).slice(0, 5) : '12:00'),
+                schedule_type: batch.schedule_type ?? batch.scheduleType ?? 'Flexible Schedule',
+                max_students: batch.max_students ?? batch.maxStudents ?? 50,
+                duration_weeks: batch.duration_weeks ?? batch.durationWeeks ?? 52,
+                instructor_id: batch.instructor_id ?? batch.instructorId ?? '',
+                price: batch.price ?? batch.fee ?? '',
+                discount_price: batch.discount_price ?? batch.discountPrice ?? '',
+                description: batch.description ?? batch.desc ?? batch.details ?? batch.summary ?? '',
+                status: batch.status ?? 'ACTIVE'
             });
         } catch (err) {
             console.error('Error fetching batch:', err);
-            alert('Failed to load batch data');
-            router.push('/admin/batches');
+            // Fallback: fetch list and find this batch so we still show previous content
+            try {
+                const listRes = await fetch(`${API_BASE_URL}/api/batches`);
+                if (listRes.ok) {
+                    const listResult = await listRes.json();
+                    const list = listResult.data ?? listResult.batches ?? (Array.isArray(listResult) ? listResult : []);
+                    const listBatch = Array.isArray(list) ? list.find(b => String(b.id) === String(batchId) || String(b.batch_id) === String(batchId)) : null;
+                    if (listBatch) {
+                        const b = listBatch;
+                        setFormData({
+                            course_id: b.course_id ?? b.courseId ?? '',
+                            program_name: b.program_name ?? b.name ?? b.programName ?? '',
+                            program_type: b.program_type ?? b.programType ?? 'Professional Certification',
+                            start_date: b.start_date ? String(b.start_date).split('T')[0] : (b.startDate ? String(b.startDate).split('T')[0] : ''),
+                            end_date: b.end_date ? String(b.end_date).split('T')[0] : (b.endDate ? String(b.endDate).split('T')[0] : ''),
+                            start_time: b.start_time ? String(b.start_time).slice(0, 5) : (b.startTime ? String(b.startTime).slice(0, 5) : '10:00'),
+                            end_time: b.end_time ? String(b.end_time).slice(0, 5) : (b.endTime ? String(b.endTime).slice(0, 5) : '12:00'),
+                            schedule_type: b.schedule_type ?? b.scheduleType ?? 'Flexible Schedule',
+                            max_students: b.max_students ?? b.maxStudents ?? 50,
+                            duration_weeks: b.duration_weeks ?? b.durationWeeks ?? 52,
+                            instructor_id: b.instructor_id ?? b.instructorId ?? '',
+                            price: b.price ?? b.fee ?? '',
+                            discount_price: b.discount_price ?? b.discountPrice ?? '',
+                            description: b.description ?? b.desc ?? b.details ?? b.summary ?? '',
+                            status: b.status ?? 'ACTIVE'
+                        });
+                    } else {
+                        alert('Failed to load batch data');
+                        router.push('/admin/batches');
+                    }
+                } else {
+                    alert('Failed to load batch data');
+                    router.push('/admin/batches');
+                }
+            } catch (_) {
+                alert('Failed to load batch data');
+                router.push('/admin/batches');
+            }
         } finally {
             setLoading(false);
         }

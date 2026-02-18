@@ -9,7 +9,7 @@ import { API_BASE_URL } from '@/lib/apiConfig';
 import API_CONFIG from '@/app/admin/config/api';
 import {
     Upload, X, FileText, Image as ImageIcon, User, Search, Settings,
-    ChevronDown, ChevronUp, Save, ArrowLeft, Calendar
+    ChevronDown, ChevronUp, Save, ArrowLeft, Calendar, Share2
 } from 'lucide-react';
 
 // Section Component - Defined OUTSIDE the main component to prevent re-creation on every render
@@ -46,6 +46,7 @@ const EditBlog = () => {
     const [formData, setFormData] = useState(null);
     const [collapsedSections, setCollapsedSections] = useState({
         seo: true,
+        social: true,
         settings: true
     });
     const [thumbnailPreview, setThumbnailPreview] = useState('');
@@ -55,7 +56,11 @@ const EditBlog = () => {
     const [uploadingImage, setUploadingImage] = useState(false);
     const initialImageUrlsRef = useRef({ thumbnail_url: '', banner_url: '' });
 
+    const fetchedContentRef = useRef(false);
+
+    // Load blog from context first, then fetch full blog (with content) from API so editor shows previous content
     useEffect(() => {
+        fetchedContentRef.current = false;
         const blog = getBlogById(parseInt(params.id));
         if (blog) {
             const thumb = blog.thumbnail_url || blog.thumbnail || '';
@@ -78,12 +83,48 @@ const EditBlog = () => {
                 allowComments: blog.allowComments ?? true,
                 showOnHomepage: blog.showOnHomepage ?? true,
                 pinPost: blog.pinPost ?? false,
-                selectedTags: blog.selectedTags || []
+                selectedTags: blog.selectedTags || [],
+                facebook_url: blog.facebook_url ?? '',
+                linkedin_url: blog.linkedin_url ?? '',
+                twitter_url: blog.twitter_url ?? '',
+                instagram_url: blog.instagram_url ?? ''
             });
             setThumbnailPreview(thumb || banner || blog.thumbnail);
         }
         setLoading(false);
     }, [params.id, getBlogById]);
+
+    // Fetch full blog from API (including content) so edit form shows previous content even if list didn't return it
+    useEffect(() => {
+        if (!formData || !params.id || fetchedContentRef.current) return;
+        const slug = formData.slug || formData.slug_url;
+        const id = formData.blog_id ?? formData.id;
+        const fetchFullBlog = async () => {
+            const base = (API_BASE_URL || '').replace(/\/$/, '');
+            const urlsToTry = [];
+            if (slug) urlsToTry.push(`/api/blogs/${encodeURIComponent(slug)}`);
+            if (id) urlsToTry.push(`${base}/api/blogs/${id}`);
+            if (slug) urlsToTry.push(`${base}/api/blogs/${encodeURIComponent(slug)}`);
+            for (const url of urlsToTry) {
+                try {
+                    const res = await fetch(url, { headers: { Accept: 'application/json' } });
+                    if (!res.ok) continue;
+                    const result = await res.json();
+                    const data = result.data ?? result.blog ?? result.post ?? result;
+                    if (!data) continue;
+                    const fullContent = data.content ?? data.description ?? data.body ?? '';
+                    if (fullContent && fullContent.trim() !== '') {
+                        fetchedContentRef.current = true;
+                        setFormData(prev => prev ? { ...prev, description: fullContent } : prev);
+                    }
+                    break;
+                } catch (_) {
+                    continue;
+                }
+            }
+        };
+        fetchFullBlog();
+    }, [params.id, formData]);
 
     const toggleSection = useCallback((section) => {
         setCollapsedSections(prev => ({
@@ -223,7 +264,11 @@ const EditBlog = () => {
                 meta_robots: (formData.metaRobots || 'INDEX').toUpperCase(),
                 allow_comments: !!formData.allowComments,
                 show_on_homepage: !!formData.showOnHomepage,
-                is_sticky: !!formData.pinPost
+                is_sticky: !!formData.pinPost,
+                facebook_url: (formData.facebook_url || '').trim() || null,
+                linkedin_url: (formData.linkedin_url || '').trim() || null,
+                twitter_url: (formData.twitter_url || '').trim() || null,
+                instagram_url: (formData.instagram_url || '').trim() || null
             };
 
             showToast('Updating blog post...', 'info');
@@ -598,14 +643,16 @@ const EditBlog = () => {
                     onToggle={toggleSection}
                 >
                     <div className="space-y-4">
-                        <label className="block text-sm font-medium text-gray-700">
-                            Blog Content <span className="text-red-500">*</span>
-                        </label>
-                        <p className="text-xs text-gray-500 -mt-1">Use the toolbar to add images and videos anywhere in the content.</p>
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700">
+                                Blog Content <span className="text-red-500">*</span>
+                            </label>
+                            <p className="text-xs text-gray-500 mt-0.5">Place the cursor where you want an image or video, then use the Image or Video button in the toolbar to insert there.</p>
+                        </div>
                         <RichTextEditor
                             value={formData.description}
                             onChange={handleChange}
-                            placeholder="Write your blog content here... (Supports Markdown)"
+                            placeholder="Write your blog content here. Use the toolbar to insert images (upload or URL) or videos (YouTube/Vimeo) anywhere in the content."
                             rows={16}
                             error={errors.description}
                             onUploadImage={uploadContentImage}
@@ -674,6 +721,47 @@ const EditBlog = () => {
                                 ))}
                             </div>
                         </div>
+                    </div>
+                </Section>
+
+                {/* SECTION 5b — Social Share Links */}
+                <Section
+                    id="social"
+                    title="Social Share Links"
+                    icon={Share2}
+                    isCollapsed={collapsedSections.social ?? true}
+                    onToggle={toggleSection}
+                >
+                    <p className="text-sm text-gray-500 mb-4">Optional custom links for the Share section on the blog post. Leave empty to use default share URLs.</p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <Input
+                            label="Facebook URL"
+                            name="facebook_url"
+                            value={formData.facebook_url ?? ''}
+                            onChange={handleChange}
+                            placeholder="https://facebook.com/..."
+                        />
+                        <Input
+                            label="LinkedIn URL"
+                            name="linkedin_url"
+                            value={formData.linkedin_url ?? ''}
+                            onChange={handleChange}
+                            placeholder="https://linkedin.com/..."
+                        />
+                        <Input
+                            label="X (Twitter) URL"
+                            name="twitter_url"
+                            value={formData.twitter_url ?? ''}
+                            onChange={handleChange}
+                            placeholder="https://x.com/..."
+                        />
+                        <Input
+                            label="Instagram URL"
+                            name="instagram_url"
+                            value={formData.instagram_url ?? ''}
+                            onChange={handleChange}
+                            placeholder="https://instagram.com/..."
+                        />
                     </div>
                 </Section>
 

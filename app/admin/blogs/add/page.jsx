@@ -9,7 +9,7 @@ import { API_BASE_URL } from '@/lib/apiConfig';
 import API_CONFIG from '@/app/admin/config/api';
 import {
     Upload, X, FileText, Image as ImageIcon, User, Search, Settings,
-    ChevronDown, ChevronUp, Save, Send, ArrowLeft, Calendar
+    ChevronDown, ChevronUp, Save, Send, ArrowLeft, Calendar, Share2
 } from 'lucide-react';
 
 // Section Component - Defined OUTSIDE the main component to prevent re-creation on every render
@@ -83,12 +83,19 @@ const AddBlog = () => {
         pinPost: false,
 
         // Legacy fields
-        keywords: ''
+        keywords: '',
+
+        // Social share links (optional custom URLs for Share section on blog post)
+        facebook_url: '',
+        linkedin_url: '',
+        twitter_url: '',
+        instagram_url: ''
     });
 
     // Section collapse state
     const [collapsedSections, setCollapsedSections] = useState({
         seo: true,
+        social: true,
         settings: true
     });
     const [thumbnailPreview, setThumbnailPreview] = useState('');
@@ -328,7 +335,11 @@ const AddBlog = () => {
                 meta_robots: (formData.metaRobots || 'index').toUpperCase() === 'NOINDEX' ? 'NOINDEX' : 'INDEX',
                 allow_comments: !!formData.allowComments,
                 show_on_homepage: !!formData.showOnHomepage,
-                is_sticky: !!formData.pinPost
+                is_sticky: !!formData.pinPost,
+                facebook_url: (formData.facebook_url || '').trim() || null,
+                linkedin_url: (formData.linkedin_url || '').trim() || null,
+                twitter_url: (formData.twitter_url || '').trim() || null,
+                instagram_url: (formData.instagram_url || '').trim() || null
             };
 
             // Show loading state
@@ -618,7 +629,7 @@ const AddBlog = () => {
                             )}
                         </div>
 
-                        <div>
+                        {/* <div>
                             <label className="block text-sm font-medium text-gray-700 mb-2">Content Image (image_url)</label>
                             <p className="text-xs text-gray-500 mb-2">Optional. Image used in the post body.</p>
                             <div className="flex flex-wrap gap-3 items-start">
@@ -642,9 +653,9 @@ const AddBlog = () => {
                                     className="flex-1 min-w-[200px] px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-violet-500"
                                 />
                             </div>
-                        </div>
+                        </div> */}
 
-                        <div>
+                        {/* <div>
                             <label className="block text-sm font-medium text-gray-700 mb-2">Video URL (video_url)</label>
                             <p className="text-xs text-gray-500 mb-2">Optional. Paste a video URL (e.g. Cloudinary, YouTube).</p>
                             <input
@@ -655,7 +666,7 @@ const AddBlog = () => {
                                 placeholder="https://..."
                                 className="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-violet-500 text-black"
                             />
-                        </div>
+                        </div> */}
                     </div>
                 </Section>
 
@@ -753,13 +764,16 @@ const AddBlog = () => {
                     onToggle={toggleSection}
                 >
                     <div className="space-y-4">
-                        <label className="block text-sm font-medium text-gray-700">
-                            Blog Content <span className="text-red-500">*</span>
-                        </label>
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700">
+                                Blog Content <span className="text-red-500">*</span>
+                            </label>
+                            <p className="text-xs text-gray-500 mt-0.5">Place the cursor where you want an image or video, then use the Image or Video button in the toolbar to insert there.</p>
+                        </div>
                         <RichTextEditor
                             value={formData.description}
                             onChange={handleChange}
-                            placeholder="Write your blog content here... (Supports Markdown)"
+                            placeholder="Write your blog content here. Use the toolbar to insert images (upload or URL) or videos (YouTube/Vimeo) anywhere in the content."
                             rows={16}
                             error={errors.description}
                             onUploadImage={uploadContentImage}
@@ -828,6 +842,47 @@ const AddBlog = () => {
                                 ))}
                             </div>
                         </div>
+                    </div>
+                </Section>
+
+                {/* SECTION 5b — Social Links (for Share section on blog post) */}
+                <Section
+                    id="social"
+                    title="Social Share Links"
+                    icon={Share2}
+                    isCollapsed={collapsedSections.social ?? true}
+                    onToggle={toggleSection}
+                >
+                    <p className="text-sm text-gray-500 mb-4">Optional custom links for the Share section on the blog post. Leave empty to use default share URLs (share current page).</p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <Input
+                            label="Facebook URL"
+                            name="facebook_url"
+                            value={formData.facebook_url ?? ''}
+                            onChange={handleChange}
+                            placeholder="https://facebook.com/..."
+                        />
+                        <Input
+                            label="LinkedIn URL"
+                            name="linkedin_url"
+                            value={formData.linkedin_url ?? ''}
+                            onChange={handleChange}
+                            placeholder="https://linkedin.com/..."
+                        />
+                        <Input
+                            label="X (Twitter) URL"
+                            name="twitter_url"
+                            value={formData.twitter_url ?? ''}
+                            onChange={handleChange}
+                            placeholder="https://x.com/..."
+                        />
+                        <Input
+                            label="Instagram URL"
+                            name="instagram_url"
+                            value={formData.instagram_url ?? ''}
+                            onChange={handleChange}
+                            placeholder="https://instagram.com/..."
+                        />
                     </div>
                 </Section>
 

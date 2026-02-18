@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Lock, ChevronRight, AlertCircle, ShieldCheck, Mail, KeyRound, Info, UserPlus, X, Upload, Loader2 } from 'lucide-react';
+import { Lock, ChevronRight, AlertCircle, ShieldCheck, Mail, KeyRound, Info, UserPlus, X, Upload, Loader2, UserCircle } from 'lucide-react';
 import { getRoleFromToken } from '@/lib/jwt';
 import { Toast } from '@/components/ui';
 import { API_BASE_URL } from '@/lib/apiConfig';
@@ -710,7 +710,7 @@ export default function AdminLogin() {
                                                 {profileImageUploading ? (
                                                     <Loader2 className="w-8 h-8 text-purple-400 animate-spin" />
                                                 ) : (
-                                                    <Upload className="w-8 h-8 text-gray-500" />
+                                                    <UserCircle className="w-10 h-10 text-gray-400" strokeWidth={1.25} />
                                                 )}
                                                 <span className="text-sm text-gray-400">
                                                     {profileImageUploading ? 'Uploading…' : 'Drag & drop or click to upload'}
