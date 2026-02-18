@@ -18,6 +18,15 @@ const UserList = () => {
 
     const isSuperAdmin = currentUserRole === 'SUPERADMIN';
     const canManageStatus = currentUserRole === 'ADMIN' || currentUserRole === 'SUPERADMIN';
+    const isTargetAdminOrSuperadmin = (user) => {
+        const r = String(user.role || '').toUpperCase().replace(/\s/g, '');
+        return r === 'SUPERADMIN' || r === 'ADMIN' || user.role_id === 1;
+    };
+    const canToggleStatusForUser = (user) => {
+        if (!canManageStatus) return false;
+        if (isSuperAdmin) return true;
+        return !isTargetAdminOrSuperadmin(user);
+    };
 
     const [togglingStatusId, setTogglingStatusId] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
@@ -207,12 +216,19 @@ const UserList = () => {
     };
 
     const handleToggleStatus = async (user) => {
+        if (!canToggleStatusForUser(user)) {
+            showToast('You cannot change status for another admin. Only Superadmin can.', 'error');
+            return;
+        }
         const currentStatus = (user.status || 'active').toLowerCase();
         const newStatus = currentStatus === 'active' ? 'inactive' : 'active';
+        if (newStatus === 'inactive' && !window.confirm('Are you sure you want to deactivate this user? They will not be able to log in.')) {
+            return;
+        }
         setTogglingStatusId(user.id);
         try {
             await updateUser(user.id, { ...user, status: newStatus });
-            showToast(`User ${newStatus === 'active' ? 'activated' : 'deactivated'} successfully`, 'success');
+            showToast(newStatus === 'active' ? 'User activated successfully.' : 'User deactivated successfully. They can no longer log in.', 'success');
         } catch (error) {
             showToast(error?.message || 'Failed to update status', 'error');
         } finally {
@@ -381,18 +397,18 @@ const UserList = () => {
                                                     variant="ghost"
                                                     size="sm"
                                                     onClick={() => handleToggleStatus(user)}
-                                                    disabled={togglingStatusId === user.id}
-                                                    title={(user.status || 'active').toLowerCase() === 'active' ? 'Deactivate user' : 'Activate user'}
+                                                    disabled={togglingStatusId === user.id || !canToggleStatusForUser(user)}
+                                                    title={!canToggleStatusForUser(user) ? 'Cannot change status for another admin' : (user.status || 'active').toLowerCase() === 'active' ? 'Deactivate user' : 'Activate user'}
                                                     className={(user.status || 'active').toLowerCase() === 'active'
-                                                        ? 'text-amber-600 hover:text-amber-700 hover:bg-amber-50 dark:hover:bg-amber-900/20'
-                                                        : 'text-green-600 hover:text-green-700 hover:bg-green-50 dark:hover:bg-green-900/20'}
+                                                        ? 'text-green-600 hover:text-green-700 hover:bg-green-50 dark:hover:bg-green-900/20'
+                                                        : 'text-gray-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20'}
                                                 >
                                                     {togglingStatusId === user.id ? (
                                                         <span className="inline-block w-[18px] h-[18px] border-2 border-current border-t-transparent rounded-full animate-spin" />
                                                     ) : (user.status || 'active').toLowerCase() === 'active' ? (
-                                                        <UserX size={18} />
+                                                        <UserCheck size={18} aria-hidden />
                                                     ) : (
-                                                        <UserCheck size={18} />
+                                                        <UserX size={18} aria-hidden />
                                                     )}
                                                 </Button>
                                             )}

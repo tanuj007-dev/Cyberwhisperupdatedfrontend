@@ -14,7 +14,8 @@ import {
     Plus,
     Filter,
     Grid3x3,
-    List as ListIcon
+    List as ListIcon,
+    Loader2
 } from 'lucide-react';
 import Image from 'next/image';
 
@@ -34,6 +35,9 @@ const GalleryManagement = () => {
 
     const [selectedImage, setSelectedImage] = useState(null);
     const [toast, setToast] = useState({ isVisible: false, message: '', type: 'success' });
+    const [uploading, setUploading] = useState(false);
+    const [deleting, setDeleting] = useState(false);
+    const [updating, setUpdating] = useState(false);
 
     // Upload form state
     const [uploadForm, setUploadForm] = useState({
@@ -148,8 +152,8 @@ const GalleryManagement = () => {
             console.log(`  - ${key}:`, value, value instanceof File ? `File: ${value.name} (${value.size} bytes)` : typeof value);
         }
 
+        setUploading(true);
         try {
-            // Call backend API directly
             const response = await fetch(`${API_BASE_URL}/api/gallery/upload`, {
                 method: 'POST',
                 body: formData,
@@ -164,15 +168,15 @@ const GalleryManagement = () => {
         } catch (error) {
             console.error('Error uploading image:', error);
             showToast('Failed to upload image', 'error');
+        } finally {
+            setUploading(false);
         }
     };
 
     // Delete image
     const handleDelete = async () => {
+        setDeleting(true);
         try {
-            console.log('Deleting image:', selectedImage);
-            
-            // Call backend API to delete image
             const response = await fetch(`${API_BASE_URL}/api/gallery/${selectedImage.id}/remove`, {
                 method: 'DELETE',
                 headers: {
@@ -180,9 +184,7 @@ const GalleryManagement = () => {
                 }
             });
 
-            console.log('Delete response status:', response.status);
             const responseData = await response.json();
-            console.log('Delete response data:', responseData);
 
             if (!response.ok) {
                 throw new Error(responseData.message || 'Delete failed');
@@ -195,15 +197,16 @@ const GalleryManagement = () => {
         } catch (error) {
             console.error('Error deleting image:', error);
             showToast(error.message || 'Failed to delete image', 'error');
+        } finally {
+            setDeleting(false);
         }
     };
 
     // Update image metadata
     const handleUpdate = async (e) => {
         e.preventDefault();
-
+        setUpdating(true);
         try {
-            // Call backend API to update image
             const response = await fetch(`${API_BASE_URL}/api/gallery/${selectedImage.id}`, {
                 method: 'PUT',
                 headers: {
@@ -221,6 +224,8 @@ const GalleryManagement = () => {
         } catch (error) {
             console.error('Error updating image:', error);
             showToast('Failed to update image', 'error');
+        } finally {
+            setUpdating(false);
         }
     };
 
@@ -266,9 +271,10 @@ const GalleryManagement = () => {
 
     if (loading) {
         return (
-            <div className="space-y-6">
-                <Skeleton variant="title" />
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="flex flex-col items-center justify-center min-h-[320px] gap-4">
+                <Loader2 className="w-12 h-12 text-violet-600 animate-spin" aria-hidden />
+                <p className="text-gray-600 font-medium">Loading gallery…</p>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full max-w-4xl mt-4">
                     {[...Array(6)].map((_, i) => (
                         <Skeleton key={i} className="h-64" />
                     ))}
@@ -368,11 +374,11 @@ const GalleryManagement = () => {
                     <select
                         value={filterContext}
                         onChange={(e) => setFilterContext(e.target.value)}
-                        className="px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-transparent bg-white"
+                        className="px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-transparent bg-white text-gray-900"
                     >
                         <option value="">All Contexts</option>
                         {contexts.map((context) => (
-                            <option key={context} value={context}>
+                            <option key={context} value={context} className="text-gray-900 bg-white">
                                 {context.charAt(0).toUpperCase() + context.slice(1)}
                             </option>
                         ))}
@@ -382,11 +388,11 @@ const GalleryManagement = () => {
                     <select
                         value={filterActive}
                         onChange={(e) => setFilterActive(e.target.value)}
-                        className="px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-transparent bg-white"
+                        className="px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-transparent bg-white text-gray-900"
                     >
-                        <option value="">All Status</option>
-                        <option value="active">Active</option>
-                        <option value="inactive">Inactive</option>
+                        <option value="" className="text-gray-900 bg-white">All Status</option>
+                        <option value="active" className="text-gray-900 bg-white">Active</option>
+                        <option value="inactive" className="text-gray-900 bg-white">Inactive</option>
                     </select>
                 </div>
 
@@ -582,13 +588,13 @@ const GalleryManagement = () => {
                         }}>
                             Cancel
                         </Button>
-                        <Button onClick={handleUpload}>
-                            Upload
+                        <Button onClick={handleUpload} disabled={uploading}>
+                            {uploading ? <><Loader2 className="w-4 h-4 animate-spin" /> Uploading…</> : 'Upload'}
                         </Button>
                     </>
                 }
             >
-                <form onSubmit={handleUpload} className="space-y-4">
+                <form onSubmit={handleUpload} className={`space-y-4 ${uploading ? 'pointer-events-none opacity-70' : ''}`}>
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
                             Image File *
@@ -622,10 +628,10 @@ const GalleryManagement = () => {
                         <select
                             value={uploadForm.context}
                             onChange={(e) => setUploadForm({ ...uploadForm, context: e.target.value })}
-                            className="w-full px-4 py-2 border text-black border-gray-300 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent bg-white text-gray-900"
                         >
                             {contexts.map((context) => (
-                                <option key={context} value={context}>
+                                <option key={context} value={context} className="text-gray-900 bg-white">
                                     {context.charAt(0).toUpperCase() + context.slice(1)}
                                 </option>
                             ))}
@@ -702,8 +708,8 @@ const GalleryManagement = () => {
                         }}>
                             Cancel
                         </Button>
-                        <Button onClick={handleUpdate}>
-                            Update
+                        <Button onClick={handleUpdate} disabled={updating}>
+                            {updating ? <><Loader2 className="w-4 h-4 animate-spin" /> Updating…</> : 'Update'}
                         </Button>
                     </>
                 }
@@ -729,10 +735,10 @@ const GalleryManagement = () => {
                         <select
                             value={editForm.context}
                             onChange={(e) => setEditForm({ ...editForm, context: e.target.value })}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent bg-white text-gray-900"
                         >
                             {contexts.map((context) => (
-                                <option key={context} value={context}>
+                                <option key={context} value={context} className="text-gray-900 bg-white">
                                     {context.charAt(0).toUpperCase() + context.slice(1)}
                                 </option>
                             ))}
@@ -866,8 +872,8 @@ const GalleryManagement = () => {
                         <Button variant="outline" onClick={() => setDeleteModalOpen(false)}>
                             Cancel
                         </Button>
-                        <Button variant="danger" onClick={handleDelete}>
-                            Delete
+                        <Button variant="danger" onClick={handleDelete} disabled={deleting}>
+                            {deleting ? <><Loader2 className="w-4 h-4 animate-spin" /> Deleting…</> : 'Delete'}
                         </Button>
                     </>
                 }

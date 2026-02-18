@@ -4,8 +4,20 @@ import { useState, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Sidebar from './Sidebar';
 import Header from './Header';
-import { AdminProvider } from '@/contexts/AdminContext';
+import { AdminProvider, useAdmin } from '@/contexts/AdminContext';
 import { isTokenExpired, clearAdminSessionAndRedirect } from '@/lib/adminAuth';
+import { Loader2 } from 'lucide-react';
+
+function AdminDataLoader() {
+    const { loading } = useAdmin();
+    if (!loading) return null;
+    return (
+        <div className="fixed top-4 right-4 z-50 flex items-center gap-2 px-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg">
+            <Loader2 className="w-5 h-5 text-violet-600 animate-spin shrink-0" aria-hidden />
+            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Loading…</span>
+        </div>
+    );
+}
 
 const AdminLayout = ({ children }) => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -81,6 +93,9 @@ const AdminLayout = ({ children }) => {
 
                 {/* Sidebar */}
                 <Sidebar isOpen={sidebarOpen} setIsOpen={setSidebarOpen} />
+
+                {/* Global loader when context is fetching data (e.g. users, blogs) */}
+                <AdminDataLoader />
 
                 {/* Main Content Area */}
                 <div className="lg:ml-72 min-h-screen flex flex-col relative">

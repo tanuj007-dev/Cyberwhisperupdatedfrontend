@@ -201,7 +201,12 @@ const EditUser = () => {
                 router.push(redirectTo);
             }, 1500);
         } catch (error) {
-            showToast(error?.message || 'Error updating user', 'error');
+            const msg = (error?.message || '').toLowerCase();
+            if (msg.includes('email') && (msg.includes('already') || msg.includes('registered') || msg.includes('duplicate') || msg.includes('exists') || msg.includes('taken'))) {
+                showToast('Email is already registered.', 'error');
+            } else {
+                showToast(error?.message || 'Error updating user', 'error');
+            }
             console.error(error);
         } finally {
             setSubmitting(false);
