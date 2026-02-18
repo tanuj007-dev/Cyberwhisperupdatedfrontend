@@ -9,7 +9,7 @@ import { API_BASE_URL } from '@/lib/apiConfig';
 import API_CONFIG from '@/app/admin/config/api';
 import {
     Upload, X, FileText, Image as ImageIcon, User, Search, Settings,
-    ChevronDown, ChevronUp, Save, ArrowLeft, Calendar, Share2
+    ChevronDown, ChevronUp, Save, ArrowLeft, Calendar
 } from 'lucide-react';
 
 // Section Component - Defined OUTSIDE the main component to prevent re-creation on every render
@@ -47,7 +47,6 @@ const EditBlog = () => {
     const [collapsedSections, setCollapsedSections] = useState({
         seo: true,
         social: true,
-        socialShare: true,
         settings: true
     });
     const [thumbnailPreview, setThumbnailPreview] = useState('');
@@ -85,10 +84,6 @@ const EditBlog = () => {
                 showOnHomepage: blog.showOnHomepage ?? true,
                 pinPost: blog.pinPost ?? false,
                 selectedTags: blog.selectedTags || [],
-                facebook_url: blog.facebook_url ?? blog.Facebook_handle_url ?? '',
-                linkedin_url: blog.linkedin_url ?? blog.linkedin_handle_url ?? '',
-                twitter_url: blog.twitter_url ?? blog.x_handle_url ?? '',
-                instagram_url: blog.instagram_url ?? blog.Instagram_handle_url ?? ''
             });
             setThumbnailPreview(thumb || banner || blog.thumbnail);
         }
@@ -265,11 +260,7 @@ const EditBlog = () => {
                 meta_robots: (formData.metaRobots || 'INDEX').toUpperCase(),
                 allow_comments: !!formData.allowComments,
                 show_on_homepage: !!formData.showOnHomepage,
-                is_sticky: !!formData.pinPost,
-                facebook_url: (formData.facebook_url || '').trim() || null,
-                linkedin_url: (formData.linkedin_url || '').trim() || null,
-                twitter_url: (formData.twitter_url || '').trim() || null,
-                instagram_url: (formData.instagram_url || '').trim() || null
+                is_sticky: !!formData.pinPost
             };
 
             showToast('Updating blog post...', 'info');
@@ -722,47 +713,6 @@ const EditBlog = () => {
                                 ))}
                             </div>
                         </div>
-                    </div>
-                </Section>
-
-                {/* SECTION 5b — Social Share Links (shown on blog post page) */}
-                <Section
-                    id="socialShare"
-                    title="Social Share Links"
-                    icon={Share2}
-                    isCollapsed={collapsedSections.socialShare ?? true}
-                    onToggle={toggleSection}
-                >
-                    <p className="text-sm text-gray-500 mb-4">Optional. Custom URLs for share buttons on the blog post. Leave blank to use default share links (share current page).</p>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <Input
-                            label="Facebook URL"
-                            name="facebook_url"
-                            value={formData.facebook_url ?? ''}
-                            onChange={handleChange}
-                            placeholder="https://www.facebook.com/..."
-                        />
-                        <Input
-                            label="LinkedIn URL"
-                            name="linkedin_url"
-                            value={formData.linkedin_url ?? ''}
-                            onChange={handleChange}
-                            placeholder="https://www.linkedin.com/..."
-                        />
-                        <Input
-                            label="X (Twitter) URL"
-                            name="twitter_url"
-                            value={formData.twitter_url ?? ''}
-                            onChange={handleChange}
-                            placeholder="https://twitter.com/..."
-                        />
-                        <Input
-                            label="Instagram URL"
-                            name="instagram_url"
-                            value={formData.instagram_url ?? ''}
-                            onChange={handleChange}
-                            placeholder="https://www.instagram.com/..."
-                        />
                     </div>
                 </Section>
 

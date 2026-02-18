@@ -3,46 +3,11 @@ import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import BlogSidebar from '../../Component/BlogSidebar'
-import { FaFacebook, FaLinkedin, FaInstagram, FaXTwitter } from 'react-icons/fa6'
 import { FaQuoteLeft } from 'react-icons/fa'
 import { Loader2, ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
 import { use } from 'react'
 import { API_BASE_URL } from '@/lib/apiConfig'
-
-function SocialShareLinks({ blog }) {
-    const [pageUrl, setPageUrl] = useState('')
-    useEffect(() => {
-        if (typeof window !== 'undefined') setPageUrl(window.location.href)
-    }, [])
-    const encodedUrl = encodeURIComponent(pageUrl)
-    // Use the handle URL you set in admin for each platform; otherwise fall back to share-this-page
-    const facebookHandle = (blog?.facebook_url && blog.facebook_url.trim()) || ''
-    const linkedinHandle = (blog?.linkedin_url && blog.linkedin_url.trim()) || ''
-    const twitterHandle = (blog?.twitter_url && blog.twitter_url.trim()) || ''
-    const instagramHandle = (blog?.instagram_url && blog.instagram_url.trim()) || ''
-    const links = [
-        { Icon: FaFacebook, url: facebookHandle || `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}` },
-        { Icon: FaLinkedin, url: linkedinHandle || `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}` },
-        { Icon: FaXTwitter, url: twitterHandle || `https://twitter.com/intent/tweet?url=${encodedUrl}` },
-        { Icon: FaInstagram, url: instagramHandle || '#' }
-    ]
-    return (
-        <>
-            {links.map(({ Icon, url }, idx) => (
-                <a
-                    key={idx}
-                    href={url}
-                    target={url === '#' ? undefined : '_blank'}
-                    rel={url === '#' ? undefined : 'noopener noreferrer'}
-                    className="w-10 h-10 rounded-lg bg-[#F4F7FF] text-[#1C2D5A] flex items-center justify-center hover:bg-[#6B46E5] hover:text-white transition-all transform hover:-translate-y-1"
-                >
-                    <Icon size={18} />
-                </a>
-            ))}
-        </>
-    )
-}
 
 export default function BlogPostDetail({ params }) {
     // Unwrap the params Promise (Next.js 15+)
@@ -80,7 +45,14 @@ export default function BlogPostDetail({ params }) {
                 if (authorFromNames && !blogData.author) {
                     blogData = { ...blogData, author: authorFromNames }
                 }
-                setBlog(blogData)
+                // Map social handle URLs from API (backend uses facebook_handle_url, linkedin_handle_url, etc.)
+                const social = {
+                    facebook_url: blogData.facebook_url ?? blogData.Facebook_handle_url ?? blogData.facebook_handle_url ?? null,
+                    linkedin_url: blogData.linkedin_url ?? blogData.linkedin_handle_url ?? null,
+                    twitter_url: blogData.twitter_url ?? blogData.x_handle_url ?? null,
+                    instagram_url: blogData.instagram_url ?? blogData.Instagram_handle_url ?? blogData.instagram_handle_url ?? null
+                }
+                setBlog({ ...blogData, ...social })
             } else {
                 console.error('Invalid blog data format:', result)
                 throw new Error('Invalid blog data format')
@@ -223,12 +195,6 @@ export default function BlogPostDetail({ params }) {
                                         ))}
                                     </div>
                                 )}
-
-                                {/* Social Share Links — each icon goes to the handle URL you set for that platform */}
-                                <div className="flex items-center gap-3 flex-wrap">
-                                    <span className="text-sm font-bold text-[#1C0F2D]">Share:</span>
-                                    <SocialShareLinks blog={blog} />
-                                </div>
                             </div>
                         </div>
                     </div>
