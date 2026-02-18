@@ -63,10 +63,11 @@ const EditBlog = () => {
             initialImageUrlsRef.current = { thumbnail_url: thumb, banner_url: banner };
             setFormData({
                 ...blog,
-                shortDescription: blog.shortDescription || '',
-                readingTime: blog.readingTime || '',
-                imageAltText: blog.imageAltText || '',
-                imageCaption: blog.imageCaption || '',
+                description: blog.content ?? blog.description ?? '',
+                shortDescription: blog.short_description ?? blog.shortDescription ?? '',
+                readingTime: blog.reading_time ?? blog.readingTime ?? '',
+                imageAltText: blog.image_alt_text ?? blog.imageAltText ?? '',
+                imageCaption: blog.image_caption ?? blog.imageCaption ?? '',
                 publishDate: blog.publishDate || new Date(blog.added_date).toISOString().split('T')[0],
                 visibility: blog.visibility || 'public',
                 seoTitle: blog.seoTitle || '',
@@ -139,6 +140,23 @@ const EditBlog = () => {
             setUploadingImage(false);
             e.target.value = '';
         }
+    }, []);
+
+    const uploadContentImage = useCallback(async (file) => {
+        if (!file?.type?.startsWith('image/')) throw new Error('Please select an image file');
+        if (file.size > 10 * 1024 * 1024) throw new Error('Image must be under 10MB');
+        const formDataUpload = new FormData();
+        formDataUpload.append('thumbnail', file);
+        const base = (API_BASE_URL || '').replace(/\/$/, '');
+        const response = await fetch(`${base}${API_CONFIG.endpoints.uploadThumbnail}`, { method: 'POST', body: formDataUpload });
+        if (!response.ok) {
+            const err = await response.json().catch(() => ({}));
+            throw new Error(err.error || err.message || 'Upload failed');
+        }
+        const data = await response.json();
+        const url = data.url || data.thumbnail_url || data.data?.url;
+        if (!url) throw new Error('No image URL received');
+        return url;
     }, []);
 
     const handleTagAdd = useCallback((tagId) => {
@@ -468,14 +486,6 @@ const EditBlog = () => {
                                 placeholder="Optional caption for the image"
                             />
                         </div>
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Content Image URL (image_url)</label>
-                            <input type="url" name="image_url" value={formData.image_url || ''} onChange={handleChange} placeholder="https://..." className="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-violet-500 text-black" />
-                        </div>
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Video URL (video_url)</label>
-                            <input type="url" name="video_url" value={formData.video_url || ''} onChange={handleChange} placeholder="https://..." className="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-violet-500 text-black" />
-                        </div>
                     </div>
                 </Section>
 
@@ -579,7 +589,7 @@ const EditBlog = () => {
                     </div>
                 </Section>
 
-                {/* SECTION 4 — CONTENT */}
+                {/* SECTION 4 — CONTENT (body only; add images/videos via toolbar inside editor) */}
                 <Section
                     id="content"
                     title="Content"
@@ -591,12 +601,14 @@ const EditBlog = () => {
                         <label className="block text-sm font-medium text-gray-700">
                             Blog Content <span className="text-red-500">*</span>
                         </label>
+                        <p className="text-xs text-gray-500 -mt-1">Use the toolbar to add images and videos anywhere in the content.</p>
                         <RichTextEditor
                             value={formData.description}
                             onChange={handleChange}
                             placeholder="Write your blog content here... (Supports Markdown)"
                             rows={16}
                             error={errors.description}
+                            onUploadImage={uploadContentImage}
                         />
                         {errors.description && (
                             <p className="text-sm text-red-600">{errors.description}</p>
@@ -666,7 +678,7 @@ const EditBlog = () => {
                 </Section>
 
                 {/* SECTION 6 — SETTINGS */}
-                <Section
+                {/* <Section
                     id="settings"
                     title="Post Settings"
                     icon={Settings}
@@ -693,7 +705,7 @@ const EditBlog = () => {
                             onChange={handleChange}
                         />
                     </div>
-                </Section>
+                </Section> */}
             </div>
 
             {/* Bottom Action Bar */}

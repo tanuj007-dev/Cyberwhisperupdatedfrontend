@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { useAdmin } from '@/contexts/AdminContext';
 import { Button, Input, Select, Textarea, Toggle, Card, Toast, Skeleton } from '@/components/ui';
+import { getUserIdFromToken, getRoleFromToken } from '@/lib/jwt';
 
 const EditUser = () => {
     const router = useRouter();
@@ -14,16 +15,40 @@ const EditUser = () => {
     const [toast, setToast] = useState({ isVisible: false, message: '', type: 'success' });
     const [errors, setErrors] = useState({});
     const [loading, setLoading] = useState(true);
+    const [isOwnProfile, setIsOwnProfile] = useState(false);
+
+    useEffect(() => {
+        if (typeof window === 'undefined') return;
+        const role = getRoleFromToken(localStorage.getItem('adminToken'));
+        const currentUserId = getUserIdFromToken(localStorage.getItem('adminToken'));
+        const editingId = params.id != null ? parseInt(params.id, 10) : null;
+        if (role === 'STUDENT' || role === 'INSTRUCTOR') {
+            if (currentUserId != null && String(editingId) !== String(currentUserId)) {
+                router.replace('/admin/profile');
+                return;
+            }
+            setIsOwnProfile(true);
+        }
+    }, [params.id, router]);
 
     useEffect(() => {
         const loadUser = async () => {
+            if (typeof window !== 'undefined') {
+                const role = getRoleFromToken(localStorage.getItem('adminToken'));
+                const currentUserId = getUserIdFromToken(localStorage.getItem('adminToken'));
+                const editingId = params.id != null ? parseInt(params.id, 10) : null;
+                if ((role === 'STUDENT' || role === 'INSTRUCTOR') && currentUserId != null && String(editingId) !== String(currentUserId)) {
+                    return;
+                }
+            }
             setLoading(true);
             try {
                 const user = await getUserById(parseInt(params.id));
                 if (user) {
                     const roleByRoleId = { 1: 'ADMIN', 2: 'STUDENT', 3: 'INSTRUCTOR' };
                     const roleFromApi = user.role === 'USER' ? 'STUDENT' : (user.role || roleByRoleId[user.role_id] || 'STUDENT');
-                    setFormData({ ...user, role: roleFromApi });
+                    const statusNorm = (user.status || 'active').toLowerCase();
+                    setFormData({ ...user, role: roleFromApi, status: statusNorm });
                 } else {
                     showToast('User not found', 'error');
                 }
@@ -87,8 +112,10 @@ const EditUser = () => {
             await updateUser(formData.id, userData);
             showToast('User updated successfully!', 'success');
 
+            const role = typeof window !== 'undefined' ? getRoleFromToken(localStorage.getItem('adminToken')) : null;
+            const redirectTo = (role === 'STUDENT' || role === 'INSTRUCTOR') ? '/admin/profile' : '/admin/users';
             setTimeout(() => {
-                router.push('/admin/users');
+                router.push(redirectTo);
             }, 1500);
         } catch (error) {
             showToast('Error updating user', 'error');
@@ -226,7 +253,42 @@ const EditUser = () => {
                     </div>
                 </Card>
 
-                {/* Role & Permissions */}
+                {/* Status – Admin can set Active/Inactive (Superadmin can delete; both can edit status) */}
+                {!isOwnProfile && (
+                <Card title="Status">
+                    <div className="space-y-2">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Account status</label>
+                        <div className="flex flex-wrap gap-4">
+                            <label className="flex items-center gap-2 cursor-pointer">
+                                <input
+                                    type="radio"
+                                    name="status"
+                                    value="active"
+                                    checked={(formData.status || 'active').toLowerCase() === 'active'}
+                                    onChange={handleChange}
+                                    className="w-4 h-4 text-green-600"
+                                />
+                                <span className="text-sm">Active</span>
+                            </label>
+                            <label className="flex items-center gap-2 cursor-pointer">
+                                <input
+                                    type="radio"
+                                    name="status"
+                                    value="inactive"
+                                    checked={(formData.status || 'active').toLowerCase() === 'inactive'}
+                                    onChange={handleChange}
+                                    className="w-4 h-4 text-gray-600"
+                                />
+                                <span className="text-sm">Inactive</span>
+                            </label>
+                        </div>
+                        <p className="text-xs text-gray-500">Inactive users cannot log in.</p>
+                    </div>
+                </Card>
+                )}
+
+                {/* Role & Permissions – hidden when student/instructor editing own profile */}
+                {!isOwnProfile && (
                 <Card title="Role & Permissions">
                     <div className="space-y-4">
                         <div>
@@ -268,8 +330,6 @@ const EditUser = () => {
                             </div>
                         </div>
 
-                        
-
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t">
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1">Date Added <span className="text-gray-400 font-normal">(read-only)</span></label>
@@ -282,10 +342,11 @@ const EditUser = () => {
                         </div>
                     </div>
                 </Card>
+                )}
 
                 {/* Actions */}
                 <div className="flex items-center justify-end gap-3">
-                    <Button type="button" variant="outline" onClick={() => router.push('/admin/users')}>
+                    <Button type="button" variant="outline" onClick={() => router.push(isOwnProfile ? '/admin/profile' : '/admin/users')}>
                         Cancel
                     </Button>
                     <Button type="submit" variant="primary">

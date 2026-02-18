@@ -7,18 +7,9 @@ import { mockTags } from '@/data/mockTags';
 import { mockMedia, mockSiteSettings } from '@/data/mockMedia';
 import { mockUsers } from '@/data/mockUsers';
 import { API_BASE_URL } from '@/lib/apiConfig';
+import { adminFetch } from '@/lib/adminFetch';
 
 const AdminContext = createContext();
-
-// Headers for admin API calls: include Bearer token when available (after MFA login)
-const getAdminHeaders = () => {
-    const headers = { 'Content-Type': 'application/json', 'Accept': 'application/json' };
-    if (typeof window !== 'undefined') {
-        const token = localStorage.getItem('adminToken');
-        if (token) headers['Authorization'] = `Bearer ${token}`;
-    }
-    return headers;
-};
 
 export const useAdmin = () => {
     const context = useContext(AdminContext);
@@ -133,9 +124,8 @@ export const AdminProvider = ({ children }) => {
     const fetchUsers = async () => {
         try {
             const base = (API_BASE_URL || '').replace(/\/$/, '');
-            const response = await fetch(`${base}/api/users?page=1&limit=1000`, {
+            const response = await adminFetch(`${base}/api/users?page=1&limit=1000`, {
                 method: 'GET',
-                headers: getAdminHeaders(),
             });
 
             if (!response.ok) {
@@ -151,8 +141,9 @@ export const AdminProvider = ({ children }) => {
             } else if (result.users) {
                 usersList = Array.isArray(result.users) ? result.users : [result.users];
             }
-
-            setUsers(usersList);
+            // Normalize status to lowercase so UI (ACTIVE → active) works consistently
+            const normalizeUserStatus = (s) => (s ? String(s).toLowerCase() : 'active');
+            setUsers(usersList.map(u => ({ ...u, status: normalizeUserStatus(u.status) })));
             setLoading(false);
         } catch (error) {
             console.error('Error fetching users from API:', error.message);
@@ -165,9 +156,8 @@ export const AdminProvider = ({ children }) => {
     const fetchMedia = async () => {
         try {
             const apiUrl = API_BASE_URL.replace(/\/$/, '');
-            const response = await fetch(`${apiUrl}/api/media`, {
+            const response = await adminFetch(`${apiUrl}/api/media`, {
                 method: 'GET',
-                headers: getAdminHeaders(),
             });
 
             if (response.status === 404) {
@@ -202,9 +192,8 @@ export const AdminProvider = ({ children }) => {
         try {
             const backendUrl = API_BASE_URL;
 
-            const response = await fetch(`${backendUrl}/api/blogs`, {
+            const response = await adminFetch(`${backendUrl}/api/blogs`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(blogData)
             });
 
@@ -225,9 +214,8 @@ export const AdminProvider = ({ children }) => {
     const updateBlog = async (blog_id, updatedBlog) => {
         try {
             const backendUrl = API_BASE_URL.replace(/\/$/, '');
-            const response = await fetch(`${backendUrl}/api/blogs/${blog_id}`, {
+            const response = await adminFetch(`${backendUrl}/api/blogs/${blog_id}`, {
                 method: 'PUT',
-                headers: getAdminHeaders(),
                 credentials: 'include',
                 body: JSON.stringify(updatedBlog)
             });
@@ -247,9 +235,8 @@ export const AdminProvider = ({ children }) => {
     const deleteBlog = async (blog_id) => {
         try {
             const backendUrl = API_BASE_URL.replace(/\/$/, '');
-            const response = await fetch(`${backendUrl}/api/blogs/${blog_id}`, {
+            const response = await adminFetch(`${backendUrl}/api/blogs/${blog_id}`, {
                 method: 'DELETE',
-                headers: getAdminHeaders(),
                 credentials: 'include'
             });
 
@@ -299,9 +286,8 @@ export const AdminProvider = ({ children }) => {
 
             console.log('Creating user with payload:', payload);
 
-            const response = await fetch(`${apiUrl}/api/users`, {
+            const response = await adminFetch(`${apiUrl}/api/users`, {
                 method: 'POST',
-                headers: getAdminHeaders(),
                 body: JSON.stringify(payload),
                 credentials: 'include',
                 mode: 'cors'
@@ -335,6 +321,7 @@ export const AdminProvider = ({ children }) => {
                 email: updatedUser.email,
                 phone: updatedUser.phone || '',
                 role: updatedUser.role || 'STUDENT',
+                status: (updatedUser.status || 'active').toUpperCase(),
                 title: updatedUser.title || '',
                 address: updatedUser.address || '',
                 biography: updatedUser.biography || '',
@@ -346,9 +333,8 @@ export const AdminProvider = ({ children }) => {
 
             console.log('Updating user', id, 'with payload:', payload);
 
-            const response = await fetch(`${apiUrl}/api/users/${id}/update`, {
+            const response = await adminFetch(`${apiUrl}/api/users/${id}/update`, {
                 method: 'POST',
-                headers: getAdminHeaders(),
                 body: JSON.stringify(payload),
                 credentials: 'include',
                 mode: 'cors'
@@ -374,9 +360,8 @@ export const AdminProvider = ({ children }) => {
         try {
             const apiUrl = API_BASE_URL;
 
-            const response = await fetch(`${apiUrl}/api/users/${id}`, {
+            const response = await adminFetch(`${apiUrl}/api/users/${id}`, {
                 method: 'DELETE',
-                headers: getAdminHeaders(),
                 credentials: 'include',
                 mode: 'cors'
             });
@@ -485,9 +470,8 @@ export const AdminProvider = ({ children }) => {
     const getUserById = async (id) => {
         try {
             const apiUrl = API_BASE_URL;
-            const response = await fetch(`${apiUrl}/api/users/${id}`, {
+            const response = await adminFetch(`${apiUrl}/api/users/${id}`, {
                 method: 'GET',
-                headers: getAdminHeaders(),
                 credentials: 'include',
                 mode: 'cors'
             });

@@ -252,6 +252,24 @@ const AddBlog = () => {
         e.target.value = '';
     }, []);
 
+    const uploadContentImage = useCallback(async (file) => {
+        if (!file?.type?.startsWith('image/')) throw new Error('Please select an image file');
+        if (file.size > 10 * 1024 * 1024) throw new Error('Image must be under 10MB');
+        const formDataUpload = new FormData();
+        formDataUpload.append('thumbnail', file);
+        const base = (API_BASE_URL || '').replace(/\/$/, '');
+        const uploadUrl = base ? `${base}${API_CONFIG.endpoints.uploadThumbnail}` : API_CONFIG.endpoints.uploadThumbnail;
+        const response = await fetch(uploadUrl, { method: 'POST', body: formDataUpload });
+        if (!response.ok) {
+            const err = await response.json().catch(() => ({}));
+            throw new Error(err.error || err.message || 'Upload failed');
+        }
+        const data = await response.json();
+        const url = data.url || data.thumbnail_url || data.data?.url;
+        if (!url) throw new Error('No image URL received');
+        return url;
+    }, []);
+
     const handleTagAdd = useCallback((tagId) => {
         setFormData(prev => {
             if (!prev.selectedTags.includes(tagId)) {
@@ -741,9 +759,10 @@ const AddBlog = () => {
                         <RichTextEditor
                             value={formData.description}
                             onChange={handleChange}
-                            placeholder="   blog content here... (Supports Markdown)"
+                            placeholder="Write your blog content here... (Supports Markdown)"
                             rows={16}
                             error={errors.description}
+                            onUploadImage={uploadContentImage}
                         />
                         {errors.description && (
                             <p className="text-sm text-red-600">{errors.description}</p>
@@ -813,7 +832,7 @@ const AddBlog = () => {
                 </Section>
 
                 {/* SECTION 6 — SETTINGS */}
-                <Section
+                {/* <Section
                     id="settings"
                     title="Post Settings"
                     icon={Settings}
@@ -840,7 +859,7 @@ const AddBlog = () => {
                             onChange={handleChange}
                         />
                     </div>
-                </Section>
+                </Section> */}
             </div>
 
             {/* Bottom Action Bar */}

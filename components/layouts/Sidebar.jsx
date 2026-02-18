@@ -20,7 +20,8 @@ import {
     Mail,
     LogOut,
     BookOpen,
-    ClipboardList
+    ClipboardList,
+    UserCircle
 } from 'lucide-react';
 
 const ADMIN_LOGO = '/assets/cw_logo_sample_2.png';
@@ -117,20 +118,18 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
         }*/
     ];
 
-    // Role-based menu: Student = Blogs + Batches (view only); Instructor = Blogs + Batches (full); Admin = full
+    // Role-based menu: Student = Blogs + My Profile only; Instructor = Blogs, Batches, Courses, Course Enrollments + My Profile; Admin = full
+    const myProfileItem = { name: 'My Profile', icon: UserCircle, path: '/admin/profile' };
     const menuItems = (() => {
         if (role === 'STUDENT') {
             const blogs = allMenuItems.find((item) => item.name === 'Blogs');
-            const batches = allMenuItems.find((item) => item.name === 'Batches');
-            const batchesViewOnly = batches && batches.submenu
-                ? { ...batches, submenu: batches.submenu.filter((s) => s.path === '/admin/batches') }
-                : batches;
-            return [blogs, batchesViewOnly].filter(Boolean);
+            return [blogs, myProfileItem].filter(Boolean);
         }
         if (role === 'INSTRUCTOR') {
-            return allMenuItems.filter((item) => item.name === 'Blogs' || item.name === 'Batches' || item.name === 'Courses' || item.name === 'Course Enrollments');
+            const allowed = ['Blogs', 'Batches', 'Courses', 'Course Enrollments'];
+            return [...allMenuItems.filter((item) => allowed.includes(item.name)), myProfileItem];
         }
-        return allMenuItems;
+        return [...allMenuItems, myProfileItem];
     })();
 
     const isActive = (path) => pathname === path;

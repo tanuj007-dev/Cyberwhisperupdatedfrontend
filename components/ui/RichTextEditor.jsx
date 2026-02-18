@@ -4,23 +4,34 @@ import { useRef, useCallback, useEffect, useState } from 'react';
 import {
     Bold, Italic, Underline, List, ListOrdered,
     AlignLeft, AlignCenter, AlignRight, Quote, Code,
-    Link as LinkIcon, Image as ImageIcon, Heading1, Heading2, Heading3, Heading4, Heading5, Heading6,
+    Link as LinkIcon, Image as ImageIcon, Video, Upload, X,
+    Heading1, Heading2, Heading3, Heading4, Heading5, Heading6,
     Strikethrough, Undo, Redo, Eraser, Type
 } from 'lucide-react';
 
-const RichTextEditor = ({ value, onChange, placeholder = "Write your content here...", rows = 16, error, name = 'description' }) => {
+const RichTextEditor = ({ value, onChange, placeholder = "Write your content here...", rows = 16, error, name = 'description', onUploadImage }) => {
     const editorRef = useRef(null);
+    const savedSelectionRef = useRef(null);
+    const imageInputRef = useRef(null);
     const [activeFormats, setActiveFormats] = useState({});
     const [isEmpty, setIsEmpty] = useState(true);
     const [currentBlock, setCurrentBlock] = useState('p');
+    const [imageModalOpen, setImageModalOpen] = useState(false);
+    const [imageDragActive, setImageDragActive] = useState(false);
+    const [imageUrlInput, setImageUrlInput] = useState('');
+    const [imageAltInput, setImageAltInput] = useState('');
+    const [imageUploading, setImageUploading] = useState(false);
 
-    // Initialize editor content
+    // Initialize and sync editor content when value loads (e.g. existing blog content when editing)
     useEffect(() => {
-        if (editorRef.current && value && editorRef.current.innerHTML !== value) {
-            editorRef.current.innerHTML = value;
-            setIsEmpty(!value || value.trim() === '' || value === '<br>');
+        if (!editorRef.current) return;
+        const raw = value ?? '';
+        const normalized = raw.trim() === '' ? '' : raw;
+        if (editorRef.current.innerHTML !== normalized) {
+            editorRef.current.innerHTML = normalized || '';
+            setIsEmpty(!normalized || normalized === '<br>');
         }
-    }, []);
+    }, [value]);
 
     // Check which formats are active at cursor position
     const updateActiveFormats = useCallback(() => {
@@ -153,15 +164,99 @@ const RichTextEditor = ({ value, onChange, placeholder = "Write your content her
         handleInput();
     }, [handleInput]);
 
-    // Insert image
-    const insertImage = useCallback(() => {
-        const url = prompt('Enter image URL:', 'https://');
-        if (url) {
-            const alt = prompt('Enter alt text:', 'Image');
-            document.execCommand('insertHTML', false, `<img src="${url}" alt="${alt || 'Image'}" />`);
-            editorRef.current?.focus();
-            handleInput();
+    // Insert image HTML at current (or saved) cursor position
+    const insertImageAtCursor = useCallback((url, alt = 'Image') => {
+        const safeUrl = String(url).trim().replace(/"/g, '&quot;');
+        const safeAlt = String(alt || 'Image').replace(/"/g, '&quot;');
+        const html = `<p><img src="${safeUrl}" alt="${safeAlt}" style="max-width: 100%; height: auto;" /></p>`;
+        editorRef.current?.focus();
+        const sel = window.getSelection();
+        if (savedSelectionRef.current && sel) {
+            try {
+                sel.removeAllRanges();
+                sel.addRange(savedSelectionRef.current);
+            } catch (_) { /* ignore */ }
         }
+        document.execCommand('insertHTML', false, html);
+        handleInput();
+    }, [handleInput]);
+
+    const openImageModal = useCallback(() => {
+        const sel = window.getSelection();
+        if (editorRef.current && sel && sel.rangeCount > 0) {
+            try {
+                savedSelectionRef.current = sel.getRangeAt(0).cloneRange();
+            } catch (_) { savedSelectionRef.current = null; }
+        } else {
+            savedSelectionRef.current = null;
+        }
+        setImageUrlInput('');
+        setImageAltInput('');
+        setImageModalOpen(true);
+    }, []);
+
+    const closeImageModal = useCallback(() => {
+        setImageModalOpen(false);
+        setImageDragActive(false);
+        setImageUploading(false);
+        setImageUrlInput('');
+        setImageAltInput('');
+        if (imageInputRef.current) imageInputRef.current.value = '';
+        editorRef.current?.focus();
+    }, []);
+
+    const handleImageFile = useCallback(async (file) => {
+        if (!file || !file.type.startsWith('image/')) return;
+        if (onUploadImage) {
+            setImageUploading(true);
+            try {
+                const url = await onUploadImage(file);
+                if (url) {
+                    insertImageAtCursor(url, imageAltInput || file.name || 'Image');
+                    closeImageModal();
+                }
+            } catch (err) {
+                console.error('Image upload failed:', err);
+                alert(err?.message || 'Upload failed.');
+            } finally {
+                setImageUploading(false);
+            }
+        } else {
+            alert('Upload is not configured. Use "Or paste URL" to add an image link.');
+        }
+    }, [onUploadImage, imageAltInput, insertImageAtCursor, closeImageModal]);
+
+    const insertImageFromUrl = useCallback(() => {
+        const url = imageUrlInput?.trim();
+        if (!url) return;
+        insertImageAtCursor(url, imageAltInput || 'Image');
+        closeImageModal();
+    }, [imageUrlInput, imageAltInput, insertImageAtCursor, closeImageModal]);
+
+    // Parse YouTube/Vimeo URL to embed src
+    const getVideoEmbedSrc = (url) => {
+        const u = url.trim();
+        const ytMatch = u.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]+)/);
+        if (ytMatch) return { src: `https://www.youtube.com/embed/${ytMatch[1]}`, title: 'YouTube' };
+        const vimeoMatch = u.match(/vimeo\.com\/(?:video\/)?(\d+)/);
+        if (vimeoMatch) return { src: `https://player.vimeo.com/video/${vimeoMatch[1]}`, title: 'Vimeo' };
+        if (u.includes('youtube.com/embed/') || u.includes('youtu.be/')) return { src: u, title: 'Video' };
+        return null;
+    };
+
+    // Insert video embed at cursor (YouTube / Vimeo)
+    const insertVideo = useCallback(() => {
+        const url = prompt('Enter video URL (YouTube or Vimeo):', 'https://');
+        if (!url || !url.trim()) return;
+        const embed = getVideoEmbedSrc(url);
+        if (!embed) {
+            alert('Please enter a valid YouTube or Vimeo URL.');
+            return;
+        }
+        const iframeHtml = `<p><iframe src="${embed.src}" title="${embed.title}" width="560" height="315" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="max-width: 100%; border-radius: 8px;"></iframe></p>`;
+        document.execCommand('insertHTML', false, iframeHtml);
+        editorRef.current?.focus();
+        handleInput();
     }, [handleInput]);
 
     // Clear ALL formatting from selected text
@@ -397,7 +492,8 @@ const RichTextEditor = ({ value, onChange, placeholder = "Write your content her
 
                 {/* Insert Elements */}
                 <ToolbarButton icon={LinkIcon} title="Insert/Remove Link" onClick={insertLink} />
-                <ToolbarButton icon={ImageIcon} title="Insert Image" onClick={insertImage} />
+                <ToolbarButton icon={ImageIcon} title="Insert Image (drag & drop or paste URL)" onClick={openImageModal} />
+                <ToolbarButton icon={Video} title="Insert Video (YouTube or Vimeo)" onClick={insertVideo} />
 
                 <Divider />
 
@@ -414,6 +510,90 @@ const RichTextEditor = ({ value, onChange, placeholder = "Write your content her
                     danger
                 />
             </div>
+
+            {/* Image insert modal – drag & drop or paste URL */}
+            {imageModalOpen && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50" onClick={closeImageModal}>
+                    <div className="bg-white rounded-2xl shadow-xl border border-gray-200 w-full max-w-md overflow-hidden" onClick={e => e.stopPropagation()}>
+                        <div className="flex items-center justify-between px-5 py-4 border-b border-gray-200">
+                            <h3 className="text-lg font-semibold text-gray-900">Insert image</h3>
+                            <button type="button" onClick={closeImageModal} className="p-2 rounded-lg text-gray-500 hover:bg-gray-100 hover:text-gray-700" aria-label="Close">
+                                <X size={20} />
+                            </button>
+                        </div>
+                        <div className="p-5 space-y-4">
+                            {/* Drag and drop */}
+                            <div
+                                onDragOver={e => { e.preventDefault(); e.stopPropagation(); setImageDragActive(true); }}
+                                onDragLeave={e => { e.preventDefault(); e.stopPropagation(); setImageDragActive(false); }}
+                                onDrop={e => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    setImageDragActive(false);
+                                    const file = e.dataTransfer.files?.[0];
+                                    if (file) handleImageFile(file);
+                                }}
+                                onClick={() => imageInputRef.current?.click()}
+                                className={`flex flex-col items-center justify-center w-full h-36 border-2 border-dashed rounded-xl cursor-pointer transition-colors ${imageDragActive ? 'border-violet-500 bg-violet-50' : 'border-gray-300 hover:border-violet-400 hover:bg-violet-50/50'}`}
+                            >
+                                <input
+                                    ref={imageInputRef}
+                                    type="file"
+                                    accept="image/*"
+                                    className="hidden"
+                                    onChange={e => { const f = e.target.files?.[0]; if (f) handleImageFile(f); e.target.value = ''; }}
+                                    disabled={imageUploading}
+                                />
+                                {imageUploading ? (
+                                    <div className="w-10 h-10 border-2 border-violet-600 border-t-transparent rounded-full animate-spin mb-2" />
+                                ) : (
+                                    <div className="p-3 bg-violet-100 rounded-xl mb-2">
+                                        <Upload className="text-violet-600" size={28} />
+                                    </div>
+                                )}
+                                <p className="text-sm text-gray-600">
+                                    {imageUploading ? 'Uploading…' : <>Drag & drop or <span className="font-semibold text-violet-600">click to upload</span></>}
+                                </p>
+                                <p className="text-xs text-gray-500 mt-0.5">PNG, JPG, WebP up to 10MB</p>
+                            </div>
+                            {/* Or paste URL */}
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Or paste URL</label>
+                                <input
+                                    type="url"
+                                    value={imageUrlInput}
+                                    onChange={e => setImageUrlInput(e.target.value)}
+                                    placeholder="https://..."
+                                    className="w-full px-3 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-violet-500 text-gray-900"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Alt text (optional)</label>
+                                <input
+                                    type="text"
+                                    value={imageAltInput}
+                                    onChange={e => setImageAltInput(e.target.value)}
+                                    placeholder="Describe the image for accessibility"
+                                    className="w-full px-3 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-violet-500 text-gray-900"
+                                />
+                            </div>
+                            <div className="flex gap-2 pt-2">
+                                <button
+                                    type="button"
+                                    onClick={insertImageFromUrl}
+                                    disabled={!imageUrlInput?.trim()}
+                                    className="flex-1 px-4 py-2.5 bg-violet-600 text-white font-medium rounded-xl hover:bg-violet-700 disabled:opacity-50 disabled:pointer-events-none"
+                                >
+                                    Insert from URL
+                                </button>
+                                <button type="button" onClick={closeImageModal} className="px-4 py-2.5 border border-gray-300 text-gray-700 font-medium rounded-xl hover:bg-gray-50">
+                                    Cancel
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             {/* Editor Area */}
             <div className="relative">

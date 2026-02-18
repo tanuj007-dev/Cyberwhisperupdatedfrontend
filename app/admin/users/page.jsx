@@ -1,16 +1,25 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useAdmin } from '@/contexts/AdminContext';
 import { Button, Badge, Modal, Input, Toast, Skeleton } from '@/components/ui';
-import { Edit2, Trash2, Eye, Search, PlusCircle, UserPlus } from 'lucide-react';
+import { Edit2, Trash2, Eye, Search, PlusCircle, UserPlus, UserX, UserCheck } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { API_BASE_URL } from '@/lib/apiConfig';
 
 const UserList = () => {
     const router = useRouter();
     const { users, addUser, updateUser, deleteUser, loading } = useAdmin();
+    const [currentUserRole, setCurrentUserRole] = useState(null);
 
+    useEffect(() => {
+        setCurrentUserRole(typeof window !== 'undefined' ? localStorage.getItem('adminRole') : null);
+    }, []);
+
+    const isSuperAdmin = currentUserRole === 'SUPERADMIN';
+    const canManageStatus = currentUserRole === 'ADMIN' || currentUserRole === 'SUPERADMIN';
+
+    const [togglingStatusId, setTogglingStatusId] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
     const [filterRole, setFilterRole] = useState('');
     const [filterStatus, setFilterStatus] = useState('');
@@ -46,8 +55,14 @@ const UserList = () => {
 
     const itemsPerPage = 10;
 
+    const isSuperAdminUser = (user) => user.id === 1 || user.user_id === 1 || String(user.role || '').toUpperCase().replace(/\s/g, '') === 'SUPERADMIN';
+    const visibleUsers = useMemo(() => {
+        if (currentUserRole === 'SUPERADMIN') return users;
+        return users.filter((u) => !isSuperAdminUser(u));
+    }, [users, currentUserRole]);
+
     const filteredUsers = useMemo(() => {
-        return users.filter((user) => {
+        return visibleUsers.filter((user) => {
             const matchesSearch =
                 (user.first_name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
                 (user.last_name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -60,7 +75,7 @@ const UserList = () => {
 
             return matchesSearch && matchesRole && matchesStatus && matchesInstructor;
         });
-    }, [users, searchTerm, filterRole, filterStatus, filterInstructor]);
+    }, [visibleUsers, searchTerm, filterRole, filterStatus, filterInstructor]);
 
     const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
     const paginatedUsers = filteredUsers.slice(
@@ -191,6 +206,20 @@ const UserList = () => {
         }
     };
 
+    const handleToggleStatus = async (user) => {
+        const currentStatus = (user.status || 'active').toLowerCase();
+        const newStatus = currentStatus === 'active' ? 'inactive' : 'active';
+        setTogglingStatusId(user.id);
+        try {
+            await updateUser(user.id, { ...user, status: newStatus });
+            showToast(`User ${newStatus === 'active' ? 'activated' : 'deactivated'} successfully`, 'success');
+        } catch (error) {
+            showToast(error?.message || 'Failed to update status', 'error');
+        } finally {
+            setTogglingStatusId(null);
+        }
+    };
+
     const handleViewUser = (user) => {
         setViewUser(user);
         setViewModalOpen(true);
@@ -240,15 +269,15 @@ const UserList = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                 <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-4">
                     <p className="text-sm text-gray-500 dark:text-gray-400">Admins</p>
-                    <p className="text-3xl font-bold text-blue-600">{users.filter((u) => (u.role_id === 1) || (u.role === 'ADMIN')).length}</p>
+                    <p className="text-3xl font-bold text-blue-600">{visibleUsers.filter((u) => (u.role_id === 1) || (u.role === 'ADMIN')).length}</p>
                 </div>
                 <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-4">
                     <p className="text-sm text-gray-500 dark:text-gray-400">Students</p>
-                    <p className="text-3xl font-bold text-sky-600">{users.filter((u) => (u.role_id === 2) || (u.role === 'STUDENT') || (u.role === 'USER')).length}</p>
+                    <p className="text-3xl font-bold text-sky-600">{visibleUsers.filter((u) => (u.role_id === 2) || (u.role === 'STUDENT') || (u.role === 'USER')).length}</p>
                 </div>
                 <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-4">
                     <p className="text-sm text-gray-500 dark:text-gray-400">Instructors</p>
-                    <p className="text-3xl font-bold text-violet-600">{users.filter((u) => (u.role_id === 3) || u.is_instructor || (u.role === 'INSTRUCTOR')).length}</p>
+                    <p className="text-3xl font-bold text-violet-600">{visibleUsers.filter((u) => (u.role_id === 3) || u.is_instructor || (u.role === 'INSTRUCTOR')).length}</p>
                 </div>
             </div>
 
@@ -336,16 +365,38 @@ const UserList = () => {
                                         </span>
                                     </td>
                                     <td className="px-6 py-4 text-right">
-                                        <div className="flex items-center justify-end gap-2">
+                                        <div className="flex items-center justify-end gap-2 flex-wrap">
                                             <Button variant="ghost" size="sm" onClick={() => handleViewUser(user)} title="View">
                                                 <Eye size={18} />
                                             </Button>
                                             <Button variant="ghost" size="sm" onClick={() => handleOpenEdit(user)} title="Edit">
                                                 <Edit2 size={18} />
                                             </Button>
-                                            <Button variant="ghost" size="sm" onClick={() => { setSelectedUser(user); setDeleteModalOpen(true); }} title="Delete" className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20">
-                                                <Trash2 size={18} />
-                                            </Button>
+                                            {canManageStatus && (
+                                                <Button
+                                                    variant="ghost"
+                                                    size="sm"
+                                                    onClick={() => handleToggleStatus(user)}
+                                                    disabled={togglingStatusId === user.id}
+                                                    title={(user.status || 'active').toLowerCase() === 'active' ? 'Deactivate user' : 'Activate user'}
+                                                    className={(user.status || 'active').toLowerCase() === 'active'
+                                                        ? 'text-amber-600 hover:text-amber-700 hover:bg-amber-50 dark:hover:bg-amber-900/20'
+                                                        : 'text-green-600 hover:text-green-700 hover:bg-green-50 dark:hover:bg-green-900/20'}
+                                                >
+                                                    {togglingStatusId === user.id ? (
+                                                        <span className="inline-block w-[18px] h-[18px] border-2 border-current border-t-transparent rounded-full animate-spin" />
+                                                    ) : (user.status || 'active').toLowerCase() === 'active' ? (
+                                                        <UserX size={18} />
+                                                    ) : (
+                                                        <UserCheck size={18} />
+                                                    )}
+                                                </Button>
+                                            )}
+                                            {isSuperAdmin && (
+                                                <Button variant="ghost" size="sm" onClick={() => { setSelectedUser(user); setDeleteModalOpen(true); }} title="Delete (Superadmin only)" className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20">
+                                                    <Trash2 size={18} />
+                                                </Button>
+                                            )}
                                         </div>
                                     </td>
                                 </tr>

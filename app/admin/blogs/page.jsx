@@ -172,7 +172,7 @@ const BlogList = () => {
                                     Author
                                 </th>
                                 <th className="px-6 py-4 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                    Featured
+                                    
                                 </th>
                                 <th className="px-6 py-4 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                     Status
@@ -213,7 +213,7 @@ const BlogList = () => {
                                         {getUserName(blog.user_id)}
                                     </td>
                                     <td className="px-6 py-4 text-center">
-                                        <button
+                                        {/* <button
                                             onClick={() => handleTogglePopular(blog)}
                                             className="inline-flex items-center justify-center p-2 rounded-lg hover:bg-gray-100 transition-colors"
                                         >
@@ -222,7 +222,7 @@ const BlogList = () => {
                                             ) : (
                                                 <StarOff className="text-gray-400" size={20} />
                                             )}
-                                        </button>
+                                        </button> */}
                                     </td>
                                     <td className="px-6 py-4 text-center">
                                         <Badge variant={blog.status === 'active' ? 'success' : 'warning'}>
