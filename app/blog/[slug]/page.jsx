@@ -10,18 +10,22 @@ import Link from 'next/link'
 import { use } from 'react'
 import { API_BASE_URL } from '@/lib/apiConfig'
 
-function SocialShareLinks() {
+function SocialShareLinks({ blog }) {
     const [pageUrl, setPageUrl] = useState('')
     useEffect(() => {
         if (typeof window !== 'undefined') setPageUrl(window.location.href)
     }, [])
     const encodedUrl = encodeURIComponent(pageUrl)
-    // Always share the current blog post URL (this page), not custom profile links
+    // Use the handle URL you set in admin for each platform; otherwise fall back to share-this-page
+    const facebookHandle = (blog?.facebook_url && blog.facebook_url.trim()) || ''
+    const linkedinHandle = (blog?.linkedin_url && blog.linkedin_url.trim()) || ''
+    const twitterHandle = (blog?.twitter_url && blog.twitter_url.trim()) || ''
+    const instagramHandle = (blog?.instagram_url && blog.instagram_url.trim()) || ''
     const links = [
-        { Icon: FaFacebook, url: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}` },
-        { Icon: FaLinkedin, url: `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}` },
-        { Icon: FaXTwitter, url: `https://twitter.com/intent/tweet?url=${encodedUrl}` },
-        { Icon: FaInstagram, url: '#' }
+        { Icon: FaFacebook, url: facebookHandle || `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}` },
+        { Icon: FaLinkedin, url: linkedinHandle || `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}` },
+        { Icon: FaXTwitter, url: twitterHandle || `https://twitter.com/intent/tweet?url=${encodedUrl}` },
+        { Icon: FaInstagram, url: instagramHandle || '#' }
     ]
     return (
         <>
@@ -220,10 +224,10 @@ export default function BlogPostDetail({ params }) {
                                     </div>
                                 )}
 
-                                {/* Social Share Links — share this blog post on each platform */}
+                                {/* Social Share Links — each icon goes to the handle URL you set for that platform */}
                                 <div className="flex items-center gap-3 flex-wrap">
                                     <span className="text-sm font-bold text-[#1C0F2D]">Share:</span>
-                                    <SocialShareLinks />
+                                    <SocialShareLinks blog={blog} />
                                 </div>
                             </div>
                         </div>
