@@ -9,6 +9,11 @@ const corsHeaders = {
 };
 
 function mapBlogToFrontend(blog) {
+    const firstName = blog.author_first_name ?? blog.authorFirstName ?? '';
+    const lastName = blog.author_last_name ?? blog.authorLastName ?? '';
+    const authorFromNames = [firstName, lastName].filter(Boolean).join(' ').trim();
+    const author = blog.author_name ?? blog.authorName ?? authorFromNames || 'CyberWhisper Team';
+
     return {
         ...blog,
         image: blog.banner_url || blog.thumbnail_url || blog.image,
@@ -16,9 +21,13 @@ function mapBlogToFrontend(blog) {
         description: blog.short_description || (blog.description && blog.description.substring(0, 200)) || '',
         excerpt: blog.short_description || (blog.description && blog.description.substring(0, 150)) || '',
         date: blog.published_at || blog.created_at,
-        author: blog.author_name || 'CyberWhisper Team',
+        author,
         category: blog.category_name || 'Cybersecurity',
-        tags: blog.tags || []
+        tags: blog.tags || [],
+        facebook_url: blog.facebook_url ?? null,
+        linkedin_url: blog.linkedin_url ?? null,
+        twitter_url: blog.twitter_url ?? null,
+        instagram_url: blog.instagram_url ?? null
     };
 }
 

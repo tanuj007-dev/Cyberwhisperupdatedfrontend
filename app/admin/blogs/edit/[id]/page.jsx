@@ -47,6 +47,7 @@ const EditBlog = () => {
     const [collapsedSections, setCollapsedSections] = useState({
         seo: true,
         social: true,
+        socialShare: true,
         settings: true
     });
     const [thumbnailPreview, setThumbnailPreview] = useState('');
@@ -724,8 +725,47 @@ const EditBlog = () => {
                     </div>
                 </Section>
 
-                {/* SECTION 5b — Social Share Links */}
-             
+                {/* SECTION 5b — Social Share Links (shown on blog post page) */}
+                <Section
+                    id="socialShare"
+                    title="Social Share Links"
+                    icon={Share2}
+                    isCollapsed={collapsedSections.socialShare ?? true}
+                    onToggle={toggleSection}
+                >
+                    <p className="text-sm text-gray-500 mb-4">Optional. Custom URLs for share buttons on the blog post. Leave blank to use default share links (share current page).</p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <Input
+                            label="Facebook URL"
+                            name="facebook_url"
+                            value={formData.facebook_url ?? ''}
+                            onChange={handleChange}
+                            placeholder="https://www.facebook.com/..."
+                        />
+                        <Input
+                            label="LinkedIn URL"
+                            name="linkedin_url"
+                            value={formData.linkedin_url ?? ''}
+                            onChange={handleChange}
+                            placeholder="https://www.linkedin.com/..."
+                        />
+                        <Input
+                            label="X (Twitter) URL"
+                            name="twitter_url"
+                            value={formData.twitter_url ?? ''}
+                            onChange={handleChange}
+                            placeholder="https://twitter.com/..."
+                        />
+                        <Input
+                            label="Instagram URL"
+                            name="instagram_url"
+                            value={formData.instagram_url ?? ''}
+                            onChange={handleChange}
+                            placeholder="https://www.instagram.com/..."
+                        />
+                    </div>
+                </Section>
+
                 {/* SECTION 6 — SETTINGS */}
                 {/* <Section
                     id="settings"

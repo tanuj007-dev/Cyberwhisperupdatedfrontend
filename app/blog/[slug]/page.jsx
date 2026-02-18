@@ -66,8 +66,15 @@ export default function BlogPostDetail({ params }) {
             const result = await response.json()
             console.log('Blog API response:', result)
 
-            const blogData = result.data ?? result.blog ?? result.post ?? result
+            let blogData = result.data ?? result.blog ?? result.post ?? result
             if (blogData && (blogData.id || blogData.slug || blogData.title)) {
+                // Map author from author_first_name + author_last_name if backend sends those
+                const first = blogData.author_first_name ?? blogData.authorFirstName ?? ''
+                const last = blogData.author_last_name ?? blogData.authorLastName ?? ''
+                const authorFromNames = [first, last].filter(Boolean).join(' ').trim()
+                if (authorFromNames && !blogData.author) {
+                    blogData = { ...blogData, author: authorFromNames }
+                }
                 setBlog(blogData)
             } else {
                 console.error('Invalid blog data format:', result)
@@ -212,7 +219,11 @@ export default function BlogPostDetail({ params }) {
                                     </div>
                                 )}
 
-                                
+                                {/* Social Share Links — uses blog's custom URLs or default share URLs */}
+                                <div className="flex items-center gap-3 flex-wrap">
+                                    <span className="text-sm font-bold text-[#1C0F2D]">Share:</span>
+                                    <SocialShareLinks blog={blog} />
+                                </div>
                             </div>
                         </div>
                     </div>
