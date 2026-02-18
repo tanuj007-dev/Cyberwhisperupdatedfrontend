@@ -85,10 +85,10 @@ const EditBlog = () => {
                 showOnHomepage: blog.showOnHomepage ?? true,
                 pinPost: blog.pinPost ?? false,
                 selectedTags: blog.selectedTags || [],
-                facebook_url: blog.facebook_url ?? '',
-                linkedin_url: blog.linkedin_url ?? '',
-                twitter_url: blog.twitter_url ?? '',
-                instagram_url: blog.instagram_url ?? ''
+                facebook_url: blog.facebook_url ?? blog.Facebook_handle_url ?? '',
+                linkedin_url: blog.linkedin_url ?? blog.linkedin_handle_url ?? '',
+                twitter_url: blog.twitter_url ?? blog.x_handle_url ?? '',
+                instagram_url: blog.instagram_url ?? blog.Instagram_handle_url ?? ''
             });
             setThumbnailPreview(thumb || banner || blog.thumbnail);
         }

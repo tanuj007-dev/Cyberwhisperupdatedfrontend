@@ -187,14 +187,27 @@ export const AdminProvider = ({ children }) => {
         }
     };
 
+    // Backend uses Facebook_handle_url, linkedin_handle_url, x_handle_url, Instagram_handle_url (not facebook_url etc.)
+    const mapBlogPayloadToBackend = (payload) => {
+        const { facebook_url, linkedin_url, twitter_url, instagram_url, ...rest } = payload;
+        return {
+            ...rest,
+            ...(facebook_url != null && facebook_url !== '' && { Facebook_handle_url: facebook_url }),
+            ...(linkedin_url != null && linkedin_url !== '' && { linkedin_handle_url: linkedin_url }),
+            ...(twitter_url != null && twitter_url !== '' && { x_handle_url: twitter_url }),
+            ...(instagram_url != null && instagram_url !== '' && { Instagram_handle_url: instagram_url })
+        };
+    };
+
     // Blog CRUD operations - POST to backend (3001) to support thumbnail_url, banner_url, image_url, video_url
     const addBlog = async (blogData) => {
         try {
             const backendUrl = API_BASE_URL;
+            const payload = mapBlogPayloadToBackend(blogData);
 
             const response = await adminFetch(`${backendUrl}/api/blogs`, {
                 method: 'POST',
-                body: JSON.stringify(blogData)
+                body: JSON.stringify(payload)
             });
 
             if (!response.ok) {
@@ -214,10 +227,11 @@ export const AdminProvider = ({ children }) => {
     const updateBlog = async (blog_id, updatedBlog) => {
         try {
             const backendUrl = API_BASE_URL.replace(/\/$/, '');
+            const payload = mapBlogPayloadToBackend(updatedBlog);
             const response = await adminFetch(`${backendUrl}/api/blogs/${blog_id}`, {
                 method: 'PUT',
                 credentials: 'include',
-                body: JSON.stringify(updatedBlog)
+                body: JSON.stringify(payload)
             });
 
             if (!response.ok) {
