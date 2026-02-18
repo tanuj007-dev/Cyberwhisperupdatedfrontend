@@ -21,7 +21,7 @@ const initialForm = {
     language: 'English',
     category: '',
     course_type: 'video',
-    status: 'draft',
+    status: 'published',
     is_free_course: 0,
     multi_instructor: 0,
     enable_drip_content: 1,
@@ -80,7 +80,7 @@ export default function AddCoursePage() {
                 language: formData.language || 'English',
                 category: formData.category?.trim() || undefined,
                 course_type: formData.course_type || 'video',
-                status: formData.status || 'draft',
+                status: formData.status || 'published',
                 is_free_course: formData.is_free_course ?? 0,
                 multi_instructor: formData.multi_instructor ?? 0,
                 enable_drip_content: formData.enable_drip_content ?? 1,
@@ -200,8 +200,8 @@ export default function AddCoursePage() {
                                 onChange={handleChange}
                                 className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent placeholder:text-gray-300 text-black"
                             >
-                                <option value="draft">Draft</option>
                                 <option value="published">Published</option>
+                                <option value="draft">Draft</option>
                                 <option value="archived">Archived</option>
                             </select>
                         </div>

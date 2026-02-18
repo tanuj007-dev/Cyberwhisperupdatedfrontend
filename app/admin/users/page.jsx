@@ -226,12 +226,16 @@ const UserList = () => {
     };
 
     const getRoleName = (user) => {
+        const r = String(user.role || '').toUpperCase().replace(/\s/g, '');
+        if (r === 'SUPERADMIN') return 'Superadmin';
         const roleId = user.role_id != null ? user.role_id : (user.role === 'ADMIN' ? 1 : user.role === 'INSTRUCTOR' ? 3 : 2);
         const roles = { 1: 'Admin', 2: 'Student', 3: 'Instructor' };
         return roles[roleId] || user.role || 'Unknown';
     };
 
     const getRoleColor = (user) => {
+        const r = String(user.role || '').toUpperCase().replace(/\s/g, '');
+        if (r === 'SUPERADMIN') return 'purple';
         const roleId = user.role_id != null ? user.role_id : (user.role === 'ADMIN' ? 1 : user.role === 'INSTRUCTOR' ? 3 : 2);
         const colors = { 1: 'purple', 2: 'info', 3: 'success' };
         return colors[roleId] || 'default';
@@ -269,7 +273,7 @@ const UserList = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                 <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-4">
                     <p className="text-sm text-gray-500 dark:text-gray-400">Admins</p>
-                    <p className="text-3xl font-bold text-blue-600">{visibleUsers.filter((u) => (u.role_id === 1) || (u.role === 'ADMIN')).length}</p>
+                    <p className="text-3xl font-bold text-blue-600">{visibleUsers.filter((u) => (u.role_id === 1) || (u.role === 'ADMIN') || (String(u.role || '').toUpperCase().replace(/\s/g, '') === 'SUPERADMIN')).length}</p>
                 </div>
                 <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-4">
                     <p className="text-sm text-gray-500 dark:text-gray-400">Students</p>
