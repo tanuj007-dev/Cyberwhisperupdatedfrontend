@@ -212,11 +212,7 @@ export default function BlogPostDetail({ params }) {
                                     </div>
                                 )}
 
-                                {/* Social Share — use blog's custom links when set, else default share URLs */}
-                                <div className="flex gap-4 items-center">
-                                    <span className="text-sm font-bold text-[#1C0F2D]">Share:</span>
-                                    <SocialShareLinks blog={blog} />
-                                </div>
+                                
                             </div>
                         </div>
                     </div>

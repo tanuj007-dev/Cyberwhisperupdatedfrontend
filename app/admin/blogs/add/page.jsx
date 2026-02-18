@@ -846,45 +846,7 @@ const AddBlog = () => {
                 </Section>
 
                 {/* SECTION 5b — Social Links (for Share section on blog post) */}
-                <Section
-                    id="social"
-                    title="Social Share Links"
-                    icon={Share2}
-                    isCollapsed={collapsedSections.social ?? true}
-                    onToggle={toggleSection}
-                >
-                    <p className="text-sm text-gray-500 mb-4">Optional custom links for the Share section on the blog post. Leave empty to use default share URLs (share current page).</p>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <Input
-                            label="Facebook URL"
-                            name="facebook_url"
-                            value={formData.facebook_url ?? ''}
-                            onChange={handleChange}
-                            placeholder="https://facebook.com/..."
-                        />
-                        <Input
-                            label="LinkedIn URL"
-                            name="linkedin_url"
-                            value={formData.linkedin_url ?? ''}
-                            onChange={handleChange}
-                            placeholder="https://linkedin.com/..."
-                        />
-                        <Input
-                            label="X (Twitter) URL"
-                            name="twitter_url"
-                            value={formData.twitter_url ?? ''}
-                            onChange={handleChange}
-                            placeholder="https://x.com/..."
-                        />
-                        <Input
-                            label="Instagram URL"
-                            name="instagram_url"
-                            value={formData.instagram_url ?? ''}
-                            onChange={handleChange}
-                            placeholder="https://instagram.com/..."
-                        />
-                    </div>
-                </Section>
+               
 
                 {/* SECTION 6 — SETTINGS */}
                 {/* <Section
