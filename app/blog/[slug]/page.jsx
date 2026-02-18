@@ -170,8 +170,8 @@ export default function BlogPostDetail({ params }) {
                                 )}
                             </div>
 
-                            {/* Blog Content */}
-                            <div className="prose prose-lg max-w-none text-slate-600 space-y-6">
+                            {/* Blog Content - links styled to be clearly visible */}
+                            <div className="prose prose-lg max-w-none text-slate-600 space-y-6 [&_a]:text-violet-600 [&_a]:underline [&_a]:font-medium [&_a]:decoration-violet-500 [&_a:hover]:text-violet-800 [&_a:hover]:decoration-violet-700">
                                 {blog.content ? (
                                     <div dangerouslySetInnerHTML={{ __html: blog.content }} />
                                 ) : (

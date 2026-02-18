@@ -4,7 +4,6 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import {
   Star,
-  BookOpen,
   BarChart2,
   Calendar,
   ArrowRight,
@@ -84,7 +83,7 @@ export default function CourseSection() {
   const fetchCategories = async () => {
     setCategoriesLoading(true);
     try {
-      const response = await fetch(`${API_BASE_URL}/api/courses?page=1&limit=100`);
+      const response = await fetch(`${API_BASE_URL}/api/courses?page=1&limit=100`, { cache: 'no-store' });
 
       if (!response.ok) {
         throw new Error(`Failed to fetch categories: ${response.status}`);
@@ -117,7 +116,7 @@ export default function CourseSection() {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch(`${API_BASE_URL}/api/courses?page=1&limit=50`);
+      const response = await fetch(`${API_BASE_URL}/api/courses?page=1&limit=50`, { cache: 'no-store' });
 
       if (!response.ok) {
         throw new Error(`Failed to fetch courses: ${response.status}`);
@@ -139,11 +138,11 @@ export default function CourseSection() {
         category: categoryLabel(course),
         image:
           course.thumbnail ||
-          course.image ||
           course.course_thumbnail ||
+          course.thumbnail_url ||
+          course.image ||
           defaultImage,
         rating: course.rating || 4.5,
-        lessons: course.lessons || 20,
         level: course.level || "Beginner",
         duration: course.duration || "3 Weeks",
         price: course.price,
@@ -453,13 +452,7 @@ export default function CourseSection() {
                                 Book a demo
                               </button>
                             </div>
-                            <div className="grid grid-cols-3 gap-2">
-                              <div className="flex flex-col items-center justify-center gap-1.5 p-2.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/50">
-                                <BookOpen size={18} className="text-[#6B46E5] dark:text-purple-400" />
-                                <span className="text-xs font-medium text-slate-700 dark:text-gray-300 text-center">
-                                  {course.lessons} lessons
-                                </span>
-                              </div>
+                            <div className="grid grid-cols-2 gap-2">
                               <div className="flex flex-col items-center justify-center gap-1.5 p-2.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/50">
                                 <BarChart2 size={18} className="text-[#6B46E5] dark:text-purple-400" />
                                 <span className="text-xs font-medium text-slate-700 dark:text-gray-300 text-center">
@@ -477,7 +470,11 @@ export default function CourseSection() {
                           <div className="px-4 pb-3">
                             <div className="relative aspect-[3/2] rounded-b-xl overflow-hidden ring-1 ring-black/5">
                               <Image
-                                src={course.image}
+                                src={
+                                  typeof course.image === "string"
+                                    ? `${course.image}${course.image.includes("?") ? "&" : "?"}v=${course.last_modified ?? course.id ?? ""}`
+                                    : course.image
+                                }
                                 alt={course.title}
                                 fill
                                 unoptimized={

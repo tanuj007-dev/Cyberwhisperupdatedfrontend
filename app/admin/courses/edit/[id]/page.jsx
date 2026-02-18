@@ -40,6 +40,14 @@ export default function EditCoursePage() {
     const [thumbnailUploading, setThumbnailUploading] = useState(false);
 
     useEffect(() => {
+        const role = typeof window !== 'undefined' ? localStorage.getItem('adminRole') : null;
+        if (role === 'INSTRUCTOR' || role === 'STUDENT') {
+            router.replace('/admin/courses');
+            return;
+        }
+    }, [router]);
+
+    useEffect(() => {
         if (!id) return;
         if (lastFetchedIdRef.current === id) return;
         lastFetchedIdRef.current = id;
@@ -136,7 +144,10 @@ export default function EditCoursePage() {
                 meta_keywords: formData.meta_keywords || undefined,
                 meta_description: formData.meta_description || undefined,
                 brochure_url: formData.brochure_url || undefined,
+                // Send thumbnail under all common field names so backend persists it regardless of column name
                 course_thumbnail: courseThumbnailUrl || undefined,
+                thumbnail: courseThumbnailUrl || undefined,
+                thumbnail_url: courseThumbnailUrl || undefined,
             };
 
             const response = await fetch(`${API_BASE_URL}/api/courses/update/admin/${id}`, {

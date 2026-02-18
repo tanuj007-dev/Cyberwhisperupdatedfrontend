@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
-import { Star, BookOpen, BarChart2, Calendar, ChevronLeft, ChevronRight } from 'lucide-react'
+import { Star, BarChart2, Calendar, ChevronLeft, ChevronRight } from 'lucide-react'
 import Link from 'next/link'
 import thumb1 from '../Component/assets/cyber_lab_1.webp'
 import BrochureFormModal from '../Component/BrochureFormModal'
@@ -46,7 +46,8 @@ export default function AllCoursesPage() {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json'
-                    }
+                    },
+                    cache: 'no-store'
                 }
             )
 
@@ -166,13 +167,19 @@ export default function AllCoursesPage() {
                             <div className="px-6 pb-6 mt-6">
                                 <div className="relative aspect-video rounded-[1.5rem] overflow-hidden bg-gray-100 dark:bg-gray-700">
                                     <Image
-                                        src={(course.course_thumbnail || course.image || course.thumbnail) || defaultImage}
+                                        src={(() => {
+                                            const raw = course.thumbnail || course.course_thumbnail || course.thumbnail_url || course.image
+                                            if (!raw) return defaultImage
+                                            if (typeof raw !== 'string') return defaultImage
+                                            const sep = raw.includes('?') ? '&' : '?'
+                                            const v = course.last_modified ?? course.updated_at ?? course.id ?? ''
+                                            return `${raw}${sep}v=${v}`
+                                        })()}
                                         alt={course.title}
                                         fill
                                         className="object-cover transition-transform duration-700 group-hover:scale-110"
                                         unoptimized={typeof (course.course_thumbnail || course.image || course.thumbnail) === 'string' && (course.course_thumbnail || course.image || course.thumbnail)?.startsWith('http')}
                                         onError={(e) => {
-                                            // Fallback if image fails to load
                                             e.currentTarget.src = defaultImage.src
                                             e.currentTarget.srcset = defaultImage.src
                                         }}
@@ -202,33 +209,27 @@ export default function AllCoursesPage() {
                                 </div>
 
                                 <div className="pt-4 border-t border-gray-50 dark:border-gray-700">
-                                    <div className="flex items-center justify-between text-slate-400 dark:text-gray-500">
-                                        <div className="flex flex-col items-center gap-1">
-                                            <BookOpen size={18} />
-                                            <span className="text-[11px] font-bold uppercase tracking-tighter">{course.lessons || 20} lessons</span>
-                                        </div>
-                                        <div className="w-px h-8 bg-gray-100 dark:bg-gray-600" />
-                                        <div className="flex flex-col items-center gap-1">
-                                            <BarChart2 size={18} />
+                                    <div className="flex items-center justify-between gap-3 text-slate-600 dark:text-gray-400 flex-wrap">
+                                        <div className="flex items-center gap-1.5">
+                                            <BarChart2 size={16} className="text-[#6B46E5] dark:text-violet-400 shrink-0" />
                                             <span className="text-[11px] font-bold uppercase tracking-tighter">{course.level || 'Beginner'}</span>
                                         </div>
-                                        <div className="w-px h-8 bg-gray-100 dark:bg-gray-600" />
-                                        <div className="flex flex-col items-center gap-1">
-                                            <Calendar size={18} />
+                                        <div className="w-px h-4 bg-gray-200 dark:bg-gray-600 shrink-0" />
+                                        <div className="flex items-center gap-1.5">
+                                            <Calendar size={16} className="text-[#6B46E5] dark:text-violet-400 shrink-0" />
                                             <span className="text-[11px] font-bold uppercase tracking-tighter">{course.duration || '3 Weeks'}</span>
                                         </div>
+                                        <div className="flex items-center gap-1.5 ml-auto">
+                                            <span className="text-[#6B46E5] dark:text-violet-400 font-bold text-sm">
+                                                {getCoursePrice(course)}
+                                            </span>
+                                            {course.discounted_price && course.price > course.discounted_price && (
+                                                <span className="text-slate-400 dark:text-gray-500 line-through text-xs">
+                                                    ₹{course.price}
+                                                </span>
+                                            )}
+                                        </div>
                                     </div>
-                                </div>
-
-                                <div className="mt-4 text-center">
-                                    <p className="text-[#6B46E5] dark:text-violet-400 font-bold text-lg">
-                                        {getCoursePrice(course)}
-                                    </p>
-                                    {course.discounted_price && course.price > course.discounted_price && (
-                                        <p className="text-slate-400 dark:text-gray-500 line-through text-sm">
-                                            ₹{course.price}
-                                        </p>
-                                    )}
                                 </div>
                             </div>
 

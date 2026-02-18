@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, Save, Loader2, FileText, Upload } from 'lucide-react';
 import { Toast } from '@/components/ui';
@@ -41,6 +41,13 @@ export default function AddCoursePage() {
     const [thumbnailUploading, setThumbnailUploading] = useState(false);
     const [thumbnailPreview, setThumbnailPreview] = useState('');
     const [toast, setToast] = useState({ isVisible: false, message: '', type: 'success' });
+
+    useEffect(() => {
+        const r = typeof window !== 'undefined' ? localStorage.getItem('adminRole') : null;
+        if (r === 'INSTRUCTOR' || r === 'STUDENT') {
+            router.replace('/admin/courses');
+        }
+    }, [router]);
 
     const showToast = (message, type = 'success') => {
         setToast({ isVisible: true, message, type });

@@ -3,7 +3,7 @@
 import { useState, useMemo, useEffect } from 'react';
 import { useAdmin } from '@/contexts/AdminContext';
 import { Button, Badge, Modal, Input, Toast, Skeleton } from '@/components/ui';
-import { Edit2, Trash2, Eye, Search, PlusCircle, UserPlus, UserX, UserCheck, UserCircle } from 'lucide-react';
+import { Edit2, Trash2, Eye, Search, PlusCircle, UserPlus, UserX, UserCheck, UserCircle, Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { API_BASE_URL } from '@/lib/apiConfig';
 import { getUserIdFromToken } from '@/lib/jwt';
@@ -34,9 +34,10 @@ const UserList = () => {
         if (isSuperAdmin) return true;
         return !isTargetAdminOrSuperadmin(user);
     };
-    // Only superadmin can delete users; cannot delete own account
+    // Only superadmin can delete users; cannot delete own account or another admin/superadmin
     const canDeleteUser = (user) => {
         if (!isSuperAdmin) return false;
+        if (isTargetAdminOrSuperadmin(user)) return false;
         const id = user?.id ?? user?.user_id;
         if (id == null || currentUserId == null) return true;
         return String(id) !== String(currentUserId);
@@ -49,6 +50,7 @@ const UserList = () => {
     const [filterInstructor, setFilterInstructor] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+    const [deleting, setDeleting] = useState(false);
     const [selectedUser, setSelectedUser] = useState(null);
     const [viewModalOpen, setViewModalOpen] = useState(false);
     const [viewUser, setViewUser] = useState(null);
@@ -225,12 +227,15 @@ const UserList = () => {
             return;
         }
         try {
+            setDeleting(true);
             await deleteUser(selectedUser.id ?? selectedUser.user_id);
             setDeleteModalOpen(false);
             setSelectedUser(null);
             showToast('User deleted successfully', 'success');
         } catch (error) {
             showToast(error?.message || 'Error deleting user', 'error');
+        } finally {
+            setDeleting(false);
         }
     };
 
@@ -437,7 +442,7 @@ const UserList = () => {
                                                     size="sm"
                                                     onClick={() => { setSelectedUser(user); setDeleteModalOpen(true); }}
                                                     disabled={!canDeleteUser(user)}
-                                                    title={canDeleteUser(user) ? 'Delete user' : 'You cannot delete your own account'}
+                                                    title={canDeleteUser(user) ? 'Delete user' : 'You cannot delete your own account or another admin'}
                                                     className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20 disabled:opacity-50 disabled:pointer-events-none"
                                                 >
                                                     <Trash2 size={18} />
@@ -531,21 +536,25 @@ const UserList = () => {
                 </div>
             </Modal>
 
-            {/* Delete Modal — only superadmin sees delete; cannot delete own account */}
+            {/* Delete Modal — only superadmin sees delete; cannot delete own account or another admin */}
             <Modal
                 isOpen={deleteModalOpen}
                 onClose={() => setDeleteModalOpen(false)}
                 title="Delete User"
                 footer={
                     <>
-                        <Button variant="outline" onClick={() => setDeleteModalOpen(false)}>Cancel</Button>
-                        <Button variant="danger" onClick={handleDelete} disabled={selectedUser && !canDeleteUser(selectedUser)}>Delete</Button>
+                        <Button variant="outline" onClick={() => setDeleteModalOpen(false)} disabled={deleting}>Cancel</Button>
+                        <Button variant="danger" onClick={handleDelete} disabled={deleting || (selectedUser && !canDeleteUser(selectedUser))}>
+                            {deleting ? <><Loader2 className="w-4 h-4 animate-spin" /> Deleting…</> : 'Delete'}
+                        </Button>
                     </>
                 }
             >
                 <p className="text-gray-600 dark:text-gray-400">
                     {selectedUser && !canDeleteUser(selectedUser)
-                        ? "You cannot delete your own account."
+                        ? (String(selectedUser?.id ?? selectedUser?.user_id) === String(currentUserId)
+                            ? "You cannot delete your own account."
+                            : "You cannot delete another admin or superadmin.")
                         : <>Are you sure you want to delete <strong>{selectedUser?.first_name} {selectedUser?.last_name}</strong>? This action cannot be undone.</>}
                 </p>
             </Modal>

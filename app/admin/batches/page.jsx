@@ -11,6 +11,7 @@ export default function BatchesPage() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [role, setRole] = useState(null);
+    const [deletingId, setDeletingId] = useState(null);
 
     useEffect(() => {
         setRole(typeof window !== 'undefined' ? localStorage.getItem('adminRole') : null);
@@ -55,6 +56,7 @@ export default function BatchesPage() {
     const handleDelete = async (id) => {
         if (!confirm('Are you sure you want to delete this batch?')) return;
 
+        setDeletingId(id);
         try {
             const response = await fetch(`${API_BASE_URL}/api/batches/${id}`, {
                 method: 'DELETE',
@@ -70,6 +72,8 @@ export default function BatchesPage() {
         } catch (err) {
             console.error('Error deleting batch:', err);
             alert('Failed to delete batch: ' + err.message);
+        } finally {
+            setDeletingId(null);
         }
     };
 
@@ -179,10 +183,11 @@ export default function BatchesPage() {
                                             </button>
                                             <button
                                                 onClick={() => handleDelete(batch.id)}
-                                                className="p-2 bg-white/20 hover:bg-red-500 rounded-lg transition-colors"
+                                                disabled={deletingId === batch.id}
+                                                className="p-2 bg-white/20 hover:bg-red-500 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                                                 title="Delete"
                                             >
-                                                <Trash2 size={16} />
+                                                {deletingId === batch.id ? <Loader2 size={16} className="animate-spin" /> : <Trash2 size={16} />}
                                             </button>
                                         </div>
                                     )}

@@ -12,7 +12,8 @@ export async function GET(request) {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
-                }
+                },
+                cache: 'no-store'
             }
         );
 
@@ -38,8 +39,8 @@ export async function GET(request) {
                 price: course.price,
                 discounted_price: course.discounted_price,
                 category: course.category || course.category_name || course.type || 'General',
-                thumbnail: course.thumbnail || course.thumbnail_url || course.course_thumbnail,
-                image: course.image || course.thumbnail || course.thumbnail_url || course.course_thumbnail,
+                thumbnail: course.thumbnail || course.course_thumbnail || course.thumbnail_url || course.image,
+                image: course.thumbnail || course.course_thumbnail || course.thumbnail_url || course.image,
                 brochure_url: course.brochure_url || course.brochure || undefined,
                 ...course
             })),

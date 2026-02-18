@@ -9,7 +9,7 @@ import { API_BASE_URL } from '@/lib/apiConfig';
 import API_CONFIG from '@/app/admin/config/api';
 import {
     Upload, X, FileText, Image as ImageIcon, User, Search, Settings,
-    ChevronDown, ChevronUp, Save, ArrowLeft, Calendar
+    ChevronDown, ChevronUp, Save, ArrowLeft, Calendar, Loader2
 } from 'lucide-react';
 
 // Section Component - Defined OUTSIDE the main component to prevent re-creation on every render
@@ -53,6 +53,7 @@ const EditBlog = () => {
     const [toast, setToast] = useState({ isVisible: false, message: '', type: 'success' });
     const [errors, setErrors] = useState({});
     const [loading, setLoading] = useState(true);
+    const [submitting, setSubmitting] = useState(false);
     const [uploadingImage, setUploadingImage] = useState(false);
     const initialImageUrlsRef = useRef({ thumbnail_url: '', banner_url: '' });
 
@@ -263,6 +264,7 @@ const EditBlog = () => {
                 is_sticky: !!formData.pinPost
             };
 
+            setSubmitting(true);
             showToast('Updating blog post...', 'info');
             await updateBlog(formData.blog_id, blogData);
             showToast('Blog updated successfully!', 'success');
@@ -273,6 +275,8 @@ const EditBlog = () => {
         } catch (error) {
             console.error('Error updating blog:', error);
             showToast(error.message || 'Failed to update blog post', 'error');
+        } finally {
+            setSubmitting(false);
         }
     };
 
@@ -322,10 +326,11 @@ const EditBlog = () => {
                     <button
                         type="button"
                         onClick={handleSubmit}
-                        className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-violet-600 to-purple-600 text-white font-medium rounded-lg hover:shadow-lg hover:shadow-purple-500/25 transition-all"
+                        disabled={submitting}
+                        className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-violet-600 to-purple-600 text-white font-medium rounded-lg hover:shadow-lg hover:shadow-purple-500/25 transition-all disabled:opacity-70 disabled:cursor-not-allowed"
                     >
-                        <Save size={18} />
-                        Update Blog
+                        {submitting ? <Loader2 size={18} className="animate-spin" /> : <Save size={18} />}
+                        {submitting ? 'Updating…' : 'Update Blog'}
                     </button>
                 </div>
             </div>

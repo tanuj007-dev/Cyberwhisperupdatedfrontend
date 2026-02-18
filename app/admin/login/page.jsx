@@ -18,7 +18,7 @@ export default function AdminLogin() {
     const [resendCooldown, setResendCooldown] = useState(0);
     const [registerOpen, setRegisterOpen] = useState(false);
     const [registerForm, setRegisterForm] = useState({
-        first_name: '', last_name: '', email: '', phone: '', password: '',
+        first_name: '', last_name: '', email: '', phone: '', password: '', repeat_password: '',
         title: '', address: '', biography: '', linkedin_url: '', github_url: '',
         role: 'STUDENT', is_instructor: false, profile_image_url: '', skills: []
     });
@@ -279,6 +279,10 @@ export default function AdminLogin() {
         if (registerForm.email && !/\S+@\S+\.\S+/.test(registerForm.email)) err.email = 'Invalid email';
         if (!registerForm.phone.trim()) err.phone = 'Required';
         if (!registerForm.password.trim()) err.password = 'Required';
+        if (!registerForm.repeat_password.trim()) err.repeat_password = 'Required';
+        if (registerForm.password && registerForm.repeat_password && registerForm.password !== registerForm.repeat_password) {
+            err.repeat_password = 'Passwords do not match';
+        }
         setRegisterErrors(err);
         return Object.keys(err).length === 0;
     };
@@ -316,7 +320,7 @@ export default function AdminLogin() {
                 return;
             }
             setRegisterForm({
-                first_name: '', last_name: '', email: '', phone: '', password: '',
+                first_name: '', last_name: '', email: '', phone: '', password: '', repeat_password: '',
                 title: '', address: '', biography: '', linkedin_url: '', github_url: '',
                 role: 'STUDENT', is_instructor: false, profile_image_url: '', skills: []
             });
@@ -565,7 +569,7 @@ export default function AdminLogin() {
                                         Back to login
                                     </button>
                                 </div>
-                                {isDevSkipOtpEnabled && (
+                                {/* {isDevSkipOtpEnabled && (
                                     <div className="pt-2 border-t border-white/5">
                                         <button
                                             type="button"
@@ -575,7 +579,7 @@ export default function AdminLogin() {
                                             Dev: Skip OTP and use any email
                                         </button>
                                     </div>
-                                )}
+                                )} */}
                             </motion.form>
                         )}
                     </AnimatePresence>
@@ -665,6 +669,11 @@ export default function AdminLogin() {
                                         <label className={labelClass}>Password *</label>
                                         <input name="password" type="password" value={registerForm.password} onChange={registerChange} className={inputClass} placeholder="••••••••" />
                                         {registerErrors.password && <p className="mt-1 text-xs text-red-400">{registerErrors.password}</p>}
+                                    </div>
+                                    <div>
+                                        <label className={labelClass}>Repeat password *</label>
+                                        <input name="repeat_password" type="password" value={registerForm.repeat_password} onChange={registerChange} className={inputClass} placeholder="••••••••" />
+                                        {registerErrors.repeat_password && <p className="mt-1 text-xs text-red-400">{registerErrors.repeat_password}</p>}
                                     </div>
                                     <div>
                                         <label className={labelClass}>Address</label>

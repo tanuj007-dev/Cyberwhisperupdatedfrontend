@@ -3,7 +3,7 @@
 import { useState, useMemo } from 'react';
 import { useAdmin } from '@/contexts/AdminContext';
 import { Button, Badge, Modal, Skeleton, Toast } from '@/components/ui';
-import { Edit2, Trash2, Eye, Search, Star, StarOff, Filter, MoreVertical } from 'lucide-react';
+import { Edit2, Trash2, Eye, Search, Star, StarOff, Filter, MoreVertical, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
@@ -17,6 +17,7 @@ const BlogList = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
     const [selectedBlog, setSelectedBlog] = useState(null);
+    const [deleting, setDeleting] = useState(false);
     const [toast, setToast] = useState({ isVisible: false, message: '', type: 'success' });
 
     const itemsPerPage = 10;
@@ -49,12 +50,15 @@ const BlogList = () => {
 
     const handleDelete = async () => {
         try {
+            setDeleting(true);
             await deleteBlog(selectedBlog.blog_id);
             setDeleteModalOpen(false);
             setSelectedBlog(null);
             showToast('Blog deleted successfully', 'success');
         } catch (error) {
             showToast('Failed to delete blog', 'error');
+        } finally {
+            setDeleting(false);
         }
     };
 
@@ -330,11 +334,11 @@ const BlogList = () => {
                 title="Delete Blog"
                 footer={
                     <>
-                        <Button variant="outline" onClick={() => setDeleteModalOpen(false)}>
+                        <Button variant="outline" onClick={() => setDeleteModalOpen(false)} disabled={deleting}>
                             Cancel
                         </Button>
-                        <Button variant="danger" onClick={handleDelete}>
-                            Delete
+                        <Button variant="danger" onClick={handleDelete} disabled={deleting}>
+                            {deleting ? <><Loader2 className="w-4 h-4 animate-spin" /> Deleting…</> : 'Delete'}
                         </Button>
                     </>
                 }

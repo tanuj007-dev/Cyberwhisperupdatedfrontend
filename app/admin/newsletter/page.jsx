@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useMemo } from 'react';
 import { Button, Badge, Modal, Skeleton, Toast, Input, Textarea } from '@/components/ui';
-import { Trash2, Search, Download, Mail, Calendar, Filter, Send } from 'lucide-react';
+import { Trash2, Search, Download, Mail, Calendar, Filter, Send, Loader2 } from 'lucide-react';
 import { API_BASE_URL } from '@/lib/apiConfig';
 
 const NewsletterSubscribers = () => {
@@ -12,6 +12,7 @@ const NewsletterSubscribers = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
     const [selectedSubscriber, setSelectedSubscriber] = useState(null);
+    const [deleting, setDeleting] = useState(false);
     const [toast, setToast] = useState({ isVisible: false, message: '', type: 'success' });
     const [totalCount, setTotalCount] = useState(0);
 
@@ -75,6 +76,7 @@ const NewsletterSubscribers = () => {
 
     const handleDelete = async () => {
         try {
+            setDeleting(true);
             const base = (API_BASE_URL || '').replace(/\/$/, '');
             const response = await fetch(`${base}/api/newsletter/subscribers/${selectedSubscriber.id}`, {
                 method: 'DELETE',
@@ -91,6 +93,8 @@ const NewsletterSubscribers = () => {
         } catch (error) {
             console.error('Error deleting subscriber:', error);
             showToast('Failed to delete subscriber', 'error');
+        } finally {
+            setDeleting(false);
         }
     };
 
@@ -452,11 +456,11 @@ const NewsletterSubscribers = () => {
                 title="Delete Subscriber"
                 footer={
                     <>
-                        <Button variant="outline" onClick={() => setDeleteModalOpen(false)}>
+                        <Button variant="outline" onClick={() => setDeleteModalOpen(false)} disabled={deleting}>
                             Cancel
                         </Button>
-                        <Button variant="danger" onClick={handleDelete}>
-                            Delete
+                        <Button variant="danger" onClick={handleDelete} disabled={deleting}>
+                            {deleting ? <><Loader2 className="w-4 h-4 animate-spin" /> Deleting…</> : 'Delete'}
                         </Button>
                     </>
                 }

@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
-import { Star, BookOpen, BarChart2, Calendar, ArrowRight, Loader2, ChevronLeft, ChevronRight } from 'lucide-react'
+import { Star, BarChart2, Calendar, ArrowRight, Loader2, ChevronLeft, ChevronRight } from 'lucide-react'
 import BrochureFormModal from './BrochureFormModal'
 import EnrollModal from './EnrollModal'
 import { useEnquiry } from '../context/EnquiryContext'
@@ -41,7 +41,7 @@ export default function TrainingSection() {
     const fetchCourses = async () => {
         try {
             setLoading(true)
-            const response = await fetch(`${API_BASE_URL}/api/courses?page=1&limit=10`)
+            const response = await fetch(`${API_BASE_URL}/api/courses?page=1&limit=10`, { cache: 'no-store' })
             if (!response.ok) {
                 throw new Error('Failed to fetch courses')
             }
@@ -267,11 +267,7 @@ export default function TrainingSection() {
                                                 </button>
                                             </div>
 
-                                            <div className="grid grid-cols-3 gap-2">
-                                                <div className="flex flex-col items-center justify-center gap-1.5 p-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/50">
-                                                    <BookOpen size={16} className="text-[#6B46E5] dark:text-purple-400" />
-                                                    <span className="text-[10px] font-medium text-slate-700 dark:text-gray-300 text-center">{course.lessons || 20} lessons</span>
-                                                </div>
+                                            <div className="grid grid-cols-2 gap-2">
                                                 <div className="flex flex-col items-center justify-center gap-1.5 p-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/50">
                                                     <BarChart2 size={16} className="text-[#6B46E5] dark:text-purple-400" />
                                                     <span className="text-[10px] font-medium text-slate-700 dark:text-gray-300 text-center">{course.level || 'Beginner'}</span>
@@ -287,7 +283,13 @@ export default function TrainingSection() {
                                         <div className="px-4 pb-3">
                                             <div className="relative aspect-[3/2] rounded-b-xl overflow-hidden ring-1 ring-black/5">
                                                 <Image
-                                                    src={course.thumbnail || course.course_thumbnail || course.image || fallbackImages[idx % fallbackImages.length]}
+                                                    src={(() => {
+                                                        const raw = course.thumbnail || course.course_thumbnail || course.thumbnail_url || course.image || fallbackImages[idx % fallbackImages.length]
+                                                        if (typeof raw !== 'string') return raw
+                                                        const sep = raw.includes('?') ? '&' : '?'
+                                                        const v = course.last_modified ?? course.updated_at ?? course.id ?? ''
+                                                        return `${raw}${sep}v=${v}`
+                                                    })()}
                                                     alt={course.title}
                                                     fill
                                                     unoptimized={!!(course.thumbnail || course.course_thumbnail || (typeof course.image === 'string' && course.image.startsWith('http')))}

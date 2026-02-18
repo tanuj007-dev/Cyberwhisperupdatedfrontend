@@ -24,6 +24,7 @@ export default function CoursesPage() {
     }, []);
 
     const isStudent = role === 'STUDENT';
+    const canManageCourses = role === 'ADMIN' || role === 'SUPERADMIN';
 
     const fetchCourses = async () => {
         try {
@@ -121,7 +122,7 @@ export default function CoursesPage() {
                     <h1 className="text-3xl font-bold text-gray-900">Course Management</h1>
                     <p className="text-gray-600 mt-2">Manage courses shown on the homepage and courses page</p>
                 </div>
-                {!isStudent && (
+                {canManageCourses && (
                     <button
                         onClick={() => router.push('/admin/courses/add')}
                         className="mt-4 md:mt-0 flex items-center gap-2 bg-purple-600 text-white px-6 py-3 rounded-xl hover:bg-purple-700 transition-colors font-semibold"
@@ -146,7 +147,7 @@ export default function CoursesPage() {
                     <p className="text-gray-600 mb-6">
                         {isStudent ? 'No courses available.' : 'Add your first course to show it on the homepage.'}
                     </p>
-                    {!isStudent && (
+                    {canManageCourses && (
                         <button
                             onClick={() => router.push('/admin/courses/add')}
                             className="inline-flex items-center gap-2 bg-purple-600 text-white px-6 py-3 rounded-xl hover:bg-purple-700 transition-colors font-semibold"
@@ -168,7 +169,7 @@ export default function CoursesPage() {
                                     <span className={`px-3 py-1 rounded-full text-xs font-bold border ${getStatusBadge(course.status)}`}>
                                         {course.status || 'draft'}
                                     </span>
-                                    {!isStudent && (
+                                    {canManageCourses && (
                                         <div className="flex gap-2">
                                             <button
                                                 onClick={() => router.push(`/admin/courses/edit/${course.id}`)}

@@ -695,8 +695,8 @@ const RichTextEditor = ({ value, onChange, placeholder = "Write your content her
                 </div>
             )}
 
-            {/* Editor Area */}
-            <div className="relative">
+            {/* Editor Area - scrollable when content exceeds max height */}
+            <div className="relative max-h-[32rem] overflow-y-auto">
                 <div
                     ref={editorRef}
                     contentEditable

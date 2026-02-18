@@ -9,7 +9,7 @@ import { API_BASE_URL } from '@/lib/apiConfig';
 import API_CONFIG from '@/app/admin/config/api';
 import {
     Upload, X, FileText, Image as ImageIcon, User, Search, Settings,
-    ChevronDown, ChevronUp, Save, Send, ArrowLeft, Calendar
+    ChevronDown, ChevronUp, Save, Send, ArrowLeft, Calendar, Loader2
 } from 'lucide-react';
 
 // Section Component - Defined OUTSIDE the main component to prevent re-creation on every render
@@ -97,6 +97,7 @@ const AddBlog = () => {
     const [imageUrlPreview, setImageUrlPreview] = useState('');
     const [toast, setToast] = useState({ isVisible: false, message: '', type: 'success' });
     const [errors, setErrors] = useState({});
+    const [submitting, setSubmitting] = useState(false);
 
     // Auto-generate slug from title (debounced effect)
     useEffect(() => {
@@ -126,6 +127,14 @@ const AddBlog = () => {
         }));
         if (errors[name]) {
             setErrors(prev => ({ ...prev, [name]: '' }));
+        }
+    }, [errors]);
+
+    const handleReadingTimeChange = useCallback((e) => {
+        const value = e.target.value.replace(/\D/g, '');
+        setFormData(prev => ({ ...prev, readingTime: value }));
+        if (errors.readingTime) {
+            setErrors(prev => ({ ...prev, readingTime: '' }));
         }
     }, [errors]);
 
@@ -304,6 +313,7 @@ const AddBlog = () => {
         }
 
         try {
+            setSubmitting(true);
             // Payload matches backend POST /api/blogs (Cloudinary CDN URLs from uploads, saved to DB)
             const blogPost = {
                 title: formData.title,
@@ -313,7 +323,7 @@ const AddBlog = () => {
                 content: formData.description,
                 keywords: (formData.keywords && formData.keywords.trim()) || formData.selectedTags.map(id => tags.find(t => t.id === id)?.name).filter(Boolean).join(', '),
                 short_description: formData.shortDescription,
-                reading_time: formData.readingTime || '5 min read',
+                reading_time: formData.readingTime ? `${formData.readingTime} min read` : '5 min read',
                 thumbnail_url: formData.thumbnail || '',
                 banner_url: formData.banner || '',
                 image_url: formData.image_url || '',
@@ -350,6 +360,8 @@ const AddBlog = () => {
         } catch (error) {
             console.error('Error creating blog:', error);
             showToast(error.message || 'Failed to create blog post', 'error');
+        } finally {
+            setSubmitting(false);
         }
     };
 
@@ -400,17 +412,19 @@ const AddBlog = () => {
                         variant="outline"
                         onClick={() => handleSubmit('draft')}
                         className="flex items-center gap-2"
+                        disabled={submitting}
                     >
-                        <Save size={18} />
-                        Save Draft
+                        {submitting ? <Loader2 size={18} className="animate-spin" /> : <Save size={18} />}
+                        {submitting ? 'Saving…' : 'Save Draft'}
                     </Button>
                     <button
                         type="button"
                         onClick={() => handleSubmit('publish')}
-                        className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-violet-600 to-purple-600 text-white font-medium rounded-lg hover:shadow-lg hover:shadow-purple-500/25 transition-all"
+                        disabled={submitting}
+                        className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-violet-600 to-purple-600 text-white font-medium rounded-lg hover:shadow-lg hover:shadow-purple-500/25 transition-all disabled:opacity-70 disabled:cursor-not-allowed"
                     >
-                        <Send size={18} />
-                        Publish
+                        {submitting ? <Loader2 size={18} className="animate-spin" /> : <Send size={18} />}
+                        {submitting ? 'Publishing…' : 'Publish'}
                     </button>
                 </div>
             </div>
@@ -457,11 +471,12 @@ const AddBlog = () => {
                                 </div>
                             </div>
                             <Input
-                                label="Reading Time"
+                                label="Reading Time (minutes)"
                                 name="readingTime"
+                                type="text"
                                 value={formData.readingTime}
-                                onChange={handleChange}
-                                placeholder="e.g., 5 min read"
+                                onChange={handleReadingTimeChange}
+                                placeholder="e.g., 5"
                             />
                         </div>
 
@@ -736,12 +751,7 @@ const AddBlog = () => {
                             </div>
                         </div>
 
-                        <Toggle
-                            label="Mark as Featured Post"
-                            name="is_popular"
-                            checked={formData.is_popular}
-                            onChange={handleChange}
-                        />
+                        
                     </div>
                 </Section>
 
