@@ -10,17 +10,18 @@ import Link from 'next/link'
 import { use } from 'react'
 import { API_BASE_URL } from '@/lib/apiConfig'
 
-function SocialShareLinks({ blog }) {
+function SocialShareLinks() {
     const [pageUrl, setPageUrl] = useState('')
     useEffect(() => {
         if (typeof window !== 'undefined') setPageUrl(window.location.href)
     }, [])
     const encodedUrl = encodeURIComponent(pageUrl)
+    // Always share the current blog post URL (this page), not custom profile links
     const links = [
-        { Icon: FaFacebook, url: (blog?.facebook_url && blog.facebook_url.trim()) || `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}` },
-        { Icon: FaLinkedin, url: (blog?.linkedin_url && blog.linkedin_url.trim()) || `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}` },
-        { Icon: FaXTwitter, url: (blog?.twitter_url && blog.twitter_url.trim()) || `https://twitter.com/intent/tweet?url=${encodedUrl}` },
-        { Icon: FaInstagram, url: (blog?.instagram_url && blog.instagram_url.trim()) || '#' }
+        { Icon: FaFacebook, url: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}` },
+        { Icon: FaLinkedin, url: `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}` },
+        { Icon: FaXTwitter, url: `https://twitter.com/intent/tweet?url=${encodedUrl}` },
+        { Icon: FaInstagram, url: '#' }
     ]
     return (
         <>
@@ -219,10 +220,10 @@ export default function BlogPostDetail({ params }) {
                                     </div>
                                 )}
 
-                                {/* Social Share Links — uses blog's custom URLs or default share URLs */}
+                                {/* Social Share Links — share this blog post on each platform */}
                                 <div className="flex items-center gap-3 flex-wrap">
                                     <span className="text-sm font-bold text-[#1C0F2D]">Share:</span>
-                                    <SocialShareLinks blog={blog} />
+                                    <SocialShareLinks />
                                 </div>
                             </div>
                         </div>
