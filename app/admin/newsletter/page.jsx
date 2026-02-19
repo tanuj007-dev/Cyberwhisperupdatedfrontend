@@ -114,8 +114,8 @@ const NewsletterSubscribers = () => {
         }
         setSendLoading(true);
         try {
-            const base = (API_BASE_URL || '').replace(/\/$/, '');
-            const response = await fetch(`${base}/api/newsletter/send`, {
+            // Use app's API route so SUPERADMIN is allowed (route forwards with service token to backend)
+            const response = await fetch('/api/newsletter/send', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

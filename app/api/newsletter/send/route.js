@@ -1,17 +1,20 @@
 import { NextResponse } from 'next/server';
 import { API_BASE_URL } from '@/lib/apiConfig';
+import { getRoleFromToken } from '@/lib/jwt';
+
+const ALLOWED_NEWSLETTER_ROLES = ['ADMIN', 'SUPERADMIN', 'INSTRUCTOR'];
 
 export async function POST(request) {
     try {
         const body = await request.json();
         let authHeader = request.headers.get('Authorization');
-        // If client sent dev-bypass (e.g. "Dev: Log in without backend"), use server-side token so backend accepts the request
         const serverToken = process.env.NEWSLETTER_SERVICE_TOKEN || process.env.ADMIN_SERVICE_TOKEN;
+
+        // If client sent dev-bypass, use server-side token so backend accepts the request
         if (authHeader?.startsWith('Bearer dev-bypass')) {
             if (serverToken) {
                 authHeader = `Bearer ${serverToken.trim()}`;
             } else {
-                // Dev mode: avoid 401 so UI doesn't error. No emails sent; user can set NEWSLETTER_SERVICE_TOKEN or log in for real send.
                 return NextResponse.json(
                     {
                         success: true,
@@ -20,9 +23,22 @@ export async function POST(request) {
                     { status: 200 }
                 );
             }
+        } else if (authHeader?.startsWith('Bearer ')) {
+            const token = authHeader.slice(7);
+            const role = getRoleFromToken(token);
+            if (!role || !ALLOWED_NEWSLETTER_ROLES.includes(role)) {
+                return NextResponse.json(
+                    { success: false, message: 'Only administrators, superadmins, and instructors can send newsletters.' },
+                    { status: 403 }
+                );
+            }
+            // Use service token so backend accepts the request (backend may only allow "instructors and administrators" by name; superadmin is allowed here)
+            if (serverToken) {
+                authHeader = `Bearer ${serverToken.trim()}`;
+            }
         }
-        const url = `${API_BASE_URL}/api/newsletter/send`;
 
+        const url = `${API_BASE_URL}/api/newsletter/send`;
         const headers = {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
