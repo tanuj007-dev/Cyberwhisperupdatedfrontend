@@ -274,7 +274,7 @@ export default function TrainingSection() {
                                                 </div>
                                                 <div className="flex flex-col items-center justify-center gap-1.5 p-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/50">
                                                     <Calendar size={16} className="text-[#6B46E5] dark:text-purple-400" />
-                                                    <span className="text-[10px] font-medium text-slate-700 dark:text-gray-300 text-center">{course.duration || '3 Weeks'}</span>
+                                                    <span className="text-[10px] font-medium text-slate-700 dark:text-gray-300 text-center">{(course.duration || '3').replace(/\s*weeks?$/i, '')}</span>
                                                 </div>
                                             </div>
                                         </div>

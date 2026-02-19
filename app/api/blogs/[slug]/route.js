@@ -23,7 +23,7 @@ function mapBlogToFrontend(blog) {
         date: blog.published_at || blog.created_at,
         author,
         category: blog.category_name || 'Cybersecurity',
-        tags: blog.tags || [],
+        tags: Array.isArray(blog.tags) ? blog.tags : (blog.keywords ? String(blog.keywords).split(',').map(k => k.trim()).filter(Boolean) : []),
         facebook_url: blog.facebook_url ?? blog.Facebook_handle_url ?? blog.facebook_handle_url ?? null,
         linkedin_url: blog.linkedin_url ?? blog.linkedin_handle_url ?? null,
         twitter_url: blog.twitter_url ?? blog.x_handle_url ?? null,

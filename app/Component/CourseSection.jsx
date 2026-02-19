@@ -144,7 +144,7 @@ export default function CourseSection() {
           defaultImage,
         rating: course.rating || 4.5,
         level: course.level || "Beginner",
-        duration: course.duration || "3 Weeks",
+        duration: (course.duration || "3").replace(/\s*weeks?$/i, ""),
         price: course.price,
         mrp: course.mrp,
         discounted_price: course.discounted_price,
@@ -462,7 +462,7 @@ export default function CourseSection() {
                               <div className="flex flex-col items-center justify-center gap-1.5 p-2.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/50">
                                 <Calendar size={18} className="text-[#6B46E5] dark:text-purple-400" />
                                 <span className="text-xs font-medium text-slate-700 dark:text-gray-300 text-center">
-                                  {course.duration}
+                                  {(course.duration || "3").replace(/\s*weeks?$/i, "")}
                                 </span>
                               </div>
                             </div>

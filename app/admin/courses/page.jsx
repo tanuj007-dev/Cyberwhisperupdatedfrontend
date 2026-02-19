@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, BookOpen, Loader2, DollarSign, BarChart2 } from 'lucide-react';
+import { Plus, Edit, Trash2, BookOpen, Loader2, IndianRupee, BarChart2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { API_BASE_URL } from '../../../lib/apiConfig';
 
@@ -203,7 +203,7 @@ export default function CoursesPage() {
                                     <p className="text-gray-600 text-sm line-clamp-2">{course.short_description}</p>
                                 )}
                                 <div className="flex items-center gap-3">
-                                    <DollarSign className="w-5 h-5 text-purple-600 flex-shrink-0" />
+                                    <IndianRupee className="w-5 h-5 text-purple-600 flex-shrink-0" />
                                     <div className="flex-1">
                                         <p className="text-sm text-gray-600">Price</p>
                                         <div className="flex items-baseline gap-2">

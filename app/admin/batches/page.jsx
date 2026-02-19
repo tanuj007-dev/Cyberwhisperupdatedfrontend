@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, Calendar, Clock, Users, DollarSign, Loader2 } from 'lucide-react';
+import { Plus, Edit, Trash2, Calendar, Clock, Users, IndianRupee, Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { API_BASE_URL } from '../../../lib/apiConfig';
 
@@ -206,7 +206,7 @@ export default function BatchesPage() {
                                         <p className="text-gray-900 font-semibold">
                                             {formatDate(batch.start_date)} - {formatDate(batch.end_date)}
                                         </p>
-                                        <p className="text-xs text-gray-500 mt-0.5">{batch.duration_weeks} weeks</p>
+                                        <p className="text-xs text-gray-500 mt-0.5">{batch.duration_weeks}</p>
                                     </div>
                                 </div>
 
@@ -233,7 +233,7 @@ export default function BatchesPage() {
 
                                 {/* Pricing */}
                                 <div className="flex items-start gap-3">
-                                    <DollarSign className="w-5 h-5 text-purple-600 mt-0.5 flex-shrink-0" />
+                                    <IndianRupee className="w-5 h-5 text-purple-600 mt-0.5 flex-shrink-0" />
                                     <div className="flex-1">
                                         <p className="text-sm text-gray-600 font-medium">Pricing</p>
                                         <div className="flex items-baseline gap-2">

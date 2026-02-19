@@ -224,14 +224,7 @@ const Categories = () => {
                         </div>
                     </div>
 
-                    <Textarea
-                        label="Description"
-                        name="description"
-                        value={formData.description}
-                        onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                        placeholder="Brief description of this category..."
-                        rows={3}
-                    />
+                    
 
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>

@@ -52,7 +52,8 @@ export default function BlogPostDetail({ params }) {
                     twitter_url: blogData.twitter_url ?? blogData.x_handle_url ?? null,
                     instagram_url: blogData.instagram_url ?? blogData.Instagram_handle_url ?? blogData.instagram_handle_url ?? null
                 }
-                setBlog({ ...blogData, ...social })
+                const tagsArray = Array.isArray(blogData.tags) ? blogData.tags : (blogData.keywords ? String(blogData.keywords).split(',').map(k => k.trim()).filter(Boolean) : [])
+                setBlog({ ...blogData, ...social, tags: tagsArray })
             } else {
                 console.error('Invalid blog data format:', result)
                 throw new Error('Invalid blog data format')

@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
-import { Star, BarChart2, Calendar, ChevronLeft, ChevronRight } from 'lucide-react'
+import { Star, BarChart2, Calendar, ChevronLeft, ChevronRight, ChevronDown, ChevronUp } from 'lucide-react'
 import Link from 'next/link'
 import thumb1 from '../Component/assets/cyber_lab_1.webp'
 import BrochureFormModal from '../Component/BrochureFormModal'
@@ -23,7 +23,18 @@ export default function AllCoursesPage() {
     const [brochureCourse, setBrochureCourse] = useState(null)
     const [enrollModalOpen, setEnrollModalOpen] = useState(false)
     const [enrollCourseTitle, setEnrollCourseTitle] = useState('')
+    const [expandedId, setExpandedId] = useState(null)
     const { openEnquiry } = useEnquiry()
+
+    const PREVIEW_LENGTH = 120
+    const getDescriptionPreview = (course) => {
+        const full = (course.description || course.short_description || '').trim()
+        if (!full) return ''
+        if (full.length <= PREVIEW_LENGTH) return full
+        return full.slice(0, PREVIEW_LENGTH).trim() + '...'
+    }
+    const getFullDescription = (course) => (course.description || course.short_description || '').trim()
+    const hasLongDescription = (course) => (getFullDescription(course).length > PREVIEW_LENGTH)
 
     const openEnrollModal = (title) => {
         setEnrollCourseTitle(title || '')
@@ -199,13 +210,28 @@ export default function AllCoursesPage() {
                                     </div>
                                 </div>
 
-                                <div className="flex-1">
+                                <div className="flex-1 min-w-0">
                                     <h3 className="text-[22px] font-semibold text-[#1a1a2e] dark:text-white leading-[1.2] group-hover:text-[#6B46E5] dark:group-hover:text-violet-400 transition-colors line-clamp-3">
                                         {course.title}
                                     </h3>
-                                    <p className="text-slate-500 dark:text-gray-400 text-sm mt-2 line-clamp-2">
-                                        {course.short_description}
-                                    </p>
+                                    <div className="text-slate-500 dark:text-gray-400 text-sm mt-2">
+                                        <p className={expandedId === course.id ? '' : 'line-clamp-2'}>
+                                            {expandedId === course.id ? getFullDescription(course) : (getDescriptionPreview(course) || course.short_description)}
+                                        </p>
+                                        {hasLongDescription(course) && (
+                                            <button
+                                                type="button"
+                                                onClick={() => setExpandedId((id) => (id === course.id ? null : course.id))}
+                                                className="mt-1.5 inline-flex items-center gap-1 text-[#6B46E5] dark:text-violet-400 font-semibold text-xs hover:underline focus:outline-none"
+                                            >
+                                                {expandedId === course.id ? (
+                                                    <>Read less <ChevronUp className="w-3.5 h-3.5" /></>
+                                                ) : (
+                                                    <>Read more <ChevronDown className="w-3.5 h-3.5" /></>
+                                                )}
+                                            </button>
+                                        )}
+                                    </div>
                                 </div>
 
                                 <div className="pt-4 border-t border-gray-50 dark:border-gray-700">
@@ -217,7 +243,7 @@ export default function AllCoursesPage() {
                                         <div className="w-px h-4 bg-gray-200 dark:bg-gray-600 shrink-0" />
                                         <div className="flex items-center gap-1.5">
                                             <Calendar size={16} className="text-[#6B46E5] dark:text-violet-400 shrink-0" />
-                                            <span className="text-[11px] font-bold uppercase tracking-tighter">{course.duration || '3 Weeks'}</span>
+                                            <span className="text-[11px] font-bold uppercase tracking-tighter">{(course.duration || '3').replace(/\s*weeks?$/i, '')}</span>
                                         </div>
                                         <div className="flex items-center gap-1.5 ml-auto">
                                             <span className="text-[#6B46E5] dark:text-violet-400 font-bold text-sm">

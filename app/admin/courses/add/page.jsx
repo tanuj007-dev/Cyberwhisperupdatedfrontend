@@ -10,10 +10,8 @@ const getAdminToken = () => typeof window !== 'undefined' ? localStorage.getItem
 
 const initialForm = {
     title: '',
-    faqs: '',
     short_description: '',
     description: '',
-    outcomes: '',
     price: '',
     discount_flag: 0,
     discounted_price: '',
@@ -76,10 +74,8 @@ export default function AddCoursePage() {
         try {
             const payload = {
                 title: formData.title,
-                faqs: formData.faqs || undefined,
                 short_description: formData.short_description || undefined,
                 description: formData.description || undefined,
-                outcomes: formData.outcomes || undefined,
                 price: parseFloat(formData.price) || 0,
                 discount_flag: formData.discount_flag ?? 0,
                 discounted_price: formData.discounted_price ? parseFloat(formData.discounted_price) : undefined,
@@ -407,7 +403,7 @@ export default function AddCoursePage() {
                                 onChange={handleChange}
                                 className="rounded border-gray-300 text-purple-600 focus:ring-purple-500"
                             />
-                            <label htmlFor="discount_flag" className="text-sm font-medium text-gray-700">Discount active</label>
+                            
                         </div>
                         <div className="flex items-center gap-2">
                             <input
@@ -420,32 +416,6 @@ export default function AddCoursePage() {
                             />
                             <label htmlFor="is_free_course" className="text-sm font-medium text-gray-700">Free course</label>
                         </div>
-                    </div>
-                </div>
-
-                <div className="space-y-4">
-                    <h2 className="text-xl font-bold text-gray-900 border-b pb-2">Outcomes & FAQs</h2>
-                    <div>
-                        <label className="block text-sm font-semibold text-gray-700 mb-2">Outcomes</label>
-                        <textarea
-                            name="outcomes"
-                            value={formData.outcomes}
-                            onChange={handleChange}
-                            rows={2}
-                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent placeholder:text-gray-300 text-black"
-                            placeholder="e.g. Understand advanced TypeScript patterns, Create scalable applications"
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-semibold text-gray-700 mb-2">FAQs (Q: ... A: ...)</label>
-                        <textarea
-                            name="faqs"
-                            value={formData.faqs}
-                            onChange={handleChange}
-                            rows={3}
-                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent placeholder:text-gray-300 text-black"
-                            placeholder="Q: Is this for beginners? A: No, intermediate+"
-                        />
                     </div>
                 </div>
 
