@@ -221,16 +221,7 @@ export default function EditCoursePage() {
                                 className="w-full px-4 py-3 border border-gray-300 rounded-xl text-gray-700 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                             />
                         </div>
-                        <div className="md:col-span-2">
-                            <label className="block text-sm font-semibold text-gray-700 mb-2">Short description</label>
-                            <input
-                                type="text"
-                                name="short_description"
-                                value={formData.short_description}
-                                onChange={handleChange}
-                                className="w-full px-4 py-3 border border-gray-300 rounded-xl text-gray-700 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                            />
-                        </div>
+                        
                         <div className="md:col-span-2">
                             <label className="block text-sm font-semibold text-gray-700 mb-2">Description</label>
                             <textarea
