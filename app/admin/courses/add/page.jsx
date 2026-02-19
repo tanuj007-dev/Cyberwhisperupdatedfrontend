@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, Save, Loader2, FileText, Upload } from 'lucide-react';
+import { ArrowLeft, Loader2, FileText, Upload } from 'lucide-react';
 import { Toast } from '@/components/ui';
 import { API_BASE_URL } from '../../../../lib/apiConfig';
 
@@ -150,6 +150,17 @@ export default function AddCoursePage() {
                             />
                         </div>
                          
+                        <div className="md:col-span-2">
+                            <label className="block text-sm font-semibold text-gray-700 mb-2">Short description</label>
+                            <input
+                                type="text"
+                                name="short_description"
+                                value={formData.short_description}
+                                onChange={handleChange}
+                                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent placeholder:text-gray-300 text-black"
+                                placeholder="Brief summary for course cards (e.g. one line)"
+                            />
+                        </div>
                         <div className="md:col-span-2">
                             <label className="block text-sm font-semibold text-gray-700 mb-2">Description</label>
                             <textarea
@@ -329,7 +340,7 @@ export default function AddCoursePage() {
                                 <div className="mt-2 flex items-center gap-3">
                                     <p className="text-sm text-green-600 flex items-center gap-1">
                                         <FileText size={14} />
-                                        {brochureFileName || 'Brochure attached'} — will be attached to this course
+                                        {brochureFileName || 'Brochure attached'} - will be attached to this course
                                     </p>
                                     <button
                                         type="button"
@@ -393,7 +404,7 @@ export default function AddCoursePage() {
                                 onChange={handleChange}
                                 className="rounded border-gray-300 text-purple-600 focus:ring-purple-500"
                             />
-                            
+                            <label htmlFor="discount_flag" className="text-sm font-medium text-gray-700">Discount active</label>
                         </div>
                         <div className="flex items-center gap-2">
                             <input
@@ -440,7 +451,7 @@ export default function AddCoursePage() {
                         disabled={isSubmitting}
                         className="flex items-center gap-2 bg-purple-600 text-white px-6 py-3 rounded-xl hover:bg-purple-700 disabled:opacity-50 font-semibold"
                     >
-                        {isSubmitting ? <Loader2 className="w-5 h-5 animate-spin" /> : <Save size={20} />}
+                        {isSubmitting ? <Loader2 className="w-5 h-5 animate-spin" /> : <FileText size={20} />}
                         {isSubmitting ? 'Creating...' : 'Create Course'}
                     </button>
                     <button
