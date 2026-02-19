@@ -5,6 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { useAdmin } from '@/contexts/AdminContext';
 import { Button, Badge, Skeleton } from '@/components/ui';
 import { ArrowLeft, Calendar, User, FolderOpen, Heart, Edit2, Eye, Clock, Tag, Info, ExternalLink } from 'lucide-react';
+import { API_BASE_URL } from '@/lib/apiConfig';
 
 const ViewBlog = () => {
     const params = useParams();
@@ -12,6 +13,7 @@ const ViewBlog = () => {
     const { getBlogById, users, categories } = useAdmin();
 
     const [blog, setBlog] = useState(null);
+    const [fullContent, setFullContent] = useState(null);
     const [loading, setLoading] = useState(true);
     const [showDevInfo, setShowDevInfo] = useState(false);
 
@@ -19,7 +21,39 @@ const ViewBlog = () => {
         const blogData = getBlogById(parseInt(params.id));
         setBlog(blogData);
         setLoading(false);
-    }, [params.id]);
+    }, [params.id, getBlogById]);
+
+    // Fetch full blog content (list API often returns only excerpt/short description)
+    useEffect(() => {
+        if (!blog || !params.id) return;
+        const base = (API_BASE_URL || '').replace(/\/$/, '');
+        const slug = blog.slug || blog.slug_url;
+        const id = blog.blog_id ?? blog.id;
+        const urlsToTry = [];
+        if (slug) urlsToTry.push(`/api/blogs/${encodeURIComponent(slug)}`);
+        if (id != null) urlsToTry.push(`${base}/api/blogs/${id}`);
+        if (slug && base) urlsToTry.push(`${base}/api/blogs/${encodeURIComponent(slug)}`);
+        if (id != null) urlsToTry.push(`/api/blogs/${id}`);
+        const fetchFull = async () => {
+            for (const url of urlsToTry) {
+                try {
+                    const res = await fetch(url, { headers: { Accept: 'application/json' } });
+                    if (!res.ok) continue;
+                    const result = await res.json();
+                    const data = result.data ?? result.blog ?? result.post ?? result;
+                    if (!data) continue;
+                    const content = data.content ?? data.description ?? data.body ?? '';
+                    if (content && String(content).trim() !== '') {
+                        setFullContent(content);
+                        return;
+                    }
+                } catch (_) {
+                    continue;
+                }
+            }
+        };
+        fetchFull();
+    }, [blog, params.id]);
 
     if (loading) {
         return (
@@ -105,7 +139,7 @@ const ViewBlog = () => {
                 {/* Content */}
                 <div className="p-8">
                     {/* Title */}
-                    <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4 leading-tight">
+                    <h1 className="text-3xl sm:text-4xl md:text-[50px] font-semibold tracking-tight leading-tight text-gray-900 mb-4">
                         {blog.title}
                     </h1>
 
@@ -176,20 +210,20 @@ const ViewBlog = () => {
                     )}
 
                     {/* Short Description */}
-                    {blog.shortDescription && (
+                    {(blog.shortDescription || blog.short_description) && (
                         <div className="mb-6 p-4 bg-gray-50 rounded-xl border-l-4 border-violet-500">
-                            <p className="text-gray-700 italic">{blog.shortDescription}</p>
+                            <p className="text-gray-700 italic">{blog.shortDescription || blog.short_description}</p>
                         </div>
                     )}
 
                     {/* Divider */}
                     <div className="border-t border-gray-100 my-8" />
 
-                    {/* Blog Content - This is the actual content that will display dynamically */}
+                    {/* Blog Content - Full content from API when available (list only returns excerpt) */}
                     <article className="prose prose-lg max-w-none">
                         <div
                             className="text-gray-800 leading-relaxed"
-                            dangerouslySetInnerHTML={{ __html: blog.description }}
+                            dangerouslySetInnerHTML={{ __html: fullContent ?? blog.description ?? blog.content ?? '' }}
                         />
                     </article>
                 </div>

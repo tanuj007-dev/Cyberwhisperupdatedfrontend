@@ -89,7 +89,7 @@ export default function AddBatchPage() {
                     <ArrowLeft size={24} />
                 </button>
                 <div>
-                    <h1 className="text-3xl font-bold text-black">Add New Batch</h1>
+                    <h1 className="text-3xl sm:text-4xl md:text-[50px] font-semibold tracking-tight leading-tight text-black">Add New Batch</h1>
                     <p className="text-black mt-1">Create a new training batch</p>
                 </div>
             </div>

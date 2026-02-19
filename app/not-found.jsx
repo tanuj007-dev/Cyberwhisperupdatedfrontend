@@ -22,7 +22,7 @@ export default function NotFound() {
                     />
                 </div>
 
-                <h1 className="text-3xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white via-violet-200 to-blue-200 mb-3 pb-2 animate-in slide-in-from-bottom-4 duration-700">
+                <h1 className="text-3xl sm:text-4xl md:text-[50px] font-semibold tracking-tight leading-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-violet-200 to-blue-200 mb-3 pb-2 animate-in slide-in-from-bottom-4 duration-700">
                     Page Not Found
                 </h1>
 

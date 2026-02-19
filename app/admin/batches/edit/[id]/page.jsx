@@ -194,7 +194,7 @@ export default function EditBatchPage() {
                     <ArrowLeft size={24} />
                 </button>
                 <div>
-                    <h1 className="text-3xl font-bold text-gray-900">Edit Batch</h1>
+                    <h1 className="text-3xl sm:text-4xl md:text-[50px] font-semibold tracking-tight leading-tight text-gray-900">Edit Batch</h1>
                     <p className="text-gray-600 mt-1">Update batch details</p>
                 </div>
             </div>

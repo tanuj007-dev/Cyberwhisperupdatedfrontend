@@ -317,7 +317,7 @@ const EditBlog = () => {
                         <ArrowLeft size={20} className="text-gray-600" />
                     </button>
                     <div>
-                        <h1 className="text-3xl font-bold text-gray-900 mb-1">Edit Blog</h1>
+                        <h1 className="text-3xl sm:text-4xl md:text-[50px] font-semibold tracking-tight leading-tight text-gray-900 mb-1">Edit Blog</h1>
                         <p className="text-gray-600">Update blog post details • ID: {formData.blog_id}</p>
                     </div>
                 </div>

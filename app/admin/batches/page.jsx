@@ -121,7 +121,7 @@ export default function BatchesPage() {
             {/* Header */}
             <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
                 <div>
-                    <h1 className="text-3xl font-bold text-gray-900">Batch Management</h1>
+                    <h1 className="text-3xl sm:text-4xl md:text-[50px] font-semibold tracking-tight leading-tight text-gray-900">Batch Management</h1>
                     <p className="text-gray-600 mt-2">Manage all training batches and schedules</p>
                 </div>
                 {!isStudent && (

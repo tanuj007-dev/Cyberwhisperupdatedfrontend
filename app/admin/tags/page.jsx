@@ -91,7 +91,7 @@ const TagsPage = () => {
             {/* Header */}
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-3xl font-bold text-gray-900 mb-1">Tags</h1>
+                    <h1 className="text-3xl sm:text-4xl md:text-[50px] font-semibold tracking-tight leading-tight text-gray-900 mb-1">Tags</h1>
                     <p className="text-gray-600">Manage blog tags and labels</p>
                 </div>
                 <Button onClick={handleOpenAdd} variant="primary" className="flex items-center gap-2">

@@ -66,7 +66,7 @@ export default function TermsOfService() {
                         <Gavel className="w-5 h-5 text-[#6b46e5]" />
                         <span className="text-sm font-bold text-[#6b46e5] uppercase tracking-wider">The Rules of the Game</span>
                     </div>
-                    <h1 className="text-4xl md:text-6xl font-black text-[#1a1a2e] mb-6">Terms & Services</h1>
+                    <h1 className="text-3xl sm:text-4xl md:text-[50px] font-semibold tracking-tight leading-tight text-[#1a1a2e] mb-6">Terms & Services</h1>
                     <p className="text-gray-500 text-lg max-w-2xl mx-auto font-medium">
                         Clear, fair rules designed to protect our learners, clients, and community.
                     </p>

@@ -402,7 +402,7 @@ const AddBlog = () => {
                         <ArrowLeft size={20} className="text-gray-600" />
                     </button>
                     <div>
-                        <h1 className="text-3xl font-bold text-gray-900 mb-1">Add New Blog</h1>
+                        <h1 className="text-3xl sm:text-4xl md:text-[50px] font-semibold tracking-tight leading-tight text-gray-900 mb-1">Add New Blog</h1>
                         <p className="text-gray-600">Create a new blog post with full details</p>
                     </div>
                 </div>

@@ -177,14 +177,14 @@ export default function CoreServicesOverview() {
                         </span>
                     </motion.div>
 
-                    <motion.h2
+                    <motion.h1
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: 0.1 }}
-                        className="text-3xl md:text-5xl font-bold text-gray-900 dark:text-white tracking-tight"
+                        className="text-3xl md:text-5xl font-semibold text-gray-900 dark:text-white tracking-tight"
                     >
                         Unlock Cyber Resilience with <span className="text-transparent bg-clip-text bg-purple-600">Cyber Whisper</span>
-                    </motion.h2>
+                    </motion.h1>
 
                     <motion.p
                         initial={{ opacity: 0, y: 20 }}

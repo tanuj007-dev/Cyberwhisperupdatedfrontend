@@ -53,9 +53,9 @@ const CyberRangeStats = () => {
                                         INDUSTRIES AND LEARNERS SERVED
                                     </span>
                                 </div>
-                                <h2 className="text-3xl md:text-4xl font-semibold text-foreground leading-tight tracking-tight">
+                                <h1 className="text-3xl md:text-4xl font-semibold text-foreground leading-tight tracking-tight">
                                     Hands-On Cybersecurity at Scale<br />
-                                </h2>
+                                </h1>
                                 <p className="text-muted-foreground text-sm md:text-[15px] font-semibold leading-relaxed max-w-lg">
                                     From classrooms to cyber ranges, we support learners and organizations with practical labs, simulations, and real-world security scenarios.
                                 </p>

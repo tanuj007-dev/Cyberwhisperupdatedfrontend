@@ -301,7 +301,7 @@ const UserList = () => {
         <div className="p-8">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
                 <div>
-                    <h1 className="text-3xl font-bold text-gray-900">Users</h1>
+                    <h1 className="text-3xl sm:text-4xl md:text-[50px] font-semibold tracking-tight leading-tight text-gray-900">Users</h1>
                     <p className="text-gray-600 dark:text-gray-400 mt-1">Manage all users and their roles</p>
                 </div>
                 <Button onClick={handleOpenAdd} variant="primary" className="inline-flex items-center gap-2">

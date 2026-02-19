@@ -56,10 +56,10 @@ export function AboutVision() {
                   <div className="w-5 h-5 bg-[#6b46e5] shadow-[0_0_15px_rgba(107,70,229,0.5)]"></div>
                   <span className="text-[#0f172a] dark:text-white text-sm font-bold tracking-[0.2em] uppercase">OUR STORY</span>
                 </div>
-                <h2 className="text-2xl md:text-4xl lg:text-[44px] font-bold text-gray-900 dark:text-white leading-[1.1] tracking-tight">
+                <h1 className="text-3xl md:text-5xl font-semibold text-gray-900 dark:text-white leading-[1.1] tracking-tight">
                   Get started <br />
                   <span className="text-primary">Cyber Defense</span>
-                </h2>
+                </h1>
               </div>
               <p className="text-gray-600 dark:text-gray-400 text-sm md:text-[15px] leading-relaxed text-justify lg:text-left">
                 Cyber Whisper is built by cybersecurity practitioners focused on outcomes, not noise. We help organizations strengthen detection and response, enable SOC teams with repeatable workflows, and train analysts using realistic labs that build true muscle memory. From advisory to implementation to training, the goal is the same: reduce risk and improve readiness.

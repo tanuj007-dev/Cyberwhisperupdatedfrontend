@@ -33,9 +33,9 @@ export default function TrainingPrograms() {
                                 <span className="text-white text-sm font-bold tracking-[0.2em] uppercase">Training Programs</span>
                             </div>
 
-                            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight leading-tight">
+                            <h1 className="text-3xl md:text-5xl font-semibold tracking-tight leading-tight">
                                 Building Cybersecurity Skills Through Real-World Training
-                            </h2>
+                            </h1>
                         </div>
 
                         {/* Video Container - Cloudinary CDN hosted video */}

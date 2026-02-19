@@ -22,7 +22,7 @@ export default function TrainingPrograms() {
             <div className="w-4 h-4 bg-white shadow-[0_0_10px_rgba(255,255,255,0.8)]"></div>
             <span className="text-xs font-semibold tracking-[0.2em] uppercase opacity-90">Training Programs</span>
           </div>
-          <h2 className="text-3xl md:text-5xl font-bold mb-4 tracking-tight">Building Cybersecurity Skills Through Real-World Training</h2>
+          <h1 className="text-3xl md:text-5xl font-semibold mb-4 tracking-tight">Building Cybersecurity Skills Through Real-World Training</h1>
           <p className="text-sm md:text-lg opacity-80 max-w-2xl mx-auto font-light">
             Your cyber-range sessions stay rock-solid anywhere your team logs in.
           </p>
@@ -86,7 +86,7 @@ export default function TrainingPrograms() {
                 <span className="text-[10px] font-bold uppercase tracking-widest text-white/90 bg-white/20 px-3 py-1 rounded-full">
                   Free Education Month
                 </span>
-                <h3 className="text-2xl font-extrabold mt-3 leading-tight text-white uppercase tracking-tight">
+                <h3 className="text-3xl md:text-5xl font-semibold mt-3 leading-tight text-white uppercase tracking-tight">
                   CEH V13 AI + SOC Analyst Training
                 </h3>
               </div>

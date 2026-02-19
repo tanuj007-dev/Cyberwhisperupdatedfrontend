@@ -376,7 +376,7 @@ export default function AdminLogin() {
                         >
                             <ShieldCheck className="w-8 h-8 text-white -rotate-3 group-hover:-rotate-6 transition-all duration-300" />
                         </motion.div>
-                        <h1 className="text-3xl font-bold text-white tracking-tight text-center">
+                        <h1 className="text-3xl sm:text-4xl md:text-[50px] font-semibold tracking-tight leading-tight text-white text-center">
                             CyberWhisper
                         </h1>
                         <p className="text-gray-400 text-sm mt-2 font-medium tracking-wide uppercase">

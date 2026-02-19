@@ -230,7 +230,7 @@ const EditUser = () => {
     return (
         <div className="max-w-4xl mx-auto space-y-6">
             <div>
-                <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Edit User</h1>
+                <h1 className="text-3xl sm:text-4xl md:text-[50px] font-semibold tracking-tight leading-tight text-gray-900 dark:text-white mb-2">Edit User</h1>
                 <p className="text-gray-600 dark:text-gray-400">Update user information</p>
             </div>
 

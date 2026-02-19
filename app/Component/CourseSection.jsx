@@ -211,23 +211,23 @@ export default function CourseSection() {
               LEARNING HUB
             </span>
           </motion.div>
-          <motion.h2
+          <motion.h1
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-3xl md:text-[50px] lg:text-4xl font-semibold text-foreground tracking-tight leading-tight"
+            className="text-3xl md:text-5xl font-semibold text-foreground tracking-tight leading-tight"
           >
             {categories.length > 0
               ? `Explore ${categories.length} Training Categories`
               : "Stay Connected, Keep Training"}
-          </motion.h2>
+          </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="text-muted-foreground text-sm md:text-lg font-medium max-w-3xl mx-auto px-4"
+            className="text-muted-foreground text-sm md:text-base lg:text-lg font-medium max-w-3xl mx-auto px-4"
           >
             Discover comprehensive courses tailored to your skill level and
             career goals

@@ -99,7 +99,7 @@ const BlogList = () => {
             {/* Header */}
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-3xl font-bold text-gray-900 mb-1">All Blogs</h1>
+                    <h1 className="text-3xl sm:text-4xl md:text-[50px] font-semibold tracking-tight leading-tight text-gray-900 mb-1">All Blogs</h1>
                     <p className="text-gray-600">Manage your blog posts</p>
                 </div>
                 <Link href="/admin/blogs/add">

@@ -30,9 +30,9 @@ export default function FreeTrial() {
 
                     {/* Text Content */}
                     <div className="relative z-10 w-full max-w-2xl space-y-4 md:space-y-6">
-                        <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-[44px] leading-tight font-semibold text-white tracking-tight">
+                        <h1 className="text-3xl md:text-5xl font-semibold leading-tight font-semibold text-white tracking-tight">
                             Get a Free Security Readiness Consultation
-                        </h2>
+                        </h1>
                         <p className="text-white/90 text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed max-w-xl mx-auto lg:mx-0">
                             Share your objective—SOC build, monitoring, cyber range, TI, VAPT, or compliance—and we’ll recommend the right engagement model.
                         </p>

@@ -60,15 +60,15 @@ export function ApproachSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="text-center max-w-3xl mx-auto mb-8 md:mb-12 space-y-2"
+          className="text-center max-w-5xl mx-auto mb-8 md:mb-12 space-y-2"
         >
           <div className="inline-flex items-center gap-3 mb-2">
             <div className="w-5 h-5 bg-[#6b46e5] shadow-[0_0_15px_rgba(107,70,229,0.5)]"></div>
             <span className="text-[#0f172a] dark:text-white text-sm font-bold tracking-[0.2em] uppercase"> Our Strategy</span>
           </div>
-          <h2 className="text-2xl md:text-3xl lg:text-4xl text-gray-900 dark:text-white font-bold tracking-tight">
+          <h1 className="text-3xl md:text-5xl font-semibold text-gray-900 dark:text-white font-bold tracking-tight">
             Strengthening security, <span className="text-primary  ">your future</span>
-          </h2>
+          </h1>
         </motion.div>
 
         <motion.div

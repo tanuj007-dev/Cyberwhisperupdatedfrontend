@@ -93,7 +93,7 @@ export default function DeployTeamTrainingPage() {
     return (
         <div className="p-8">
             <div className="mb-8">
-                <h1 className="text-3xl font-bold text-gray-900">Deploy Team Training Requests</h1>
+                <h1 className="text-3xl sm:text-4xl md:text-[50px] font-semibold tracking-tight leading-tight text-gray-900">Deploy Team Training Requests</h1>
                 <p className="text-gray-600 mt-2">Requests submitted from the Deploy Team Training form</p>
             </div>
 

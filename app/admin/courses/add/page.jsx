@@ -132,7 +132,7 @@ export default function AddCoursePage() {
                     <ArrowLeft size={24} />
                 </button>
                 <div>
-                    <h1 className="text-3xl font-bold text-gray-900">Add New Course</h1>
+                    <h1 className="text-3xl sm:text-4xl md:text-[50px] font-semibold tracking-tight leading-tight text-gray-900">Add New Course</h1>
                     <p className="text-gray-600 mt-1">Create a course to display on the homepage and courses page</p>
                 </div>
             </div>

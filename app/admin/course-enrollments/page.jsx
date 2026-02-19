@@ -60,7 +60,7 @@ export default function CourseEnrollmentsPage() {
     return (
         <div className="p-8">
             <div className="mb-8">
-                <h1 className="text-3xl font-bold text-black ">Course Enrollments</h1>
+                <h1 className="text-3xl sm:text-4xl md:text-[50px] font-semibold tracking-tight leading-tight text-black">Course Enrollments</h1>
                 <p className="text-gray-600 dark:text-gray-400 mt-2">Enrollments from the Enroll Now button on courses</p>
             </div>
 

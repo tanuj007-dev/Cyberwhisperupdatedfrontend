@@ -40,7 +40,7 @@ export function AboutHero() {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8 }}
-          className="text-4xl sm:text-5xl md:text-8xl font-black text-gray-900 dark:text-white mb-4 md:mb-8 tracking-tighter"
+          className="text-3xl md:text-7xl font-semibold text-gray-900 dark:text-white mb-4 md:mb-8 tracking-tighter"
         >
           WHO WE <span className="text-primary drop-shadow-[0_0_15px_rgba(168,85,247,0.5)]">ARE</span>
         </motion.h1>

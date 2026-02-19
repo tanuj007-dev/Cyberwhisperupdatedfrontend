@@ -85,10 +85,10 @@ export default function B2BFeatures() {
                         {/* Glow Effect */}
                         <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#6B46E5]/10 blur-[120px] rounded-full pointer-events-none -z-10"></div>
 
-                        <h2 className="text-2xl md:text-5xl font-bold leading-tight mb-4 md:mb-8 transition-colors duration-300">
+                        <h1 className="text-3xl md:text-5xl font-semibold leading-tight mb-4 md:mb-8 transition-colors duration-300">
                             <span className="text-gray-900 dark:text-white">We don't just deploy and leave — </span>
                             <span className="bg-gradient-to-r from-purple-600 via-purple-700 to-purple-900 dark:from-purple-400 dark:via-purple-500 dark:to-purple-700 bg-clip-text text-transparent">we partner with you for the long haul.</span>
-                        </h2>
+                        </h1>
 
                         <div className="text-gray-600 dark:text-gray-300 text-base md:text-lg leading-relaxed font-light transition-colors duration-300 mb-6 md:mb-10">
                             <p>
@@ -132,10 +132,10 @@ export default function B2BFeatures() {
                 {/* DELIVERABLES GRID ("What You Get") */}
                 <div className="border-t border-gray-200 dark:border-white/10 pt-10 md:pt-20">
                     <div className="text-center mb-8 md:mb-16">
-                        <h2 className="text-2xl md:text-3xl font-bold mb-2 md:mb-4">
+                        <h1 className="text-3xl md:text-5xl font-semibold mb-2 md:mb-4">
                             <span className="text-gray-900 dark:text-white">What </span>
                             <span className="bg-gradient-to-r from-purple-600 via-purple-700 to-purple-900 dark:from-purple-400 dark:via-purple-500 dark:to-purple-700 bg-clip-text text-transparent">You Get</span>
-                        </h2>
+                        </h1>
                         <p className="text-gray-600 dark:text-gray-400">Everything included in your comprehensive partnership package.</p>
                     </div>
 

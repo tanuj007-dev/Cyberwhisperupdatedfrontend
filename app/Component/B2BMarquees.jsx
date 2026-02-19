@@ -122,7 +122,7 @@ export default function B2BMarquees() {
             <div className="relative z-10">
                 {/* Main heading */}
                 <div className="max-w-7xl mx-auto px-4 mb-6 md:mb-12 text-center">
-                    <h2 className="text-xl md:text-4xl font-black bg-gradient-to-r from-purple-600 via-purple-700 to-purple-900 dark:from-purple-400 dark:via-purple-500 dark:to-purple-700 bg-clip-text text-transparent mb-3">
+                    <h2 className="text-3xl md:text-5xl font-semibold bg-gradient-to-r from-purple-600 via-purple-700 to-purple-900 dark:from-purple-400 dark:via-purple-500 dark:to-purple-700 bg-clip-text text-transparent mb-3">
                         Enterprise Cyber Defense Ecosystem
                     </h2>
                     <p className="text-gray-600 dark:text-gray-400 text-sm max-w-2xl mx-auto">

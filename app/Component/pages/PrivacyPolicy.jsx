@@ -59,7 +59,7 @@ export default function PrivacyPolicy() {
                         <Lock className="w-5 h-5 text-[#6b46e5]" />
                         <span className="text-sm font-bold text-[#6b46e5] uppercase tracking-wider">Your Data, Protected</span>
                     </div>
-                    <h1 className="text-4xl md:text-6xl font-black text-[#1a1a2e] mb-6">Privacy Policy</h1>
+                    <h1 className="text-3xl sm:text-4xl md:text-[50px] font-semibold tracking-tight leading-tight text-[#1a1a2e] mb-6">Privacy Policy</h1>
                     <p className="text-gray-500 text-lg max-w-2xl mx-auto font-medium">
                         At Cyber Whisper, we value your trust. This policy outlines how we collect, use, and protect your information.
                     </p>

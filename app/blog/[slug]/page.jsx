@@ -83,7 +83,7 @@ export default function BlogPostDetail({ params }) {
             <div className="min-h-screen bg-[#FBFAFF] pt-32 pb-20">
                 <div className="container mx-auto px-6 max-w-4xl">
                     <div className="bg-white rounded-2xl p-12 text-center shadow-sm border border-gray-200">
-                        <h1 className="text-3xl font-bold text-gray-900 mb-4">Blog Post Not Found</h1>
+                        <h1 className="text-3xl sm:text-4xl md:text-[50px] font-semibold tracking-tight leading-tight text-gray-900 mb-4">Blog Post Not Found</h1>
                         <p className="text-gray-600 mb-8">{error || 'The blog post you\'re looking for doesn\'t exist.'}</p>
                         <Link
                             href="/blog"
@@ -143,7 +143,7 @@ export default function BlogPostDetail({ params }) {
                         {/* Article Content */}
                         <div className="bg-white rounded-[2.5rem] p-8 md:p-12 shadow-sm border border-slate-100 space-y-8">
                             {/* Title */}
-                            <h1 className="text-4xl md:text-5xl font-bold text-[#1C0F2D] leading-tight">
+                            <h1 className="text-3xl sm:text-4xl md:text-[50px] font-semibold tracking-tight leading-tight text-[#1C0F2D]">
                                 {blog.title}
                             </h1>
 

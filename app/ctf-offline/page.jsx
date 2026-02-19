@@ -91,7 +91,7 @@ export default function CTFOfflinePage() {
                             transition={{ delay: 0.4 }}
                             className="space-y-6 max-w-2xl"
                         >
-                            <h1 className="text-4xl md:text-6xl font-bold text-transparent bg-clip-text bg-linear-to-r from-white via-purple-100 to-gray-400 tracking-tight font-tech">
+                            <h1 className="text-3xl sm:text-4xl md:text-[50px] font-semibold tracking-tight leading-tight text-transparent bg-clip-text bg-linear-to-r from-white via-purple-100 to-gray-400 font-tech">
                                 SYSTEM OFFLINE
                             </h1>
 

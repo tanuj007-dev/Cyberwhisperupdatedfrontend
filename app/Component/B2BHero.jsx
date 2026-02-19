@@ -78,7 +78,7 @@ export default function B2BHero() {
                         <span className="inline-block py-1 mt-8 md:mt-0 px-3 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-600 dark:text-purple-400 text-[10px] font-bold tracking-wider mb-2">
                             ENTERPRISE CYBER RANGE
                         </span>
-                        <h1 className="text-2xl md:text-3xl lg:text-[50px] font-bold leading-tight tracking-tighter">
+                        <h1 className="text-3xl sm:text-4xl md:text-[50px] font-semibold tracking-tight leading-tight">
                             <span className="text-gray-900 dark:text-white">Prove Your SOC Can Respond — </span>
                             <span className="bg-gradient-to-r from-purple-600 via-purple-700 to-purple-900 dark:from-purple-400 dark:via-purple-500 dark:to-purple-700 bg-clip-text text-transparent">Before the Next Incident</span>
                         </h1>

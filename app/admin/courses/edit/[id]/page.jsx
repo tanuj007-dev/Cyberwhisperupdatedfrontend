@@ -193,7 +193,7 @@ export default function EditCoursePage() {
                     <ArrowLeft size={24} />
                 </button>
                 <div>
-                    <h1 className="text-3xl font-bold text-gray-900">Edit Course</h1>
+                    <h1 className="text-3xl sm:text-4xl md:text-[50px] font-semibold tracking-tight leading-tight text-gray-900">Edit Course</h1>
                     <p className="text-gray-600 mt-1">Update course details</p>
                 </div>
             </div>

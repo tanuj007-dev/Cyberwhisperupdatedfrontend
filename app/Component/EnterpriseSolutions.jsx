@@ -53,9 +53,9 @@ export default function EnterpriseSolutions() {
 
                         {/* Title & Description */}
                         <div className="space-y-3">
-                            <h2 className="text-2xl md:text-[25px] font-semibold text-foreground  tracking-tight">
+                            <h1 className="text-3xl md:text-5xl font-semibold text-foreground  tracking-tight">
                                 Inside Cyber Whisper: Training, Labs & Live Events
-                            </h2>
+                            </h1>
                             <p className="text-muted-foreground text-[15px] font-medium max-w-lg leading-relaxed">
                                 A look at our workshops, cyber range sessions, hands-on labs, and competitive learning environments.
                             </p>

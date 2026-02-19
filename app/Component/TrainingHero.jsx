@@ -111,7 +111,7 @@ export default function TrainingHero() {
 
                     {/* High-Tech Heading */}
                     <div className="space-y-5 max-w-7xl">
-                            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[54px] font-bold text-white leading-tight md:leading-[1.1] tracking-tight drop-shadow-2xl px-2">
+                            <h1 className="text-3xl sm:text-4xl md:text-[50px] font-semibold tracking-tight leading-tight text-white drop-shadow-2xl px-2">
                             1 Year Cyber Security <br className="hidden md:block" />
                             Diploma Training + <span className="relative inline-block mt-1 md:mt-0">
                                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-purple-200 to-purple-400">Expert AI Skills</span>

@@ -63,7 +63,7 @@ export function ValuesSection() {
           transition={{ duration: 0.6 }}
           className="text-center mb-8 md:mb-16"
         >
-          <h2 className="text-2xl md:text-5xl font-bold mb-2 md:mb-4  text-gray-900 dark:text-white">Our Core Values</h2>
+          <h1 className="text-3xl md:text-5xl font-semibold mb-2 md:mb-4  text-gray-900 dark:text-white">Our Core Values</h1>
           <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
             The principles that guide how we build security programs and train defenders.
           </p>

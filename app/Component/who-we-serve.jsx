@@ -113,11 +113,11 @@ export default function WeServe() {
                 </div>
 
                 {/* Heading */}
-                <h2 className="text-3xl md:text-4xl lg:text-[45px] font-bold leading-[1.2] text-foreground tracking-tight">
+                <h1 className="text-3xl md:text-5xl font-semibold leading-[1.2] text-foreground tracking-tight">
                   We don't just deploy and <br className="hidden md:block" />
                   leave - we partner with you for <br className="hidden md:block" />
                   the long haul
-                </h2>
+                </h1>
 
                 {/* Description */}
                 <p className="text-base md:text-[17px] leading-relaxed text-muted-foreground font-medium max-w-xl">
