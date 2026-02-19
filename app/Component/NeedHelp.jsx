@@ -41,9 +41,9 @@ export default function NeedHelp() {
                         <span className="text-[#0f172a] dark:text-white text-sm font-bold tracking-[0.2em] uppercase">Support & Ops</span>
                     </div>
 
-                    <h2 className="text-3xl md:text-5xl font-bold text-gray-900 dark:text-white tracking-tight">
+                    <h1 className="text-3xl md:text-5xl font-semibold text-gray-900 dark:text-white tracking-tight">
                         Need Help? <span className="text-transparent bg-clip-text bg-purple-600">Start Here First</span>
-                    </h2>
+                    </h1>
                     <p className="text-slate-600 dark:text-slate-400 max-w-2xl mx-auto text-sm md:text-base leading-relaxed">
                         Clear answers to streamline your engagement. No ambiguity, just execution.
                     </p>

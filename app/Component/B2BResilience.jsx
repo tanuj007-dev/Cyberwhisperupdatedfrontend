@@ -76,10 +76,10 @@ export default function B2BResilience() {
             <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10 text-center">
 
                 <div className="mb-16">
-                    <h2 className="text-3xl md:text-5xl font-bold mb-4 tracking-tight transition-colors duration-300">
+                    <h1 className="text-3xl md:text-5xl font-semibold mb-4 tracking-tight transition-colors duration-300">
                         <span className="text-gray-900 dark:text-white">Unlock Cyber Resilience with </span>
                         <span className="bg-gradient-to-r from-purple-600 via-purple-700 to-purple-900 dark:from-purple-400 dark:via-purple-500 dark:to-purple-700 bg-clip-text text-transparent">Cyber Whisper</span>
-                    </h2>
+                    </h1>
                     <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto text-lg font-light transition-colors duration-300">
                         Real-world labs, round-the-clock defense, and expert guidance <br className="hidden md:block" /> everything you need to outsmart tomorrow's threats.
                     </p>

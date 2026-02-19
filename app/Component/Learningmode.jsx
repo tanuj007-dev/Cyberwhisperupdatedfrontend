@@ -83,21 +83,13 @@ export default function LearningMode() {
 
                 {/* Header */}
                 <div className="text-center mb-16">
-                    <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        className="inline-flex items-center gap-2 mb-4 px-3 py-1 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-sm shadow-sm dark:shadow-none"
-                    >
-                        <Terminal className="w-3.5 h-3.5 text-purple-600 dark:text-green-400" />
-                        <span className="text-xs font-mono text-purple-600 dark:text-green-400 tracking-widest uppercase">SYSTEM MODES // SELECT PROTOCOL</span>
-                    </motion.div>
+                   
 
-                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 tracking-tight">
+                    <h1 className="text-3xl md:text-5xl font-semibold mb-4 tracking-tight">
                         <span className="text-gray-900 dark:text-white">DEPLOYMENT </span>
                         <span className="bg-clip-text text-transparent bg-linear-to-r from-gray-900 via-purple-700 to-purple-900 dark:from-white dark:via-purple-200 dark:to-purple-400">OPTIONS</span>
-                    </h2>
-                    <p className="text-gray-600 dark:text-gray-400 text-sm md:text-base font-mono max-w-2xl mx-auto">
+                    </h1>
+                    <p className="text-gray-600 dark:text-gray-400 text-sm md:text-base  max-w-2xl mx-auto">
                         Choose how you want to train - classroom, online, or team deployment.
                     </p>
                 </div>
@@ -146,10 +138,10 @@ export default function LearningMode() {
                                         <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,29,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] fragment-shader opacity-20 pointer-events-none" />
 
                                         <div className="relative z-10 mb-4">
-                                            <h3 className="text-lg font-mono font-bold text-gray-900 dark:text-white mb-2 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-linear-to-r group-hover:from-purple-600 group-hover:to-blue-600 dark:group-hover:from-white dark:group-hover:to-gray-400 transition-all">
+                                            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-linear-to-r group-hover:from-purple-600 group-hover:to-blue-600 dark:group-hover:from-white dark:group-hover:to-gray-400 transition-all">
                                                 &gt; {mode.title}
                                             </h3>
-                                            <p className="text-gray-600 dark:text-gray-400 text-xs leading-relaxed line-clamp-2 font-mono">
+                                            <p className="text-gray-600 dark:text-gray-400 text-xs leading-relaxed line-clamp-2">
                                                 {mode.description}
                                             </p>
                                         </div>
@@ -159,7 +151,7 @@ export default function LearningMode() {
                                             {mode.features.map((feature, i) => (
                                                 <li key={i} className="flex items-center gap-2 text-xs text-gray-600 dark:text-gray-500 group-hover:text-gray-800 dark:group-hover:text-gray-300 transition-colors bg-gray-50 dark:bg-white/5 p-1.5 rounded border border-gray-200 dark:border-white/5">
                                                     <Cpu className={`w-3 h-3 ${mode.textAccent}`} />
-                                                    <span className="font-mono tracking-tight">{feature}</span>
+                                                    <span className="tracking-tight">{feature}</span>
                                                 </li>
                                             ))}
                                         </ul>
@@ -168,7 +160,7 @@ export default function LearningMode() {
                                         <div className="mt-auto relative z-10">
                                             <button
                                                 onClick={() => setActiveForm(mode.formType)}
-                                                className={`w-full group/btn relative overflow-hidden bg-gray-900 dark:bg-[#0d0d12] border border-gray-800 dark:border-white/10 hover:${mode.color.split(' ')[0]} text-white px-4 py-3 font-mono text-xs font-bold uppercase tracking-wider flex items-center justify-between transition-all duration-300`}
+                                                className={`w-full group/btn relative overflow-hidden bg-gray-900 dark:bg-[#0d0d12] border border-gray-800 dark:border-white/10 hover:${mode.color.split(' ')[0]} text-white px-4 py-3  text-xs font-bold uppercase tracking-wider flex items-center justify-between transition-all duration-300`}
                                             >
                                                 <span className="relative z-10 flex items-center gap-2">
                                                     <span className={`${mode.textAccent}`}>[</span> {mode.btnText} <span className={`${mode.textAccent}`}>]</span>

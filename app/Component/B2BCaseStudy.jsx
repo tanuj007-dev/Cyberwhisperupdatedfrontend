@@ -13,13 +13,10 @@ export default function B2BCaseStudy() {
             <div className="relative max-w-7xl mx-auto px-4 sm:px-6">
                 {/* Header */}
                 <div className="text-center mb-8 md:mb-10">
-                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#a855f7]/10 border border-[#a855f7]/20 mb-3">
-                        <TrendingUp size={14} className="text-[#a855f7]" />
-                        <span className="text-xs font-bold tracking-wider text-[#a855f7] uppercase">Success Story</span>
-                    </div>
-                    <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
+                     
+                    <h1 className="text-3xl md:text-5xl font-semibold text-gray-900 dark:text-white">
                         SecureFlow Implementation
-                    </h2>
+                    </h1>
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-6 md:gap-10 items-center">

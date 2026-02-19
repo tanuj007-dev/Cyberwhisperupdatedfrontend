@@ -55,12 +55,12 @@ export default function LearningJourney() {
                         </div>
 
                         {/* Main Title */}
-                        <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#1e1b4b] dark:text-white leading-tight tracking-tight">
+                        <h1 className="text-3xl md:text-5xl font-semibold text-[#1e1b4b] dark:text-white leading-tight tracking-tight">
                             Stay Connected, <br className="hidden lg:block" />
                             <span className="text-[#7c3aed] dark:text-[#c084fc]">
                                 Keep Training
                             </span>
-                        </h2>
+                        </h1>
 
                         {/* Description */}
                         <p className="text-base md:text-lg text-gray-600 dark:text-gray-400 leading-relaxed border-l-0 lg:border-l-2 border-purple-500/30 lg:pl-5 mx-auto lg:mx-0 max-w-xl">

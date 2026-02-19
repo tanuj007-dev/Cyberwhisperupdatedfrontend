@@ -79,14 +79,11 @@ export default function B2BFAQ() {
 
             <div className="max-w-4xl mx-auto px-6 md:px-12 relative z-10">
                 <div className="text-center mb-16">
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#6B46E5]/10 text-[#6B46E5] text-xs font-bold uppercase tracking-wider mb-4">
-                        <HelpCircle size={14} />
-                        <span>Common Questions</span>
-                    </div>
-                    <h2 className="text-3xl md:text-4xl font-bold mb-4">
+                    
+                    <h1 className="text-3xl md:text-5xl font-semibold mb-4">
                         <span className="text-gray-900 dark:text-white">Frequently Asked </span>
                         <span className="bg-gradient-to-r from-purple-600 via-purple-700 to-purple-900 dark:from-purple-400 dark:via-purple-500 dark:to-purple-700 bg-clip-text text-transparent">Questions</span>
-                    </h2>
+                    </h1>
                     <p className="text-gray-600 dark:text-gray-400 max-w-xl mx-auto">
                         Everything you need to know about our enterprise training and cyber range solutions.
                     </p>

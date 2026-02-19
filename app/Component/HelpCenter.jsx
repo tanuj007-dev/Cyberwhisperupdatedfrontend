@@ -106,11 +106,11 @@ export default function CompactPremiumDemo() {
             <div className="w-5 h-5 bg-[#6b46e5] shadow-[0_0_15px_rgba(107,70,229,0.5)]"></div>
             <span className="text-[#0f172a] dark:text-white text-sm font-bold tracking-[0.2em] uppercase">PRIORITY ACCESS</span>
           </div>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight mb-4">
+          <h1 className="text-3xl md:text-5xl font-semibold tracking-tight mb-4">
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-gray-900 via-purple-700 to-purple-900 dark:from-white dark:via-purple-200 dark:to-purple-400">
               Cyber Range Labs — Built for Real Practice
             </span>
-          </h2>
+          </h1>
           <p className="text-gray-600 dark:text-gray-400 text-base md:text-lg max-w-4xl mx-auto font-medium leading-relaxed">
             Live mentor-led sessions with hands-on labs you can actually finish and explain in interviews.
           </p>

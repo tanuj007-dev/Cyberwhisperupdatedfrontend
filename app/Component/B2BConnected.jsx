@@ -38,10 +38,10 @@ export default function B2BConnected() {
 
                     {/* Right Side: Content */}
                     <div className="w-full lg:w-[45%] flex flex-col justify-center">
-                        <h2 className="text-3xl md:text-4xl font-bold leading-tight mb-4 transition-colors duration-300">
+                        <h1 className="text-3xl md:text-4xl font-semibold leading-tight mb-4 transition-colors duration-300">
                             Stay Connected, Keep <br />
                             Training
-                        </h2>
+                        </h1>
 
                         <p className="text-gray-600 dark:text-gray-400 text-base mb-6 leading-relaxed transition-colors duration-300">
                             Run training and simulations without fragile VPN setups - stable access, faster onboarding, and a smoother learner experience.

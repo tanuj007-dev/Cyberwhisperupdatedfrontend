@@ -112,9 +112,9 @@ export default function TrainingSection() {
                             LEARNING HUB
                         </span>
                     </div>
-                    <h2 className="text-4xl md:text-[50px] lg:text-4xl font-semibold text-[#1a1a2e] dark:text-white tracking-tight">
+                    <h1 className="text-4xl md:text-5xl font-semibold text-[#1a1a2e] dark:text-white tracking-tight">
                         Stay Connected, Keep Training
-                    </h2>
+                    </h1>
                     <p className="text-slate-500 dark:text-gray-400 text-lg lg:text-base font-medium max-w-3xl mx-auto">
                         Immersive Tech Experiences in Our Workshop at Techfest, IIT Bombay
                     </p>

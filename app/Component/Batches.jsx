@@ -172,13 +172,13 @@ export default function Batches() {
                         <span className="text-[#0f172a] dark:text-white text-sm font-bold tracking-[0.2em] uppercase">Upcoming Training Sessions</span>
                     </div>
 
-                    <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
+                    <h1 className="text-4xl md:text-5xl font-semibold mb-6">
                         <span className="bg-clip-text text-transparent bg-gradient-to-r from-gray-900 via-purple-700 to-purple-900 dark:from-white dark:via-purple-200 dark:to-purple-400">
                             Upcoming Batches
                         </span>
-                    </h2>
+                    </h1>
 
-                    <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto text-lg leading-relaxed">
+                    <p className="text-gray-600 dark:text-gray-400 max-w-3xl mx-auto text-lg leading-relaxed">
                         Join our expert-led cybersecurity training programs and advance your career
                     </p>
                 </motion.div>

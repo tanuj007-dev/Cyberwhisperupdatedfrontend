@@ -140,9 +140,9 @@ export default function Placement() {
                         </span>
                     </div>
 
-                    <h2 className="text-3xl sm:text-4xl md:text-[42px] lg:text-[50px] font-bold bg-clip-text text-transparent bg-linear-to-r from-gray-900 via-purple-700 to-purple-900 dark:from-white dark:via-purple-200 dark:to-purple-400 leading-tight pb-2">
-                        Our Recent Placement Stories
-                    </h2>
+                    <h1 className="text-3xl md:text-5xl font-semibold bg-clip-text text-transparent bg-linear-to-r from-gray-900 via-purple-700 to-purple-900 dark:from-white dark:via-purple-200 dark:to-purple-400 leading-tight pb-2">
+                        Our Recent Placement Stories    
+                    </h1>
 
                     <p className="max-w-2xl text-gray-600 dark:text-gray-400 text-sm md:text-base">
                         Join the league of successful professionals who have transformed their careers with our industry-leading cybersecurity training.
