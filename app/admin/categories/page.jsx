@@ -226,33 +226,7 @@ const Categories = () => {
 
                     
 
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>
-                        <div className="flex gap-4">
-                            <label className="flex items-center gap-2 cursor-pointer">
-                                <input
-                                    type="radio"
-                                    name="status"
-                                    value="active"
-                                    checked={formData.status === 'active'}
-                                    onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                                    className="w-4 h-4 text-violet-600 focus:ring-2 focus:ring-violet-500"
-                                />
-                                <span className="text-sm text-gray-700">Active</span>
-                            </label>
-                            <label className="flex items-center gap-2 cursor-pointer">
-                                <input
-                                    type="radio"
-                                    name="status"
-                                    value="inactive"
-                                    checked={formData.status === 'inactive'}
-                                    onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                                    className="w-4 h-4 text-violet-600 focus:ring-2 focus:ring-violet-500"
-                                />
-                                <span className="text-sm text-gray-700">Inactive</span>
-                            </label>
-                        </div>
-                    </div>
+                    
                 </div>
             </Modal>
 

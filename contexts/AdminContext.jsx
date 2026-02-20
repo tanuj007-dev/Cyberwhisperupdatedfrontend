@@ -33,10 +33,10 @@ export const AdminProvider = ({ children }) => {
             try {
                 // Initialize static data from mock files
                 setCategories(mockCategories);
-                setTags(mockTags);
                 setSiteSettings(mockSiteSettings);
 
-                // Fetch users, media and blogs from API, fallback to mock data
+                // Fetch users, media, tags and blogs from API, fallback to mock data
+                await fetchTags();
                 await fetchUsers();
                 await fetchMedia();
                 await fetchBlogs();
@@ -118,6 +118,49 @@ export const AdminProvider = ({ children }) => {
             console.warn('Blogs list: backend unreachable', err.message);
         }
         setBlogs(mockBlogs);
+    };
+
+    const fetchTags = async () => {
+        try {
+            const base = (API_BASE_URL || '').replace(/\/$/, '');
+            const listUrl = base ? `${base}/api/tags` : null;
+            if (listUrl) {
+                const response = await fetch(listUrl, {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' },
+                });
+                if (response.ok) {
+                    const result = await response.json();
+                    const list = result?.data ?? result?.tags ?? (Array.isArray(result) ? result : []);
+                    if (Array.isArray(list) && list.length > 0) {
+                        setTags(list.map((t, i) => ({
+                            id: t.id ?? t.tag_id ?? i + 1,
+                            name: t.name ?? t.tag_name ?? '',
+                            slug: t.slug ?? (t.name ?? '').toLowerCase().replace(/\s+/g, '-'),
+                            color: t.color ?? '#8B5CF6'
+                        })));
+                        return;
+                    }
+                }
+            }
+            const proxyRes = await fetch('/api/tags', { method: 'GET', headers: { 'Content-Type': 'application/json' } });
+            if (proxyRes.ok) {
+                const result = await proxyRes.json();
+                const list = result?.data ?? result?.tags ?? (Array.isArray(result) ? result : []);
+                if (Array.isArray(list) && list.length > 0) {
+                    setTags(list.map((t, i) => ({
+                        id: t.id ?? t.tag_id ?? i + 1,
+                        name: t.name ?? t.tag_name ?? '',
+                        slug: t.slug ?? (t.name ?? '').toLowerCase().replace(/\s+/g, '-'),
+                        color: t.color ?? '#8B5CF6'
+                    })));
+                    return;
+                }
+            }
+        } catch (err) {
+            console.warn('Tags: backend unreachable, using mock tags', err?.message);
+        }
+        setTags(mockTags);
     };
 
     // Fetch users from API (Next.js proxy calls backend at API_BASE_URL so users render on admin panel)

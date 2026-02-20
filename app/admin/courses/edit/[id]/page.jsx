@@ -450,28 +450,8 @@ export default function EditCoursePage() {
                                 placeholder="79.99"
                             />
                         </div>
-                        <div className="flex items-center gap-2">
-                            <input
-                                type="checkbox"
-                                name="discount_flag"
-                                id="discount_flag"
-                                checked={!!formData.discount_flag}
-                                onChange={handleChange}
-                                className="rounded border-gray-300 text-purple-600 focus:ring-purple-500"
-                            />
-                            <label htmlFor="discount_flag" className="text-sm font-medium text-gray-700">Discount active</label>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <input
-                                type="checkbox"
-                                name="is_free_course"
-                                id="is_free_course"
-                                checked={!!formData.is_free_course}
-                                onChange={handleChange}
-                                className="rounded border-gray-300 text-purple-600 focus:ring-purple-500"
-                            />
-                            <label htmlFor="is_free_course" className="text-sm font-medium text-gray-700">Free course</label>
-                        </div>
+                       
+                        
                     </div>
                 </div>
 

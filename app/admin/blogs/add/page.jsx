@@ -504,8 +504,25 @@ const AddBlog = () => {
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1">Tags</label>
                                 <div className="border border-gray-300 rounded-xl p-3 min-h-[100px]">
+                                    {/* Dropdown: add a tag from fetched list */}
+                                    <select
+                                        className="w-full max-w-xs mb-3 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500"
+                                        value=""
+                                        onChange={(e) => {
+                                            const id = e.target.value ? Number(e.target.value) : null;
+                                            if (id) handleTagAdd(id);
+                                            e.target.value = '';
+                                        }}
+                                    >
+                                        <option value="">Select a tag to add...</option>
+                                        {tags
+                                            .filter(t => !formData.selectedTags.includes(t.id))
+                                            .map(tag => (
+                                                <option key={tag.id} value={tag.id}>{tag.name}</option>
+                                            ))}
+                                    </select>
                                     {/* Selected Tags */}
-                                    <div className="flex flex-wrap gap-2 mb-3">
+                                    <div className="flex flex-wrap gap-2">
                                         {formData.selectedTags.map(tagId => {
                                             const tag = tags.find(t => t.id === tagId);
                                             return tag ? (
@@ -524,22 +541,6 @@ const AddBlog = () => {
                                                 </span>
                                             ) : null;
                                         })}
-                                    </div>
-                                    {/* Tag Options */}
-                                    <div className="flex flex-wrap gap-2">
-                                        {tags
-                                            .filter(t => !formData.selectedTags.includes(t.id))
-                                            .slice(0, 8)
-                                            .map(tag => (
-                                                <button
-                                                    key={tag.id}
-                                                    type="button"
-                                                    onClick={() => handleTagAdd(tag.id)}
-                                                    className="px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-sm hover:bg-violet-100 hover:text-violet-700 transition-colors"
-                                                >
-                                                    + {tag.name}
-                                                </button>
-                                            ))}
                                     </div>
                                 </div>
                             </div>

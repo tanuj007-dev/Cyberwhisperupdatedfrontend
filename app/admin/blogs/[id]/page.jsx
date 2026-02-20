@@ -92,13 +92,7 @@ const ViewBlog = () => {
                     <span className="font-medium">Back to Blogs</span>
                 </button>
                 <div className="flex gap-3">
-                    <button
-                        onClick={() => setShowDevInfo(!showDevInfo)}
-                        className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-colors ${showDevInfo ? 'bg-violet-50 border-violet-300 text-violet-700' : 'border-gray-300 text-gray-600 hover:bg-gray-50'}`}
-                    >
-                        <Info size={18} />
-                        {showDevInfo ? 'Hide' : 'Show'} Dev Info
-                    </button>
+                    
                     <button
                         onClick={() => router.push(`/admin/blogs/edit/${blog.blog_id}`)}
                         className="flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-violet-600 to-purple-600 text-white font-medium rounded-lg hover:shadow-lg hover:shadow-purple-500/25 transition-all"
@@ -230,58 +224,7 @@ const ViewBlog = () => {
             </div>
 
             {/* Developer Info Panel - Hidden by default, toggle with button */}
-            {
-                showDevInfo && (
-                    <div className="bg-gray-900 rounded-2xl p-6 text-white">
-                        <div className="flex items-center gap-2 mb-4">
-                            <Info size={20} className="text-violet-400" />
-                            <h3 className="text-lg font-semibold">Developer Information</h3>
-                            <span className="ml-auto text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">For API Integration</span>
-                        </div>
-                        <p className="text-gray-400 text-sm mb-4">
-                            This data is what you would receive from your API. Use these field names when integrating with your backend.
-                        </p>
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                            <div className="bg-gray-800 p-3 rounded-lg">
-                                <p className="text-xs text-gray-400 mb-1">blog_id</p>
-                                <p className="text-sm font-mono text-emerald-400">{blog.blog_id}</p>
-                            </div>
-                            <div className="bg-gray-800 p-3 rounded-lg">
-                                <p className="text-xs text-gray-400 mb-1">user_id</p>
-                                <p className="text-sm font-mono text-emerald-400">{blog.user_id}</p>
-                            </div>
-                            <div className="bg-gray-800 p-3 rounded-lg">
-                                <p className="text-xs text-gray-400 mb-1">blog_category_id</p>
-                                <p className="text-sm font-mono text-emerald-400">{blog.blog_category_id}</p>
-                            </div>
-                            <div className="bg-gray-800 p-3 rounded-lg">
-                                <p className="text-xs text-gray-400 mb-1">status</p>
-                                <p className="text-sm font-mono text-emerald-400">{blog.status}</p>
-                            </div>
-                            <div className="bg-gray-800 p-3 rounded-lg">
-                                <p className="text-xs text-gray-400 mb-1">is_popular</p>
-                                <p className="text-sm font-mono text-emerald-400">{blog.is_popular ? 'true' : 'false'}</p>
-                            </div>
-                            <div className="bg-gray-800 p-3 rounded-lg">
-                                <p className="text-xs text-gray-400 mb-1">likes</p>
-                                <p className="text-sm font-mono text-emerald-400">{blog.likes}</p>
-                            </div>
-                            <div className="bg-gray-800 p-3 rounded-lg col-span-2">
-                                <p className="text-xs text-gray-400 mb-1">added_date</p>
-                                <p className="text-sm font-mono text-emerald-400">{blog.added_date}</p>
-                            </div>
-                            <div className="bg-gray-800 p-3 rounded-lg col-span-2">
-                                <p className="text-xs text-gray-400 mb-1">thumbnail</p>
-                                <p className="text-sm font-mono text-emerald-400 truncate">{blog.thumbnail}</p>
-                            </div>
-                            <div className="bg-gray-800 p-3 rounded-lg col-span-2">
-                                <p className="text-xs text-gray-400 mb-1">banner</p>
-                                <p className="text-sm font-mono text-emerald-400 truncate">{blog.banner}</p>
-                            </div>
-                        </div>
-                    </div>
-                )
-            }
+            
 
             {/* Style for prose content */}
             <style jsx global>{`
