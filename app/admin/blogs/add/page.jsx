@@ -716,7 +716,7 @@ const AddBlog = () => {
                             <div>
                                 <label className="block text-sm font-medium text-black mb-2">Status</label>
                                 <div className="flex gap-3">
-                                    {['draft', 'published', 'scheduled'].map((status) => (
+                                    {['draft'].map((status) => (
                                         <label key={status} className="flex items-center gap-2 cursor-pointer">
                                             <input
                                                 type="radio"
@@ -734,7 +734,7 @@ const AddBlog = () => {
                             <div>
                                 <label className="block text-sm font-medium text-black mb-2">Visibility <span className="text-red-500">*</span></label>
                                 <div className="flex gap-3">
-                                    {['public', 'private'].map((vis) => (
+                                    {['public'].map((vis) => (
                                         <label key={vis} className="flex items-center gap-2 cursor-pointer">
                                             <input
                                                 type="radio"

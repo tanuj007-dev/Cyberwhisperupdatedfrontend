@@ -534,19 +534,8 @@ const RichTextEditor = ({ value, onChange, placeholder = "Write your content her
                 />
 
                 <Divider />
-
-                {/* Block Elements - Toggle behavior */}
-                <ToolbarButton
-                    icon={Quote}
-                    title="Blockquote - Click again to remove"
-                    onClick={toggleBlockquote}
-                    active={isBlockquoteActive}
-                />
-                <ToolbarButton
-                    icon={Code}
-                    title="Code - Click again to remove"
-                    onClick={toggleCode}
-                />
+                           
+                
 
                 <Divider />
 
@@ -563,12 +552,7 @@ const RichTextEditor = ({ value, onChange, placeholder = "Write your content her
                     title="Clear Formatting (removes bold, italic, etc.)"
                     onClick={clearFormatting}
                 />
-                <ToolbarButton
-                    icon={Eraser}
-                    title="Clear All Content"
-                    onClick={clearAllContent}
-                    danger
-                />
+               
             </div>
 
             {/* Video insert modal — paste YouTube/Vimeo URL, inserts at cursor */}

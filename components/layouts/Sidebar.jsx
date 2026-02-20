@@ -49,7 +49,9 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             hasSubmenu: true,
             submenu: [
                 { name: 'All Blogs', icon: List, path: '/admin/blogs' },
-                { name: 'Add Blog', icon: PlusCircle, path: '/admin/blogs/add' }
+                { name: 'Add Blog', icon: PlusCircle, path: '/admin/blogs/add' },
+                { name: 'Categories', icon: FolderOpen, path: '/admin/categories' },
+                { name: 'Tags', icon: Tags, path: '/admin/tags' }
             ]
         },
         {
@@ -71,16 +73,6 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                 { name: 'Add Course', icon: PlusCircle, path: '/admin/courses/add' }
             ]
         },
-        {
-            name: 'Categories',
-            icon: FolderOpen,
-            path: '/admin/categories'
-        },
-        /*{
-            name: 'Tags',
-            icon: Tags,
-            path: '/admin/tags'
-        },*/
         {
             name: 'Users',
             icon: Users,
@@ -220,7 +212,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                                         <div className={`overflow-hidden transition-all duration-300 ${(item.name === 'Blogs' && blogMenuOpen) ||
                                             (item.name === 'Batches' && batchMenuOpen) ||
                                             (item.name === 'Courses' && courseMenuOpen)
-                                            ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0'
+                                            ? 'max-h-52 opacity-100' : 'max-h-0 opacity-0'
                                             }`}>
                                             <ul className="mt-2 ml-4 pl-4 border-l border-gray-200 space-y-1">
                                                 {item.submenu.map((subItem) => (

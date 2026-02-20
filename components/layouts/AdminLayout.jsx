@@ -67,6 +67,8 @@ const AdminLayout = ({ children }) => {
                 path.startsWith('/admin/blogs') ||
                 path.startsWith('/admin/batches') ||
                 path.startsWith('/admin/courses') ||
+                path.startsWith('/admin/categories') ||
+                path.startsWith('/admin/tags') ||
                 path.startsWith('/admin/course-enrollments') ||
                 path.startsWith('/admin/upcoming-enrollments') ||
                 path.startsWith('/admin/deploy-team-training') ||
