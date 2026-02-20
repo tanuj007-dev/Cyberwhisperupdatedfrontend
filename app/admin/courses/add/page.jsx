@@ -109,7 +109,7 @@ export default function AddCoursePage() {
             }
 
             showToast('Course created successfully!', 'success');
-            router.push('/admin/courses');
+            setTimeout(() => router.push('/admin/courses'), 1500);
         } catch (err) {
             console.error('Create course error:', err);
             showToast(err.message || 'Failed to create course', 'error');

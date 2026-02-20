@@ -99,8 +99,10 @@ const UserList = () => {
                 (user.first_name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
                 (user.last_name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
                 (user.email || '').toLowerCase().includes(searchTerm.toLowerCase());
+            const isSuper = isSuperAdminUser(user);
             const roleId = user.role_id != null ? user.role_id : (user.role === 'ADMIN' ? 1 : user.role === 'INSTRUCTOR' ? 3 : 2);
-            const matchesRole = !filterRole || roleId === parseInt(filterRole);
+            const matchesRole = !filterRole ||
+                (filterRole === 'superadmin' ? isSuper : (!isSuper && roleId === parseInt(filterRole)));
             const matchesStatus = !filterStatus || (user.status || 'active') === filterStatus;
             const matchesInstructor = !filterInstructor ||
                 (filterInstructor === 'yes' ? user.is_instructor : !user.is_instructor);
@@ -365,6 +367,7 @@ const UserList = () => {
                     className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-900 text-gray-900 dark:text-white"
                 >
                     <option value="">All Roles</option>
+                    <option value="superadmin">Superadmin</option>
                     <option value="1">Admin</option>
                     <option value="2">Student</option>
                     <option value="3">Instructor</option>
