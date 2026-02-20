@@ -94,8 +94,9 @@ const UserList = () => {
 
     const isSuperAdminUser = (user) => user.id === 1 || user.user_id === 1 || String(user.role || '').toUpperCase().replace(/\s/g, '') === 'SUPERADMIN';
     const visibleUsers = useMemo(() => {
-        if (currentUserRole === 'SUPERADMIN') return users;
-        return users.filter((u) => !isSuperAdminUser(u));
+        const list = Array.isArray(users) ? users : [];
+        if (currentUserRole === 'SUPERADMIN') return list;
+        return list.filter((u) => !isSuperAdminUser(u));
     }, [users, currentUserRole]);
 
     const filteredUsers = useMemo(() => {
