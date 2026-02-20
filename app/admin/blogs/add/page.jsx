@@ -406,7 +406,7 @@ const AddBlog = () => {
                         <p className="text-gray-600">Create a new blog post with full details</p>
                     </div>
                 </div>
-                <div className="flex items-center gap-3">
+                {/* <div className="flex items-center gap-3">
                     <Button
                         type="button"
                         variant="outline"
@@ -426,7 +426,7 @@ const AddBlog = () => {
                         {submitting ? <Loader2 size={18} className="animate-spin" /> : <Send size={18} />}
                         {submitting ? 'Publishing…' : 'Publish'}
                     </button>
-                </div>
+                </div> */}
             </div>
 
             <div className="space-y-6">

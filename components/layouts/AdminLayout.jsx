@@ -60,7 +60,12 @@ const AdminLayout = ({ children }) => {
         const role = localStorage.getItem('adminRole');
         const path = (pathname || '').replace(/\/$/, '');
         if (role === 'STUDENT') {
-            const allowed = path.startsWith('/admin/blogs') || path === '/admin/profile' || path.startsWith('/admin/users/edit');
+            const allowed =
+                path.startsWith('/admin/blogs') ||
+                path.startsWith('/admin/categories') ||
+                path.startsWith('/admin/tags') ||
+                path === '/admin/profile' ||
+                path.startsWith('/admin/users/edit');
             if (!allowed) router.replace('/admin/blogs');
         } else if (role === 'INSTRUCTOR') {
             const allowed =
