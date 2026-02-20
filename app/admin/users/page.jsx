@@ -85,6 +85,7 @@ const UserList = () => {
     const [imagePreview, setImagePreview] = useState('');
 
     const itemsPerPage = 10;
+    const MAX_ADMINS = 5;
 
     const isSuperAdminUser = (user) => user.id === 1 || user.user_id === 1 || String(user.role || '').toUpperCase().replace(/\s/g, '') === 'SUPERADMIN';
     const visibleUsers = useMemo(() => {
@@ -113,6 +114,12 @@ const UserList = () => {
         (currentPage - 1) * itemsPerPage,
         currentPage * itemsPerPage
     );
+
+    const adminCount = useMemo(() =>
+        visibleUsers.filter((u) => !isSuperAdminUser(u) && ((u.role_id === 1) || (String(u.role || '').toUpperCase().replace(/\s/g, '') === 'ADMIN'))).length,
+        [visibleUsers]
+    );
+    const adminLimitReached = adminCount >= MAX_ADMINS;
 
     const showToast = (message, type = 'success') => {
         setToast({ isVisible: true, message, type });
@@ -212,6 +219,11 @@ const UserList = () => {
 
     const handleSubmit = async () => {
         if (!validateForm()) return;
+        const isCreatingAdmin = !editMode && (formData.role === 'ADMIN');
+        if (isCreatingAdmin && adminLimitReached) {
+            showToast('Maximum limit of 5 admins reached. Cannot create more admins.', 'error');
+            return;
+        }
         try {
             if (editMode) {
                 await updateUser(selectedUser.id, formData);
@@ -222,7 +234,12 @@ const UserList = () => {
             }
             setAddEditModalOpen(false);
         } catch (error) {
-            showToast(error?.message || 'Error saving user', 'error');
+            const msg = error?.message || '';
+            if (msg.includes('Maximum limit') || msg.includes('5 admins') || msg.includes('Cannot create more admins')) {
+                showToast('Maximum limit of 5 admins reached. Cannot create more admins.', 'error');
+            } else {
+                showToast(msg || 'Error saving user', 'error');
+            }
         }
     };
 
@@ -506,7 +523,9 @@ const UserList = () => {
                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Role</label>
                         <select value={formData.role} onChange={(e) => setFormData({ ...formData, role: e.target.value })} className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl text-black dark:text-white bg-white dark:bg-gray-800">
                             <option value="STUDENT">Student</option>
-                            <option value="ADMIN">Admin</option>
+                            <option value="ADMIN" disabled={!editMode && adminLimitReached}>
+                                Admin{!editMode && adminLimitReached ? ' (max 5 reached)' : ''}
+                            </option>
                             <option value="INSTRUCTOR">Instructor</option>
                         </select>
                     </div>
