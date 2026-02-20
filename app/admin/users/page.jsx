@@ -383,6 +383,7 @@ const UserList = () => {
                     <option value="2">Student</option>
                     <option value="3">Instructor</option>
                 </select>
+                
                 <select
                     value={filterStatus}
                     onChange={(e) => setFilterStatus(e.target.value)}
@@ -392,15 +393,7 @@ const UserList = () => {
                     <option value="active">Active</option>
                     <option value="inactive">Inactive</option>
                 </select>
-                <select
-                    value={filterInstructor}
-                    onChange={(e) => setFilterInstructor(e.target.value)}
-                    className="px-4 py-2 border border-gray-300 rounded-xl bg-white text-gray-900"
-                >
-                    <option value="">All</option>
-                    <option value="yes">Instructor</option>
-                    <option value="no">Not Instructor</option>
-                </select>
+              
             </div>
 
             <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
