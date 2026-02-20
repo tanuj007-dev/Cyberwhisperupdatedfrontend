@@ -315,7 +315,7 @@ const UserList = () => {
 
     if (loading && users.length === 0) {
         return (
-            <div className="p-8">
+            <div className="p-8 min-h-screen bg-white text-gray-900">
                 <div className="flex flex-col gap-6">
                     <Skeleton className="h-10 w-64" />
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -330,11 +330,11 @@ const UserList = () => {
     }
 
     return (
-        <div className="p-8">
+        <div className="p-8 min-h-screen bg-white text-gray-900">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
                 <div>
                     <h1 className="text-3xl sm:text-4xl md:text-[50px] font-semibold tracking-tight leading-tight text-gray-900">Users</h1>
-                    <p className="text-gray-600 dark:text-gray-400 mt-1">Manage all users and their roles</p>
+                    <p className="text-gray-600 mt-1">Manage all users and their roles</p>
                 </div>
                 <Button onClick={handleOpenAdd} variant="primary" className="inline-flex items-center gap-2">
                     <UserPlus size={20} />
@@ -343,16 +343,16 @@ const UserList = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-4">
-                    <p className="text-sm text-gray-500 dark:text-gray-400">Admins</p>
+                <div className="bg-white rounded-2xl border border-gray-200 p-4">
+                    <p className="text-sm text-gray-500">Admins</p>
                     <p className="text-3xl font-bold text-blue-600">{visibleUsers.filter((u) => !isSuperAdminUser(u) && ((u.role_id === 1) || (String(u.role || '').toUpperCase().replace(/\s/g, '') === 'ADMIN'))).length}</p>
                 </div>
-                <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-4">
-                    <p className="text-sm text-gray-500 dark:text-gray-400">Students</p>
+                <div className="bg-white rounded-2xl border border-gray-200 p-4">
+                    <p className="text-sm text-gray-500">Students</p>
                     <p className="text-3xl font-bold text-sky-600">{visibleUsers.filter((u) => (u.role_id === 2) || (u.role === 'STUDENT') || (u.role === 'USER')).length}</p>
                 </div>
-                <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-4">
-                    <p className="text-sm text-gray-500 dark:text-gray-400">Instructors</p>
+                <div className="bg-white rounded-2xl border border-gray-200 p-4">
+                    <p className="text-sm text-gray-500">Instructors</p>
                     <p className="text-3xl font-bold text-violet-600">{visibleUsers.filter((u) => (u.role_id === 3) || u.is_instructor || (u.role === 'INSTRUCTOR')).length}</p>
                 </div>
             </div>
@@ -365,13 +365,13 @@ const UserList = () => {
                         placeholder="Search by name or email..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-900 text-gray-900 dark:text-white"
+                        className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-xl bg-white text-gray-900"
                     />
                 </div>
                 <select
                     value={filterRole}
                     onChange={(e) => setFilterRole(e.target.value)}
-                    className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-900 text-gray-900 dark:text-white"
+                    className="px-4 py-2 border border-gray-300 rounded-xl bg-white text-gray-900"
                 >
                     <option value="">All Roles</option>
                     {isSuperAdmin && <option value="superadmin">Superadmin</option>}
@@ -382,7 +382,7 @@ const UserList = () => {
                 <select
                     value={filterStatus}
                     onChange={(e) => setFilterStatus(e.target.value)}
-                    className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-900 text-gray-900 dark:text-white"
+                    className="px-4 py-2 border border-gray-300 rounded-xl bg-white text-gray-900"
                 >
                     <option value="">All Status</option>
                     <option value="active">Active</option>
@@ -391,7 +391,7 @@ const UserList = () => {
                 <select
                     value={filterInstructor}
                     onChange={(e) => setFilterInstructor(e.target.value)}
-                    className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-900 text-gray-900 dark:text-white"
+                    className="px-4 py-2 border border-gray-300 rounded-xl bg-white text-gray-900"
                 >
                     <option value="">All</option>
                     <option value="yes">Instructor</option>
@@ -399,45 +399,45 @@ const UserList = () => {
                 </select>
             </div>
 
-            <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 overflow-hidden">
+            <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
                 <div className="overflow-x-auto">
                     <table className="w-full">
                         <thead>
-                            <tr className="border-b border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/50">
-                                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase">User</th>
-                                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase">Contact</th>
-                                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase">Role</th>
-                                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase">Status</th>
-                                <th className="px-6 py-4 text-right text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase">Actions</th>
+                            <tr className="border-b border-gray-200 bg-gray-50">
+                                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">User</th>
+                                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">Contact</th>
+                                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">Role</th>
+                                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">Status</th>
+                                <th className="px-6 py-4 text-right text-xs font-semibold text-gray-600 uppercase">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             {paginatedUsers.map((user) => (
-                                <tr key={user.id} className="border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800/30">
+                                <tr key={user.id} className="border-b border-gray-100 hover:bg-gray-50">
                                     <td className="px-6 py-4">
                                         <div className="flex items-center gap-3">
                                             {user.profile_image_url ? (
                                                 <img src={user.profile_image_url} alt="" className="w-10 h-10 rounded-full object-cover" />
                                             ) : (
-                                                <div className="w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-500 dark:text-gray-400">
+                                                <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-500">
                                                     <UserCircle className="w-10 h-10" strokeWidth={1.25} />
                                                 </div>
                                             )}
                                             <div>
-                                                <p className="font-medium text-gray-900 dark:text-white">{user.first_name} {user.last_name}</p>
-                                                <p className="text-sm text-gray-500 dark:text-gray-400">{user.title || '—'}</p>
+                                                <p className="font-medium text-gray-900">{user.first_name} {user.last_name}</p>
+                                                <p className="text-sm text-gray-500">{user.title || '—'}</p>
                                             </div>
                                         </div>
                                     </td>
                                     <td className="px-6 py-4">
-                                        <p className="text-sm text-gray-900 dark:text-white">{user.email}</p>
-                                        <p className="text-sm text-gray-500 dark:text-gray-400">{user.phone || '—'}</p>
+                                        <p className="text-sm text-gray-900">{user.email}</p>
+                                        <p className="text-sm text-gray-500">{user.phone || '—'}</p>
                                     </td>
                                     <td className="px-6 py-4">
                                         <Badge variant={getRoleColor(user)}>{getRoleName(user)}</Badge>
                                     </td>
                                     <td className="px-6 py-4">
-                                        <span className={`text-sm font-medium ${(user.status || 'active') === 'active' ? 'text-green-600 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'}`}>
+                                        <span className={`text-sm font-medium ${(user.status || 'active') === 'active' ? 'text-green-600' : 'text-gray-500'}`}>
                                             {(user.status || 'active') === 'active' ? 'Active' : 'Inactive'}
                                         </span>
                                     </td>
@@ -459,8 +459,8 @@ const UserList = () => {
                                                     disabled={togglingStatusId === user.id || !canToggleStatusForUser(user)}
                                                     title={!canToggleStatusForUser(user) ? 'Cannot change status for another admin' : (user.status || 'active').toLowerCase() === 'active' ? 'Deactivate user' : 'Activate user'}
                                                     className={(user.status || 'active').toLowerCase() === 'active'
-                                                        ? 'text-green-600 hover:text-green-700 hover:bg-green-50 dark:hover:bg-green-900/20'
-                                                        : 'text-gray-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20'}
+                                                        ? 'text-green-600 hover:text-green-700 hover:bg-green-50'
+                                                        : 'text-gray-500 hover:text-red-600 hover:bg-red-50'}
                                                 >
                                                     {togglingStatusId === user.id ? (
                                                         <span className="inline-block w-[18px] h-[18px] border-2 border-current border-t-transparent rounded-full animate-spin" />
@@ -478,7 +478,7 @@ const UserList = () => {
                                                     onClick={() => { setSelectedUser(user); setDeleteModalOpen(true); }}
                                                     disabled={!canDeleteUser(user)}
                                                     title={canDeleteUser(user) ? 'Delete user' : 'You cannot delete your own account or another admin'}
-                                                    className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20 disabled:opacity-50 disabled:pointer-events-none"
+                                                    className="text-red-600 hover:text-red-700 hover:bg-red-50 disabled:opacity-50 disabled:pointer-events-none"
                                                 >
                                                     <Trash2 size={18} />
                                                 </Button>
@@ -491,14 +491,14 @@ const UserList = () => {
                     </table>
                 </div>
                 {filteredUsers.length === 0 && (
-                    <div className="text-center py-12 text-gray-500 dark:text-gray-400">No users found.</div>
+                    <div className="text-center py-12 text-gray-500">No users found.</div>
                 )}
             </div>
 
             {totalPages > 1 && (
                 <div className="mt-6 flex justify-center gap-2">
                     <Button variant="outline" onClick={() => setCurrentPage((p) => Math.max(1, p - 1))} disabled={currentPage <= 1}>Previous</Button>
-                    <span className="px-4 py-2 text-gray-600 dark:text-gray-400">Page {currentPage} of {totalPages}</span>
+                    <span className="px-4 py-2 text-gray-600">Page {currentPage} of {totalPages}</span>
                     <Button variant="outline" onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))} disabled={currentPage >= totalPages}>Next</Button>
                 </div>
             )}
@@ -530,8 +530,8 @@ const UserList = () => {
                         
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Role</label>
-                        <select value={formData.role} onChange={(e) => setFormData({ ...formData, role: e.target.value })} className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl text-black dark:text-white bg-white dark:bg-gray-800">
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Role</label>
+                        <select value={formData.role} onChange={(e) => setFormData({ ...formData, role: e.target.value })} className="w-full px-4 py-2 border border-gray-300 rounded-xl text-black bg-white">
                             <option value="STUDENT">Student</option>
                             <option value="ADMIN" disabled={!editMode && adminLimitReached}>
                                 Admin{!editMode && adminLimitReached ? ' (max 5 reached)' : ''}
@@ -541,30 +541,30 @@ const UserList = () => {
                     </div>
                     <Input label="Address" value={formData.address} onChange={(e) => setFormData({ ...formData, address: e.target.value })} placeholder="City, Country" />
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Profile Image</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Profile Image</label>
                         <div
                             onDragOver={(e) => { e.preventDefault(); e.currentTarget.classList.add('border-violet-500', 'bg-violet-50'); }}
                             onDragLeave={(e) => { e.currentTarget.classList.remove('border-violet-500', 'bg-violet-50'); }}
                             onDrop={(e) => { e.preventDefault(); e.currentTarget.classList.remove('border-violet-500', 'bg-violet-50'); if (e.dataTransfer.files?.[0]) handleImageUpload(e.dataTransfer.files[0]); }}
-                            className="relative border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl p-6 text-center cursor-pointer hover:border-violet-500"
+                            className="relative border-2 border-dashed border-gray-300 rounded-xl p-6 text-center cursor-pointer hover:border-violet-500"
                         >
                             <input type="file" accept="image/*" className="absolute inset-0 w-full h-full cursor-pointer opacity-0" onChange={(e) => e.target.files?.[0] && handleImageUpload(e.target.files[0])} />
                             {imagePreview ? (
                                 <div><img src={imagePreview} alt="Preview" className="h-24 w-24 object-cover rounded-lg mx-auto" /><p className="text-sm text-gray-500 mt-2">Click or drag to replace</p></div>
                             ) : (
                                 <div className="flex flex-col items-center gap-2">
-                                    <div className="w-24 h-24 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-400 dark:text-gray-500">
+                                    <div className="w-24 h-24 rounded-full bg-gray-100 flex items-center justify-center text-gray-400">
                                         <UserCircle className="w-16 h-16" strokeWidth={1.25} />
                                     </div>
                                     <p className="text-gray-500">Drag and drop or click to upload (max 5MB)</p>
                                 </div>
                             )}
-                            {imageUploading && <div className="absolute inset-0 bg-white/80 dark:bg-gray-900/80 flex items-center justify-center rounded-xl"><span className="text-sm">Uploading...</span></div>}
+                            {imageUploading && <div className="absolute inset-0 bg-white/80/80 flex items-center justify-center rounded-xl"><span className="text-sm">Uploading...</span></div>}
                         </div>
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Biography</label>
-                        <textarea value={formData.biography} onChange={(e) => setFormData({ ...formData, biography: e.target.value })} placeholder="Brief bio" rows={3} className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl text-black dark:text-white bg-white dark:bg-gray-800 resize-none" />
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Biography</label>
+                        <textarea value={formData.biography} onChange={(e) => setFormData({ ...formData, biography: e.target.value })} placeholder="Brief bio" rows={3} className="w-full px-4 py-2 border border-gray-300 rounded-xl text-black bg-white resize-none" />
                     </div>
                     <Input label="LinkedIn URL" value={formData.linkedin_url} onChange={(e) => setFormData({ ...formData, linkedin_url: e.target.value })} placeholder="https://linkedin.com/in/username" />
                     <Input label="GitHub URL" value={formData.github_url} onChange={(e) => setFormData({ ...formData, github_url: e.target.value })} placeholder="https://github.com/username" />
@@ -587,7 +587,7 @@ const UserList = () => {
                     </>
                 }
             >
-                <p className="text-gray-600 dark:text-gray-400">
+                <p className="text-gray-600">
                     {selectedUser && !canDeleteUser(selectedUser)
                         ? (String(selectedUser?.id ?? selectedUser?.user_id) === String(currentUserId)
                             ? "You cannot delete your own account."
@@ -604,22 +604,22 @@ const UserList = () => {
                             {viewUser.profile_image_url ? (
                                 <img src={viewUser.profile_image_url} alt="" className="w-20 h-20 rounded-full object-cover" />
                             ) : (
-                                <div className="w-20 h-20 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-500 dark:text-gray-400">
+                                <div className="w-20 h-20 rounded-full bg-gray-100 flex items-center justify-center text-gray-500">
                                     <UserCircle className="w-16 h-16" strokeWidth={1.25} />
                                 </div>
                             )}
                             <div>
-                                <h3 className="text-xl font-bold text-gray-900 dark:text-white">{viewUser.first_name} {viewUser.last_name}</h3>
-                                <p className="text-gray-500 dark:text-gray-400">{viewUser.title || '—'}</p>
+                                <h3 className="text-xl font-bold text-gray-900">{viewUser.first_name} {viewUser.last_name}</h3>
+                                <p className="text-gray-500">{viewUser.title || '—'}</p>
                                 <Badge variant={getRoleColor(viewUser)}>{getRoleName(viewUser)}</Badge>
                             </div>
                         </div>
                         <dl className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
-                            <div><dt className="text-gray-500 dark:text-gray-400">Email</dt><dd className="font-medium text-gray-900 dark:text-white">{viewUser.email}</dd></div>
-                            <div><dt className="text-gray-500 dark:text-gray-400">Phone</dt><dd className="font-medium text-gray-900 dark:text-white">{viewUser.phone || '—'}</dd></div>
+                            <div><dt className="text-gray-500">Email</dt><dd className="font-medium text-gray-900">{viewUser.email}</dd></div>
+                            <div><dt className="text-gray-500">Phone</dt><dd className="font-medium text-gray-900">{viewUser.phone || '—'}</dd></div>
                           
-                            {viewUser.address && <div className="sm:col-span-2"><dt className="text-gray-500 dark:text-gray-400">Address</dt><dd className="font-medium text-gray-900 dark:text-white">{viewUser.address}</dd></div>}
-                            {viewUser.biography && <div className="sm:col-span-2"><dt className="text-gray-500 dark:text-gray-400">Biography</dt><dd className="text-gray-900 dark:text-white">{viewUser.biography}</dd></div>}
+                            {viewUser.address && <div className="sm:col-span-2"><dt className="text-gray-500">Address</dt><dd className="font-medium text-gray-900">{viewUser.address}</dd></div>}
+                            {viewUser.biography && <div className="sm:col-span-2"><dt className="text-gray-500">Biography</dt><dd className="text-gray-900">{viewUser.biography}</dd></div>}
                         </dl>
                     </div>
                 )}

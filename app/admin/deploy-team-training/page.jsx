@@ -83,7 +83,7 @@ export default function DeployTeamTrainingPage() {
 
     if (loading && requests.length === 0) {
         return (
-            <div className="flex flex-col items-center justify-center min-h-[60vh]">
+            <div className="flex flex-col items-center justify-center min-h-[60vh] bg-white text-gray-900">
                 <Loader2 className="w-12 h-12 animate-spin text-purple-600 mb-4" />
                 <p className="text-gray-600">Loading requests...</p>
             </div>
@@ -91,7 +91,7 @@ export default function DeployTeamTrainingPage() {
     }
 
     return (
-        <div className="p-8">
+        <div className="p-8 min-h-screen bg-white text-gray-900">
             <div className="mb-8">
                 <h1 className="text-3xl sm:text-4xl md:text-[50px] font-semibold tracking-tight leading-tight text-gray-900">Deploy Team Training Requests</h1>
                 <p className="text-gray-600 mt-2">Requests submitted from the Deploy Team Training form</p>
@@ -111,23 +111,23 @@ export default function DeployTeamTrainingPage() {
             )}
 
             {requests.length === 0 && !loading ? (
-                <div className="text-center py-16 bg-gray-50 dark:bg-gray-900 rounded-2xl">
+                <div className="text-center py-16 bg-gray-50 rounded-2xl">
                     <Users className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                    <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">No requests yet</h3>
-                    <p className="text-gray-600 dark:text-gray-400">Deploy Team Training form submissions will appear here.</p>
+                    <h3 className="text-xl font-semibold text-gray-900 mb-2">No requests yet</h3>
+                    <p className="text-gray-600">Deploy Team Training form submissions will appear here.</p>
                 </div>
             ) : (
                 <div className="space-y-6">
                     {requests.map((req) => (
                         <div
                             key={req.id}
-                            className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 overflow-hidden shadow-sm hover:shadow-md transition-shadow"
+                            className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-shadow"
                         >
                             <div className="p-6">
                                 <div className="flex flex-wrap items-start justify-between gap-4">
                                     <div className="flex-1 min-w-0 space-y-3">
                                         <div className="flex flex-wrap items-center gap-2">
-                                            <span className="text-lg font-bold text-gray-900 dark:text-white">{req.full_name}</span>
+                                            <span className="text-lg font-bold text-gray-900">{req.full_name}</span>
                                             {req.work_email && (
                                                 <a href={`mailto:${req.work_email}`} className="inline-flex items-center gap-1 text-sm text-purple-600 hover:underline">
                                                     <Mail size={14} />
@@ -135,7 +135,7 @@ export default function DeployTeamTrainingPage() {
                                                 </a>
                                             )}
                                         </div>
-                                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-1 text-sm text-gray-600 dark:text-gray-400">
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-1 text-sm text-gray-600">
                                             {req.phone_whatsapp && (
                                                 <span className="flex items-center gap-1">
                                                     <Phone size={14} />
@@ -157,23 +157,23 @@ export default function DeployTeamTrainingPage() {
                                         </div>
                                         <div className="flex flex-wrap gap-2 text-xs">
                                             {req.team_size && (
-                                                <span className="px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded">Team: {req.team_size}</span>
+                                                <span className="px-2 py-1 bg-gray-100 rounded">Team: {req.team_size}</span>
                                             )}
                                             {req.delivery_mode && (
-                                                <span className="px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded">{req.delivery_mode}</span>
+                                                <span className="px-2 py-1 bg-gray-100 rounded">{req.delivery_mode}</span>
                                             )}
                                             {req.timeline && (
-                                                <span className="px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded">{req.timeline}</span>
+                                                <span className="px-2 py-1 bg-gray-100 rounded">{req.timeline}</span>
                                             )}
                                         </div>
                                         {req.track_certification && (
-                                            <p className="text-sm text-gray-600 dark:text-gray-400">
-                                                <span className="font-medium text-gray-700 dark:text-gray-300">Track/Certification:</span>{' '}
+                                            <p className="text-sm text-gray-600">
+                                                <span className="font-medium text-gray-700">Track/Certification:</span>{' '}
                                                 {req.track_certification}
                                             </p>
                                         )}
                                         {req.message_requirement && (
-                                            <p className="text-sm text-gray-600 dark:text-gray-400 border-t border-gray-100 dark:border-gray-800 pt-3 mt-3">
+                                            <p className="text-sm text-gray-600 border-t border-gray-100 pt-3 mt-3">
                                                 {req.message_requirement}
                                             </p>
                                         )}
@@ -181,7 +181,7 @@ export default function DeployTeamTrainingPage() {
                                     <button
                                         onClick={() => handleDelete(req.id)}
                                         disabled={deletingId === req.id}
-                                        className="p-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors disabled:opacity-50"
+                                        className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-50"
                                         title="Delete"
                                     >
                                         {deletingId === req.id ? <Loader2 className="w-5 h-5 animate-spin" /> : <Trash2 size={20} />}
@@ -198,17 +198,17 @@ export default function DeployTeamTrainingPage() {
                     <button
                         onClick={() => setPage((p) => Math.max(1, p - 1))}
                         disabled={page <= 1}
-                        className="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 disabled:opacity-50"
+                        className="px-4 py-2 rounded-lg border border-gray-300 disabled:opacity-50"
                     >
                         Previous
                     </button>
-                    <span className="px-4 py-2 text-gray-600 dark:text-gray-400">
+                    <span className="px-4 py-2 text-gray-600">
                         Page {page} of {pagination.totalPages}
                     </span>
                     <button
                         onClick={() => setPage((p) => Math.min(pagination.totalPages, p + 1))}
                         disabled={page >= pagination.totalPages}
-                        className="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 disabled:opacity-50"
+                        className="px-4 py-2 rounded-lg border border-gray-300 disabled:opacity-50"
                     >
                         Next
                     </button>
