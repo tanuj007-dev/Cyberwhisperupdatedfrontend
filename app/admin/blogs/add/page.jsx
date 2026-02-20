@@ -622,12 +622,12 @@ const AddBlog = () => {
                             <label className="block text-sm font-medium text-gray-700 mb-2">Banner Image</label>
                             <p className="text-xs text-gray-500 mb-2">Optional. Shown as header/banner for the post.</p>
                             {bannerPreview ? (
-                                <div className="relative inline-block">
+                                <div className="relative inline-block text-black">
                                     <img src={bannerPreview} alt="Banner" className="h-32 object-cover rounded-xl border" />
                                     <button type="button" onClick={() => { setBannerPreview(''); setFormData(prev => ({ ...prev, banner: '' })); }} className="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-lg hover:bg-red-600"><X size={16} /></button>
                                 </div>
                             ) : (
-                                <label className="inline-flex items-center gap-2 px-4 py-2.5 border border-gray-300 rounded-xl cursor-pointer hover:bg-gray-50">
+                                <label className="inline-flex items-center text-black gap-2 px-4 py-2.5 border border-gray-300 rounded-xl cursor-pointer hover:bg-gray-50">
                                     <Upload size={18} /> Choose banner image
                                     <input type="file" accept="image/*" className="hidden" onChange={handleBannerChange} />
                                 </label>
@@ -696,8 +696,8 @@ const AddBlog = () => {
                                 placeholder="Select an author"
                             />
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">
-                                    Publish Date
+                                <label className="block text-sm font-medium text-black mb-1">
+                                    Publish Date <span className="text-red-500">*</span>
                                 </label>
                                 <div className="relative">
                                     <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
@@ -714,7 +714,7 @@ const AddBlog = () => {
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>
+                                <label className="block text-sm font-medium text-black mb-2">Status</label>
                                 <div className="flex gap-3">
                                     {['draft', 'published', 'scheduled'].map((status) => (
                                         <label key={status} className="flex items-center gap-2 cursor-pointer">
@@ -732,7 +732,7 @@ const AddBlog = () => {
                                 </div>
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">Visibility</label>
+                                <label className="block text-sm font-medium text-black mb-2">Visibility <span className="text-red-500">*</span></label>
                                 <div className="flex gap-3">
                                     {['public', 'private'].map((vis) => (
                                         <label key={vis} className="flex items-center gap-2 cursor-pointer">
