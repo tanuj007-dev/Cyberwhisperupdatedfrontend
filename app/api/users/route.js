@@ -61,8 +61,6 @@ export async function GET(request) {
                     }
                 } catch (e) {
                     continue;
-            } catch (e) {
-                // fall through to local
                 }
             }
         }

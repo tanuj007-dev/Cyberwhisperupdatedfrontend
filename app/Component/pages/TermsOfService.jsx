@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Gavel, ArrowRight, HelpCircle, FileText, CheckCircle2, Shield, AlertTriangle, Scale, Lock, Globe, Mail, Phone, MapPin } from 'lucide-react';
 import { useEnquiry } from '../../context/EnquiryContext';
 
+
 const sections = [
     { id: 'acceptance', title: '1. Acceptance of Terms' },
     { id: 'description', title: '2. Description of Services' },
