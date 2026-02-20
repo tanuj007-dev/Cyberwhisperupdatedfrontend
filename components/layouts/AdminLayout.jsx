@@ -54,14 +54,14 @@ const AdminLayout = ({ children }) => {
         };
     }, [isAuthenticated]);
 
-    // Role-based route protection: Student = blogs + profile only; Instructor = blogs, batches, courses, enrollments, profile; Admin = all
+    // Role-based route protection: Student = blogs (including add), categories, tags, profile; Instructor = blogs, batches, courses, enrollments, profile; Admin = all
     useEffect(() => {
         if (!isAuthenticated || typeof window === 'undefined') return;
         const role = localStorage.getItem('adminRole');
         const path = (pathname || '').replace(/\/$/, '');
         if (role === 'STUDENT') {
             const allowed =
-                path.startsWith('/admin/blogs') ||
+                path.startsWith('/admin/blogs') || // includes /admin/blogs/add so students can add blogs
                 path.startsWith('/admin/categories') ||
                 path.startsWith('/admin/tags') ||
                 path === '/admin/profile' ||

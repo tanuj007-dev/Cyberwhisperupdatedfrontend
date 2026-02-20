@@ -110,16 +110,24 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
         }*/
     ];
 
-    // Role-based menu: Student = Blogs + My Profile only; Instructor = Blogs, Batches, Courses, Course Enrollments + My Profile; Admin = full
+    // Role-based menu: Student = Blogs (including Add Blog) + My Profile only; Instructor = Blogs, Batches, Courses, Course Enrollments + My Profile (no Add Course); Admin = full
     const myProfileItem = { name: 'My Profile', icon: UserCircle, path: '/admin/profile' };
     const menuItems = (() => {
         if (role === 'STUDENT') {
+            // Students get full Blogs submenu: All Blogs, Add Blog, Categories, Tags
             const blogs = allMenuItems.find((item) => item.name === 'Blogs');
             return [blogs, myProfileItem].filter(Boolean);
         }
         if (role === 'INSTRUCTOR') {
             const allowed = ['Blogs', 'Batches', 'Courses', 'Course Enrollments'];
-            return [...allMenuItems.filter((item) => allowed.includes(item.name)), myProfileItem];
+            const items = allMenuItems.filter((item) => allowed.includes(item.name));
+            // Hide "Add Course" for Instructors
+            return items.map((item) => {
+                if (item.name === 'Courses' && item.submenu) {
+                    return { ...item, submenu: item.submenu.filter((s) => s.name !== 'Add Course') };
+                }
+                return item;
+            }).concat(myProfileItem);
         }
         return [...allMenuItems, myProfileItem];
     })();
