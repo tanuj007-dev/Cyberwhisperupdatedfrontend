@@ -29,16 +29,20 @@ const UserList = () => {
         const r = String(user.role || '').toUpperCase().replace(/\s/g, '');
         return r === 'SUPERADMIN' || r === 'ADMIN' || user.role_id === 1;
     };
+    const isTargetSuperadmin = (user) => {
+        const r = String(user.role || '').toUpperCase().replace(/\s/g, '');
+        return r === 'SUPERADMIN' || user.id === 1 || user.user_id === 1;
+    };
     // Superadmin: full access. Admin: can only activate/deactivate students and instructors (not other admins)
     const canToggleStatusForUser = (user) => {
         if (!canManageStatus) return false;
         if (isSuperAdmin) return true;
         return !isTargetAdminOrSuperadmin(user);
     };
-    // Only superadmin can delete; admin cannot delete anyone
+    // Only superadmin can delete; can delete admins/students/instructors but not self or another superadmin
     const canDeleteUser = (user) => {
         if (!isSuperAdmin) return false;
-        if (isTargetAdminOrSuperadmin(user)) return false;
+        if (isTargetSuperadmin(user)) return false;
         const id = user?.id ?? user?.user_id;
         if (id == null || currentUserId == null) return true;
         return String(id) !== String(currentUserId);
@@ -477,7 +481,7 @@ const UserList = () => {
                                                     size="sm"
                                                     onClick={() => { setSelectedUser(user); setDeleteModalOpen(true); }}
                                                     disabled={!canDeleteUser(user)}
-                                                    title={canDeleteUser(user) ? 'Delete user' : 'You cannot delete your own account or another admin'}
+                                                    title={canDeleteUser(user) ? 'Delete user' : 'You cannot delete your own account or another superadmin'}
                                                     className="text-red-600 hover:text-red-700 hover:bg-red-50 disabled:opacity-50 disabled:pointer-events-none"
                                                 >
                                                     <Trash2 size={18} />
@@ -573,7 +577,7 @@ const UserList = () => {
                 </div>
             </Modal>
 
-            {/* Delete Modal — only superadmin sees delete; cannot delete own account or another admin */}
+            {/* Delete Modal — only superadmin sees delete; cannot delete own account or another superadmin; can delete admins */}
             <Modal
                 isOpen={deleteModalOpen}
                 onClose={() => setDeleteModalOpen(false)}
@@ -591,7 +595,7 @@ const UserList = () => {
                     {selectedUser && !canDeleteUser(selectedUser)
                         ? (String(selectedUser?.id ?? selectedUser?.user_id) === String(currentUserId)
                             ? "You cannot delete your own account."
-                            : "You cannot delete another admin or superadmin.")
+                            : "You cannot delete another superadmin.")
                         : <>Are you sure you want to delete <strong>{selectedUser?.first_name} {selectedUser?.last_name}</strong>? This action cannot be undone.</>}
                 </p>
             </Modal>
