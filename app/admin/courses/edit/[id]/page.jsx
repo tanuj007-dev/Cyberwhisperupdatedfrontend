@@ -85,6 +85,7 @@ export default function EditCoursePage() {
                 status: course.status || 'draft',
                 course_type: course.course_type || 'video',
                 category: course.category || course.category_name || course.type || '',
+                is_free_course: course.is_free_course ?? 0,
                 meta_keywords: course.meta_keywords || '',
                 meta_description: course.meta_description || '',
                 brochure_url: course.brochure_url || course.brochure || '',
@@ -135,6 +136,7 @@ export default function EditCoursePage() {
                 status: formData.status,
                 course_type: formData.course_type,
                 category: formData.category?.trim() || undefined,
+                is_free_course: formData.is_free_course ?? 0,
                 meta_keywords: formData.meta_keywords || undefined,
                 meta_description: formData.meta_description || undefined,
                 brochure_url: formData.brochure_url || undefined,
@@ -222,6 +224,17 @@ export default function EditCoursePage() {
                             />
                         </div>
                         
+                        <div className="md:col-span-2">
+                            <label className="block text-sm font-semibold text-gray-700 mb-2">Short description</label>
+                            <input
+                                type="text"
+                                name="short_description"
+                                value={formData.short_description}
+                                onChange={handleChange}
+                                className="w-full px-4 py-3 border border-gray-300 rounded-xl text-gray-700 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                placeholder="Brief summary for course cards (e.g. one line)"
+                            />
+                        </div>
                         <div className="md:col-span-2">
                             <label className="block text-sm font-semibold text-gray-700 mb-2">Description</label>
                             <textarea
@@ -333,7 +346,7 @@ export default function EditCoursePage() {
                         </div>
                         <div className="md:col-span-2">
                             <label className="block text-sm font-semibold text-gray-700 mb-2">Course brochure (PDF)</label>
-                            <p className="text-xs text-gray-500 mb-2">One brochure per course. When a user downloads the brochure for this course, they get this file. Optional.</p>
+                            <p className="text-xs text-gray-500 mb-2">Upload one PDF per course. When a user downloads the brochure for this course, they will get this file. Optional.</p>
                             <label className="inline-flex items-center gap-2 px-4 py-2.5 border border-gray-300 rounded-xl font-medium text-gray-700 cursor-pointer hover:bg-gray-50 transition-colors">
                                 <Upload size={18} />
                                 {brochureUploading ? 'Uploading...' : 'Choose PDF'}
@@ -382,7 +395,7 @@ export default function EditCoursePage() {
                                 <div className="mt-2 flex items-center gap-3">
                                     <p className="text-sm text-green-600 flex items-center gap-1">
                                         <FileText size={14} />
-                                        {brochureFileName || 'Brochure attached'}
+                                        {brochureFileName || 'Current brochure attached'} - will be attached to this course
                                     </p>
                                     <button
                                         type="button"
@@ -408,11 +421,11 @@ export default function EditCoursePage() {
                                 value={formData.category}
                                 onChange={handleChange}
                                 className="w-full px-4 py-3 border border-gray-300 text-gray-700 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                                placeholder="e.g. Cybersecurity, Web Development, Cloud"
+                                placeholder="e.g. Cyber Whisper, Cybersecurity, Web Development"
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-2">Price</label>
+                            <label className="block text-sm font-semibold text-gray-700 mb-2">Price *</label>
                             <input
                                 type="number"
                                 name="price"
@@ -421,6 +434,7 @@ export default function EditCoursePage() {
                                 step="0.01"
                                 min="0"
                                 className="w-full px-4 py-3 border border-gray-300 text-gray-700 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                placeholder="99"
                             />
                         </div>
                         <div>
@@ -433,6 +447,7 @@ export default function EditCoursePage() {
                                 step="0.01"
                                 min="0"
                                 className="w-full px-4 py-3 border border-gray-300 text-gray-700 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                placeholder="79.99"
                             />
                         </div>
                         <div className="flex items-center gap-2">
@@ -444,13 +459,24 @@ export default function EditCoursePage() {
                                 onChange={handleChange}
                                 className="rounded border-gray-300 text-purple-600 focus:ring-purple-500"
                             />
-                             
+                            <label htmlFor="discount_flag" className="text-sm font-medium text-gray-700">Discount active</label>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <input
+                                type="checkbox"
+                                name="is_free_course"
+                                id="is_free_course"
+                                checked={!!formData.is_free_course}
+                                onChange={handleChange}
+                                className="rounded border-gray-300 text-purple-600 focus:ring-purple-500"
+                            />
+                            <label htmlFor="is_free_course" className="text-sm font-medium text-gray-700">Free course</label>
                         </div>
                     </div>
                 </div>
 
                 <div className="space-y-4">
-                    <h2 className="text-xl font-bold text-gray-900 border-b pb-2">SEO</h2>
+                    <h2 className="text-xl font-bold text-gray-900 border-b pb-2">SEO (optional)</h2>
                     <div>
                         <label className="block text-sm font-semibold text-gray-700 mb-2">Meta keywords</label>
                         <input
@@ -459,6 +485,7 @@ export default function EditCoursePage() {
                             value={formData.meta_keywords}
                             onChange={handleChange}
                             className="w-full px-4 py-3 border border-gray-300 text-gray-700 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                            placeholder="typescript, advanced, programming"
                         />
                     </div>
                     <div>

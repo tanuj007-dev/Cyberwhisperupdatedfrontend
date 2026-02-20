@@ -5,7 +5,7 @@ import { API_BASE_URL } from '@/lib/apiConfig';
 const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type, Accept',
+    'Access-Control-Allow-Headers': 'Content-Type, Accept, Authorization',
 };
 
 // Handle CORS preflight requests
@@ -24,37 +24,46 @@ export async function GET(request) {
         let users = await getAllUsers();
 
         if (users.length === 0) {
-            try {
-                const base = (API_BASE_URL || '').replace(/\/$/, '');
-                const queryString = searchParams.toString();
-                const url = `${base}/api/users${queryString ? `?${queryString}` : ''}`;
-                const auth = request.headers.get('Authorization');
-                const headers = { 'Content-Type': 'application/json' };
-                if (auth) headers['Authorization'] = auth;
-                const res = await fetch(url, { method: 'GET', headers, cache: 'no-store' });
-                if (res.ok) {
+            const base = (API_BASE_URL || '').replace(/\/$/, '');
+            const queryString = searchParams.toString();
+            const auth = request.headers.get('Authorization');
+            const headers = { 'Content-Type': 'application/json', Accept: 'application/json' };
+            if (auth) headers['Authorization'] = auth;
+
+            // Try backend: some APIs use /users, others /api/users
+            const urlsToTry = [
+                `${base}/users${queryString ? `?${queryString}` : ''}`,
+                `${base}/api/users${queryString ? `?${queryString}` : ''}`,
+            ];
+            for (const url of urlsToTry) {
+                try {
+                    const res = await fetch(url, { method: 'GET', headers, cache: 'no-store' });
                     const data = await res.json().catch(() => ({}));
                     const list = Array.isArray(data?.data) ? data.data : Array.isArray(data?.users) ? data.users : Array.isArray(data) ? data : [];
-                    const total = data?.pagination?.total ?? data?.total ?? list.length;
-                    const startIndex = (page - 1) * limit;
-                    const endIndex = startIndex + limit;
-                    const paginatedUsers = list.slice(startIndex, endIndex);
-                    return NextResponse.json({
-                        success: true,
-                        message: 'Users fetched successfully',
-                        data: paginatedUsers,
-                        pagination: {
-                            page,
-                            limit,
-                            total,
-                            totalPages: Math.ceil(Number(total) / limit) || 1,
-                            hasNextPage: endIndex < total,
-                            hasPrevPage: page > 1,
-                        },
-                    }, { status: 200, headers: corsHeaders });
-                }
+                    if (res.ok && list.length >= 0) {
+                        const total = data?.pagination?.total ?? data?.total ?? list.length;
+                        const startIndex = (page - 1) * limit;
+                        const endIndex = startIndex + limit;
+                        const paginatedUsers = list.slice(startIndex, endIndex);
+                        return NextResponse.json({
+                            success: true,
+                            message: 'Users fetched successfully',
+                            data: paginatedUsers,
+                            pagination: {
+                                page,
+                                limit,
+                                total,
+                                totalPages: Math.ceil(Number(total) / limit) || 1,
+                                hasNextPage: endIndex < total,
+                                hasPrevPage: page > 1,
+                            },
+                        }, { status: 200, headers: corsHeaders });
+                    }
+                } catch (e) {
+                    continue;
             } catch (e) {
                 // fall through to local
+                }
             }
         }
 

@@ -28,19 +28,25 @@ const UserList = () => {
         const r = String(user.role || '').toUpperCase().replace(/\s/g, '');
         return r === 'SUPERADMIN' || r === 'ADMIN' || user.role_id === 1;
     };
-    // Superadmin can activate/deactivate any user; Admin can only non-admin users
+    // Superadmin: full access. Admin: can only activate/deactivate students and instructors (not other admins)
     const canToggleStatusForUser = (user) => {
         if (!canManageStatus) return false;
         if (isSuperAdmin) return true;
         return !isTargetAdminOrSuperadmin(user);
     };
-    // Only superadmin can delete users; cannot delete own account or another admin/superadmin
+    // Only superadmin can delete; admin cannot delete anyone
     const canDeleteUser = (user) => {
         if (!isSuperAdmin) return false;
         if (isTargetAdminOrSuperadmin(user)) return false;
         const id = user?.id ?? user?.user_id;
         if (id == null || currentUserId == null) return true;
         return String(id) !== String(currentUserId);
+    };
+    // Superadmin can edit any user; admin can only edit their own profile
+    const canEditUser = (user) => {
+        if (isSuperAdmin) return true;
+        if (currentUserRole === 'ADMIN') return String(user?.id ?? user?.user_id) === String(currentUserId);
+        return true;
     };
 
     const [togglingStatusId, setTogglingStatusId] = useState(null);
@@ -413,9 +419,11 @@ const UserList = () => {
                                             <Button variant="ghost" size="sm" onClick={() => handleViewUser(user)} title="View">
                                                 <Eye size={18} />
                                             </Button>
-                                            <Button variant="ghost" size="sm" onClick={() => handleOpenEdit(user)} title="Edit">
-                                                <Edit2 size={18} />
-                                            </Button>
+                                            {canEditUser(user) && (
+                                                <Button variant="ghost" size="sm" onClick={() => router.push('/admin/users/edit/' + (user.id ?? user.user_id))} title="Edit">
+                                                    <Edit2 size={18} />
+                                                </Button>
+                                            )}
                                             {canManageStatus && (
                                                 <Button
                                                     variant="ghost"

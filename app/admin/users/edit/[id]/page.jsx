@@ -28,14 +28,24 @@ const EditUser = () => {
         if (typeof window === 'undefined') return;
         const role = getRoleFromToken(localStorage.getItem('adminToken'));
         const currentUserId = getUserIdFromToken(localStorage.getItem('adminToken'));
-        const editingId = params.id != null ? parseInt(params.id, 10) : null;
+        const editingId = params.id != null ? String(params.id).trim() : null;
+        const currentIdStr = currentUserId != null ? String(currentUserId) : null;
         setCurrentUserRole(role || localStorage.getItem('adminRole'));
+        if (currentIdStr != null && editingId != null && editingId === currentIdStr) {
+            setIsOwnProfile(true);
+        }
+        // Admin can only edit their own profile; redirect if trying to edit another user
+        if (role === 'ADMIN') {
+            if (currentIdStr == null || editingId == null || editingId !== currentIdStr) {
+                router.replace('/admin/users');
+                return;
+            }
+        }
         if (role === 'STUDENT' || role === 'INSTRUCTOR') {
             if (currentUserId != null && String(editingId) !== String(currentUserId)) {
                 router.replace('/admin/profile');
                 return;
             }
-            setIsOwnProfile(true);
         }
     }, [params.id, router]);
 
@@ -44,7 +54,11 @@ const EditUser = () => {
             if (typeof window !== 'undefined') {
                 const role = getRoleFromToken(localStorage.getItem('adminToken'));
                 const currentUserId = getUserIdFromToken(localStorage.getItem('adminToken'));
-                const editingId = params.id != null ? parseInt(params.id, 10) : null;
+                const editingId = params.id != null ? String(params.id).trim() : null;
+                const currentIdStr = currentUserId != null ? String(currentUserId) : null;
+                if (role === 'ADMIN' && (currentIdStr == null || editingId == null || editingId !== currentIdStr)) {
+                    return;
+                }
                 if ((role === 'STUDENT' || role === 'INSTRUCTOR') && currentUserId != null && String(editingId) !== String(currentUserId)) {
                     return;
                 }
@@ -177,14 +191,14 @@ const EditUser = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (!validateForm()) {
-            showToast('Please fill in all required fields', 'error');
-            return;
-        }
-
         const userId = formData.id ?? formData.user_id ?? params.id;
         if (userId == null || userId === '') {
             showToast('Invalid user data: missing user ID', 'error');
+            return;
+        }
+
+        if (!validateForm()) {
+            showToast('Please fill in all required fields', 'error');
             return;
         }
 
@@ -424,7 +438,7 @@ const EditUser = () => {
                 </Card>
                 )}
 
-                {/* Role & Permissions – hidden when editing own profile or when logged in as Superadmin */}
+                {/* Role & Permissions – hidden for own profile and when logged in as Superadmin */}
                 {!isOwnProfile && currentUserRole !== 'SUPERADMIN' && (
                 <Card title="Role & Permissions">
                     <div className="space-y-4">
@@ -432,41 +446,19 @@ const EditUser = () => {
                             <label className="block text-sm font-medium text-gray-700 mb-2">Role</label>
                             <div className="flex flex-wrap gap-4">
                                 <label className="flex items-center gap-2 cursor-pointer">
-                                    <input
-                                        type="radio"
-                                        name="role"
-                                        value="ADMIN"
-                                        checked={formData.role === 'ADMIN'}
-                                        onChange={handleChange}
-                                        className="w-4 h-4 text-blue-600"
-                                    />
+                                    <input type="radio" name="role" value="ADMIN" checked={formData.role === 'ADMIN'} onChange={handleChange} className="w-4 h-4 text-blue-600" />
                                     <span className="text-sm">Admin</span>
                                 </label>
                                 <label className="flex items-center gap-2 cursor-pointer">
-                                    <input
-                                        type="radio"
-                                        name="role"
-                                        value="STUDENT"
-                                        checked={formData.role === 'STUDENT'}
-                                        onChange={handleChange}
-                                        className="w-4 h-4 text-blue-600"
-                                    />
+                                    <input type="radio" name="role" value="STUDENT" checked={formData.role === 'STUDENT'} onChange={handleChange} className="w-4 h-4 text-blue-600" />
                                     <span className="text-sm">Student</span>
                                 </label>
                                 <label className="flex items-center gap-2 cursor-pointer">
-                                    <input
-                                        type="radio"
-                                        name="role"
-                                        value="INSTRUCTOR"
-                                        checked={formData.role === 'INSTRUCTOR'}
-                                        onChange={handleChange}
-                                        className="w-4 h-4 text-blue-600"
-                                    />
+                                    <input type="radio" name="role" value="INSTRUCTOR" checked={formData.role === 'INSTRUCTOR'} onChange={handleChange} className="w-4 h-4 text-blue-600" />
                                     <span className="text-sm">Instructor</span>
                                 </label>
                             </div>
                         </div>
-
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t">
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1">Date Added <span className="text-gray-400 font-normal">(read-only)</span></label>
