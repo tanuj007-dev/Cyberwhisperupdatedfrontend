@@ -23,6 +23,11 @@ const UserList = () => {
     }, []);
 
     const isSuperAdmin = currentUserRole === 'SUPERADMIN';
+
+    // When logged in as admin, hide Superadmin filter and clear it if selected
+    useEffect(() => {
+        if (!isSuperAdmin && filterRole === 'superadmin') setFilterRole('');
+    }, [isSuperAdmin, filterRole]);
     const canManageStatus = currentUserRole === 'ADMIN' || currentUserRole === 'SUPERADMIN';
     const isTargetAdminOrSuperadmin = (user) => {
         const r = String(user.role || '').toUpperCase().replace(/\s/g, '');
@@ -367,7 +372,7 @@ const UserList = () => {
                     className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-900 text-gray-900 dark:text-white"
                 >
                     <option value="">All Roles</option>
-                    <option value="superadmin">Superadmin</option>
+                    {isSuperAdmin && <option value="superadmin">Superadmin</option>}
                     <option value="1">Admin</option>
                     <option value="2">Student</option>
                     <option value="3">Instructor</option>
