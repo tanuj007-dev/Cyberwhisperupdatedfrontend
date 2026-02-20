@@ -24,10 +24,6 @@ const UserList = () => {
 
     const isSuperAdmin = currentUserRole === 'SUPERADMIN';
 
-    // When logged in as admin, hide Superadmin filter and clear it if selected
-    useEffect(() => {
-        if (!isSuperAdmin && filterRole === 'superadmin') setFilterRole('');
-    }, [isSuperAdmin, filterRole]);
     const canManageStatus = currentUserRole === 'ADMIN' || currentUserRole === 'SUPERADMIN';
     const isTargetAdminOrSuperadmin = (user) => {
         const r = String(user.role || '').toUpperCase().replace(/\s/g, '');
@@ -88,6 +84,11 @@ const UserList = () => {
     const [errors, setErrors] = useState({});
     const [imageUploading, setImageUploading] = useState(false);
     const [imagePreview, setImagePreview] = useState('');
+
+    // When logged in as admin, hide Superadmin filter and clear it if selected (must run after filterRole is declared)
+    useEffect(() => {
+        if (!isSuperAdmin && filterRole === 'superadmin') setFilterRole('');
+    }, [isSuperAdmin, filterRole]);
 
     const itemsPerPage = 10;
     const MAX_ADMINS = 5;
