@@ -93,6 +93,7 @@ const AddBlog = () => {
         settings: true
     });
     const [thumbnailPreview, setThumbnailPreview] = useState('');
+    const [thumbnailUploading, setThumbnailUploading] = useState(false);
     const [bannerPreview, setBannerPreview] = useState('');
     const [imageUrlPreview, setImageUrlPreview] = useState('');
     const [toast, setToast] = useState({ isVisible: false, message: '', type: 'success' });
@@ -155,6 +156,7 @@ const AddBlog = () => {
         }
 
         try {
+            setThumbnailUploading(true);
             showToast('Uploading image...', 'info');
 
             const formDataUpload = new FormData();
@@ -190,6 +192,8 @@ const AddBlog = () => {
         } catch (error) {
             console.error('Error uploading image:', error);
             showToast('Failed to upload image. Please try again.', 'error');
+        } finally {
+            setThumbnailUploading(false);
         }
     }, []);
 
@@ -561,7 +565,12 @@ const AddBlog = () => {
                             <label className="block text-sm font-medium text-gray-700 mb-2">
                                 Featured Image <span className="text-red-500">*</span>
                             </label>
-                            {thumbnailPreview ? (
+                            {thumbnailUploading ? (
+                                <div className="flex flex-col items-center justify-center w-full h-64 border-2 border-dashed border-violet-300 rounded-xl bg-violet-50/50">
+                                    <Loader2 className="w-10 h-10 text-violet-600 animate-spin mb-3" />
+                                    <p className="text-sm font-medium text-violet-700">Image Uploading</p>
+                                </div>
+                            ) : thumbnailPreview ? (
                                 <div className="relative group rounded-xl overflow-hidden">
                                     <img
                                         src={thumbnailPreview}

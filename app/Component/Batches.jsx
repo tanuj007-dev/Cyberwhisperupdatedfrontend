@@ -245,7 +245,7 @@ export default function Batches() {
                             </div>
                             <div className="col-span-2 flex items-center gap-2 justify-center">
                                 <IndianRupee className="w-5 h-5 opacity-80" />
-                                <span className="font-bold">Investment</span>
+                                <span className="font-bold">Fee</span>
                             </div>
                             <div className="col-span-2 flex items-center justify-center">
                                 <span className="font-bold">Action</span>
@@ -315,7 +315,7 @@ export default function Batches() {
                                     {/* Price Column */}
                                     <div className="lg:col-span-2 flex flex-col items-start lg:items-center justify-center relative z-10 mt-2 lg:mt-0">
                                         {/* Mobile Label */}
-                                        <p className="lg:hidden text-gray-500 text-xs font-semibold uppercase tracking-wider mb-1">Investment</p>
+                                        <p className="lg:hidden text-gray-500 text-xs font-semibold uppercase tracking-wider mb-1">Fee</p>
                                         <div className="flex items-baseline gap-2">
                                             <span className="text-gray-900 dark:text-white font-bold text-xl lg:text-base">
                                                 {formatCurrency(batch.discount_price || batch.price)}

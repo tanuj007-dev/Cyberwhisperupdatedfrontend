@@ -235,6 +235,9 @@ const EditBlog = () => {
             const isDataUrl = (s) => typeof s === 'string' && s.startsWith('data:');
             const thumbnail_url = isDataUrl(rawThumb) ? (initialImageUrlsRef.current.thumbnail_url || '') : rawThumb;
             const banner_url = isDataUrl(rawBanner) ? (initialImageUrlsRef.current.banner_url || '') : rawBanner;
+            // Send empty string when cleared so backend persists removal (null is often ignored by APIs)
+            const thumbnail_urlToSend = (thumbnail_url || '').trim() ? thumbnail_url : '';
+            const banner_urlToSend = (banner_url || '').trim() ? banner_url : '';
 
             const blogData = {
                 title: formData.title,
@@ -245,8 +248,8 @@ const EditBlog = () => {
                 keywords: formData.selectedTags?.map(id => tags.find(t => t.id === id)?.name).filter(Boolean).join(', ') || formData.keywords || '',
                 short_description: formData.shortDescription || '',
                 reading_time: formData.readingTime || '5 min read',
-                thumbnail_url,
-                banner_url,
+                thumbnail_url: thumbnail_urlToSend,
+                banner_url: banner_urlToSend,
                 image_url: formData.image_url || '',
                 video_url: formData.video_url || '',
                 image_alt_text: formData.imageAltText || formData.title || '',
@@ -322,7 +325,6 @@ const EditBlog = () => {
                     </div>
                 </div>
                 <div className="flex items-center gap-3">
-                    <span className="text-sm text-gray-500">{formData.likes} likes</span>
                     <button
                         type="button"
                         onClick={handleSubmit}
@@ -460,7 +462,12 @@ const EditBlog = () => {
                             <label className="block text-sm font-medium text-gray-700 mb-2">
                                 Featured Image
                             </label>
-                            {thumbnailPreview ? (
+                            {uploadingImage ? (
+                                <div className="flex flex-col items-center justify-center w-full h-64 border-2 border-dashed border-violet-300 rounded-xl bg-violet-50/50">
+                                    <Loader2 className="w-10 h-10 text-violet-600 animate-spin mb-3" />
+                                    <p className="text-sm font-medium text-violet-700">Image Uploading</p>
+                                </div>
+                            ) : thumbnailPreview ? (
                                 <div className="relative group rounded-xl overflow-hidden">
                                     <img
                                         src={thumbnailPreview}
@@ -484,7 +491,8 @@ const EditBlog = () => {
                                             type="button"
                                             onClick={() => {
                                                 setThumbnailPreview('');
-                                                setFormData(prev => ({ ...prev, thumbnail: '', banner: '' }));
+                                                initialImageUrlsRef.current = { thumbnail_url: '', banner_url: '' };
+                                                setFormData(prev => ({ ...prev, thumbnail: '', thumbnail_url: '', banner: '', banner_url: '' }));
                                             }}
                                             className="p-3 bg-red-500 text-white rounded-xl hover:bg-red-600 transition-colors"
                                         >
@@ -563,7 +571,7 @@ const EditBlog = () => {
                                         name="publishDate"
                                         value={formData.publishDate}
                                         onChange={handleChange}
-                                        className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                                        className="w-full pl-10 pr-4 text-gray-700 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-transparent"
                                     />
                                 </div>
                             </div>
@@ -573,7 +581,7 @@ const EditBlog = () => {
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>
                                 <div className="flex gap-3">
-                                    {[{ value: 'active', label: 'Published' }, { value: 'inactive', label: 'Draft' }].map((status) => (
+                                    {[ { value: 'active', label: 'Published' }, { value: 'inactive', label: 'Draft' }].map((status) => (
                                         <label key={status.value} className="flex items-center gap-2 cursor-pointer">
                                             <input
                                                 type="radio"
@@ -589,9 +597,9 @@ const EditBlog = () => {
                                 </div>
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">Visibility</label>
+                                {/* <label className="block text-sm font-medium text-gray-700 mb-2">Visibility</label>
                                 <div className="flex gap-3">
-                                    {['public', 'private'].map((vis) => (
+                                    {['public', ].map((vis) => (
                                         <label key={vis} className="flex items-center gap-2 cursor-pointer">
                                             <input
                                                 type="radio"
@@ -604,16 +612,11 @@ const EditBlog = () => {
                                             <span className="text-sm text-gray-700 capitalize">{vis}</span>
                                         </label>
                                     ))}
-                                </div>
+                                </div> */}
                             </div>
                         </div>
 
-                        <Toggle
-                            label="Mark as Featured Post"
-                            name="is_popular"
-                            checked={formData.is_popular}
-                            onChange={handleChange}
-                        />
+                         
 
                         <div className="grid grid-cols-2 gap-4 pt-4 border-t border-gray-100">
                             <div>

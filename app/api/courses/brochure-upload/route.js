@@ -3,6 +3,7 @@ import { writeFile, mkdir } from 'fs/promises';
 import path from 'path';
 
 const COURSE_BROCHURES_DIR = path.join(process.cwd(), 'public', 'uploads', 'course-brochures');
+const MAX_BROCHURE_SIZE = 100 * 1024 * 1024; // 100MB
 
 function sanitize(name) {
     return name.replace(/[^a-zA-Z0-9.-]/g, '_').slice(0, 80) || 'brochure';
@@ -14,6 +15,12 @@ export async function POST(request) {
         const file = formData.get('file') || formData.get('brochure');
         if (!file || !(file instanceof File)) {
             return NextResponse.json({ error: 'No file provided' }, { status: 400 });
+        }
+        if (file.size > MAX_BROCHURE_SIZE) {
+            return NextResponse.json(
+                { error: 'File too large', message: 'Brochure must be 100MB or less' },
+                { status: 400 }
+            );
         }
         const ext = path.extname(file.name) || '.pdf';
         const baseName = sanitize(path.basename(file.name, ext));

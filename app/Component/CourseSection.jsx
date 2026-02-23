@@ -91,10 +91,11 @@ export default function CourseSection() {
 
       const data = await response.json();
 
-      // API returns { success, data: [...] } or { success, courses: [...] }
+      // API returns { success, data: [...] } or { success, courses: [...] }; frontend shows only published
       const rawList = Array.isArray(data.data) ? data.data : (Array.isArray(data.courses) ? data.courses : []);
+      const publishedList = rawList.filter((c) => String(c.status || '').toLowerCase() === "published");
       const categoryLabel = (c) => c.category ?? (c.category_id != null ? `Category ${c.category_id}` : "General");
-      const uniqueCategories = ["All", ...new Set(rawList.map(categoryLabel).filter(Boolean))];
+      const uniqueCategories = ["All", ...new Set(publishedList.map(categoryLabel).filter(Boolean))];
 
       if (uniqueCategories.length > 0) {
         setCategories(uniqueCategories);
@@ -124,14 +125,15 @@ export default function CourseSection() {
 
       const data = await response.json();
 
-      // API returns { success, data: [...] } or { success, courses: [...] }
+      // API returns { success, data: [...] } or { success, courses: [...] }; frontend shows only published
       const rawList = Array.isArray(data.data) ? data.data : (Array.isArray(data.courses) ? data.courses : []);
+      const publishedList = rawList.filter((c) => String(c.status || '').toLowerCase() === "published");
       const categoryLabel = (c) => c.category ?? (c.category_id != null ? `Category ${c.category_id}` : "General");
 
       const filteredCourses =
         !category || category === "All"
-          ? rawList
-          : rawList.filter((course) => categoryLabel(course) === category);
+          ? publishedList
+          : publishedList.filter((course) => categoryLabel(course) === category);
 
       const processedCourses = filteredCourses.map((course) => ({
         ...course,
@@ -358,7 +360,7 @@ export default function CourseSection() {
                           initial={{ opacity: 0, y: 20 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: 0.05 }}
-                          className="shrink-0 flex-none rounded-xl border border-[#7B2CFF]/30 bg-gradient-to-b from-card to-card/95 shadow-lg shadow-gray-200/50 dark:shadow-none overflow-hidden group hover:shadow-xl hover:shadow-[#6B46E5]/15 hover:border-[#6B46E5]/50 transition-all duration-300 flex flex-col text-card-foreground max-w-[360px]"
+                          className="shrink-0 flex-none rounded-3xl border border-[#6B46E5]/30 bg-[#1A0A38] shadow-lg shadow-[#6B46E5]/10 overflow-hidden group hover:shadow-xl hover:shadow-[#6B46E5]/20 hover:border-[#6B46E5]/50 transition-all duration-300 flex flex-col text-white max-w-[360px]"
                           style={
                             visibleCount === 1
                               ? { width: "100%" }
@@ -368,33 +370,38 @@ export default function CourseSection() {
                                 }
                           }
                         >
-                          <div className="p-4 pb-3 space-y-4 shrink-0">
-                            <div className="flex items-center justify-between gap-2">
-                              <span className="bg-[#6B46E5] text-white px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider">
+                          {/* Content block */}
+                          <div className="p-5 pb-4 space-y-4 shrink-0 flex flex-col">
+                            {/* Top row: category + rating + price */}
+                            <div className="flex items-center justify-between gap-2 flex-wrap">
+                              <span className="bg-[#6B46E5] text-white px-3 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider">
                                 {course.category}
                               </span>
-                              <div className="flex items-center gap-1.5 flex-wrap">
-                                <span className="text-sm text-foreground font-medium">
+                              <div className="flex items-center gap-2 flex-wrap justify-end">
+                                <span className="text-sm text-white font-medium flex items-center gap-1">
                                   {course.rating}
+                                  <Star className="w-4 h-4 fill-amber-400 text-amber-400 shrink-0" />
                                 </span>
-                                <Star className="w-4 h-4 fill-amber-400 text-amber-400 shrink-0" />
                                 {(course.price != null ||
                                   course.discounted_price != null) && (
-                                  <span className="text-sm text-muted-foreground flex items-center gap-1.5">
+                                  <span className="text-sm flex items-center gap-1.5">
+                                    <span className="font-semibold text-primary">
+                                      ₹
+                                      {Number(
+                                        course.discounted_price != null &&
+                                        course.price != null &&
+                                        course.discounted_price < course.price
+                                          ? course.discounted_price
+                                          : course.discounted_price ?? course.price,
+                                      ).toLocaleString("en-IN", {
+                                        maximumFractionDigits: 2,
+                                        minimumFractionDigits: 0,
+                                      })}
+                                    </span>
                                     {course.discounted_price != null &&
-                                    course.price != null &&
-                                    course.discounted_price < course.price ? (
-                                      <>
-                                        <span className="font-semibold text-[#6B46E5]">
-                                          ₹
-                                          {Number(
-                                            course.discounted_price,
-                                          ).toLocaleString("en-IN", {
-                                            maximumFractionDigits: 2,
-                                            minimumFractionDigits: 0,
-                                          })}
-                                        </span>
-                                        <span className="line-through text-slate-400 dark:text-gray-500">
+                                      course.price != null &&
+                                      course.discounted_price < course.price && (
+                                        <span className="line-through text-gray-400">
                                           ₹
                                           {Number(course.price).toLocaleString(
                                             "en-IN",
@@ -404,32 +411,22 @@ export default function CourseSection() {
                                             },
                                           )}
                                         </span>
-                                      </>
-                                    ) : (
-                                      <span>
-                                        ₹
-                                        {Number(
-                                          course.discounted_price ??
-                                            course.price,
-                                        ).toLocaleString("en-IN", {
-                                          maximumFractionDigits: 2,
-                                          minimumFractionDigits: 0,
-                                        })}
-                                      </span>
-                                    )}
+                                      )}
                                   </span>
                                 )}
                               </div>
                             </div>
-                            <h3 className="text-lg font-bold text-foreground leading-snug line-clamp-3 group-hover:text-[#6B46E5] transition-colors duration-200">
+                            {/* Title */}
+                            <h3 className="text-lg font-bold text-primary leading-snug line-clamp-3">
                               {course.title}
                             </h3>
+                            {/* Buttons */}
                             <div className="space-y-3">
                               <div className="flex items-center gap-3">
                                 <button
                                   type="button"
                                   onClick={() => openEnrollModal(course.title)}
-                                  className="flex-1 bg-[#310E3F] text-white py-2.5 rounded-lg text-sm font-bold hover:bg-[#6B46E5] transition-colors dark:bg-white dark:text-[#310E3F] dark:hover:bg-[#6B46E5] dark:hover:text-white"
+                                  className="flex-1 bg-white text-[#1A0A38] py-2.5 rounded-xl text-sm font-bold hover:bg-gray-100 transition-colors"
                                 >
                                   Enroll Now
                                 </button>
@@ -439,7 +436,7 @@ export default function CourseSection() {
                                     setBrochureCourse(course);
                                     setBrochureModalOpen(true);
                                   }}
-                                  className="flex-1 border-2 border-[#6B46E5] text-[#6B46E5] py-2.5 rounded-lg text-sm font-bold hover:bg-[#6B46E5]/10 transition-colors dark:border-purple-400 dark:text-purple-300 dark:hover:bg-purple-500/10"
+                                  className="flex-1 border-2 border-[#9F7AEA] text-white py-2.5 rounded-xl text-sm font-bold hover:bg-[#6B46E5]/20 transition-colors"
                                 >
                                   Learn More
                                 </button>
@@ -447,44 +444,36 @@ export default function CourseSection() {
                               <button
                                 type="button"
                                 onClick={() => openEnquiry(true)}
-                                className="w-full py-2 rounded-lg text-sm font-bold border border-[#6B46E5]/50 text-[#6B46E5] hover:bg-[#6B46E5] hover:text-white transition-colors dark:border-purple-400 dark:text-purple-300 dark:hover:bg-[#6B46E5] dark:hover:text-white"
+                                className="w-full py-2.5 rounded-xl text-sm font-semibold border-2 border-[#9F7AEA] text-white hover:bg-[#6B46E5]/20 transition-colors"
                               >
                                 Book a demo
                               </button>
                             </div>
-                            <div className="grid grid-cols-2 gap-2">
-                              <div className="flex flex-col items-center justify-center gap-1.5 p-2.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/50">
-                                <BarChart2 size={18} className="text-[#6B46E5] dark:text-purple-400" />
-                                <span className="text-xs font-medium text-slate-700 dark:text-gray-300 text-center">
-                                  {course.level}
-                                </span>
-                              </div>
-                              <div className="flex flex-col items-center justify-center gap-1.5 p-2.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/50">
-                                <Calendar size={18} className="text-[#6B46E5] dark:text-purple-400" />
-                                <span className="text-xs font-medium text-slate-700 dark:text-gray-300 text-center">
-                                  {(course.duration || "3").replace(/\s*weeks?$/i, "")}
-                                </span>
-                              </div>
+                            {/* Difficulty */}
+                            <div className="flex flex-col items-center justify-center gap-1.5 p-3 rounded-xl border-2 border-[#9F7AEA]">
+                              <BarChart2 size={20} className="text-white" />
+                              <span className="text-xs font-medium text-white text-center capitalize">
+                                {course.level}
+                              </span>
                             </div>
                           </div>
-                          <div className="px-4 pb-3">
-                            <div className="relative aspect-[3/2] rounded-b-xl overflow-hidden ring-1 ring-black/5">
-                              <Image
-                                src={
-                                  typeof course.image === "string"
-                                    ? `${course.image}${course.image.includes("?") ? "&" : "?"}v=${course.last_modified ?? course.id ?? ""}`
-                                    : course.image
-                                }
-                                alt={course.title}
-                                fill
-                                unoptimized={
-                                  typeof course.image === "string" &&
-                                  course.image.startsWith("http")
-                                }
-                                className="object-cover transition-transform duration-500 group-hover:scale-105"
-                              />
-                              <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-                            </div>
+                          {/* Image at bottom */}
+                          <div className="relative aspect-4/3 rounded-b-3xl overflow-hidden shrink-0 mt-auto">
+                            <Image
+                              src={
+                                typeof course.image === "string"
+                                  ? `${course.image}${course.image.includes("?") ? "&" : "?"}v=${course.last_modified ?? course.id ?? ""}`
+                                  : course.image
+                              }
+                              alt={course.title}
+                              fill
+                              unoptimized={
+                                typeof course.image === "string" &&
+                                course.image.startsWith("http")
+                              }
+                              className="object-cover transition-transform duration-500 group-hover:scale-105"
+                            />
+                            <div className="absolute inset-0 bg-linear-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
                           </div>
                         </motion.div>
                       ))}

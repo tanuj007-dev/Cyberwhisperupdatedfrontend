@@ -49,14 +49,16 @@ export default function BlogPage() {
                 totalPages = Math.ceil(result.length / blogsPerPage)
             }
 
+            // Only show published/active on frontend (exclude draft, archived)
+            const isPublished = (p) => ['PUBLISHED', 'ACTIVE'].includes(String(p.status || '').toUpperCase().replace(/\s/g, ''));
+            const publishedList = blogsList.filter(isPublished);
             // Normalize for BlogCard: backend sends thumbnail_url/banner_url/image_url, component expects image
-            const normalized = blogsList.map((post) => ({
+            const normalized = publishedList.map((post) => ({
                 ...post,
                 image: post.image || post.thumbnail_url || post.banner_url || post.image_url || '',
                 description: post.description || post.short_description || (typeof post.content === 'string' ? post.content.substring(0, 200) : ''),
                 slug: post.slug ?? post.id,
             }))
-
             console.log('Fetched blogs:', normalized.length, 'Total pages:', totalPages)
             setBlogs(normalized)
             setTotalPages(totalPages)

@@ -8,6 +8,11 @@ const corsHeaders = {
     'Access-Control-Allow-Headers': 'Content-Type',
 };
 
+const isPublished = (blog) => {
+    const s = String(blog.status || '').toUpperCase().replace(/\s/g, '');
+    return s === 'PUBLISHED' || s === 'ACTIVE';
+};
+
 function mapBlogToFrontend(blog) {
     const id = blog.id ?? blog.blog_id ?? blog._id;
     return {
@@ -47,9 +52,10 @@ export async function GET(request) {
         const normalizeAndReturn = (json) => {
             const raw = json.data ?? json.blogs ?? json.result ?? json.items ?? json.posts ?? (Array.isArray(json) ? json : []);
             const list = Array.isArray(raw) ? raw : [];
-            const total = json.pagination?.total ?? json.total ?? list.length;
+            const publishedOnly = list.filter(isPublished);
+            const total = json.pagination?.total ?? json.total ?? publishedOnly.length;
             const totalPages = json.pagination?.totalPages ?? (Math.ceil(total / limit) || 1);
-            const data = list.map(mapBlogToFrontend);
+            const data = publishedOnly.map(mapBlogToFrontend);
             return NextResponse.json(
                 {
                     success: true,

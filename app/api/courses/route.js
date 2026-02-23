@@ -23,11 +23,15 @@ export async function GET(request) {
 
         const data = await response.json();
         const rawCourses = Array.isArray(data.data) ? data.data : (Array.isArray(data.courses) ? data.courses : []);
+        // Frontend: only show published courses (exclude draft and archived)
+        const publishedOnly = rawCourses.filter(
+            (c) => String(c.status || '').toLowerCase() === 'published'
+        );
 
         // Transform the response to match our component structure
         const transformedData = {
             success: data.success !== false,
-            courses: rawCourses.map(course => ({
+            courses: publishedOnly.map(course => ({
                 id: course.id,
                 title: course.title,
                 short_description: course.short_description,
@@ -44,7 +48,7 @@ export async function GET(request) {
                 brochure_url: course.brochure_url || course.brochure || undefined,
                 ...course
             })),
-            pagination: data.pagination || { page: 1, limit: Number(limit), total: rawCourses.length }
+            pagination: data.pagination || { page: 1, limit: Number(limit), total: publishedOnly.length }
         };
 
         return Response.json(transformedData, {

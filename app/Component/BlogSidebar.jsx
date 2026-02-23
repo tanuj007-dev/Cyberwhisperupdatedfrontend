@@ -32,14 +32,15 @@ export default function BlogSidebar() {
             const result = await response.json()
             console.log('Sidebar articles API response:', result)
 
-            // Handle API response structure
+            // Handle API response structure; only show published/active on frontend
+            const isPublished = (p) => ['PUBLISHED', 'ACTIVE'].includes(String(p.status || '').toUpperCase().replace(/\s/g, ''))
             let articles = []
             if (result.success && result.data) {
                 articles = Array.isArray(result.data) ? result.data : [result.data]
             } else if (Array.isArray(result)) {
                 articles = result
             }
-
+            articles = articles.filter(isPublished)
             setLatestArticles(articles.slice(0, 5)) // Ensure max 3 articles
         } catch (err) {
             console.error('Error fetching latest articles:', err)

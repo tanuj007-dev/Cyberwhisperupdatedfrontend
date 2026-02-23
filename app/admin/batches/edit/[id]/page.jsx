@@ -5,6 +5,9 @@ import { useRouter, useParams } from 'next/navigation';
 import { ArrowLeft, Save, Loader2 } from 'lucide-react';
 import { API_BASE_URL } from '../../../../../lib/apiConfig';
 
+const VALID_BATCH_STATUSES = ['ACTIVE', 'INACTIVE', 'COMPLETED', 'UPCOMING'];
+const normalizeStatus = (s) => (VALID_BATCH_STATUSES.includes(String(s || '').toUpperCase()) ? String(s).toUpperCase() : 'ACTIVE');
+
 export default function EditBatchPage() {
     const router = useRouter();
     const params = useParams();
@@ -26,7 +29,7 @@ export default function EditBatchPage() {
         instructor_id: '',
         price: '',
         discount_price: '',
-        description: '',
+        // description: '',
         status: 'ACTIVE'
     });
 
@@ -68,8 +71,8 @@ export default function EditBatchPage() {
                 instructor_id: batch.instructor_id ?? batch.instructorId ?? '',
                 price: batch.price ?? batch.fee ?? '',
                 discount_price: batch.discount_price ?? batch.discountPrice ?? '',
-                description: batch.description ?? batch.desc ?? batch.details ?? batch.summary ?? '',
-                status: batch.status ?? 'ACTIVE'
+                // description: batch.description ?? batch.desc ?? batch.details ?? batch.summary ?? '',
+                status: normalizeStatus(batch.status)
             });
         } catch (err) {
             console.error('Error fetching batch:', err);
@@ -96,8 +99,8 @@ export default function EditBatchPage() {
                             instructor_id: b.instructor_id ?? b.instructorId ?? '',
                             price: b.price ?? b.fee ?? '',
                             discount_price: b.discount_price ?? b.discountPrice ?? '',
-                            description: b.description ?? b.desc ?? b.details ?? b.summary ?? '',
-                            status: b.status ?? 'ACTIVE'
+                            // description: b.description ?? b.desc ?? b.details ?? b.summary ?? '',
+                            status: normalizeStatus(b.status)
                         });
                     } else {
                         alert('Failed to load batch data');
@@ -142,7 +145,7 @@ export default function EditBatchPage() {
                 duration_weeks: parseInt(formData.duration_weeks),
                 price: parseFloat(formData.price),
                 discount_price: formData.discount_price ? parseFloat(formData.discount_price) : null,
-                description: formData.description,
+                // description: formData.description,
                 status: formData.status
             };
 
@@ -255,13 +258,13 @@ export default function EditBatchPage() {
                                 className="w-full px-4 py-3 border text-gray-700 border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                             >
                                 <option value="ACTIVE">Active</option>
-                                <option value="UPCOMING">Upcoming</option>
+                                <option value="INACTIVE">Inactive</option>
                                 <option value="COMPLETED">Completed</option>
-                                <option value="CANCELLED">Cancelled</option>
+                                <option value="UPCOMING">Upcoming</option>
                             </select>
                         </div>
                     </div>
-
+{/* 
                     <div>
                         <label className="block text-sm font-semibold text-gray-700 mb-2">
                             Description
@@ -273,7 +276,7 @@ export default function EditBatchPage() {
                             rows={3}
                             className="w-full px-4 py-3 border text-gray-700 border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                         />
-                    </div>
+                    </div> */}
                 </div>
 
                 {/* Schedule Details */}

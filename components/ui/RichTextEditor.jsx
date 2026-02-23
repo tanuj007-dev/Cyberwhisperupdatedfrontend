@@ -66,10 +66,17 @@ const RichTextEditor = ({ value, onChange, placeholder = "Write your content her
         handleInput();
     }, []);
 
+    // Normalize heading tags to lowercase so they render correctly on the blog page (some browsers output <H1> etc.)
+    const normalizeHeadingTags = useCallback((html) => {
+        if (typeof html !== 'string') return html;
+        return html.replace(/<\/?([Hh][1-6])>/g, (match) => match.toLowerCase());
+    }, []);
+
     // Handle content changes
     const handleInput = useCallback(() => {
         if (editorRef.current) {
-            const content = editorRef.current.innerHTML;
+            let content = editorRef.current.innerHTML;
+            content = normalizeHeadingTags(content);
             const textContent = editorRef.current.textContent || '';
             setIsEmpty(!textContent.trim());
 
@@ -80,17 +87,48 @@ const RichTextEditor = ({ value, onChange, placeholder = "Write your content her
                 }
             });
         }
-    }, [onChange, name]);
+    }, [onChange, name, normalizeHeadingTags]);
 
-    // Toggle heading (click again to remove)
+    // Toggle heading (click again to remove). Force real h1-h6 tags so they render on the blog page (some browsers ignore formatBlock or output wrong casing).
     const toggleHeading = useCallback((level) => {
-        const currentFormat = document.queryCommandValue('formatBlock');
-        if (currentFormat.toLowerCase() === `h${level}`) {
-            // Remove heading, convert to paragraph
+        const sel = window.getSelection();
+        if (!sel || sel.rangeCount === 0) {
+            editorRef.current?.focus();
+            return;
+        }
+        const range = sel.getRangeAt(0);
+        const block = range.commonAncestorContainer.nodeType === 3
+            ? range.commonAncestorContainer.parentElement
+            : range.commonAncestorContainer;
+        const blockEl = block?.closest?.('h1, h2, h3, h4, h5, h6, p, div');
+        const currentTag = blockEl?.tagName?.toLowerCase() || '';
+
+        if (currentTag === `h${level}`) {
             document.execCommand('formatBlock', false, 'p');
         } else {
             document.execCommand('formatBlock', false, `h${level}`);
+            // Ensure we have a real heading tag (some browsers output wrong casing or ignore formatBlock)
+            const blockAfter = (() => {
+                const r = window.getSelection();
+                if (!r || r.rangeCount === 0) return null;
+                const anc = r.getRangeAt(0).commonAncestorContainer;
+                const node = anc.nodeType === 3 ? anc.parentElement : anc;
+                return node?.closest?.('h1, h2, h3, h4, h5, h6, p, div');
+            })();
+            if (blockAfter && blockAfter.tagName && !/^H[1-6]$/i.test(blockAfter.tagName)) {
+                const newHeading = document.createElement(`h${level}`);
+                newHeading.innerHTML = blockAfter.innerHTML;
+                blockAfter.parentNode?.replaceChild(newHeading, blockAfter);
+            }
         }
+        editorRef.current?.focus();
+        updateActiveFormats();
+        handleInput();
+    }, [handleInput, updateActiveFormats]);
+
+    // Set current block to paragraph (p)
+    const setParagraph = useCallback(() => {
+        document.execCommand('formatBlock', false, 'p');
         editorRef.current?.focus();
         updateActiveFormats();
         handleInput();
@@ -191,6 +229,8 @@ const RichTextEditor = ({ value, onChange, placeholder = "Write your content her
             } catch (_) { savedSelectionRef.current = null; }
         } else {
             savedSelectionRef.current = null;
+            // Ensure editor has focus so insertion has a valid cursor on first use
+            editorRef.current?.focus();
         }
         setImageUrlInput('');
         setImageAltInput('');
@@ -254,6 +294,7 @@ const RichTextEditor = ({ value, onChange, placeholder = "Write your content her
             } catch (_) { savedSelectionRef.current = null; }
         } else {
             savedSelectionRef.current = null;
+            editorRef.current?.focus();
         }
         setVideoUrlInput('');
         setVideoModalOpen(true);
@@ -376,11 +417,12 @@ const RichTextEditor = ({ value, onChange, placeholder = "Write your content her
         handleInput();
     }, [handleInput, onUploadImage, insertImageAtCursor]);
 
-    // Toolbar button component
-    const ToolbarButton = ({ icon: Icon, title, onClick, active = false, disabled = false, danger = false }) => (
+    // Toolbar button component — use onMouseDownPrevent to stop first click being stolen by contentEditable focus (e.g. Image/Video)
+    const ToolbarButton = ({ icon: Icon, title, onClick, active = false, disabled = false, danger = false, preventFocusSteal = false }) => (
         <button
             type="button"
             onClick={onClick}
+            onMouseDown={preventFocusSteal ? (e) => e.preventDefault() : undefined}
             disabled={disabled}
             className={`p-2 rounded-lg transition-all ${danger
                 ? 'text-red-600 hover:bg-red-50 hover:text-red-700'
@@ -494,6 +536,12 @@ const RichTextEditor = ({ value, onChange, placeholder = "Write your content her
                     onClick={() => toggleHeading(6)}
                     active={isHeadingActive(6)}
                 />
+                <ToolbarButton
+                    icon={Type}
+                    title="Paragraph (normal text)"
+                    onClick={setParagraph}
+                    active={currentBlock.toLowerCase() === 'p'}
+                />
 
                 <Divider />
 
@@ -539,20 +587,14 @@ const RichTextEditor = ({ value, onChange, placeholder = "Write your content her
 
                 <Divider />
 
-                {/* Insert Elements */}
+                {/* Insert Elements — preventFocusSteal so first click isn't consumed by contentEditable focus */}
                 <ToolbarButton icon={LinkIcon} title="Insert/Remove Link" onClick={insertLink} />
-                <ToolbarButton icon={ImageIcon} title="Insert Image — upload or paste URL (inserts at cursor)" onClick={openImageModal} />
-                <ToolbarButton icon={Video} title="Insert Video — YouTube or Vimeo URL (inserts at cursor)" onClick={openVideoModal} />
+                <ToolbarButton icon={ImageIcon} title="Insert Image — upload or paste URL (inserts at cursor)" onClick={openImageModal} preventFocusSteal />
+                <ToolbarButton icon={Video} title="Insert Video — YouTube or Vimeo URL (inserts at cursor)" onClick={openVideoModal} preventFocusSteal />
 
                 <Divider />
 
-                {/* Clear Formatting */}
-                <ToolbarButton
-                    icon={Type}
-                    title="Clear Formatting (removes bold, italic, etc.)"
-                    onClick={clearFormatting}
-                />
-               
+              
             </div>
 
             {/* Video insert modal — paste YouTube/Vimeo URL, inserts at cursor */}

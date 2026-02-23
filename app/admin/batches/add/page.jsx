@@ -22,7 +22,7 @@ export default function AddBatchPage() {
         instructor_id: '',
         price: '',
         discount_price: '',
-        description: '',
+        // description: '',
         status: 'ACTIVE'
     });
 
@@ -144,14 +144,14 @@ export default function AddBatchPage() {
                                 className="w-full px-4 py-3 border text-black border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                             >
                                 <option value="ACTIVE">Active</option>
-                                <option value="UPCOMING">Upcoming</option>
+                                <option value="INACTIVE">Inactive</option>
                                 <option value="COMPLETED">Completed</option>
-                                <option value="CANCELLED">Cancelled</option>
+                                <option value="UPCOMING">Upcoming</option>
                             </select>
                         </div>
                     </div>
 
-                    <div>
+                    {/* <div>
                         <label className="block text-sm font-semibold text-black mb-2">
                             Description
                         </label>
@@ -163,7 +163,7 @@ export default function AddBatchPage() {
                             className="w-full px-4 py-3 text-black border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                             placeholder="Brief description of the program"
                         />
-                    </div>
+                    </div> */}
                 </div>
 
                 {/* Schedule Details */}

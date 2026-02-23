@@ -8,6 +8,11 @@ const corsHeaders = {
     'Access-Control-Allow-Headers': 'Content-Type',
 };
 
+const isPublished = (blog) => {
+    const s = String(blog.status || '').toUpperCase().replace(/\s/g, '');
+    return s === 'PUBLISHED' || s === 'ACTIVE';
+};
+
 function mapBlogToFrontend(blog) {
     const firstName = blog.author_first_name ?? blog.authorFirstName ?? '';
     const lastName = blog.author_last_name ?? blog.authorLastName ?? '';
@@ -49,6 +54,12 @@ export async function GET(request, context) {
                 const json = await res.json();
                 const blog = json.data ?? json;
                 if (blog && (blog.id || blog.slug)) {
+                    if (!isPublished(blog)) {
+                        return NextResponse.json(
+                            { success: false, error: 'Blog not found' },
+                            { status: 404, headers: corsHeaders }
+                        );
+                    }
                     return NextResponse.json(
                         { success: true, message: 'Blog fetched successfully', data: mapBlogToFrontend(blog) },
                         { status: 200, headers: corsHeaders }
@@ -64,7 +75,7 @@ export async function GET(request, context) {
             ? await getBlogById(parseInt(slug))
             : (await getAllBlogs()).find(b => b.slug === slug);
 
-        if (!blog) {
+        if (!blog || !isPublished(blog)) {
             return NextResponse.json(
                 { success: false, error: 'Blog not found' },
                 { status: 404, headers: corsHeaders }

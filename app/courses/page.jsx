@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
-import { Star, BarChart2, Calendar, ChevronLeft, ChevronRight, ChevronDown, ChevronUp } from 'lucide-react'
+import { Star, BarChart2, ChevronLeft, ChevronRight } from 'lucide-react'
 import Link from 'next/link'
 import thumb1 from '../Component/assets/cyber_lab_1.webp'
 import BrochureFormModal from '../Component/BrochureFormModal'
@@ -23,18 +23,7 @@ export default function AllCoursesPage() {
     const [brochureCourse, setBrochureCourse] = useState(null)
     const [enrollModalOpen, setEnrollModalOpen] = useState(false)
     const [enrollCourseTitle, setEnrollCourseTitle] = useState('')
-    const [expandedId, setExpandedId] = useState(null)
     const { openEnquiry } = useEnquiry()
-
-    const PREVIEW_LENGTH = 120
-    const getDescriptionPreview = (course) => {
-        const full = (course.description || course.short_description || '').trim()
-        if (!full) return ''
-        if (full.length <= PREVIEW_LENGTH) return full
-        return full.slice(0, PREVIEW_LENGTH).trim() + '...'
-    }
-    const getFullDescription = (course) => (course.description || course.short_description || '').trim()
-    const hasLongDescription = (course) => (getFullDescription(course).length > PREVIEW_LENGTH)
 
     const openEnrollModal = (title) => {
         setEnrollCourseTitle(title || '')
@@ -72,11 +61,12 @@ export default function AllCoursesPage() {
                 throw new Error('API returned unsuccessful response')
             }
 
-            // API returns { data: [...] } or { courses: [...] }
-            const list = Array.isArray(data.data) ? data.data : (data.courses || [])
+            // API returns { data: [...] } or { courses: [...] }; frontend shows only published (no draft/archived)
+            const rawList = Array.isArray(data.data) ? data.data : (data.courses || [])
+            const list = rawList.filter((c) => String(c.status || '').toLowerCase() === 'published')
             setCourses(list)
             setTotalPages(data.pagination?.pages || 1)
-            setTotalCourses(data.pagination?.total || 0)
+            setTotalCourses(data.pagination?.total ?? list.length)
         } catch (err) {
             console.error('Error fetching courses:', err)
             setError(err.message)
@@ -98,13 +88,6 @@ export default function AllCoursesPage() {
             setCurrentPage(currentPage + 1)
             window.scrollTo(0, 0)
         }
-    }
-
-    const getCoursePrice = (course) => {
-        if (course.discounted_price && course.discounted_price > 0) {
-            return `₹${course.discounted_price}`
-        }
-        return course.price ? `₹${course.price}` : 'Free'
     }
 
     return (
@@ -165,18 +148,88 @@ export default function AllCoursesPage() {
                             <p className="text-slate-400 dark:text-gray-500">No courses available</p>
                         </div>
                     )}
-                    {courses.map((course, idx) => (
-                        <motion.div
-                            key={course.id}
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: idx * 0.1 }}
-                            className="bg-white dark:bg-gray-800 rounded-[2.5rem] border border-[#7B2CFF] dark:border-gray-700 shadow-[0_15px_40px_rgba(0,0,0,0.04)] dark:shadow-none overflow-hidden group hover:shadow-[0_25px_60px_rgba(107,70,229,0.08)] dark:hover:ring-2 dark:hover:ring-violet-500/50 transition-all duration-500 flex flex-col h-full"
-                        >
-                            {/* Card Content Top */}
-                            <div className="px-6 pb-6 mt-6">
-                                <div className="relative aspect-video rounded-[1.5rem] overflow-hidden bg-gray-100 dark:bg-gray-700">
+                    {courses.map((course, idx) => {
+                        const categoryLabel = course.category ?? (course.category_id != null ? `Category ${course.category_id}` : 'General')
+                        const hasDiscount = course.discounted_price != null && course.price != null && course.discounted_price < course.price
+                        const displayPrice = hasDiscount ? course.discounted_price : (course.discounted_price ?? course.price)
+                        return (
+                            <motion.div
+                                key={course.id}
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: idx * 0.1 }}
+                                className="rounded-3xl border border-[#6B46E5]/30 bg-[#1A0A38] shadow-lg shadow-[#6B46E5]/10 overflow-hidden group hover:shadow-xl hover:shadow-[#6B46E5]/20 hover:border-[#6B46E5]/50 transition-all duration-300 flex flex-col text-white"
+                            >
+                                {/* Content block */}
+                                <div className="p-5 pb-4 space-y-4 shrink-0 flex flex-col">
+                                    {/* Top row: category + rating + price */}
+                                    <div className="flex items-center justify-between gap-2 flex-wrap">
+                                        <span className="bg-[#6B46E5] text-white px-3 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider">
+                                            {categoryLabel}
+                                        </span>
+                                        <div className="flex items-center gap-2 flex-wrap justify-end">
+                                            <span className="text-sm text-white font-medium flex items-center gap-1">
+                                                {course.rating ?? 4.5}
+                                                <Star className="w-4 h-4 fill-amber-400 text-amber-400 shrink-0" />
+                                            </span>
+                                            {(course.price != null || course.discounted_price != null) && (
+                                                <span className="text-sm flex items-center gap-1.5">
+                                                    <span className="font-semibold text-primary">
+                                                        {displayPrice != null ? `₹${Number(displayPrice).toLocaleString('en-IN', { maximumFractionDigits: 2, minimumFractionDigits: 0 })}` : 'Free'}
+                                                    </span>
+                                                    {hasDiscount && (
+                                                        <span className="line-through text-gray-400">
+                                                            ₹{Number(course.price).toLocaleString('en-IN', { maximumFractionDigits: 2, minimumFractionDigits: 0 })}
+                                                        </span>
+                                                    )}
+                                                </span>
+                                            )}
+                                        </div>
+                                    </div>
+                                    {/* Title */}
+                                    <h3 className="text-lg font-bold text-primary leading-snug line-clamp-3">
+                                        {course.title}
+                                    </h3>
+                                    {/* Buttons */}
+                                    <div className="space-y-3">
+                                        <div className="flex items-center gap-3">
+                                            <button
+                                                type="button"
+                                                onClick={() => openEnrollModal(course.title)}
+                                                className="flex-1 bg-white text-[#1A0A38] py-2.5 rounded-xl text-sm font-bold hover:bg-gray-100 transition-colors"
+                                            >
+                                                Enroll Now
+                                            </button>
+                                            <button
+                                                type="button"
+                                                onClick={() => {
+                                                    setBrochureCourse(course)
+                                                    setBrochureModalOpen(true)
+                                                }}
+                                                className="flex-1 border-2 border-[#9F7AEA] text-white py-2.5 rounded-xl text-sm font-bold hover:bg-[#6B46E5]/20 transition-colors"
+                                            >
+                                                Learn More
+                                            </button>
+                                        </div>
+                                        <button
+                                            type="button"
+                                            onClick={() => openEnquiry(true)}
+                                            className="w-full py-2.5 rounded-xl text-sm font-semibold border-2 border-[#9F7AEA] text-white hover:bg-[#6B46E5]/20 transition-colors"
+                                        >
+                                            Book a demo
+                                        </button>
+                                    </div>
+                                    {/* Difficulty */}
+                                    <div className="flex flex-col items-center justify-center gap-1.5 p-3 rounded-xl border-2 border-[#9F7AEA]">
+                                        <BarChart2 size={20} className="text-white" />
+                                        <span className="text-xs font-medium text-white text-center capitalize">
+                                            {course.level || 'Beginner'}
+                                        </span>
+                                    </div>
+                                </div>
+                                {/* Image at bottom */}
+                                <div className="relative aspect-4/3 rounded-b-3xl overflow-hidden shrink-0 mt-auto">
                                     <Image
                                         src={(() => {
                                             const raw = course.thumbnail || course.course_thumbnail || course.thumbnail_url || course.image
@@ -188,110 +241,18 @@ export default function AllCoursesPage() {
                                         })()}
                                         alt={course.title}
                                         fill
-                                        className="object-cover transition-transform duration-700 group-hover:scale-110"
+                                        className="object-cover transition-transform duration-500 group-hover:scale-105"
                                         unoptimized={typeof (course.course_thumbnail || course.image || course.thumbnail) === 'string' && (course.course_thumbnail || course.image || course.thumbnail)?.startsWith('http')}
                                         onError={(e) => {
                                             e.currentTarget.src = defaultImage.src
                                             e.currentTarget.srcset = defaultImage.src
                                         }}
                                     />
+                                    <div className="absolute inset-0 bg-linear-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
                                 </div>
-                            </div>
-                            <div className="px-8 pb-4 space-y-6 grow flex flex-col">
-                                <div className="flex items-start justify-between gap-4">
-                                    <div className="flex-1">
-                                        <span className="bg-[#E9E4FF] dark:bg-violet-500/20 text-[#6B46E5] dark:text-violet-400 px-3 py-1 rounded-sm text-xs font-semibold uppercase tracking-wider inline-block">
-                                            {course.level || 'Beginner'}
-                                        </span>
-                                    </div>
-                                    <div className="flex items-center gap-1 shrink-0">
-                                        <span className="text-sm text-slate-900 dark:text-gray-100">{course.rating || 4.5}</span>
-                                        <Star className="w-4 h-4 fill-yellow-400 text-yellow-400 dark:fill-yellow-500 dark:text-yellow-500" />
-                                    </div>
-                                </div>
-
-                                <div className="flex-1 min-w-0">
-                                    <h3 className="text-[22px] font-semibold text-[#1a1a2e] dark:text-white leading-[1.2] group-hover:text-[#6B46E5] dark:group-hover:text-violet-400 transition-colors line-clamp-3">
-                                        {course.title}
-                                    </h3>
-                                    <div className="text-slate-500 dark:text-gray-400 text-sm mt-2">
-                                        <p className={expandedId === course.id ? '' : 'line-clamp-2'}>
-                                            {expandedId === course.id ? getFullDescription(course) : (getDescriptionPreview(course) || course.short_description)}
-                                        </p>
-                                        {hasLongDescription(course) && (
-                                            <button
-                                                type="button"
-                                                onClick={() => setExpandedId((id) => (id === course.id ? null : course.id))}
-                                                className="mt-1.5 inline-flex items-center gap-1 text-[#6B46E5] dark:text-violet-400 font-semibold text-xs hover:underline focus:outline-none"
-                                            >
-                                                {expandedId === course.id ? (
-                                                    <>Read less <ChevronUp className="w-3.5 h-3.5" /></>
-                                                ) : (
-                                                    <>Read more <ChevronDown className="w-3.5 h-3.5" /></>
-                                                )}
-                                            </button>
-                                        )}
-                                    </div>
-                                </div>
-
-                                <div className="pt-4 border-t border-gray-50 dark:border-gray-700">
-                                    <div className="flex items-center justify-between gap-3 text-slate-600 dark:text-gray-400 flex-wrap">
-                                        <div className="flex items-center gap-1.5">
-                                            <BarChart2 size={16} className="text-[#6B46E5] dark:text-violet-400 shrink-0" />
-                                            <span className="text-[11px] font-bold uppercase tracking-tighter">{course.level || 'Beginner'}</span>
-                                        </div>
-                                        <div className="w-px h-4 bg-gray-200 dark:bg-gray-600 shrink-0" />
-                                        <div className="flex items-center gap-1.5">
-                                            <Calendar size={16} className="text-[#6B46E5] dark:text-violet-400 shrink-0" />
-                                            <span className="text-[11px] font-bold uppercase tracking-tighter">{(course.duration || '3').replace(/\s*weeks?$/i, '')}</span>
-                                        </div>
-                                        <div className="flex items-center gap-1.5 ml-auto">
-                                            <span className="text-[#6B46E5] dark:text-violet-400 font-bold text-sm">
-                                                {getCoursePrice(course)}
-                                            </span>
-                                            {course.discounted_price && course.price > course.discounted_price && (
-                                                <span className="text-slate-400 dark:text-gray-500 line-through text-xs">
-                                                    ₹{course.price}
-                                                </span>
-                                            )}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Card Actions */}
-                            <div className="px-8 pb-8 mt-auto">
-                                <div className="space-y-3">
-                                    <div className="flex items-center gap-3">
-                                        <button
-                                            type="button"
-                                            onClick={() => openEnrollModal(course.title)}
-                                            className="flex-1 bg-[#310E3F] dark:bg-violet-600 text-white py-3 rounded-full text-sm font-bold hover:bg-[#6B46E5] dark:hover:bg-violet-500 transition-colors"
-                                        >
-                                            Enroll Now
-                                        </button>
-                                        <button
-                                            type="button"
-                                            onClick={() => {
-                                                setBrochureCourse(course)
-                                                setBrochureModalOpen(true)
-                                            }}
-                                            className="flex-1 border-2 border-[#310E3F] dark:border-violet-500 text-[#310E3F] dark:text-violet-400 py-3 rounded-full text-sm font-bold hover:border-[#6B46E5] hover:text-[#6B46E5] dark:hover:border-violet-400 dark:hover:text-violet-300 transition-all"
-                                        >
-                                            Learn More
-                                        </button>
-                                    </div>
-                                    <button
-                                        type="button"
-                                        onClick={() => openEnquiry(true)}
-                                        className="w-full py-2.5 rounded-full text-sm font-bold border border-[#6B46E5]/50 dark:border-violet-500/50 text-[#6B46E5] dark:text-violet-400 hover:bg-[#6B46E5] hover:text-white dark:hover:bg-violet-500 dark:hover:text-white transition-all"
-                                    >
-                                        Book a demo
-                                    </button>
-                                </div>
-                            </div>
-                        </motion.div>
-                    ))}
+                            </motion.div>
+                        )
+                    })}
                 </div>
 
                 {/* Pagination */}

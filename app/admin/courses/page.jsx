@@ -220,7 +220,9 @@ export default function CoursesPage() {
                                     <BarChart2 className="w-5 h-5 text-purple-600 flex-shrink-0" />
                                     <div className="flex-1">
                                         <p className="text-sm text-gray-600">Category</p>
-                                        <p className="font-medium text-gray-900">{course.category || `ID ${course.category_id}`}</p>
+                                        <p className="font-medium text-gray-900">
+                                            {course.category?.trim() || (course.category_id != null && course.category_id !== '' ? `ID ${course.category_id}` : '—')}
+                                        </p>
                                     </div>
                                 </div>
                             </div>

@@ -9,6 +9,12 @@ import Link from 'next/link'
 import { use } from 'react'
 import { API_BASE_URL } from '@/lib/apiConfig'
 
+// Normalize heading tags to lowercase so h1–h6 always render with blog-post-body styles
+function normalizeContentHeadings(html) {
+    if (typeof html !== 'string') return html || ''
+    return html.replace(/<\/?([Hh][1-6])>/g, (m) => m.toLowerCase())
+}
+
 export default function BlogPostDetail({ params }) {
     // Unwrap the params Promise (Next.js 15+)
     const { slug } = use(params)
@@ -114,21 +120,23 @@ export default function BlogPostDetail({ params }) {
                 <div className="flex flex-col lg:flex-row gap-12">
                     {/* Main Content */}
                     <div className="flex-1 space-y-8">
-                        {/* Featured Image */}
-                        {(blog.image || blog.banner_url || blog.thumbnail_url) && (
+                        {/* Featured Image — only render when we have a real URL (do not show if deleted/cleared) */}
+                        {(() => {
+                            const imgUrl = (blog.image || blog.banner_url || blog.thumbnail_url || '').trim();
+                            return imgUrl && imgUrl !== 'null' ? (
                             <motion.div
                                 initial={{ opacity: 0, y: 30 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 className="relative aspect-video rounded-3xl overflow-hidden shadow-2xl bg-gray-100"
                             >
                                 <Image
-                                    src={blog.image || blog.banner_url || blog.thumbnail_url}
+                                    src={imgUrl}
                                     alt={blog.title || 'Blog image'}
                                     fill
                                     className="object-cover"
                                     priority
                                     onError={(e) => {
-                                        console.error('Image failed to load:', blog.image);
+                                        console.error('Image failed to load:', imgUrl);
                                         // Hide the image and show a placeholder
                                         e.target.style.display = 'none';
                                         const parent = e.target.parentElement;
@@ -136,10 +144,11 @@ export default function BlogPostDetail({ params }) {
                                             parent.innerHTML = '<div class="flex items-center justify-center h-full bg-gray-200 text-gray-500">Image not available</div>';
                                         }
                                     }}
-                                    unoptimized={(blog.image || blog.banner_url || blog.thumbnail_url).includes('cloudinary')}
+                                    unoptimized={imgUrl.includes('cloudinary')}
                                 />
                             </motion.div>
-                        )}
+                            ) : null;
+                        })()}
 
                         {/* Article Content */}
                         <div className="bg-white rounded-[2.5rem] p-8 md:p-12 shadow-sm border border-slate-100 space-y-8">
@@ -171,10 +180,28 @@ export default function BlogPostDetail({ params }) {
                                 )}
                             </div>
 
-                            {/* Blog Content - links styled to be clearly visible */}
-                            <div className="prose prose-lg max-w-none text-slate-600 space-y-6 [&_a]:text-violet-600 [&_a]:underline [&_a]:font-medium [&_a]:decoration-violet-500 [&_a:hover]:text-violet-800 [&_a:hover]:decoration-violet-700">
+                            {/* Blog Content - headings, paragraphs, lists, etc. from editor reflected here */}
+                            <div
+                                className="blog-post-body text-slate-600 space-y-6
+                                    [&_h1]:text-3xl [&_h1]:sm:text-4xl [&_h1]:font-bold [&_h1]:text-[#1C0F2D] [&_h1]:mt-8 [&_h1]:mb-4 [&_h1]:leading-tight
+                                    [&_h2]:text-2xl [&_h2]:sm:text-3xl [&_h2]:font-semibold [&_h2]:text-[#1C0F2D] [&_h2]:mt-6 [&_h2]:mb-3 [&_h2]:leading-snug
+                                    [&_h3]:text-xl [&_h3]:sm:text-2xl [&_h3]:font-semibold [&_h3]:text-gray-800 [&_h3]:mt-5 [&_h3]:mb-2 [&_h3]:leading-snug
+                                    [&_h4]:text-lg [&_h4]:font-semibold [&_h4]:text-gray-800 [&_h4]:mt-4 [&_h4]:mb-2
+                                    [&_h5]:text-base [&_h5]:font-semibold [&_h5]:text-gray-800 [&_h5]:mt-4 [&_h5]:mb-2
+                                    [&_h6]:text-sm [&_h6]:font-semibold [&_h6]:text-gray-700 [&_h6]:mt-3 [&_h6]:mb-1 [&_h6]:uppercase
+                                    [&_p]:my-4 [&_p]:leading-relaxed [&_p]:text-slate-600
+                                    [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:my-4 [&_ul]:space-y-1
+                                    [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:my-4 [&_ol]:space-y-1
+                                    [&_li]:my-0.5 [&_li]:leading-relaxed
+                                    [&_blockquote]:border-l-4 [&_blockquote]:border-violet-500 [&_blockquote]:pl-4 [&_blockquote]:py-2 [&_blockquote]:my-4 [&_blockquote]:italic [&_blockquote]:text-gray-600 [&_blockquote]:bg-violet-50/50 [&_blockquote]:rounded-r-lg
+                                    [&_a]:text-violet-600 [&_a]:underline [&_a]:font-medium [&_a]:decoration-violet-500 [&_a:hover]:text-violet-800 [&_a:hover]:decoration-violet-700
+                                    [&_code]:bg-violet-100 [&_code]:text-violet-800 [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded [&_code]:text-sm [&_code]:font-mono
+                                    [&_img]:max-w-full [&_img]:h-auto [&_img]:rounded-xl [&_img]:my-4 [&_img]:shadow-md
+                                    [&_iframe]:max-w-full [&_iframe]:rounded-lg [&_iframe]:my-4
+                                    [&_.video-embed-wrapper]:my-4 [&_.video-embed-wrapper_iframe]:aspect-video [&_.video-embed-wrapper_iframe]:w-full"
+                            >
                                 {blog.content ? (
-                                    <div dangerouslySetInnerHTML={{ __html: blog.content }} />
+                                    <div dangerouslySetInnerHTML={{ __html: normalizeContentHeadings(blog.content) }} />
                                 ) : (
                                     <p>{blog.description || blog.excerpt || 'No content available for this blog post.'}</p>
                                 )}

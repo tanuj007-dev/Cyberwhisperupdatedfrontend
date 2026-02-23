@@ -139,11 +139,11 @@ export default function EditCoursePage() {
                 is_free_course: formData.is_free_course ?? 0,
                 meta_keywords: formData.meta_keywords || undefined,
                 meta_description: formData.meta_description || undefined,
-                brochure_url: formData.brochure_url || undefined,
-                // Send thumbnail under all common field names so backend persists it regardless of column name
-                course_thumbnail: courseThumbnailUrl || undefined,
-                thumbnail: courseThumbnailUrl || undefined,
-                thumbnail_url: courseThumbnailUrl || undefined,
+                // Send null when removed so backend clears the value; otherwise backend may ignore undefined and keep old value
+                brochure_url: formData.brochure_url ? formData.brochure_url : null,
+                course_thumbnail: courseThumbnailUrl || null,
+                thumbnail: courseThumbnailUrl || null,
+                thumbnail_url: courseThumbnailUrl || null,
             };
 
             const response = await fetch(`${API_BASE_URL}/api/courses/update/admin/${id}`, {
@@ -224,7 +224,7 @@ export default function EditCoursePage() {
                             />
                         </div>
                         
-                        <div className="md:col-span-2">
+                        {/* <div className="md:col-span-2">
                             <label className="block text-sm font-semibold text-gray-700 mb-2">Short description</label>
                             <input
                                 type="text"
@@ -234,7 +234,7 @@ export default function EditCoursePage() {
                                 className="w-full px-4 py-3 border border-gray-300 rounded-xl text-gray-700 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                                 placeholder="Brief summary for course cards (e.g. one line)"
                             />
-                        </div>
+                        </div> */}
                         <div className="md:col-span-2">
                             <label className="block text-sm font-semibold text-gray-700 mb-2">Description</label>
                             <textarea
@@ -275,7 +275,7 @@ export default function EditCoursePage() {
                                 name="status"
                                 value={formData.status}
                                 onChange={handleChange}
-                                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                className="w-full px-4 py-3 text-gray-700 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                             >
                                 <option value="draft">Draft</option>
                                 <option value="published">Published</option>
@@ -288,7 +288,7 @@ export default function EditCoursePage() {
                                 name="course_type"
                                 value={formData.course_type}
                                 onChange={handleChange}
-                                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                className="w-full px-4 py-3 text-gray-700 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                             >
                                 <option value="video">Video</option>
                                 <option value="live">Live</option>
@@ -346,7 +346,7 @@ export default function EditCoursePage() {
                         </div>
                         <div className="md:col-span-2">
                             <label className="block text-sm font-semibold text-gray-700 mb-2">Course brochure (PDF)</label>
-                            <p className="text-xs text-gray-500 mb-2">Upload one PDF per course. When a user downloads the brochure for this course, they will get this file. Optional.</p>
+                            <p className="text-xs text-gray-500 mb-2">Upload one PDF per course (max 100MB). When a user downloads the brochure for this course, they will get this file. Optional.</p>
                             <label className="inline-flex items-center gap-2 px-4 py-2.5 border border-gray-300 rounded-xl font-medium text-gray-700 cursor-pointer hover:bg-gray-50 transition-colors">
                                 <Upload size={18} />
                                 {brochureUploading ? 'Uploading...' : 'Choose PDF'}
@@ -362,25 +362,23 @@ export default function EditCoursePage() {
                                             alert('Please select a PDF file.');
                                             return;
                                         }
+                                        const maxBrochureSize = 100 * 1024 * 1024; // 100MB
+                                        if (file.size > maxBrochureSize) {
+                                            alert('Brochure must be 100MB or less.');
+                                            return;
+                                        }
                                         setBrochureUploading(true);
                                         try {
-                                            const token = getAdminToken();
-                                            if (!token) {
-                                                alert('Please log in again.');
-                                                return;
-                                            }
                                             const fd = new FormData();
                                             fd.append('file', file);
-                                            const res = await fetch(`${API_BASE_URL}/api/brochure-downloads/upload`, {
-                                                method: 'POST',
-                                                headers: { 'Authorization': `Bearer ${token}` },
-                                                body: fd,
-                                            });
+                                            const uploadUrl = typeof window !== 'undefined' ? `${window.location.origin}/api/courses/brochure-upload` : '/api/courses/brochure-upload';
+                                            const res = await fetch(uploadUrl, { method: 'POST', body: fd });
                                             const data = await res.json().catch(() => ({}));
                                             if (!res.ok) throw new Error(data.message || data.error || 'Upload failed');
-                                            const url = data.data?.presignedUrl ?? data.data?.fileUrl ?? data.url ?? data.brochure_url ?? data.data?.url;
-                                            if (!url) throw new Error('No brochure URL returned from server');
-                                            setFormData((prev) => ({ ...prev, brochure_url: url }));
+                                            const url = data.url;
+                                            if (!url) throw new Error('No brochure URL returned');
+                                            const fullUrl = typeof window !== 'undefined' && url.startsWith('/') ? `${window.location.origin}${url}` : url;
+                                            setFormData((prev) => ({ ...prev, brochure_url: fullUrl }));
                                             setBrochureFileName(file.name);
                                         } catch (err) {
                                             alert(err.message || 'Upload failed');

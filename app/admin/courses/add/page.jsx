@@ -291,7 +291,7 @@ export default function AddCoursePage() {
                         </div>
                         <div className="md:col-span-2">
                             <label className="block text-sm font-semibold text-gray-700 mb-2">Course brochure (PDF)</label>
-                            <p className="text-xs text-gray-500 mb-2">Upload one PDF per course. When a user downloads the brochure for this course, they will get this file. Optional.</p>
+                            <p className="text-xs text-gray-500 mb-2">Upload one PDF per course (max 100MB). When a user downloads the brochure for this course, they will get this file. Optional.</p>
                             <label className="inline-flex items-center gap-2 px-4 py-2.5 border border-gray-300 rounded-xl font-medium text-gray-700 cursor-pointer hover:bg-gray-50 transition-colors">
                                 <Upload size={18} />
                                 {brochureUploading ? 'Uploading...' : 'Choose PDF'}
@@ -307,25 +307,23 @@ export default function AddCoursePage() {
                                             alert('Please select a PDF file.');
                                             return;
                                         }
+                                        const maxBrochureSize = 100 * 1024 * 1024; // 100MB
+                                        if (file.size > maxBrochureSize) {
+                                            alert('Brochure must be 100MB or less.');
+                                            return;
+                                        }
                                         setBrochureUploading(true);
                                         try {
-                                            const token = getAdminToken();
-                                            if (!token) {
-                                                alert('Please log in again.');
-                                                return;
-                                            }
                                             const fd = new FormData();
                                             fd.append('file', file);
-                                            const res = await fetch(`${API_BASE_URL}/api/brochure-downloads/upload`, {
-                                                method: 'POST',
-                                                headers: { 'Authorization': `Bearer ${token}` },
-                                                body: fd,
-                                            });
+                                            const uploadUrl = typeof window !== 'undefined' ? `${window.location.origin}/api/courses/brochure-upload` : '/api/courses/brochure-upload';
+                                            const res = await fetch(uploadUrl, { method: 'POST', body: fd });
                                             const data = await res.json().catch(() => ({}));
                                             if (!res.ok) throw new Error(data.message || data.error || 'Upload failed');
-                                            const url = data.data?.presignedUrl ?? data.data?.fileUrl ?? data.url ?? data.brochure_url ?? data.data?.url;
-                                            if (!url) throw new Error('No brochure URL returned from server');
-                                            setBrochureUrl(url);
+                                            const url = data.url;
+                                            if (!url) throw new Error('No brochure URL returned');
+                                            const fullUrl = typeof window !== 'undefined' && url.startsWith('/') ? `${window.location.origin}${url}` : url;
+                                            setBrochureUrl(fullUrl);
                                             setBrochureFileName(file.name);
                                         } catch (err) {
                                             alert(err.message || 'Upload failed');

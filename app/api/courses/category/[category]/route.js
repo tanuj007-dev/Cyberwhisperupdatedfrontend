@@ -21,9 +21,10 @@ export async function GET(request, { params }) {
 
         // The backend likely returns { success: true, data: [...] } or just [...]
         const rawCourses = Array.isArray(data) ? data : (data.data || data.courses || []);
+        const publishedOnly = rawCourses.filter((c) => String(c.status || '').toLowerCase() === 'published');
 
         // Transform backend data to match frontend component expectations
-        const courses = rawCourses.map(course => ({
+        const courses = publishedOnly.map(course => ({
             id: course.id,
             title: course.title,
             // Fallback to null if no image, so frontend can use its default imported image.

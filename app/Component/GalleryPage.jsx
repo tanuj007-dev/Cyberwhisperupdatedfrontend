@@ -201,133 +201,75 @@ export default function GalleryPage() {
         <GalleryThemeWrapper>
             <div ref={containerRef} className="overflow-hidden">
 
-                {/* Hero Section - Compact & Attractive */}
-                <section ref={heroRef} className="relative min-h-[40vh] md:min-h-[60vh] flex items-center justify-center overflow-hidden py-10 md:py-20">
-                    {/* Animated Background */}
-                    <div className="absolute inset-0">
-                        {/* Gradient mesh background */}
-                        <div className="absolute inset-0 bg-gradient-to-br from-purple-50 via-white to-violet-50 dark:from-[#0E0429] dark:via-[#1B0D37] dark:to-[#0E0429]" />
-
-                        {/* Animated grid pattern */}
-                        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(168,85,247,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(168,85,247,0.05)_1px,transparent_1px)] bg-[size:40px_40px] opacity-30 dark:opacity-100" />
-
-                        {/* Floating gradient orbs */}
-                        <motion.div
-                            animate={{
-                                scale: [1, 1.2, 1],
-                                opacity: [0.3, 0.5, 0.3],
+                {/* Hero Section - same effect as About hero (dark base, tech image, overlay, ambient glows) */}
+                <section ref={heroRef} className="relative min-h-[40vh] md:min-h-[60vh] flex items-center justify-center overflow-hidden pt-24 pb-12 md:pt-40 md:pb-24 bg-[#170938]">
+                    {/* Background: same tech stock image as About */}
+                    <div className="absolute inset-0 w-full h-full overflow-hidden z-0">
+                        <div
+                            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+                            style={{
+                                backgroundImage: `url(https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=1920&q=80)`,
                             }}
-                            transition={{
-                                duration: 8,
-                                repeat: Infinity,
-                                ease: "easeInOut"
-                            }}
-                            className="absolute top-10 left-1/4 w-[400px] h-[400px] bg-gradient-to-r from-purple-600/30 to-violet-600/20 rounded-full blur-[100px]"
+                            aria-hidden
                         />
-                        <motion.div
-                            animate={{
-                                scale: [1, 1.3, 1],
-                                opacity: [0.2, 0.4, 0.2],
-                            }}
-                            transition={{
-                                duration: 10,
-                                repeat: Infinity,
-                                ease: "easeInOut",
-                                delay: 1
-                            }}
-                            className="absolute bottom-10 right-1/4 w-[350px] h-[350px] bg-gradient-to-r from-cyan-500/20 to-blue-600/15 rounded-full blur-[80px]"
-                        />
-
-                        {/* Animated scan lines */}
-                        <motion.div
-                            animate={{
-                                y: ['-100%', '200%']
-                            }}
-                            transition={{
-                                duration: 6,
-                                repeat: Infinity,
-                                ease: "linear"
-                            }}
-                            className="absolute left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-500/40 to-transparent"
-                        />
+                        {/* Dark overlay - vertical gradient like About (lighter at top, solid at bottom) */}
+                        <div className="absolute inset-0 bg-linear-to-b from-[#0E0429]/20 via-[#0E0429]/50 to-[#0E0429] z-10" />
                     </div>
 
+                    {/* Ambient glows - same as About */}
+                    <div className="absolute top-[10%] left-[20%] w-[250px] h-[250px] md:w-[500px] md:h-[500px] bg-[#a855f7]/20 blur-[80px] md:blur-[120px] rounded-full pointer-events-none" />
+                    <div className="absolute bottom-0 right-[10%] w-[200px] h-[200px] md:w-[400px] md:h-[400px] bg-[#6366f1]/10 blur-[60px] md:blur-[100px] rounded-full pointer-events-none" />
+                    <div className="absolute inset-0 cyber-grid-bg opacity-10 z-0" />
+
                     {/* Content */}
-                    <div className="relative z-10 text-center px-6 max-w-5xl mx-auto">
-                        {/* Animated Badge */}
+                    <div className="w-full max-w-7xl mx-auto px-4 relative z-20 text-center">
+                        {/* Badge - same style as About (gradient border, dark inner, primary text) */}
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.6 }}
-                            className="inline-flex items-center gap-2 mb-6 px-5 py-2.5 rounded-full bg-white/90 dark:bg-white/10 border border-gray-200 dark:border-white/20 backdrop-blur-md shadow-lg"
+                            className="relative inline-flex rounded-full p-px overflow-hidden mb-4 md:mb-8"
                         >
-                            <motion.div
-                                animate={{
-                                    scale: [1, 1.2, 1],
-                                    opacity: [1, 0.5, 1]
-                                }}
-                                transition={{
-                                    duration: 2,
-                                    repeat: Infinity,
-                                    ease: "easeInOut"
-                                }}
-                                className="w-2 h-2 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full"
-                            />
-                            <span className="text-gray-800 dark:text-white text-sm font-semibold tracking-wider uppercase drop-shadow-sm dark:drop-shadow-md">
+                            <div className="absolute inset-0 bg-linear-to-r from-primary via-white to-primary animate-border-rotate opacity-50" />
+                            <div className="relative px-4 py-1.5 md:px-6 md:py-2 rounded-full bg-[#0E0429] backdrop-blur-md text-primary text-[10px] md:text-xs font-bold uppercase tracking-[0.2em]">
                                 Visual Journey
-                            </span>
+                            </div>
                         </motion.div>
 
-                        {/* Animated Title */}
+                        {/* Title - white + primary accent like "WHO WE ARE" */}
                         <motion.h1
-                            initial={{ opacity: 0, y: 30 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.8, delay: 0.2 }}
-                            className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold mb-2 md:mb-4 leading-tight text-gray-900 dark:text-white drop-shadow-sm dark:drop-shadow-lg"
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ duration: 0.8 }}
+                            className="text-3xl md:text-7xl font-semibold text-white mb-4 md:mb-8 tracking-tighter"
                         >
-                            Our Gallery
+                            OUR GALLERY
                         </motion.h1>
 
-                        {/* Animated Subtitle */}
+                        {/* Breadcrumbs - same as About */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.3 }}
+                            className="flex items-center justify-center gap-4 text-gray-400 font-medium text-sm md:text-base mb-8"
+                        >
+                            <a href="/" className="hover:text-primary transition-colors hover:scale-105 transform">
+                                Home
+                            </a>
+                            <span className="w-1.5 h-1.5 rounded-full bg-primary/40" />
+                            <span className="text-white">Gallery</span>
+                        </motion.div>
+
+                        {/* Subtitle - gray-400 like About */}
                         <motion.p
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.8, delay: 0.4 }}
-                            className="text-base md:text-xl text-gray-600 dark:text-gray-200 max-w-2xl mx-auto leading-relaxed mb-6 md:mb-8 font-medium drop-shadow-sm dark:drop-shadow-md"
+                            transition={{ delay: 0.5, duration: 0.8 }}
+                            className="text-base md:text-lg text-gray-400 max-w-3xl mx-auto leading-relaxed text-center"
                         >
                             Capturing moments of excellence, innovation, and achievement
                         </motion.p>
-
-                        {/* Animated Stats */}
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.8, delay: 0.6 }}
-                            className="flex flex-wrap items-center justify-center gap-4 md:gap-8"
-                        >
-                            {[
-                                 
-                            ].map((stat, index) => (
-                                <motion.div
-                                    key={stat.label}
-                                    initial={{ opacity: 0, scale: 0.8 }}
-                                    animate={{ opacity: 1, scale: 1 }}
-                                    transition={{ duration: 0.5, delay: 0.8 + index * 0.1 }}
-                                    whileHover={{ scale: 1.05 }}
-                                    className="flex items-center gap-2 md:gap-3 px-3 py-1.5 md:px-4 md:py-2 rounded-xl bg-white/50 dark:bg-white/5 border border-gray-200 dark:border-white/10 backdrop-blur-sm"
-                                >
-                                    <stat.icon className="w-5 h-5 text-purple-600 dark:text-purple-400" />
-                                    <div className="text-left">
-                                        <div className="text-xl font-bold text-gray-900 dark:text-white">{stat.value}</div>
-                                        <div className="text-xs text-gray-600 dark:text-gray-400">{stat.label}</div>
-                                    </div>
-                                </motion.div>
-                            ))}
-                        </motion.div>
                     </div>
-
-                    {/* Bottom gradient fade - matches section bg for clean transition */}
-                    <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-purple-50 via-white to-transparent dark:from-[#1B0D37] dark:via-[#1B0D37] dark:to-transparent" />
                 </section>
 
 
@@ -410,17 +352,17 @@ export default function GalleryPage() {
                                                     }`}
                                                 onClick={() => openLightbox(image, index)}
                                             >
-                                                {/* Image container - light bg fallback when image loads or fails */}
+                                                {/* Image container - object-contain so portrait images show fully without cutting */}
                                                 <div className={`relative ${index === 0 ? 'aspect-square' : 'aspect-[4/3]'} overflow-hidden bg-gray-200 dark:bg-gray-900`}>
                                                     <Image
                                                         src={image.src}
                                                         alt={image.title}
                                                         fill
-                                                        className="object-cover transition-transform duration-700 group-hover:scale-110"
+                                                        className="object-contain transition-transform duration-700 group-hover:scale-105"
                                                     />
 
-                                                    {/* Overlay - lighter in light mode so content is visible */}
-                                                    <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-gray-900/30 to-transparent dark:from-[#0E0429] dark:via-[#0E0429]/20 to-transparent opacity-70 group-hover:opacity-90 transition-opacity duration-500" />
+                                                    {/* Overlay - always dark so title/description are visible in both light and dark mode */}
+                                                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent dark:from-[#0E0429] dark:via-[#0E0429]/50 to-transparent group-hover:opacity-95 transition-opacity duration-500" />
 
                                                     {/* Scan line effect */}
                                                     <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
@@ -430,23 +372,25 @@ export default function GalleryPage() {
                                                     {/* Corner glows */}
                                                     <div className="absolute top-4 right-4 w-16 h-16 bg-purple-500/30 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-                                                    {/* Content */}
-                                                    <div className="absolute inset-0 p-6 flex flex-col justify-end">
-                                                        <div className="transform translate-y-0 md:translate-y-4 md:group-hover:translate-y-0 transition-transform duration-500">
+                                                    {/* Content - min-height so text is not cut; always white for contrast on dark overlay */}
+                                                    <div className="absolute inset-0 p-4 sm:p-6 flex flex-col justify-end">
+                                                        <div className="min-h-[5rem] flex flex-col justify-end transform translate-y-0 md:translate-y-4 md:group-hover:translate-y-0 transition-transform duration-500">
                                                             {/* Category badge */}
-                                                            <span className="inline-block px-3 py-1 mb-3 text-xs font-semibold text-purple-200 dark:text-purple-300 bg-purple-500/30 dark:bg-purple-500/20 rounded-full border border-purple-400/40 dark:border-purple-500/30 backdrop-blur-sm">
+                                                            <span className="inline-block px-3 py-1 mb-2 text-xs font-semibold text-purple-200 bg-purple-500/40 rounded-full border border-purple-400/40 backdrop-blur-sm w-fit">
                                                                 {image.category.charAt(0).toUpperCase() + image.category.slice(1)}
                                                             </span>
 
-                                                            {/* Title */}
-                                                            <h3 className="text-lg md:text-xl font-bold text-white mb-2 group-hover:text-purple-100 dark:group-hover:text-purple-200 transition-colors">
+                                                            {/* Title - wraps so long text is not cut; white for visibility on light and dark mode */}
+                                                            <h3 className="text-base sm:text-lg md:text-xl font-bold text-white drop-shadow-md group-hover:text-purple-100 transition-colors line-clamp-2 break-words">
                                                                 {image.title}
                                                             </h3>
 
-                                                            {/* Description - hidden on mobile, shown on desktop hover */}
-                                                            {/* <p className="hidden md:block text-sm text-gray-400 opacity-0 group-hover:opacity-100 transition-all duration-500 line-clamp-2">
-                                                        {image.description}
-                                                    </p> */}
+                                                            {/* Description - visible, not cut; white/gray for readability */}
+                                                            {image.description && (
+                                                                <p className="mt-1 text-xs sm:text-sm text-gray-200 line-clamp-2 break-words">
+                                                                    {image.description}
+                                                                </p>
+                                                            )}
                                                         </div>
 
                                                         {/* Zoom icon */}
@@ -501,31 +445,32 @@ export default function GalleryPage() {
                                 <ChevronRight className="w-6 h-6" />
                             </button>
 
-                            {/* Image container */}
+                            {/* Image container - object-contain so portrait images show fully */}
                             <motion.div
                                 initial={{ scale: 0.8, opacity: 0 }}
                                 animate={{ scale: 1, opacity: 1 }}
                                 exit={{ scale: 0.8, opacity: 0 }}
                                 transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-                                className="relative max-w-5xl max-h-[80vh] w-full"
+                                className="relative max-w-5xl max-h-[85vh] w-full flex flex-col items-center"
                                 onClick={(e) => e.stopPropagation()}
                             >
-                                <div className="relative aspect-video rounded-2xl overflow-hidden border border-purple-500/30 shadow-2xl shadow-purple-500/20">
+                                <div className="relative w-full h-[60vh] min-h-[240px] rounded-2xl overflow-hidden border border-purple-500/30 shadow-2xl shadow-purple-500/20 bg-gray-100 dark:bg-gray-900">
                                     <Image
                                         src={selectedImage.src}
                                         alt={selectedImage.title}
                                         fill
-                                        className="object-cover"
+                                        className="object-contain"
+                                        sizes="(max-width: 1280px) 100vw, 1280px"
                                     />
                                 </div>
 
-                                {/* Image info */}
-                                <div className="mt-6 text-center">
+                                {/* Image info - always readable in light and dark mode */}
+                                <div className="mt-6 text-center w-full px-4">
                                     <span className="inline-block px-4 py-1 mb-3 text-sm font-semibold text-purple-300 bg-purple-500/20 rounded-full border border-purple-500/30">
                                         {selectedImage.category.charAt(0).toUpperCase() + selectedImage.category.slice(1)}
                                     </span>
-                                    <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">{selectedImage.title}</h3>
-                                    <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">{selectedImage.description}</p>
+                                    <h3 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-2 break-words">{selectedImage.title}</h3>
+                                    <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 max-w-2xl mx-auto break-words">{selectedImage.description}</p>
                                 </div>
 
                                 {/* Image counter */}
@@ -539,8 +484,8 @@ export default function GalleryPage() {
 
                 {/* Gallery Footer with Links */}
                 <section className="relative py-12 md:py-24 px-4 md:px-6 border-t border-gray-200 dark:border-white/5 bg-white dark:bg-transparent transition-colors duration-300">
-                    {/* Background effects */}
-                    <div className="absolute inset-0 pointer-events-none">
+                    {/* Background effects - hidden in light mode */}
+                    <div className="absolute inset-0 pointer-events-none hidden dark:block">
                         <div className="absolute bottom-0 left-1/4 w-[500px] h-[500px] bg-purple-600/10 rounded-full blur-[120px]" />
                         <div className="absolute top-0 right-1/4 w-[400px] h-[400px] bg-cyan-500/10 rounded-full blur-[100px]" />
                     </div>
