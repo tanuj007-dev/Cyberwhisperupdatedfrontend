@@ -38,9 +38,48 @@ export default function TrainingSection() {
         fetchCourses()
     }, [])
 
+    const buildCategoryMap = (list) => {
+        if (!Array.isArray(list)) return {}
+        const map = {}
+        list.forEach((cat, index) => {
+            if (cat == null) return
+            if (typeof cat === 'string') {
+                map[index + 1] = cat
+                map[String(index + 1)] = cat
+            } else {
+                const id = cat.id ?? cat.category_id
+                const name = (cat.name ?? cat.category_name ?? cat.title ?? '').toString().trim()
+                if (id != null && id !== '') {
+                    map[id] = name || `Category ${id}`
+                    map[String(id)] = map[id]
+                }
+            }
+        })
+        return map
+    }
+
+    const getCategoryLabel = (course, categoryMap) => {
+        const name = (course.category ?? course.category_name ?? course.type ?? '').toString().trim()
+        if (name) return name
+        const id = course.category_id
+        if (id != null && id !== '' && categoryMap[id]) return categoryMap[id]
+        if (id != null && id !== '') return `Category ${id}`
+        return 'General'
+    }
+
     const fetchCourses = async () => {
         try {
             setLoading(true)
+            let categoryMap = {}
+            try {
+                const catRes = await fetch(`${API_BASE_URL}/api/courses/categories`, { cache: 'no-store' })
+                if (catRes.ok) {
+                    const catData = await catRes.json()
+                    const catList = Array.isArray(catData) ? catData : (catData.categories ?? catData.data ?? [])
+                    categoryMap = buildCategoryMap(catList)
+                }
+            } catch (_) {}
+
             const response = await fetch(`${API_BASE_URL}/api/courses?page=1&limit=10`, { cache: 'no-store' })
             if (!response.ok) {
                 throw new Error('Failed to fetch courses')
@@ -48,13 +87,11 @@ export default function TrainingSection() {
 
             const data = await response.json()
 
-            // API returns { success, data: [...] } or { success, courses: [...] }; frontend shows only published
             const rawList = Array.isArray(data.data) ? data.data : (Array.isArray(data.courses) ? data.courses : [])
             const publishedList = rawList.filter((c) => String(c.status || '').toLowerCase() === 'published')
-            // Normalize: add category label (API has category_id, not category)
             const normalized = publishedList.map(course => ({
                 ...course,
-                category: course.category ?? (course.category_id != null ? `Category ${course.category_id}` : 'General')
+                category: getCategoryLabel(course, categoryMap)
             }))
             setCourses(normalized)
 

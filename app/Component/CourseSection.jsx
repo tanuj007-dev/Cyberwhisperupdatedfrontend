@@ -27,10 +27,40 @@ import thumb3 from "./assets/cyber_lab_3.webp";
 
 const defaultImage = thumb1;
 
+function buildCategoryMap(list) {
+  if (!Array.isArray(list)) return {};
+  const map = {};
+  list.forEach((cat, index) => {
+    if (cat == null) return;
+    if (typeof cat === 'string') {
+      map[index + 1] = cat;
+      map[String(index + 1)] = cat;
+    } else {
+      const id = cat.id ?? cat.category_id;
+      const name = (cat.name ?? cat.category_name ?? cat.title ?? '').toString().trim();
+      if (id != null && id !== '') {
+        map[id] = name || `Category ${id}`;
+        map[String(id)] = map[id];
+      }
+    }
+  });
+  return map;
+}
+
+function getCategoryLabel(course, categoryMap) {
+  const name = (course.category ?? course.category_name ?? course.type ?? '').toString().trim();
+  if (name) return name;
+  const id = course.category_id;
+  if (id != null && id !== '' && categoryMap[id]) return categoryMap[id];
+  if (id != null && id !== '') return `Category ${id}`;
+  return 'General';
+}
+
 export default function CourseSection() {
   const [activeCategory, setActiveCategory] = useState(null);
   const [categories, setCategories] = useState([]);
   const [courses, setCourses] = useState([]);
+  const [categoryMap, setCategoryMap] = useState({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [categoriesLoading, setCategoriesLoading] = useState(true);
@@ -83,6 +113,17 @@ export default function CourseSection() {
   const fetchCategories = async () => {
     setCategoriesLoading(true);
     try {
+      let map = {};
+      try {
+        const catRes = await fetch(`${API_BASE_URL}/api/courses/categories`, { cache: 'no-store' });
+        if (catRes.ok) {
+          const catData = await catRes.json();
+          const catList = Array.isArray(catData) ? catData : (catData.categories ?? catData.data ?? []);
+          map = buildCategoryMap(catList);
+          setCategoryMap(map);
+        }
+      } catch (_) {}
+
       const response = await fetch(`${API_BASE_URL}/api/courses?page=1&limit=100`, { cache: 'no-store' });
 
       if (!response.ok) {
@@ -90,11 +131,9 @@ export default function CourseSection() {
       }
 
       const data = await response.json();
-
-      // API returns { success, data: [...] } or { success, courses: [...] }; frontend shows only published
       const rawList = Array.isArray(data.data) ? data.data : (Array.isArray(data.courses) ? data.courses : []);
       const publishedList = rawList.filter((c) => String(c.status || '').toLowerCase() === "published");
-      const categoryLabel = (c) => c.category ?? (c.category_id != null ? `Category ${c.category_id}` : "General");
+      const categoryLabel = (c) => getCategoryLabel(c, map);
       const uniqueCategories = ["All", ...new Set(publishedList.map(categoryLabel).filter(Boolean))];
 
       if (uniqueCategories.length > 0) {
@@ -124,11 +163,9 @@ export default function CourseSection() {
       }
 
       const data = await response.json();
-
-      // API returns { success, data: [...] } or { success, courses: [...] }; frontend shows only published
       const rawList = Array.isArray(data.data) ? data.data : (Array.isArray(data.courses) ? data.courses : []);
       const publishedList = rawList.filter((c) => String(c.status || '').toLowerCase() === "published");
-      const categoryLabel = (c) => c.category ?? (c.category_id != null ? `Category ${c.category_id}` : "General");
+      const categoryLabel = (c) => getCategoryLabel(c, categoryMap);
 
       const filteredCourses =
         !category || category === "All"

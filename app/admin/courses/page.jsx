@@ -7,13 +7,46 @@ import { API_BASE_URL } from '../../../lib/apiConfig';
 
 const getAdminToken = () => typeof window !== 'undefined' ? localStorage.getItem('adminToken') : null;
 
+// Build category_id -> name map from API response (array of { id, name } or { category_id, name } or strings)
+function buildCategoryMap(categoriesList) {
+    if (!Array.isArray(categoriesList)) return {};
+    const map = {};
+    categoriesList.forEach((cat, index) => {
+        if (cat == null) return;
+        if (typeof cat === 'string') {
+            map[index + 1] = cat;
+            map[String(index + 1)] = cat;
+        } else {
+            const id = cat.id ?? cat.category_id;
+            const name = cat.name ?? cat.category_name ?? cat.title ?? '';
+            if (id != null && id !== '') {
+                map[id] = name;
+                map[String(id)] = name;
+            }
+        }
+    });
+    return map;
+}
+
+function getCourseCategoryDisplay(course, categoryMap) {
+    const name = (course.category ?? course.category_name ?? course.type ?? '').toString().trim();
+    if (name) return name;
+    const id = course.category_id;
+    if (id != null && id !== '' && categoryMap[id]) return categoryMap[id];
+    if (id != null && id !== '') return `ID ${id}`;
+    return '—';
+}
+
 export default function CoursesPage() {
     const router = useRouter();
     const [courses, setCourses] = useState([]);
+    const [categoriesList, setCategoriesList] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [role, setRole] = useState(null);
     const [deletingId, setDeletingId] = useState(null);
+
+    const categoryMap = React.useMemo(() => buildCategoryMap(categoriesList), [categoriesList]);
 
     useEffect(() => {
         setRole(typeof window !== 'undefined' ? localStorage.getItem('adminRole') : null);
@@ -21,6 +54,21 @@ export default function CoursesPage() {
 
     useEffect(() => {
         fetchCourses();
+    }, []);
+
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/courses/categories`, { cache: 'no-store' });
+                if (!res.ok) return;
+                const data = await res.json();
+                const list = Array.isArray(data) ? data : (data.categories ?? data.data ?? []);
+                setCategoriesList(list);
+            } catch (_) {
+                setCategoriesList([]);
+            }
+        };
+        fetchCategories();
     }, []);
 
     const isStudent = role === 'STUDENT';
@@ -221,7 +269,7 @@ export default function CoursesPage() {
                                     <div className="flex-1">
                                         <p className="text-sm text-gray-600">Category</p>
                                         <p className="font-medium text-gray-900">
-                                            {course.category?.trim() || (course.category_id != null && course.category_id !== '' ? `ID ${course.category_id}` : '—')}
+                                            {getCourseCategoryDisplay(course, categoryMap)}
                                         </p>
                                     </div>
                                 </div>
