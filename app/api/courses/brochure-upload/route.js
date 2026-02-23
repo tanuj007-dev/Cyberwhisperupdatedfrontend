@@ -6,10 +6,16 @@ import { tmpdir } from 'os';
 const COURSE_BROCHURES_DIR = path.join(process.cwd(), 'public', 'uploads', 'course-brochures');
 const MAX_BROCHURE_SIZE = 100 * 1024 * 1024; // 100MB
 
+// AWS S3 (preferred when configured)
+const s3Bucket = process.env.AWS_S3_BUCKET;
+const s3Region = process.env.AWS_REGION || process.env.AWS_S3_REGION || 'us-east-1';
+const s3Prefix = (process.env.AWS_S3_BROCHURE_PREFIX || 'course-brochures').replace(/^\/+|\/+$/g, '') || 'course-brochures';
+const useS3 = !!(s3Bucket && process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_ACCESS_KEY);
+
 const cloudName = process.env.CLOUDINARY_CLOUD_NAME;
 const apiKey = process.env.CLOUDINARY_API_KEY;
 const apiSecret = process.env.CLOUDINARY_API_SECRET;
-const useCloudinary = cloudName && apiKey && apiSecret;
+const useCloudinary = !useS3 && cloudName && apiKey && apiSecret;
 
 const isReadOnlyFs = () => typeof process.env.VERCEL !== 'undefined' || process.env.AWS_LAMBDA_FUNCTION_VERSION != null;
 
@@ -21,23 +27,7 @@ function sanitize(name) {
 const VERCEL_BLOB_MAX_SIZE = 4 * 1024 * 1024; // 4MB to stay under limit
 const hasBlobToken = typeof process.env.BLOB_READ_WRITE_TOKEN === 'string' && process.env.BLOB_READ_WRITE_TOKEN.length > 0;
 
-const BROCHURE_UNAVAILABLE_MSG = 'Brochure upload is not available. Add Cloudinary (CLOUDINARY_*) or Vercel Blob (BLOB_READ_WRITE_TOKEN) env vars, or paste a direct PDF link below.';
-
-// Optional: preset for client-side unsigned upload (create in Cloudinary: Upload > Upload presets, resource_type: raw)
-const brochureUploadPreset = process.env.CLOUDINARY_BROCHURE_UPLOAD_PRESET;
-
-/**
- * GET: returns Cloudinary client upload config when cloud name + brochure preset are set.
- * Used by add/edit course pages to upload brochure PDFs directly to Cloudinary from the browser.
- */
-export async function GET() {
-    const cloud = process.env.CLOUDINARY_CLOUD_NAME;
-    const preset = brochureUploadPreset;
-    if (!cloud || !preset) {
-        return NextResponse.json({ cloudName: null, uploadPreset: null });
-    }
-    return NextResponse.json({ cloudName: cloud, uploadPreset: preset });
-}
+const BROCHURE_UNAVAILABLE_MSG = 'Brochure upload is not available. Set AWS_S3_BUCKET with AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY (and optionally AWS_REGION) to use S3.';
 
 export async function POST(request) {
     try {
@@ -59,7 +49,39 @@ export async function POST(request) {
         const baseName = sanitize(path.basename(file.name, ext));
         const filename = `${Date.now()}-${baseName}${ext}`;
 
-        // 1) Prefer Cloudinary when configured (works on Vercel; /tmp is writable)
+        // 1) Prefer AWS S3 when configured
+        if (useS3) {
+            try {
+                const { S3Client, PutObjectCommand } = await import('@aws-sdk/client-s3');
+                const s3 = new S3Client({
+                    region: s3Region,
+                    credentials: {
+                        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+                        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+                    },
+                });
+                const key = `${s3Prefix}/${filename}`;
+                await s3.send(new PutObjectCommand({
+                    Bucket: s3Bucket,
+                    Key: key,
+                    Body: buffer,
+                    ContentType: file.type || 'application/pdf',
+                }));
+                const urlBase = process.env.AWS_S3_PUBLIC_URL_BASE;
+                const url = urlBase
+                    ? `${urlBase.replace(/\/$/, '')}/${key}`
+                    : `https://${s3Bucket}.s3.${s3Region}.amazonaws.com/${key}`;
+                return NextResponse.json({ url, success: true });
+            } catch (s3Err) {
+                console.error('S3 brochure upload error:', s3Err);
+                return NextResponse.json(
+                    { error: 'Upload failed', message: s3Err.message || 'S3 upload failed' },
+                    { status: 500 }
+                );
+            }
+        }
+
+        // 2) Cloudinary when configured (works on Vercel; /tmp is writable)
         if (useCloudinary) {
             const tmpPath = path.join(tmpdir(), `course-brochure-${Date.now()}-${filename.replace(/[^a-zA-Z0-9.-]/g, '')}`);
             await writeFile(tmpPath, buffer);
@@ -82,7 +104,7 @@ export async function POST(request) {
             }
         }
 
-        // 2) On Vercel without Cloudinary: use Vercel Blob if token is set (max ~4.5MB per request)
+        // 3) On Vercel without S3/Cloudinary: use Vercel Blob if token is set (max ~4.5MB per request)
         if (isReadOnlyFs() && hasBlobToken && buffer.length <= VERCEL_BLOB_MAX_SIZE) {
             try {
                 const { put } = await import('@vercel/blob');
@@ -93,13 +115,13 @@ export async function POST(request) {
             }
         }
 
-        // 3) Save to local disk only if not read-only (e.g. local dev)
+        // 4) Save to local disk only if not read-only (e.g. local dev)
         if (isReadOnlyFs()) {
             return NextResponse.json(
                 {
                     error: 'Brochure upload unavailable',
                     message: hasBlobToken && buffer.length > VERCEL_BLOB_MAX_SIZE
-                        ? 'PDF is too large for this host (max ~4MB). Use the paste link field or configure Cloudinary for larger files.'
+                        ? 'PDF is too large for this host (max ~4MB). Configure AWS S3 for larger files.'
                         : BROCHURE_UNAVAILABLE_MSG,
                 },
                 { status: 503 }
