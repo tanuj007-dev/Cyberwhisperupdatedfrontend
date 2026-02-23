@@ -21,7 +21,7 @@ export default function BatchesPage() {
         fetchBatches();
     }, []);
 
-    const isStudent = role === 'STUDENT';
+    const canManageBatches = role === 'ADMIN' || role === 'SUPERADMIN' || role === 'INSTRUCTOR';
 
     const fetchBatches = async () => {
         try {
@@ -124,7 +124,7 @@ export default function BatchesPage() {
                     <h1 className="text-3xl sm:text-4xl md:text-[50px] font-semibold tracking-tight leading-tight text-gray-900">Batch Management</h1>
                     <p className="text-gray-600 mt-2">Manage all training batches and schedules</p>
                 </div>
-                {!isStudent && (
+                {canManageBatches && (
                     <button
                         onClick={() => router.push('/admin/batches/add')}
                         className="mt-4 md:mt-0 flex items-center gap-2 bg-purple-600 text-white px-6 py-3 rounded-xl hover:bg-purple-700 transition-colors font-semibold"
@@ -148,8 +148,8 @@ export default function BatchesPage() {
                 <div className="text-center py-12 bg-gray-50 rounded-xl">
                     <Calendar className="w-16 h-16 text-gray-400 mx-auto mb-4" />
                     <h3 className="text-xl font-semibold text-gray-900 mb-2">No Batches Found</h3>
-                    <p className="text-gray-600 mb-6">{isStudent ? 'No batches available at the moment.' : 'Get started by creating your first batch'}</p>
-                    {!isStudent && (
+                    <p className="text-gray-600 mb-6">{!canManageBatches ? 'No batches available at the moment.' : 'Get started by creating your first batch'}</p>
+                    {canManageBatches && (
                         <button
                             onClick={() => router.push('/admin/batches/add')}
                             className="inline-flex items-center gap-2 bg-purple-600 text-white px-6 py-3 rounded-xl hover:bg-purple-700 transition-colors font-semibold"
@@ -172,7 +172,7 @@ export default function BatchesPage() {
                                     <span className={`px-3 py-1 rounded-full text-xs font-bold border ${getStatusBadge(batch.status)}`}>
                                         {batch.status}
                                     </span>
-                                    {!isStudent && (
+                                    {canManageBatches && (
                                         <div className="flex gap-2">
                                             <button
                                                 onClick={() => router.push(`/admin/batches/edit/${batch.id}`)}
@@ -245,7 +245,7 @@ export default function BatchesPage() {
                                     </div>
                                 </div>
 
-                                
+
                             </div>
                         </div>
                     ))}

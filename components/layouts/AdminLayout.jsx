@@ -71,7 +71,7 @@ const AdminLayout = ({ children }) => {
             const allowed =
                 path.startsWith('/admin/blogs') ||
                 path.startsWith('/admin/batches') ||
-                path.startsWith('/admin/courses') ||
+                (path === '/admin/courses' || path.startsWith('/admin/courses?')) ||
                 path.startsWith('/admin/categories') ||
                 path.startsWith('/admin/tags') ||
                 path.startsWith('/admin/course-enrollments') ||
@@ -79,7 +79,13 @@ const AdminLayout = ({ children }) => {
                 path.startsWith('/admin/deploy-team-training') ||
                 path === '/admin/profile' ||
                 path.startsWith('/admin/users/edit');
-            if (!allowed) router.replace('/admin/blogs');
+            if (!allowed) {
+                if (path.startsWith('/admin/courses/')) {
+                    router.replace('/admin/courses');
+                } else {
+                    router.replace('/admin/blogs');
+                }
+            }
         }
     }, [isAuthenticated, pathname, router]);
 

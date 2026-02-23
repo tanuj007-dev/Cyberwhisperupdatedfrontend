@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useAdmin } from '@/contexts/AdminContext';
 import { Button, Badge, Modal, Skeleton, Toast } from '@/components/ui';
 import { Edit2, Trash2, Eye, Search, Star, StarOff, Filter, MoreVertical, Loader2 } from 'lucide-react';
@@ -19,6 +19,15 @@ const BlogList = () => {
     const [selectedBlog, setSelectedBlog] = useState(null);
     const [deleting, setDeleting] = useState(false);
     const [toast, setToast] = useState({ isVisible: false, message: '', type: 'success' });
+    const [role, setRole] = useState(null);
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            setRole(localStorage.getItem('adminRole'));
+        }
+    }, []);
+
+    const canManageBlogs = role === 'ADMIN' || role === 'SUPERADMIN' || role === 'INSTRUCTOR';
 
     const itemsPerPage = 10;
 
@@ -112,11 +121,13 @@ const BlogList = () => {
                     <h1 className="text-3xl sm:text-4xl md:text-[50px] font-semibold tracking-tight leading-tight text-gray-900 mb-1">All Blogs</h1>
                     <p className="text-gray-600">Manage your blog posts</p>
                 </div>
-                <Link href="/admin/blogs/add">
-                    <button className="px-5 py-2.5 bg-gradient-to-r from-violet-600 to-purple-600 text-white font-medium rounded-xl hover:shadow-lg hover:shadow-purple-500/25 transition-all">
-                        + Add New Blog
-                    </button>
-                </Link>
+                {canManageBlogs && (
+                    <Link href="/admin/blogs/add">
+                        <button className="px-5 py-2.5 bg-gradient-to-r from-violet-600 to-purple-600 text-white font-medium rounded-xl hover:shadow-lg hover:shadow-purple-500/25 transition-all">
+                            + Add New Blog
+                        </button>
+                    </Link>
+                )}
             </div>
 
             {/* Filters */}
@@ -186,7 +197,7 @@ const BlogList = () => {
                                     Author
                                 </th>
                                 <th className="px-6 py-4 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                    
+
                                 </th>
                                 <th className="px-6 py-4 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                     Status
@@ -255,23 +266,27 @@ const BlogList = () => {
                                             >
                                                 <Eye size={18} />
                                             </button>
-                                            <button
-                                                onClick={() => router.push(`/admin/blogs/edit/${blog.blog_id}`)}
-                                                className="p-2 text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors"
-                                                title="Edit"
-                                            >
-                                                <Edit2 size={18} />
-                                            </button>
-                                            <button
-                                                onClick={() => {
-                                                    setSelectedBlog(blog);
-                                                    setDeleteModalOpen(true);
-                                                }}
-                                                className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                                                title="Delete"
-                                            >
-                                                <Trash2 size={18} />
-                                            </button>
+                                            {canManageBlogs && (
+                                                <>
+                                                    <button
+                                                        onClick={() => router.push(`/admin/blogs/edit/${blog.blog_id}`)}
+                                                        className="p-2 text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors"
+                                                        title="Edit"
+                                                    >
+                                                        <Edit2 size={18} />
+                                                    </button>
+                                                    <button
+                                                        onClick={() => {
+                                                            setSelectedBlog(blog);
+                                                            setDeleteModalOpen(true);
+                                                        }}
+                                                        className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                                        title="Delete"
+                                                    >
+                                                        <Trash2 size={18} />
+                                                    </button>
+                                                </>
+                                            )}
                                         </div>
                                     </td>
                                 </tr>

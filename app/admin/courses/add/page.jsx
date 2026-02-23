@@ -334,6 +334,18 @@ export default function AddCoursePage() {
                                     }}
                                 />
                             </label>
+                            <p className="text-xs text-gray-500 mt-2 mb-1">Or paste a direct PDF link (if upload is unavailable, e.g. on Vercel):</p>
+                            <input
+                                type="url"
+                                value={brochureUrl || ''}
+                                onChange={(e) => {
+                                    const v = e.target.value.trim();
+                                    setBrochureUrl(v);
+                                    if (!v) setBrochureFileName('');
+                                }}
+                                placeholder="https://..."
+                                className="w-full px-4 py-2 border border-gray-300 rounded-xl text-gray-900 text-sm"
+                            />
                             {(brochureFileName || brochureUrl) && (
                                 <div className="mt-2 flex items-center gap-3">
                                     <p className="text-sm text-green-600 flex items-center gap-1">

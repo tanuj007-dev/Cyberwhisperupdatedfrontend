@@ -5,12 +5,25 @@ import path from 'path';
 const COURSE_BROCHURES_DIR = path.join(process.cwd(), 'public', 'uploads', 'course-brochures');
 const MAX_BROCHURE_SIZE = 100 * 1024 * 1024; // 100MB
 
+// On Vercel (and similar serverless), the filesystem is read-only — cannot save uploads locally
+const isReadOnlyFs = () => typeof process.env.VERCEL !== 'undefined' || process.env.AWS_LAMBDA_FUNCTION_VERSION != null;
+
 function sanitize(name) {
     return name.replace(/[^a-zA-Z0-9.-]/g, '_').slice(0, 80) || 'brochure';
 }
 
 export async function POST(request) {
     try {
+        if (isReadOnlyFs()) {
+            return NextResponse.json(
+                {
+                    error: 'Brochure upload unavailable',
+                    message: 'File uploads are not supported in this environment. Please upload your PDF to a file host (e.g. Google Drive, Dropbox, or your server) and paste the direct link in the brochure URL field, or add the brochure after deploying to a server with writable storage.',
+                },
+                { status: 503 }
+            );
+        }
+
         const formData = await request.formData();
         const file = formData.get('file') || formData.get('brochure');
         if (!file || !(file instanceof File)) {
@@ -33,6 +46,16 @@ export async function POST(request) {
         const url = `/uploads/course-brochures/${filename}`;
         return NextResponse.json({ url, success: true });
     } catch (err) {
+        const isReadOnly = err.code === 'EROFS' || (err.message && err.message.includes('read-only'));
+        if (isReadOnly) {
+            return NextResponse.json(
+                {
+                    error: 'Brochure upload unavailable',
+                    message: 'This environment has a read-only file system. Please upload your PDF elsewhere and paste the direct link, or use a server with writable storage.',
+                },
+                { status: 503 }
+            );
+        }
         console.error('Course brochure upload error:', err);
         return NextResponse.json({ error: err.message || 'Upload failed' }, { status: 500 });
     }
