@@ -512,6 +512,7 @@ const UserList = () => {
                     <span className="px-4 py-2 text-gray-600">Page {currentPage} of {totalPages}</span>
                     <Button variant="outline" onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))} disabled={currentPage >= totalPages}>Next</Button>
                 </div>
+                
             )}
 
             {/* Add/Edit User Modal */}
