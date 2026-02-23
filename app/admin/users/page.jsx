@@ -134,6 +134,12 @@ const UserList = () => {
     );
     const adminLimitReached = adminCount >= MAX_ADMINS;
 
+    // When editing: allow Admin only if the user being edited is already an admin (so count doesn't increase)
+    const editingUserIsAdmin = editMode && selectedUser && (
+        selectedUser.role_id === 1 || String(selectedUser.role || '').toUpperCase().replace(/\s/g, '') === 'ADMIN'
+    );
+    const adminOptionDisabled = adminLimitReached && !editingUserIsAdmin;
+
     const showToast = (message, type = 'success') => {
         setToast({ isVisible: true, message, type });
         setTimeout(() => setToast({ isVisible: false, message: '', type: 'success' }), 3000);
@@ -232,9 +238,10 @@ const UserList = () => {
 
     const handleSubmit = async () => {
         if (!validateForm()) return;
-        const isCreatingAdmin = !editMode && (formData.role === 'ADMIN');
-        if (isCreatingAdmin && adminLimitReached) {
-            showToast('Maximum limit of 5 admins reached. Cannot create more admins.', 'error');
+        const isMakingAdmin = formData.role === 'ADMIN';
+        const wouldExceedAdminLimit = isMakingAdmin && adminLimitReached && !editingUserIsAdmin;
+        if (wouldExceedAdminLimit) {
+            showToast('Maximum limit of 5 admins reached. Cannot add more admins.', 'error');
             return;
         }
         try {
@@ -530,8 +537,8 @@ const UserList = () => {
                         <label className="block text-sm font-medium text-gray-700 mb-1">Role</label>
                         <select value={formData.role} onChange={(e) => setFormData({ ...formData, role: e.target.value })} className="w-full px-4 py-2 border border-gray-300 rounded-xl text-black bg-white">
                             <option value="STUDENT">Student</option>
-                            <option value="ADMIN" disabled={!editMode && adminLimitReached}>
-                                Admin{!editMode && adminLimitReached ? ' (max 5 reached)' : ''}
+                            <option value="ADMIN" disabled={adminOptionDisabled}>
+                                Admin{adminOptionDisabled ? ' (max 5 reached)' : ''}
                             </option>
                             <option value="INSTRUCTOR">Instructor</option>
                         </select>

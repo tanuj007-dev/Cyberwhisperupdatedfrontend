@@ -8,13 +8,17 @@ import { getUserIdFromToken, getRoleFromToken } from '@/lib/jwt';
 import { API_BASE_URL } from '@/lib/apiConfig';
 import { UserCircle } from 'lucide-react';
 
+const MAX_ADMINS = 5;
+const isSuperAdminUser = (user) => user?.id === 1 || user?.user_id === 1 || String(user?.role || '').toUpperCase().replace(/\s/g, '') === 'SUPERADMIN';
+
 const EditUser = () => {
     const router = useRouter();
     const params = useParams();
-    const { getUserById, updateUser } = useAdmin();
+    const { users, getUserById, updateUser } = useAdmin();
     const profileFileInputRef = useRef(null);
 
     const [formData, setFormData] = useState(null);
+    const [initialRole, setInitialRole] = useState(null);
     const [toast, setToast] = useState({ isVisible: false, message: '', type: 'success' });
     const [errors, setErrors] = useState({});
     const [loading, setLoading] = useState(true);
@@ -73,6 +77,7 @@ const EditUser = () => {
                     const roleFromApi = user.role === 'USER' ? 'STUDENT' : (r === 'SUPERADMIN' ? 'SUPERADMIN' : (user.role || roleByRoleId[user.role_id] || roleByRoleId[user.roleId] || 'STUDENT'));
                     const statusNorm = (user.status || 'active').toLowerCase();
                     const editId = params.id != null ? parseInt(params.id, 10) : null;
+                    setInitialRole(roleFromApi);
                     setFormData({
                         ...user,
                         id: user.id ?? user.user_id ?? editId ?? params.id,
@@ -188,6 +193,15 @@ const EditUser = () => {
         return Object.keys(newErrors).length === 0;
     };
 
+    const visibleUsers = Array.isArray(users) ? users.filter((u) => !isSuperAdminUser(u)) : [];
+    const adminCount = visibleUsers.filter(
+        (u) => (u.role_id === 1) || (String(u.role || '').toUpperCase().replace(/\s/g, '') === 'ADMIN')
+    ).length;
+    const adminLimitReached = adminCount >= MAX_ADMINS;
+    const editingUserWasAdmin = initialRole === 'ADMIN' || initialRole === 'SUPERADMIN';
+    const adminOptionDisabled = adminLimitReached && !editingUserWasAdmin;
+    const wouldExceedAdminLimit = formData?.role === 'ADMIN' && adminOptionDisabled;
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -199,6 +213,11 @@ const EditUser = () => {
 
         if (!validateForm()) {
             showToast('Please fill in all required fields', 'error');
+            return;
+        }
+
+        if (wouldExceedAdminLimit) {
+            showToast('Maximum limit of 5 admins reached. Cannot change this user to Admin.', 'error');
             return;
         }
 
@@ -244,7 +263,7 @@ const EditUser = () => {
     return (
         <div className="max-w-4xl mx-auto space-y-6">
             <div>
-                <h1 className="text-3xl sm:text-4xl md:text-[50px] font-semibold tracking-tight leading-tight text-gray-900 dark:text-white mb-2">Edit User</h1>
+                <h1 className="text-3xl sm:text-4xl md:text-[50px] font-semibold tracking-tight leading-tight text-gray-900  mb-2">Edit User</h1>
                 <p className="text-gray-600 dark:text-gray-400">Update user information</p>
             </div>
 
@@ -445,9 +464,17 @@ const EditUser = () => {
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-2">Role</label>
                             <div className="flex flex-wrap gap-4">
-                                <label className="flex items-center gap-2 cursor-pointer">
-                                    <input type="radio" name="role" value="ADMIN" checked={formData.role === 'ADMIN'} onChange={handleChange} className="w-4 h-4 text-blue-600" />
-                                    <span className="text-sm">Admin</span>
+                                <label className={`flex items-center gap-2 ${adminOptionDisabled ? 'cursor-not-allowed opacity-70' : 'cursor-pointer'}`}>
+                                    <input
+                                        type="radio"
+                                        name="role"
+                                        value="ADMIN"
+                                        checked={formData.role === 'ADMIN'}
+                                        onChange={handleChange}
+                                        disabled={adminOptionDisabled}
+                                        className="w-4 h-4 text-blue-600"
+                                    />
+                                    <span className="text-sm">Admin{adminOptionDisabled ? ' (max 5 reached)' : ''}</span>
                                 </label>
                                 <label className="flex items-center gap-2 cursor-pointer">
                                     <input type="radio" name="role" value="STUDENT" checked={formData.role === 'STUDENT'} onChange={handleChange} className="w-4 h-4 text-blue-600" />
