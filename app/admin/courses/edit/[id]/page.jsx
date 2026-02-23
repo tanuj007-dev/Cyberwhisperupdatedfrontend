@@ -389,6 +389,18 @@ export default function EditCoursePage() {
                                     }}
                                 />
                             </label>
+                            <p className="text-xs text-gray-500 mt-2 mb-1">Or paste a direct PDF link (if upload fails, e.g. when Cloudinary is not configured):</p>
+                            <input
+                                type="url"
+                                value={formData.brochure_url || ''}
+                                onChange={(e) => {
+                                    const v = e.target.value.trim();
+                                    setFormData((prev) => ({ ...prev, brochure_url: v }));
+                                    if (!v) setBrochureFileName('');
+                                }}
+                                placeholder="https://..."
+                                className="w-full px-4 py-2 border border-gray-300 rounded-xl text-gray-700 text-sm"
+                            />
                             {(brochureFileName || formData.brochure_url) && (
                                 <div className="mt-2 flex items-center gap-3">
                                     <p className="text-sm text-green-600 flex items-center gap-1">

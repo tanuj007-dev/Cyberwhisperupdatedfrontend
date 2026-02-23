@@ -1,29 +1,26 @@
 import { NextResponse } from 'next/server';
-import { writeFile, mkdir } from 'fs/promises';
+import { writeFile, mkdir, unlink } from 'fs/promises';
 import path from 'path';
+import { tmpdir } from 'os';
 
 const COURSE_BROCHURES_DIR = path.join(process.cwd(), 'public', 'uploads', 'course-brochures');
 const MAX_BROCHURE_SIZE = 100 * 1024 * 1024; // 100MB
 
-// On Vercel (and similar serverless), the filesystem is read-only — cannot save uploads locally
+const cloudName = process.env.CLOUDINARY_CLOUD_NAME;
+const apiKey = process.env.CLOUDINARY_API_KEY;
+const apiSecret = process.env.CLOUDINARY_API_SECRET;
+const useCloudinary = cloudName && apiKey && apiSecret;
+
 const isReadOnlyFs = () => typeof process.env.VERCEL !== 'undefined' || process.env.AWS_LAMBDA_FUNCTION_VERSION != null;
 
 function sanitize(name) {
     return name.replace(/[^a-zA-Z0-9.-]/g, '_').slice(0, 80) || 'brochure';
 }
 
+const BROCHURE_UNAVAILABLE_MSG = 'Brochure upload is not available in this environment. Please upload your PDF to a file host (e.g. Google Drive, Dropbox) and paste the direct link in the brochure URL field.';
+
 export async function POST(request) {
     try {
-        if (isReadOnlyFs()) {
-            return NextResponse.json(
-                {
-                    error: 'Brochure upload unavailable',
-                    message: 'File uploads are not supported in this environment. Please upload your PDF to a file host (e.g. Google Drive, Dropbox, or your server) and paste the direct link in the brochure URL field, or add the brochure after deploying to a server with writable storage.',
-                },
-                { status: 503 }
-            );
-        }
-
         const formData = await request.formData();
         const file = formData.get('file') || formData.get('brochure');
         if (!file || !(file instanceof File)) {
@@ -35,12 +32,45 @@ export async function POST(request) {
                 { status: 400 }
             );
         }
+
+        const bytes = await file.arrayBuffer();
+        const buffer = Buffer.from(bytes);
         const ext = path.extname(file.name) || '.pdf';
         const baseName = sanitize(path.basename(file.name, ext));
         const filename = `${Date.now()}-${baseName}${ext}`;
+
+        // Prefer Cloudinary when configured (works on Vercel; /tmp is writable)
+        if (useCloudinary) {
+            const tmpPath = path.join(tmpdir(), `course-brochure-${Date.now()}-${filename.replace(/[^a-zA-Z0-9.-]/g, '')}`);
+            await writeFile(tmpPath, buffer);
+            try {
+                const cloudinary = (await import('cloudinary')).v2;
+                cloudinary.config({ cloud_name: cloudName, api_key: apiKey, api_secret: apiSecret });
+                const result = await new Promise((resolve, reject) => {
+                    cloudinary.uploader.upload(tmpPath, {
+                        folder: 'cyberwhisper/courses/brochures',
+                        resource_type: 'raw',
+                    }, (err, res) => {
+                        if (err) reject(err);
+                        else resolve(res);
+                    });
+                });
+                const cdnUrl = result.secure_url;
+                return NextResponse.json({ url: cdnUrl, success: true });
+            } finally {
+                await unlink(tmpPath).catch(() => {});
+            }
+        }
+
+        // No Cloudinary: save to local disk only if not read-only (e.g. local dev)
+        if (isReadOnlyFs()) {
+            return NextResponse.json(
+                { error: 'Brochure upload unavailable', message: BROCHURE_UNAVAILABLE_MSG },
+                { status: 503 }
+            );
+        }
+
         await mkdir(COURSE_BROCHURES_DIR, { recursive: true });
-        const bytes = await file.arrayBuffer();
-        const buffer = Buffer.from(bytes);
         const filePath = path.join(COURSE_BROCHURES_DIR, filename);
         await writeFile(filePath, buffer);
         const url = `/uploads/course-brochures/${filename}`;
@@ -49,10 +79,7 @@ export async function POST(request) {
         const isReadOnly = err.code === 'EROFS' || (err.message && err.message.includes('read-only'));
         if (isReadOnly) {
             return NextResponse.json(
-                {
-                    error: 'Brochure upload unavailable',
-                    message: 'This environment has a read-only file system. Please upload your PDF elsewhere and paste the direct link, or use a server with writable storage.',
-                },
+                { error: 'Brochure upload unavailable', message: BROCHURE_UNAVAILABLE_MSG },
                 { status: 503 }
             );
         }
