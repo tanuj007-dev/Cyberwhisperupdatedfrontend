@@ -22,6 +22,16 @@ const BlogList = () => {
 
     const itemsPerPage = 10;
 
+    // Normalize status for filtering: backend may return DRAFT, PUBLISHED, active, inactive, etc.
+    const isStatusMatch = (blogStatus, filterValue) => {
+        if (!blogStatus || !filterValue) return !filterValue;
+        const s = String(blogStatus).toLowerCase();
+        const f = String(filterValue).toLowerCase();
+        if (f === 'active') return s === 'active' || s === 'published' || s === 'live';
+        if (f === 'inactive') return s === 'inactive' || s === 'draft';
+        return s === f;
+    };
+
     // Filtered and searched blogs
     const filteredBlogs = useMemo(() => {
         return blogs.filter((blog) => {
@@ -30,7 +40,7 @@ const BlogList = () => {
                 (blog.keywords && String(blog.keywords).toLowerCase().includes(searchTerm.toLowerCase()));
             const catId = blog.blog_category_id ?? blog.category_id;
             const matchesCategory = !filterCategory || catId == filterCategory || String(catId) === String(filterCategory);
-            const matchesStatus = !filterStatus || (blog.status && String(blog.status).toLowerCase() === String(filterStatus).toLowerCase());
+            const matchesStatus = !filterStatus || isStatusMatch(blog.status, filterStatus);
 
             return matchesSearch && matchesCategory && matchesStatus;
         });
