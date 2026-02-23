@@ -334,7 +334,7 @@ export default function AddCoursePage() {
                                     }}
                                 />
                             </label>
-                            <p className="text-xs text-gray-500 mt-2 mb-1">Or paste a direct PDF link (if upload is unavailable, e.g. on Vercel):</p>
+                            <p className="text-xs text-gray-500 mt-2 mb-1">Or paste a direct PDF link. On Vercel: enable Blob storage (Project → Storage) to allow uploads up to ~4MB.</p>
                             <input
                                 type="url"
                                 value={brochureUrl || ''}

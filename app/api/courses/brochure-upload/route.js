@@ -17,7 +17,11 @@ function sanitize(name) {
     return name.replace(/[^a-zA-Z0-9.-]/g, '_').slice(0, 80) || 'brochure';
 }
 
-const BROCHURE_UNAVAILABLE_MSG = 'Brochure upload is not available in this environment. Please upload your PDF to a file host (e.g. Google Drive, Dropbox) and paste the direct link in the brochure URL field.';
+// Vercel serverless has ~4.5MB request body limit; Blob is used for smaller PDFs
+const VERCEL_BLOB_MAX_SIZE = 4 * 1024 * 1024; // 4MB to stay under limit
+const hasBlobToken = typeof process.env.BLOB_READ_WRITE_TOKEN === 'string' && process.env.BLOB_READ_WRITE_TOKEN.length > 0;
+
+const BROCHURE_UNAVAILABLE_MSG = 'Brochure upload is not available. Add Cloudinary (CLOUDINARY_*) or Vercel Blob (BLOB_READ_WRITE_TOKEN) env vars, or paste a direct PDF link below.';
 
 export async function POST(request) {
     try {
@@ -39,7 +43,7 @@ export async function POST(request) {
         const baseName = sanitize(path.basename(file.name, ext));
         const filename = `${Date.now()}-${baseName}${ext}`;
 
-        // Prefer Cloudinary when configured (works on Vercel; /tmp is writable)
+        // 1) Prefer Cloudinary when configured (works on Vercel; /tmp is writable)
         if (useCloudinary) {
             const tmpPath = path.join(tmpdir(), `course-brochure-${Date.now()}-${filename.replace(/[^a-zA-Z0-9.-]/g, '')}`);
             await writeFile(tmpPath, buffer);
@@ -62,10 +66,26 @@ export async function POST(request) {
             }
         }
 
-        // No Cloudinary: save to local disk only if not read-only (e.g. local dev)
+        // 2) On Vercel without Cloudinary: use Vercel Blob if token is set (max ~4.5MB per request)
+        if (isReadOnlyFs() && hasBlobToken && buffer.length <= VERCEL_BLOB_MAX_SIZE) {
+            try {
+                const { put } = await import('@vercel/blob');
+                const blob = await put(`course-brochures/${filename}`, buffer, { access: 'public' });
+                return NextResponse.json({ url: blob.url, success: true });
+            } catch (blobErr) {
+                console.error('Vercel Blob brochure upload error:', blobErr);
+            }
+        }
+
+        // 3) Save to local disk only if not read-only (e.g. local dev)
         if (isReadOnlyFs()) {
             return NextResponse.json(
-                { error: 'Brochure upload unavailable', message: BROCHURE_UNAVAILABLE_MSG },
+                {
+                    error: 'Brochure upload unavailable',
+                    message: hasBlobToken && buffer.length > VERCEL_BLOB_MAX_SIZE
+                        ? 'PDF is too large for this host (max ~4MB). Use the paste link field or configure Cloudinary for larger files.'
+                        : BROCHURE_UNAVAILABLE_MSG,
+                },
                 { status: 503 }
             );
         }
