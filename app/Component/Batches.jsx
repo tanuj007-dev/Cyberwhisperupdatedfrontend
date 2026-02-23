@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Calendar, Clock, Users, Sparkles, ArrowRight, Loader2, GraduationCap, IndianRupee, X, User, Mail, Phone as PhoneIcon } from 'lucide-react';
+import { Calendar, Clock, Users, Sparkles, ArrowRight, Loader2, GraduationCap, IndianRupee, X, User, Mail, Phone as PhoneIcon, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import { API_BASE_URL } from '../../lib/apiConfig';
 
@@ -18,6 +18,8 @@ export default function Batches() {
         phone: ''
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+    const BATCHES_PER_PAGE = 7;
 
     const handleEnrollClick = (batch) => {
         setSelectedBatch(batch);
@@ -105,6 +107,7 @@ export default function Batches() {
             console.log('Filtered active batches:', activeBatches);
 
             setBatches(activeBatches);
+            setCurrentPage(1);
         } catch (err) {
             console.error('Error fetching batches:', err);
             setError(err.message);
@@ -145,6 +148,10 @@ export default function Batches() {
             maximumFractionDigits: 0
         }).format(amount);
     };
+
+    const totalPages = Math.max(1, Math.ceil(batches.length / BATCHES_PER_PAGE));
+    const startIdx = (currentPage - 1) * BATCHES_PER_PAGE;
+    const paginatedBatches = batches.slice(startIdx, startIdx + BATCHES_PER_PAGE);
 
     return (
         <section className="relative w-full py-16 md:py-24 bg-[#FBF9FF] dark:bg-linear-to-b dark:from-[#1B0D37] dark:via-[#241245] dark:to-[#1B0D37] overflow-hidden font-sans transition-colors duration-300">
@@ -254,7 +261,7 @@ export default function Batches() {
 
                         {/* Table Body */}
                         <div className="divide-y divide-gray-100 dark:divide-white/5">
-                            {batches.map((batch, index) => (
+                            {paginatedBatches.map((batch, index) => (
                                 <motion.div
                                     initial={{ opacity: 0, x: -20 }}
                                     whileInView={{ opacity: 1, x: 0 }}
@@ -347,14 +354,43 @@ export default function Batches() {
                             ))}
                         </div>
 
-                        {/* Table Footer */}
+                        {/* Table Footer + Pagination */}
                         <div className="px-8 py-4 bg-gray-50 dark:bg-white/5 border-t border-gray-100 dark:border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4">
                             <p className="text-gray-500 text-sm">
-                                Showing <span className="text-gray-900 dark:text-white font-semibold">{batches.length}</span> upcoming batches
+                                Showing <span className="text-gray-900 dark:text-white font-semibold">{batches.length === 0 ? 0 : startIdx + 1}</span>
+                                –<span className="text-gray-900 dark:text-white font-semibold">{Math.min(startIdx + BATCHES_PER_PAGE, batches.length)}</span>
+                                {' '}of <span className="text-gray-900 dark:text-white font-semibold">{batches.length}</span> batches
                             </p>
-                            <div className="flex items-center gap-2 text-sm text-gray-400">
-                                <Users className="w-4 h-4" />
-                                <span>Limited seats available - Enroll today!</span>
+                            <div className="flex items-center gap-2">
+                                <span className="text-sm text-gray-400 hidden sm:inline">
+                                    <Users className="w-4 h-4 inline mr-1" />
+                                    Limited seats – Enroll today!
+                                </span>
+                                {totalPages > 1 && (
+                                    <div className="flex items-center gap-1">
+                                        <button
+                                            type="button"
+                                            onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                                            disabled={currentPage === 1}
+                                            className="p-2 rounded-lg border border-gray-200 dark:border-white/10 bg-white dark:bg-white/5 text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-white/10 disabled:opacity-50 disabled:pointer-events-none transition-colors"
+                                            aria-label="Previous page"
+                                        >
+                                            <ChevronLeft className="w-5 h-5" />
+                                        </button>
+                                        <span className="px-3 py-1.5 text-sm text-gray-600 dark:text-gray-400">
+                                            Page <span className="font-semibold text-gray-900 dark:text-white">{currentPage}</span> of <span className="font-semibold">{totalPages}</span>
+                                        </span>
+                                        <button
+                                            type="button"
+                                            onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                                            disabled={currentPage === totalPages}
+                                            className="p-2 rounded-lg border border-gray-200 dark:border-white/10 bg-white dark:bg-white/5 text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-white/10 disabled:opacity-50 disabled:pointer-events-none transition-colors"
+                                            aria-label="Next page"
+                                        >
+                                            <ChevronRight className="w-5 h-5" />
+                                        </button>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </motion.div>
