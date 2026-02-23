@@ -346,7 +346,7 @@ export default function EditCoursePage() {
                         </div>
                         <div className="md:col-span-2">
                             <label className="block text-sm font-semibold text-gray-700 mb-2">Course brochure (PDF)</label>
-                            <p className="text-xs text-gray-500 mb-2">Upload one PDF per course (max 100MB). When a user downloads the brochure for this course, they will get this file. Optional.</p>
+                            <p className="text-xs text-gray-500 mb-2">Upload one PDF per course (max 100MB). Uploads to Cloudinary when configured. Optional.</p>
                             <label className="inline-flex items-center gap-2 px-4 py-2.5 border border-gray-300 rounded-xl font-medium text-gray-700 cursor-pointer hover:bg-gray-50 transition-colors">
                                 <Upload size={18} />
                                 {brochureUploading ? 'Uploading...' : 'Choose PDF'}
@@ -369,17 +369,32 @@ export default function EditCoursePage() {
                                         }
                                         setBrochureUploading(true);
                                         try {
-                                            const fd = new FormData();
-                                            fd.append('file', file);
-                                            const uploadUrl = typeof window !== 'undefined' ? `${window.location.origin}/api/courses/brochure-upload` : '/api/courses/brochure-upload';
-                                            const res = await fetch(uploadUrl, { method: 'POST', body: fd });
-                                            const data = await res.json().catch(() => ({}));
-                                            if (!res.ok) throw new Error(data.message || data.error || 'Upload failed');
-                                            const url = data.url;
-                                            if (!url) throw new Error('No brochure URL returned');
-                                            const fullUrl = typeof window !== 'undefined' && url.startsWith('/') ? `${window.location.origin}${url}` : url;
-                                            setFormData((prev) => ({ ...prev, brochure_url: fullUrl }));
-                                            setBrochureFileName(file.name);
+                                            const origin = typeof window !== 'undefined' ? window.location.origin : '';
+                                            const configRes = await fetch(`${origin}/api/courses/brochure-upload`).catch(() => null);
+                                            const config = configRes?.ok ? await configRes.json().catch(() => ({})) : {};
+                                            if (config?.cloudName && config?.uploadPreset) {
+                                                const fd = new FormData();
+                                                fd.append('file', file);
+                                                fd.append('upload_preset', config.uploadPreset);
+                                                const cldRes = await fetch(`https://api.cloudinary.com/v1_1/${config.cloudName}/raw/upload`, { method: 'POST', body: fd });
+                                                const cldData = await cldRes.json().catch(() => ({}));
+                                                if (!cldRes.ok) throw new Error(cldData?.error?.message || cldData?.error || 'Cloudinary upload failed');
+                                                const url = cldData?.secure_url;
+                                                if (!url) throw new Error('No brochure URL returned');
+                                                setFormData((prev) => ({ ...prev, brochure_url: url }));
+                                                setBrochureFileName(file.name);
+                                            } else {
+                                                const fd = new FormData();
+                                                fd.append('file', file);
+                                                const res = await fetch(`${origin}/api/courses/brochure-upload`, { method: 'POST', body: fd });
+                                                const data = await res.json().catch(() => ({}));
+                                                if (!res.ok) throw new Error(data.message || data.error || 'Upload failed');
+                                                const url = data.url;
+                                                if (!url) throw new Error('No brochure URL returned');
+                                                const fullUrl = url.startsWith('/') ? `${origin}${url}` : url;
+                                                setFormData((prev) => ({ ...prev, brochure_url: fullUrl }));
+                                                setBrochureFileName(file.name);
+                                            }
                                         } catch (err) {
                                             alert(err.message || 'Upload failed');
                                         } finally {
@@ -389,7 +404,7 @@ export default function EditCoursePage() {
                                     }}
                                 />
                             </label>
-                            <p className="text-xs text-gray-500 mt-2 mb-1">Or paste a direct PDF link (if upload fails, e.g. when Cloudinary is not configured):</p>
+                            <p className="text-xs text-gray-500 mt-2 mb-1">Or paste a direct PDF link. Set CLOUDINARY_CLOUD_NAME + CLOUDINARY_BROCHURE_UPLOAD_PRESET for Cloudinary uploads.</p>
                             <input
                                 type="url"
                                 value={formData.brochure_url || ''}

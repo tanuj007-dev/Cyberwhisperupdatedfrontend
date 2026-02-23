@@ -23,6 +23,22 @@ const hasBlobToken = typeof process.env.BLOB_READ_WRITE_TOKEN === 'string' && pr
 
 const BROCHURE_UNAVAILABLE_MSG = 'Brochure upload is not available. Add Cloudinary (CLOUDINARY_*) or Vercel Blob (BLOB_READ_WRITE_TOKEN) env vars, or paste a direct PDF link below.';
 
+// Optional: preset for client-side unsigned upload (create in Cloudinary: Upload > Upload presets, resource_type: raw)
+const brochureUploadPreset = process.env.CLOUDINARY_BROCHURE_UPLOAD_PRESET;
+
+/**
+ * GET: returns Cloudinary client upload config when cloud name + brochure preset are set.
+ * Used by add/edit course pages to upload brochure PDFs directly to Cloudinary from the browser.
+ */
+export async function GET() {
+    const cloud = process.env.CLOUDINARY_CLOUD_NAME;
+    const preset = brochureUploadPreset;
+    if (!cloud || !preset) {
+        return NextResponse.json({ cloudName: null, uploadPreset: null });
+    }
+    return NextResponse.json({ cloudName: cloud, uploadPreset: preset });
+}
+
 export async function POST(request) {
     try {
         const formData = await request.formData();
