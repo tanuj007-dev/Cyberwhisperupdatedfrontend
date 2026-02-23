@@ -150,17 +150,7 @@ export default function AddCoursePage() {
                             />
                         </div>
                          
-                        <div className="md:col-span-2">
-                            <label className="block text-sm font-semibold text-gray-700 mb-2">Short description</label>
-                            <input
-                                type="text"
-                                name="short_description"
-                                value={formData.short_description}
-                                onChange={handleChange}
-                                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent placeholder:text-gray-300 text-black"
-                                placeholder="Brief summary for course cards (e.g. one line)"
-                            />
-                        </div>
+                      
                         <div className="md:col-span-2">
                             <label className="block text-sm font-semibold text-gray-700 mb-2">Description</label>
                             <textarea
@@ -291,7 +281,7 @@ export default function AddCoursePage() {
                         </div>
                         <div className="md:col-span-2">
                             <label className="block text-sm font-semibold text-gray-700 mb-2">Course brochure (PDF)</label>
-                            <p className="text-xs text-gray-500 mb-2">Upload one PDF per course (max 100MB). Stored on AWS S3 when configured. Optional.</p>
+                            <p className="text-xs text-gray-500 mb-2">Upload one PDF per course (max 100MB). Uploaded to backend. Optional.</p>
                             <label className="inline-flex items-center gap-2 px-4 py-2.5 border border-gray-300 rounded-xl font-medium text-gray-700 cursor-pointer hover:bg-gray-50 transition-colors">
                                 <Upload size={18} />
                                 {brochureUploading ? 'Uploading...' : 'Choose PDF'}
@@ -312,18 +302,30 @@ export default function AddCoursePage() {
                                             alert('Brochure must be 100MB or less.');
                                             return;
                                         }
+                                        const token = getAdminToken();
+                                        if (!token) {
+                                            alert('Please log in to upload brochure.');
+                                            return;
+                                        }
                                         setBrochureUploading(true);
                                         try {
-                                            const origin = typeof window !== 'undefined' ? window.location.origin : '';
                                             const fd = new FormData();
                                             fd.append('file', file);
-                                            const res = await fetch(`${origin}/api/courses/brochure-upload`, { method: 'POST', body: fd });
+                                            const res = await fetch(`${API_BASE_URL}/api/brochure-downloads/upload`, {
+                                                method: 'POST',
+                                                headers: { Authorization: `Bearer ${token}` },
+                                                body: fd,
+                                            });
                                             const data = await res.json().catch(() => ({}));
                                             if (!res.ok) throw new Error(data.message || data.error || 'Upload failed');
-                                            const url = data.url;
-                                            if (!url) throw new Error('No brochure URL returned');
-                                            const fullUrl = url.startsWith('/') ? `${origin}${url}` : url;
-                                            setBrochureUrl(fullUrl);
+                                            const pathOrUrl = (p) => typeof p === 'string' && p ? (p.startsWith('http') ? p : `${API_BASE_URL.replace(/\/$/, '')}${p.startsWith('/') ? '' : '/'}${p}`) : null;
+                                            const raw = data.url ?? data.uri ?? data.file_url ?? data.file_uri ?? data.fileUrl ?? data.brochure_url ?? data.brochure_uri ?? data.download_url ?? data.link ?? data.result
+                                                ?? data.data?.url ?? data.data?.uri ?? data.data?.file_url ?? data.data?.file_uri ?? data.data?.fileUrl ?? data.data?.brochure_url ?? data.data?.brochure_uri
+                                                ?? data.file?.url ?? data.file?.uri ?? data.file?.path ?? data.data?.file?.url ?? data.data?.file?.uri
+                                                ?? pathOrUrl(data.data?.path) ?? pathOrUrl(data.path);
+                                            const url = (typeof raw === 'string' && raw.trim()) ? raw : (raw != null ? String(raw) : null);
+                                            if (!url || (!url.startsWith('http') && !url.startsWith('/'))) throw new Error('No brochure URL/URI returned from backend. Backend should return url, uri, file_url, or path in the response.');
+                                            setBrochureUrl(url);
                                             setBrochureFileName(file.name);
                                         } catch (err) {
                                             alert(err.message || 'Upload failed');

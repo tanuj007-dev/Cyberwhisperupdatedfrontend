@@ -383,14 +383,7 @@ const EditBlog = () => {
                             />
                         </div>
 
-                        <Textarea
-                            label="Short Description (Excerpt)"
-                            name="shortDescription"
-                            value={formData.shortDescription}
-                            onChange={handleChange}
-                            placeholder="Brief summary of the blog post..."
-                            rows={3}
-                        />
+                      
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <Select
