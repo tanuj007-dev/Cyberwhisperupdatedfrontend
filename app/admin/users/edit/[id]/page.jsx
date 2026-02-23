@@ -457,8 +457,8 @@ const EditUser = () => {
                 </Card>
                 )}
 
-                {/* Role & Permissions – hidden for own profile and when logged in as Superadmin */}
-                {!isOwnProfile && currentUserRole !== 'SUPERADMIN' && (
+                {/* Role & Permissions – hidden only when editing own profile; Superadmin can change others' roles (max 5 admins enforced below) */}
+                {!isOwnProfile && (
                 <Card title="Role & Permissions">
                     <div className="space-y-4">
                         <div>
