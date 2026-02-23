@@ -60,7 +60,12 @@ export default function BrochureForm({ className = '', onSuccess, brochureUrl: b
 
             const link = document.createElement('a')
             const base = (API_BASE_URL || '').replace(/\/$/, '');
-            link.href = brochureUrl.startsWith('http') ? brochureUrl : (base ? base : (typeof window !== 'undefined' ? window.location.origin : '')) + brochureUrl
+            // Use download proxy for S3 URLs to avoid Access Denied (private objects need presigned URL from backend)
+            const isS3Url = brochureUrl.startsWith('http') && (brochureUrl.includes('amazonaws.com') || brochureUrl.includes('s3.'));
+            const downloadHref = isS3Url
+                ? (typeof window !== 'undefined' ? window.location.origin : '') + '/api/courses/brochure-download?url=' + encodeURIComponent(brochureUrl.startsWith('http') ? brochureUrl : (base || '') + brochureUrl)
+                : brochureUrl.startsWith('http') ? brochureUrl : (base ? base : (typeof window !== 'undefined' ? window.location.origin : '')) + brochureUrl;
+            link.href = downloadHref;
             link.download = courseTitle ? `${courseTitle.replace(/[^a-zA-Z0-9.-]/g, '_').slice(0, 60)}_Brochure.pdf` : BROCHURE_FILENAME
             document.body.appendChild(link)
             link.click()

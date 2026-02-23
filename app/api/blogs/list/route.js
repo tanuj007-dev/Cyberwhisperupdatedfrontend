@@ -49,23 +49,26 @@ export async function GET(request) {
         const headers = { 'Content-Type': 'application/json' };
         let backendFailed = false;
 
-        const normalizeAndReturn = (json) => {
+        const normalizeAndReturn = (json, requestedLimit = limit) => {
             const raw = json.data ?? json.blogs ?? json.result ?? json.items ?? json.posts ?? (Array.isArray(json) ? json : []);
             const list = Array.isArray(raw) ? raw : [];
             const publishedOnly = list.filter(isPublished);
             const total = json.pagination?.total ?? json.total ?? publishedOnly.length;
-            const totalPages = json.pagination?.totalPages ?? (Math.ceil(total / limit) || 1);
-            const data = publishedOnly.map(mapBlogToFrontend);
+            const totalPages = json.pagination?.totalPages ?? (Math.ceil(total / requestedLimit) || 1);
+            const data = publishedOnly.slice(0, requestedLimit).map(mapBlogToFrontend);
             return NextResponse.json(
                 {
                     success: true,
                     message: 'Blogs fetched successfully',
                     data,
-                    pagination: { page, limit, total, totalPages, hasNextPage: page < totalPages, hasPrevPage: page > 1 },
+                    pagination: { page, limit: requestedLimit, total, totalPages, hasNextPage: page < totalPages, hasPrevPage: page > 1 },
                 },
                 { status: 200, headers: corsHeaders }
             );
         };
+
+        // Request extra from backend for page 1 so we can return 6 even if backend defaults to 5
+        const backendLimit = page === 1 ? Math.max(limit, 8) : limit;
 
         if (base) {
             try {
@@ -73,16 +76,16 @@ export async function GET(request) {
                 const urlsToTry = backendStatus === 'all'
                     ? [
                         `${base}/api/blogs/list`,
-                        `${base}/api/blogs/list?page=${page}&limit=${limit}`,
+                        `${base}/api/blogs/list?page=${page}&limit=${backendLimit}`,
                     ]
                     : [
-                        `${base}/api/blogs/list?page=${page}&limit=${limit}${backendStatus && backendStatus !== 'all' ? `&status=${backendStatus}` : ''}${category_id ? `&category_id=${category_id}` : ''}`,
+                        `${base}/api/blogs/list?page=${page}&limit=${backendLimit}${backendStatus && backendStatus !== 'all' ? `&status=${backendStatus}` : ''}${category_id ? `&category_id=${category_id}` : ''}`,
                     ];
                 for (const listUrl of urlsToTry) {
                     const res = await fetch(listUrl, { headers, cache: 'no-store' });
                     if (!res.ok) continue;
                     const json = await res.json().catch(() => ({}));
-                    return normalizeAndReturn(json);
+                    return normalizeAndReturn(json, limit);
                 }
                 backendFailed = true;
             } catch (err) {
