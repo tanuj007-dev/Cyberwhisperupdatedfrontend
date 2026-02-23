@@ -98,6 +98,15 @@ const UserList = () => {
     const MAX_ADMINS = 5;
 
     const isSuperAdminUser = (user) => user.id === 1 || user.user_id === 1 || String(user.role || '').toUpperCase().replace(/\s/g, '') === 'SUPERADMIN';
+    // Single source of truth for role so counters and role filter stay in sync (role_id 1=Admin, 2=Student, 3=Instructor)
+    const getRoleId = (user) => {
+        if (user.role_id != null && user.role_id !== '') return parseInt(user.role_id, 10);
+        const r = String(user.role || '').toUpperCase().replace(/\s/g, '');
+        if (r === 'SUPERADMIN') return 1;
+        if (r === 'ADMIN') return 1;
+        if (r === 'INSTRUCTOR') return 3;
+        return 2; // STUDENT, USER, or anything else
+    };
     const visibleUsers = useMemo(() => {
         const list = Array.isArray(users) ? users : [];
         if (currentUserRole === 'SUPERADMIN') return list;
@@ -111,9 +120,9 @@ const UserList = () => {
                 (user.last_name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
                 (user.email || '').toLowerCase().includes(searchTerm.toLowerCase());
             const isSuper = isSuperAdminUser(user);
-            const roleId = user.role_id != null ? user.role_id : (user.role === 'ADMIN' ? 1 : user.role === 'INSTRUCTOR' ? 3 : 2);
+            const roleId = getRoleId(user);
             const matchesRole = !filterRole ||
-                (filterRole === 'superadmin' ? isSuper : (!isSuper && roleId === parseInt(filterRole)));
+                (filterRole === 'superadmin' ? isSuper : (!isSuper && roleId === parseInt(filterRole, 10)));
             const matchesStatus = !filterStatus || (user.status || 'active') === filterStatus;
             const matchesInstructor = !filterInstructor ||
                 (filterInstructor === 'yes' ? user.is_instructor : !user.is_instructor);
@@ -129,15 +138,13 @@ const UserList = () => {
     );
 
     const adminCount = useMemo(() =>
-        visibleUsers.filter((u) => !isSuperAdminUser(u) && ((u.role_id === 1) || (String(u.role || '').toUpperCase().replace(/\s/g, '') === 'ADMIN'))).length,
+        visibleUsers.filter((u) => !isSuperAdminUser(u) && getRoleId(u) === 1).length,
         [visibleUsers]
     );
     const adminLimitReached = adminCount >= MAX_ADMINS;
 
     // When editing: allow Admin only if the user being edited is already an admin (so count doesn't increase)
-    const editingUserIsAdmin = editMode && selectedUser && (
-        selectedUser.role_id === 1 || String(selectedUser.role || '').toUpperCase().replace(/\s/g, '') === 'ADMIN'
-    );
+    const editingUserIsAdmin = editMode && selectedUser && getRoleId(selectedUser) === 1;
     const adminOptionDisabled = adminLimitReached && !editingUserIsAdmin;
 
     const showToast = (message, type = 'success') => {
@@ -311,7 +318,7 @@ const UserList = () => {
     const getRoleName = (user) => {
         const r = String(user.role || '').toUpperCase().replace(/\s/g, '');
         if (r === 'SUPERADMIN') return 'Superadmin';
-        const roleId = user.role_id != null ? user.role_id : (user.role === 'ADMIN' ? 1 : user.role === 'INSTRUCTOR' ? 3 : 2);
+        const roleId = getRoleId(user);
         const roles = { 1: 'Admin', 2: 'Student', 3: 'Instructor' };
         return roles[roleId] || user.role || 'Unknown';
     };
@@ -319,7 +326,7 @@ const UserList = () => {
     const getRoleColor = (user) => {
         const r = String(user.role || '').toUpperCase().replace(/\s/g, '');
         if (r === 'SUPERADMIN') return 'purple';
-        const roleId = user.role_id != null ? user.role_id : (user.role === 'ADMIN' ? 1 : user.role === 'INSTRUCTOR' ? 3 : 2);
+        const roleId = getRoleId(user);
         const colors = { 1: 'purple', 2: 'info', 3: 'success' };
         return colors[roleId] || 'default';
     };
@@ -360,11 +367,11 @@ const UserList = () => {
                 </div>
                 <div className="bg-white rounded-2xl border border-gray-200 p-4">
                     <p className="text-sm text-gray-500">Students</p>
-                    <p className="text-3xl font-bold text-sky-600">{visibleUsers.filter((u) => (u.role_id === 2) || (u.role === 'STUDENT') || (u.role === 'USER')).length}</p>
+                    <p className="text-3xl font-bold text-sky-600">{visibleUsers.filter((u) => getRoleId(u) === 2).length}</p>
                 </div>
                 <div className="bg-white rounded-2xl border border-gray-200 p-4">
                     <p className="text-sm text-gray-500">Instructors</p>
-                    <p className="text-3xl font-bold text-violet-600">{visibleUsers.filter((u) => (u.role_id === 3) || u.is_instructor || (u.role === 'INSTRUCTOR')).length}</p>
+                    <p className="text-3xl font-bold text-violet-600">{visibleUsers.filter((u) => getRoleId(u) === 3).length}</p>
                 </div>
             </div>
 
