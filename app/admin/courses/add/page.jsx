@@ -329,7 +329,7 @@ export default function AddCoursePage() {
                                                 // Step 2b: Fallback — upload via local Next.js route (local dev / no S3)
                                                 const fd = new FormData();
                                                 fd.append('file', file);
-                                                const res = await fetch(`${API_BASE_URL.replace(/\/$/, '')}/api/courses/brochure-upload`, {
+                                                const res = await fetch(`/api/courses/brochure-upload`, {
                                                     method: 'POST',
                                                     headers: { Authorization: `Bearer ${token}` },
                                                     body: fd,
