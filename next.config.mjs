@@ -15,6 +15,10 @@ const nextConfig = {
         hostname: 'res.cloudinary.com',
       },
       {
+        protocol: 'https',
+        hostname: 'darkred-mouse-801836.hostingersite.com',
+      },
+      {
         protocol: 'http',
         hostname: 'localhost',
         pathname: '/**',
