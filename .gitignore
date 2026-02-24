@@ -42,4 +42,5 @@ next-env.d.ts
 
 *.zip
 
- 
+# uploads
+public/uploads/
