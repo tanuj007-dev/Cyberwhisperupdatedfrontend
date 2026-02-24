@@ -77,6 +77,8 @@ const AddBlog = () => {
         canonicalUrl: '',
         metaRobots: 'index',
 
+
+
         // Settings
         allowComments: true,
         showOnHomepage: true,
@@ -761,7 +763,7 @@ const AddBlog = () => {
                             </div>
                         </div>
 
-                        
+
                     </div>
                 </Section>
 
