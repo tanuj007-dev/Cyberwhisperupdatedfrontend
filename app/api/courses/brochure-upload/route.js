@@ -4,7 +4,10 @@ import path from 'path';
 import { tmpdir } from 'os';
 
 const COURSE_BROCHURES_DIR = path.join(process.cwd(), 'public', 'uploads', 'course-brochures');
-const MAX_BROCHURE_SIZE = 100 * 1024 * 1024; // 100MB
+const MAX_BROCHURE_SIZE = 200 * 1024 * 1024; // 200MB
+
+export const maxDuration = 300; // 5 minutes for large uploads
+export const dynamic = 'force-dynamic';
 
 // AWS S3 (preferred when configured)
 const s3Bucket = process.env.AWS_S3_BUCKET;
@@ -100,7 +103,7 @@ export async function POST(request) {
                 const cdnUrl = result.secure_url;
                 return NextResponse.json({ url: cdnUrl, success: true });
             } finally {
-                await unlink(tmpPath).catch(() => {});
+                await unlink(tmpPath).catch(() => { });
             }
         }
 
@@ -131,7 +134,12 @@ export async function POST(request) {
         await mkdir(COURSE_BROCHURES_DIR, { recursive: true });
         const filePath = path.join(COURSE_BROCHURES_DIR, filename);
         await writeFile(filePath, buffer);
-        const url = `/uploads/course-brochures/${filename}`;
+
+        // Return absolute URL so it works correctly when stored in external backend
+        const host = request.headers.get('host') || 'localhost:3000';
+        const protocol = request.headers.get('x-forwarded-proto') || (host.includes('localhost') ? 'http' : 'https');
+        const url = `${protocol}://${host}/uploads/course-brochures/${filename}`;
+
         return NextResponse.json({ url, success: true });
     } catch (err) {
         const isReadOnly = err.code === 'EROFS' || (err.message && err.message.includes('read-only'));

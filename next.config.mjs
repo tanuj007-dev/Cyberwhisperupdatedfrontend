@@ -35,9 +35,11 @@ const nextConfig = {
     removeConsole: process.env.NODE_ENV === 'production',
   },
 
-  // Experimental optimizations
   experimental: {
     optimizePackageImports: ['lucide-react', 'react-icons', 'framer-motion'],
+    serverActions: {
+      bodySizeLimit: '200mb',
+    },
   },
 
   // Compression

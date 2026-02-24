@@ -223,7 +223,7 @@ export default function EditCoursePage() {
                                 className="w-full px-4 py-3 border border-gray-300 rounded-xl text-gray-700 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                             />
                         </div>
-                        
+
                         {/* <div className="md:col-span-2">
                             <label className="block text-sm font-semibold text-gray-700 mb-2">Short description</label>
                             <input
@@ -362,9 +362,9 @@ export default function EditCoursePage() {
                                             alert('Please select a PDF file.');
                                             return;
                                         }
-                                        const maxBrochureSize = 100 * 1024 * 1024; // 100MB
+                                        const maxBrochureSize = 200 * 1024 * 1024; // 200MB
                                         if (file.size > maxBrochureSize) {
-                                            alert('Brochure must be 100MB or less.');
+                                            alert('Brochure must be 200MB or less.');
                                             return;
                                         }
                                         const token = getAdminToken();
@@ -376,7 +376,7 @@ export default function EditCoursePage() {
                                         try {
                                             const fd = new FormData();
                                             fd.append('file', file);
-                                            const res = await fetch(`${API_BASE_URL}/api/brochure-downloads/upload`, {
+                                            const res = await fetch(`/api/courses/brochure-upload`, {
                                                 method: 'POST',
                                                 headers: { Authorization: `Bearer ${token}` },
                                                 body: fd,
@@ -460,8 +460,8 @@ export default function EditCoursePage() {
                                 placeholder="79.99"
                             />
                         </div>
-                       
-                        
+
+
                     </div>
                 </div>
 
