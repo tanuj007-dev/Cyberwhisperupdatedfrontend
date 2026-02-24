@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.995.0",
+    "@aws-sdk/s3-request-presigner": "^3.996.0",
     "@radix-ui/react-slot": "^1.2.4",
     "@react-three/fiber": "^9.4.2",
     "@vercel/blob": "^2.3.0",
