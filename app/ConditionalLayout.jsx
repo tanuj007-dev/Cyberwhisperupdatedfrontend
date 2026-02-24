@@ -11,6 +11,7 @@ const Footer = dynamic(() => import("./Component/footer"), {
   ssr: true,
 });
 
+
 const NewsletterSignup = dynamic(() => import("./Component/NewsletterSignup"), {
   loading: () => <div className="h-32 bg-gray-900" />,
   ssr: true,
