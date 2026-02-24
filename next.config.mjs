@@ -15,10 +15,6 @@ const nextConfig = {
         hostname: 'res.cloudinary.com',
       },
       {
-        protocol: 'https',
-        hostname: 'cloudinary-url',
-      },
-      {
         protocol: 'http',
         hostname: 'localhost',
         pathname: '/**',
@@ -36,7 +32,7 @@ const nextConfig = {
   },
 
   experimental: {
-    optimizePackageImports: ['lucide-react', 'react-icons', 'framer-motion'],
+    optimizePackageImports: ['lucide-react', 'framer-motion'],
     serverActions: {
       bodySizeLimit: '200mb',
     },
