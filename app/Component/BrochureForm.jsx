@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { FileDown, Loader2 } from 'lucide-react'
+import { FileDown, Loader2, X } from 'lucide-react'
 import { API_BASE_URL } from '../../lib/apiConfig'
 
 const DEFAULT_BROCHURE_URL = '/uploads/brochures/brochure.pdf'
@@ -174,6 +174,37 @@ export default function BrochureForm({ className = '', onSuccess, brochureUrl: b
             </form>
             {message && (
                 <p className="text-xs text-[#6B46E5] dark:text-purple-400 mt-2">{message}</p>
+            )}
+            
+            {/* Full-screen Download Loader Modal */}
+            {isDownloading && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 backdrop-blur-sm">
+                    <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 max-w-md w-full mx-4 shadow-2xl border border-gray-200 dark:border-gray-700">
+                        <div className="flex flex-col items-center justify-center space-y-4">
+                            <div className="relative">
+                                <div className="w-16 h-16 border-4 border-[#6B46E5] border-t-transparent rounded-full animate-spin"></div>
+                                <div className="absolute inset-0 flex items-center justify-center">
+                                    <FileDown className="w-6 h-6 text-[#6B46E5]" />
+                                </div>
+                            </div>
+                            <div className="text-center space-y-2">
+                                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                                    Downloading Brochure
+                                </h3>
+                                <p className="text-sm text-gray-600 dark:text-gray-300">
+                                    Please wait while we prepare your download...
+                                </p>
+                                <div className="flex items-center justify-center space-x-2 text-xs text-gray-500 dark:text-gray-400">
+                                    <Loader2 className="w-3 h-3 animate-spin" />
+                                    <span>Processing download</span>
+                                </div>
+                            </div>
+                            <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                                <div className="bg-[#6B46E5] h-2 rounded-full animate-pulse" style={{ width: '60%' }}></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             )}
         </div>
     )
