@@ -67,6 +67,19 @@ const EditBlog = () => {
             const thumb = blog.thumbnail_url || blog.thumbnail || '';
             const banner = blog.banner_url || blog.banner || '';
             initialImageUrlsRef.current = { thumbnail_url: thumb, banner_url: banner };
+
+            // Parse tags from keywords if selectedTags is empty or missing
+            let selectedTags = blog.selectedTags || [];
+            if (selectedTags.length === 0 && blog.keywords && tags.length > 0) {
+                const keywordList = String(blog.keywords).split(',').map(k => k.trim()).filter(Boolean);
+                const matchedIds = keywordList
+                    .map(name => tags.find(t => String(t.name).toLowerCase() === name.toLowerCase())?.id)
+                    .filter(Boolean);
+                if (matchedIds.length > 0) {
+                    selectedTags = matchedIds;
+                }
+            }
+
             setFormData({
                 ...blog,
                 description: blog.content ?? blog.description ?? '',
@@ -74,7 +87,7 @@ const EditBlog = () => {
                 readingTime: blog.reading_time ?? blog.readingTime ?? '',
                 imageAltText: blog.image_alt_text ?? blog.imageAltText ?? '',
                 imageCaption: blog.image_caption ?? blog.imageCaption ?? '',
-                publishDate: blog.publishDate || new Date(blog.added_date).toISOString().split('T')[0],
+                publishDate: blog.publishDate || (blog.added_date ? new Date(blog.added_date).toISOString().split('T')[0] : new Date().toISOString().split('T')[0]),
                 visibility: blog.visibility || 'public',
                 seoTitle: blog.seoTitle || '',
                 seoDescription: blog.seoDescription || '',
@@ -84,12 +97,12 @@ const EditBlog = () => {
                 allowComments: blog.allowComments ?? true,
                 showOnHomepage: blog.showOnHomepage ?? true,
                 pinPost: blog.pinPost ?? false,
-                selectedTags: blog.selectedTags || [],
+                selectedTags: selectedTags,
             });
             setThumbnailPreview(thumb || banner || blog.thumbnail);
         }
         setLoading(false);
-    }, [params.id, getBlogById]);
+    }, [params.id, getBlogById, tags]);
 
     // Fetch full blog from API (including content) so edit form shows previous content even if list didn't return it
     useEffect(() => {
@@ -329,7 +342,7 @@ const EditBlog = () => {
                         type="button"
                         onClick={handleSubmit}
                         disabled={submitting}
-                        className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-violet-600 to-purple-600 text-white font-medium rounded-lg hover:shadow-lg hover:shadow-purple-500/25 transition-all disabled:opacity-70 disabled:cursor-not-allowed"
+                        className="flex items-center gap-2 px-5 py-2.5 bg-linear-to-r from-violet-600 to-purple-600 text-white font-medium rounded-lg hover:shadow-lg hover:shadow-purple-500/25 transition-all disabled:opacity-70 disabled:cursor-not-allowed"
                     >
                         {submitting ? <Loader2 size={18} className="animate-spin" /> : <Save size={18} />}
                         {submitting ? 'Updating…' : 'Update Blog'}
@@ -383,7 +396,7 @@ const EditBlog = () => {
                             />
                         </div>
 
-                      
+
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <Select
@@ -574,7 +587,7 @@ const EditBlog = () => {
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>
                                 <div className="flex gap-3">
-                                    {[ { value: 'active', label: 'Published' }, { value: 'inactive', label: 'Draft' }].map((status) => (
+                                    {[{ value: 'active', label: 'Published' }, { value: 'inactive', label: 'Draft' }].map((status) => (
                                         <label key={status.value} className="flex items-center gap-2 cursor-pointer">
                                             <input
                                                 type="radio"
@@ -609,7 +622,7 @@ const EditBlog = () => {
                             </div>
                         </div>
 
-                         
+
 
                         <div className="grid grid-cols-2 gap-4 pt-4 border-t border-gray-100">
                             <div>
@@ -762,7 +775,7 @@ const EditBlog = () => {
                     <button
                         type="button"
                         onClick={handleSubmit}
-                        className="flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-violet-600 to-purple-600 text-white font-medium rounded-lg hover:shadow-lg hover:shadow-purple-500/25 transition-all"
+                        className="flex items-center gap-2 px-6 py-2.5 bg-linear-to-r from-violet-600 to-purple-600 text-white font-medium rounded-lg hover:shadow-lg hover:shadow-purple-500/25 transition-all"
                     >
                         <Save size={18} />
                         Update Blog
