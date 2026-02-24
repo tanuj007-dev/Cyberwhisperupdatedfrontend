@@ -62,7 +62,30 @@ const nextConfig = {
   async rewrites() {
     if (process.env.NODE_ENV === 'development' && !process.env.BACKEND_API_URL) {
       return [
+        // User management
         { source: '/api/users/:path*', destination: 'http://localhost:3031/api/users/:path*' },
+        // Admin authentication
+        { source: '/api/admin/:path*', destination: 'http://localhost:3031/api/admin/:path*' },
+        // Courses management
+        { source: '/api/courses/:path*', destination: 'http://localhost:3031/api/courses/:path*' },
+        // Brochure management
+        { source: '/api/brochure/:path*', destination: 'http://localhost:3031/api/brochure/:path*' },
+        // Gallery management
+        { source: '/api/gallery/:path*', destination: 'http://localhost:3031/api/gallery/:path*' },
+        // Media management
+        { source: '/api/media/:path*', destination: 'http://localhost:3031/api/media/:path*' },
+        // Newsletter
+        { source: '/api/newsletter/:path*', destination: 'http://localhost:3031/api/newsletter/:path*' },
+        // Deploy team training
+        { source: '/api/deploy-team-training/:path*', destination: 'http://localhost:3031/api/deploy-team-training/:path*' },
+        // Batches
+        { source: '/api/batches/:path*', destination: 'http://localhost:3031/api/batches/:path*' },
+        // Blogs
+        { source: '/api/blogs/:path*', destination: 'http://localhost:3031/api/blogs/:path*' },
+        // Help center
+        { source: '/api/helpcenter/:path*', destination: 'http://localhost:3031/api/helpcenter/:path*' },
+        // Enquiries
+        { source: '/api/enquiries/:path*', destination: 'http://localhost:3031/api/enquiries/:path*' },
       ];
     }
     return [];

@@ -14,6 +14,7 @@ export default function BrochureForm({ className = '', onSuccess, brochureUrl: b
         mobile: ''
     })
     const [isSubmitting, setIsSubmitting] = useState(false)
+    const [isDownloading, setIsDownloading] = useState(false)
     const [message, setMessage] = useState(null)
     const [fetchedUrl, setFetchedUrl] = useState(null)
     // Use course brochure if provided, else fallback from API (global brochure)
@@ -58,6 +59,10 @@ export default function BrochureForm({ className = '', onSuccess, brochureUrl: b
                 throw new Error(errData.message || errData.error || 'Request failed')
             }
 
+            // Start download process
+            setIsDownloading(true)
+            setMessage('Preparing download...')
+
             const link = document.createElement('a')
             const base = (API_BASE_URL || '').replace(/\/$/, '');
             // Use download proxy for S3 URLs to avoid Access Denied (private objects need presigned URL from backend)
@@ -65,17 +70,39 @@ export default function BrochureForm({ className = '', onSuccess, brochureUrl: b
             const downloadHref = isS3Url
                 ? (typeof window !== 'undefined' ? window.location.origin : '') + '/api/courses/brochure-download?url=' + encodeURIComponent(brochureUrl.startsWith('http') ? brochureUrl : (base || '') + brochureUrl)
                 : brochureUrl.startsWith('http') ? brochureUrl : (base ? base : (typeof window !== 'undefined' ? window.location.origin : '')) + brochureUrl;
+            
             link.href = downloadHref;
             link.download = courseTitle ? `${courseTitle.replace(/[^a-zA-Z0-9.-]/g, '_').slice(0, 60)}_Brochure.pdf` : BROCHURE_FILENAME
+            
+            // Add download progress tracking
+            link.onload = () => {
+                setMessage('Brochure downloaded successfully!')
+                setIsDownloading(false)
+                setFormData({ name: '', email: '', mobile: '' })
+                onSuccess?.()
+            }
+            
+            link.onerror = () => {
+                setMessage('Download failed. Please try again.')
+                setIsDownloading(false)
+            }
+            
             document.body.appendChild(link)
             link.click()
-            document.body.removeChild(link)
-
-            setMessage('Brochure is downloading. Check your downloads.')
-            setFormData({ name: '', email: '', mobile: '' })
-            onSuccess?.()
+            
+            // Give a moment for download to start, then show success
+            setTimeout(() => {
+                if (isDownloading) {
+                    setMessage('Brochure is downloading. Check your downloads.')
+                    setIsDownloading(false)
+                    setFormData({ name: '', email: '', mobile: '' })
+                    onSuccess?.()
+                }
+            }, 2000)
+            
         } catch (err) {
             setMessage(err.message || 'Something went wrong. Please try again.')
+            setIsDownloading(false)
         } finally {
             setIsSubmitting(false)
         }
@@ -124,10 +151,15 @@ export default function BrochureForm({ className = '', onSuccess, brochureUrl: b
                 />
                 <button
                     type="submit"
-                    disabled={isSubmitting || noBrochure}
+                    disabled={isSubmitting || isDownloading || noBrochure}
                     className="w-full flex items-center justify-center gap-2 bg-[#310E3F] dark:bg-[#6B46E5] text-white text-sm font-bold py-2.5 rounded-lg hover:bg-[#6B46E5] dark:hover:bg-[#7B5CF0] transition-colors disabled:opacity-70"
                 >
                     {isSubmitting ? (
+                        <>
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                            Processing…
+                        </>
+                    ) : isDownloading ? (
                         <>
                             <Loader2 className="w-4 h-4 animate-spin" />
                             Downloading…

@@ -374,41 +374,23 @@ export default function EditCoursePage() {
                                         }
                                         setBrochureUploading(true);
                                         try {
-                                            // Step 1: Try pre-signed S3 URL (direct browser→S3, no server size limit)
-                                            const presignRes = await fetch(
-                                                `/api/courses/brochure-presign?filename=${encodeURIComponent(file.name)}&contentType=${encodeURIComponent(file.type || 'application/pdf')}`
-                                            );
-                                            const presignData = await presignRes.json().catch(() => ({}));
-
-                                            let finalUrl = null;
-                                            if (presignRes.ok && !presignData.fallback && presignData.uploadUrl) {
-                                                // Step 2a: Upload directly to S3 via pre-signed PUT URL (browser → S3)
-                                                const s3Res = await fetch(presignData.uploadUrl, {
-                                                    method: 'PUT',
-                                                    headers: { 'Content-Type': file.type || 'application/pdf' },
-                                                    body: file,
-                                                });
-                                                if (!s3Res.ok) throw new Error('Failed to upload brochure to S3. Please try again.');
-                                                finalUrl = presignData.fileUrl;
-                                            } else {
-                                                // Step 2b: Fallback — upload via local Next.js route (local dev / no S3)
-                                                const fd = new FormData();
-                                                fd.append('file', file);
-                                                const res = await fetch(`${API_BASE_URL.replace(/\/$/, '')}/api/courses/brochure-upload`, {
-                                                    method: 'POST',
-                                                    headers: { Authorization: `Bearer ${token}` },
-                                                    body: fd,
-                                                });
-                                                const data = await res.json().catch(() => ({}));
-                                                if (!res.ok) throw new Error(data.message || data.error || 'Upload failed');
-                                                const pathOrUrl = (p) => typeof p === 'string' && p ? (p.startsWith('http') ? p : `${API_BASE_URL.replace(/\/$/, '')}${p.startsWith('/') ? '' : '/'}${p}`) : null;
-                                                const raw = data.url ?? data.uri ?? data.file_url ?? data.file_uri ?? data.fileUrl ?? data.brochure_url ?? data.brochure_uri ?? data.download_url ?? data.link ?? data.result
-                                                    ?? data.data?.url ?? data.data?.uri ?? data.data?.file_url ?? data.data?.file_uri ?? data.data?.fileUrl ?? data.data?.brochure_url ?? data.data?.brochure_uri
-                                                    ?? data.file?.url ?? data.file?.uri ?? data.file?.path ?? data.data?.file?.url ?? data.data?.file?.uri
-                                                    ?? pathOrUrl(data.data?.path) ?? pathOrUrl(data.path);
-                                                finalUrl = (typeof raw === 'string' && raw.trim()) ? raw : (raw != null ? String(raw) : null);
-                                                if (!finalUrl || (!finalUrl.startsWith('http') && !finalUrl.startsWith('/'))) throw new Error('No brochure URL returned. Configure AWS S3 for production use.');
-                                            }
+                                            const fd = new FormData();
+                                            fd.append('file', file);
+                                            const res = await fetch(`${API_BASE_URL}/api/brochure-downloads/upload`, {
+                                                method: 'POST',
+                                                headers: { Authorization: `Bearer ${token}` },
+                                                body: fd,
+                                            });
+                                            const data = await res.json().catch(() => ({}));
+                                            if (!res.ok) throw new Error(data.message || data.error || 'Upload failed');
+                                            const pathOrUrl = (p) => typeof p === 'string' && p ? (p.startsWith('http') ? p : `${API_BASE_URL.replace(/\/$/, '')}${p.startsWith('/') ? '' : '/'}${p}`) : null;
+                                            const raw = data.url ?? data.uri ?? data.file_url ?? data.file_uri ?? data.fileUrl ?? data.brochure_url ?? data.brochure_uri ?? data.download_url ?? data.link ?? data.result
+                                                ?? data.data?.url ?? data.data?.uri ?? data.data?.file_url ?? data.data?.file_uri ?? data.data?.fileUrl ?? data.data?.brochure_url ?? data.data?.brochure_uri
+                                                ?? data.file?.url ?? data.file?.uri ?? data.file?.path ?? data.data?.file?.url ?? data.data?.file?.uri
+                                                ?? pathOrUrl(data.data?.path) ?? pathOrUrl(data.path);
+                                            const finalUrl = (typeof raw === 'string' && raw.trim()) ? raw : (raw != null ? String(raw) : null);
+                                            if (!finalUrl || (!finalUrl.startsWith('http') && !finalUrl.startsWith('/'))) throw new Error('No brochure URL returned. Backend API may not be configured properly.');
+                                            setBrochureUrl(finalUrl);
                                             setFormData((prev) => ({ ...prev, brochure_url: finalUrl }));
                                             setBrochureFileName(file.name);
                                         } catch (err) {
