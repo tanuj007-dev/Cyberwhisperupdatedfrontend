@@ -89,11 +89,11 @@ const EditBlog = () => {
                 imageCaption: blog.image_caption ?? blog.imageCaption ?? '',
                 publishDate: blog.publishDate || (blog.added_date ? new Date(blog.added_date).toISOString().split('T')[0] : new Date().toISOString().split('T')[0]),
                 visibility: blog.visibility || 'public',
-                seoTitle: blog.seoTitle || '',
-                seoDescription: blog.seoDescription || '',
-                focusKeyword: blog.focusKeyword || '',
-                canonicalUrl: blog.canonicalUrl || '',
-                metaRobots: blog.metaRobots || 'index',
+                seoTitle: blog.seoTitle || blog.seo_title || '',
+                seoDescription: blog.seoDescription || blog.seo_description || '',
+                focusKeyword: blog.focusKeyword || blog.focus_keyword || '',
+                canonicalUrl: blog.canonicalUrl || blog.canonical_url || '',
+                metaRobots: blog.metaRobots || blog.meta_robots || 'index',
                 allowComments: blog.allowComments ?? true,
                 showOnHomepage: blog.showOnHomepage ?? true,
                 pinPost: blog.pinPost ?? false,
@@ -125,7 +125,16 @@ const EditBlog = () => {
                     const fullContent = data.content ?? data.description ?? data.body ?? '';
                     if (fullContent && fullContent.trim() !== '') {
                         fetchedContentRef.current = true;
-                        setFormData(prev => prev ? { ...prev, description: fullContent } : prev);
+                        setFormData(prev => prev ? {
+                            ...prev,
+                            description: fullContent,
+                            // Also populate SEO fields from full API response if they exist
+                            seoTitle: prev.seoTitle || data.seo_title || data.seoTitle || '',
+                            seoDescription: prev.seoDescription || data.seo_description || data.seoDescription || '',
+                            focusKeyword: prev.focusKeyword || data.focus_keyword || data.focusKeyword || '',
+                            canonicalUrl: prev.canonicalUrl || data.canonical_url || data.canonicalUrl || '',
+                            metaRobots: prev.metaRobots !== 'index' ? prev.metaRobots : (data.meta_robots || data.metaRobots || prev.metaRobots),
+                        } : prev);
                     }
                     break;
                 } catch (_) {

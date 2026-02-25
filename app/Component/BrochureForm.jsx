@@ -27,7 +27,7 @@ export default function BrochureForm({ className = '', onSuccess, brochureUrl: b
             .then((data) => {
                 if (data?.url) setFetchedUrl(data.url)
             })
-            .catch(() => {})
+            .catch(() => { })
     }, [brochureUrlProp])
 
     const handleChange = (e) => {
@@ -70,36 +70,22 @@ export default function BrochureForm({ className = '', onSuccess, brochureUrl: b
             const downloadHref = isS3Url
                 ? (typeof window !== 'undefined' ? window.location.origin : '') + '/api/courses/brochure-download?url=' + encodeURIComponent(brochureUrl.startsWith('http') ? brochureUrl : (base || '') + brochureUrl)
                 : brochureUrl.startsWith('http') ? brochureUrl : (base ? base : (typeof window !== 'undefined' ? window.location.origin : '')) + brochureUrl;
-            
+
             link.href = downloadHref;
             link.download = courseTitle ? `${courseTitle.replace(/[^a-zA-Z0-9.-]/g, '_').slice(0, 60)}_Brochure.pdf` : BROCHURE_FILENAME
-            
-            // Add download progress tracking
-            link.onload = () => {
-                setMessage('Brochure downloaded successfully!')
+
+            document.body.appendChild(link)
+            link.click()
+            document.body.removeChild(link)
+
+            // Give a moment for the browser to initiate the download, then dismiss the loader
+            setTimeout(() => {
+                setMessage('Brochure is downloading. Check your downloads.')
                 setIsDownloading(false)
                 setFormData({ name: '', email: '', mobile: '' })
                 onSuccess?.()
-            }
-            
-            link.onerror = () => {
-                setMessage('Download failed. Please try again.')
-                setIsDownloading(false)
-            }
-            
-            document.body.appendChild(link)
-            link.click()
-            
-            // Give a moment for download to start, then show success
-            setTimeout(() => {
-                if (isDownloading) {
-                    setMessage('Brochure is downloading. Check your downloads.')
-                    setIsDownloading(false)
-                    setFormData({ name: '', email: '', mobile: '' })
-                    onSuccess?.()
-                }
             }, 2000)
-            
+
         } catch (err) {
             setMessage(err.message || 'Something went wrong. Please try again.')
             setIsDownloading(false)
@@ -175,7 +161,7 @@ export default function BrochureForm({ className = '', onSuccess, brochureUrl: b
             {message && (
                 <p className="text-xs text-[#6B46E5] dark:text-purple-400 mt-2">{message}</p>
             )}
-            
+
             {/* Full-screen Download Loader Modal */}
             {isDownloading && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 backdrop-blur-sm">
