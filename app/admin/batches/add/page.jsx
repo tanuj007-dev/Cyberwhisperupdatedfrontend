@@ -39,6 +39,9 @@ export default function AddBatchPage() {
         setIsSubmitting(true);
 
         try {
+            // Get auth token
+            const token = typeof window !== 'undefined' ? localStorage.getItem('adminToken') : null;
+
             // Convert numeric fields
             const payload = {
                 ...formData,
@@ -56,6 +59,7 @@ export default function AddBatchPage() {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
                 },
                 body: JSON.stringify(payload),
             });

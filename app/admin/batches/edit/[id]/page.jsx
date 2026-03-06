@@ -132,6 +132,8 @@ export default function EditBatchPage() {
         setIsSubmitting(true);
 
         try {
+            const token = typeof window !== 'undefined' ? localStorage.getItem('adminToken') : null;
+
             // Convert numeric fields
             const payload = {
                 program_name: formData.program_name,
@@ -153,6 +155,7 @@ export default function EditBatchPage() {
                 method: 'POST', // As per your API spec
                 headers: {
                     'Content-Type': 'application/json',
+                    ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
                 },
                 body: JSON.stringify(payload),
             });

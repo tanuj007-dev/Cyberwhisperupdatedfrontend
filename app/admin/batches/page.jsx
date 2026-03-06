@@ -58,8 +58,13 @@ export default function BatchesPage() {
 
         setDeletingId(id);
         try {
+            const token = typeof window !== 'undefined' ? localStorage.getItem('adminToken') : null;
+            
             const response = await fetch(`${API_BASE_URL}/api/batches/${id}`, {
                 method: 'DELETE',
+                headers: {
+                    ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
+                },
             });
 
             if (!response.ok) {
