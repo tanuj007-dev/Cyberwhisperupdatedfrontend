@@ -134,7 +134,7 @@ export default function Footer() {
             <div className="space-y-4 md:space-y-6 text-sm md:text-[16px] font-medium text-slate-600 leading-relaxed">
               <div className="flex gap-4">
                 <MapPin className="w-5 h-5 text-[#6b46e5] shrink-0 mt-1" />
-                <p>62-A, 3rd Floor, Suraj Nagar, Delhi – 110033</p>
+                <p>A/62, Suraj Nagar, Model Town, Azadpur, Delhi, 110033</p>
               </div>
               <p className="flex items-center gap-4">
                 <Phone className="w-5 h-5 text-[#6b46e5] shrink-0" />

@@ -31,11 +31,21 @@ export default function WhenVisibleSection({ section, loadingHeight = "h-96", cl
     const el = ref.current;
     if (!el) return;
 
+    if (typeof window === "undefined" || !window.IntersectionObserver) {
+      // Fallback: load immediately if observer is not supported
+      importFunc().then((mod) => {
+        setComponent(() => mod.default || mod);
+      });
+      return;
+    }
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (!entry.isIntersecting) return;
-        observerRef.current?.disconnect();
-        observerRef.current = null;
+        if (observerRef.current) {
+          observerRef.current.disconnect();
+          observerRef.current = null;
+        }
         importFunc().then((mod) => {
           setComponent(() => mod.default || mod);
         });
@@ -46,8 +56,10 @@ export default function WhenVisibleSection({ section, loadingHeight = "h-96", cl
     observerRef.current = observer;
     observer.observe(el);
     return () => {
-      observer.disconnect();
-      observerRef.current = null;
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+        observerRef.current = null;
+      }
     };
   }, [section, importFunc]);
 

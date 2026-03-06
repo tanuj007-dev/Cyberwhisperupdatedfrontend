@@ -1,7 +1,6 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { mockBlogs } from '@/data/mockBlogs';
 import { mockCategories } from '@/data/mockCategories';
 import { mockTags } from '@/data/mockTags';
 import { mockMedia, mockSiteSettings } from '@/data/mockMedia';
@@ -117,7 +116,7 @@ export const AdminProvider = ({ children }) => {
         } catch (err) {
             console.warn('Blogs list: backend unreachable', err.message);
         }
-        setBlogs(mockBlogs);
+        setBlogs([]);
     };
 
     const fetchTags = async () => {

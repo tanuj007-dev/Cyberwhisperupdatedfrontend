@@ -69,10 +69,10 @@ export default function CourseSection() {
   const [enrollModalOpen, setEnrollModalOpen] = useState(false);
   const [enrollCourseTitle, setEnrollCourseTitle] = useState("");
   const [slideIndex, setSlideIndex] = useState(0);
-  const visibleCount = useVisibleCount();
+  const { visibleCount, mounted } = useVisibleCount();
   const { openEnquiry } = useEnquiry();
 
-  const totalSlides = Math.max(1, Math.ceil(courses.length / visibleCount));
+  const totalSlides = mounted ? Math.max(1, Math.ceil(courses.length / (visibleCount || 1))) : 1;
   const canGoPrev = slideIndex > 0;
   const canGoNext = slideIndex < totalSlides - 1;
   const goPrev = useCallback(
@@ -84,14 +84,15 @@ export default function CourseSection() {
     [totalSlides],
   );
   const swipeHandlers = useSliderSwipe(slideIndex, totalSlides, goPrev, goNext);
-  const cardWidthStyle = getCardWidthStyle(totalSlides, visibleCount);
+  const cardWidthStyle = getCardWidthStyle(totalSlides, visibleCount || 1);
   const slideChunks = React.useMemo(() => {
+    if (!mounted) return [];
     const chunks = [];
     for (let i = 0; i < totalSlides; i++) {
-      chunks.push(courses.slice(i * visibleCount, (i + 1) * visibleCount));
+      chunks.push(courses.slice(i * (visibleCount || 1), (i + 1) * (visibleCount || 1)));
     }
     return chunks;
-  }, [courses, totalSlides, visibleCount]);
+  }, [courses, totalSlides, visibleCount, mounted]);
 
   const openEnrollModal = (title) => {
     setEnrollCourseTitle(title || "");
@@ -122,7 +123,7 @@ export default function CourseSection() {
           map = buildCategoryMap(catList);
           setCategoryMap(map);
         }
-      } catch (_) {}
+      } catch (_) { }
 
       const response = await fetch(`${API_BASE_URL}/api/courses?page=1&limit=100`, { cache: 'no-store' });
 
@@ -295,11 +296,10 @@ export default function CourseSection() {
                   <button
                     key={cat}
                     onClick={() => setActiveCategory(cat)}
-                    className={`px-4 md:px-6 py-2 md:py-2.5 rounded-full text-xs md:text-sm font-bold transition-all duration-300 whitespace-nowrap ${
-                      activeCategory === cat
-                        ? "bg-primary text-primary-foreground shadow-lg"
-                        : "text-muted-foreground hover:text-foreground"
-                    }`}
+                    className={`px-4 md:px-6 py-2 md:py-2.5 rounded-full text-xs md:text-sm font-bold transition-all duration-300 whitespace-nowrap ${activeCategory === cat
+                      ? "bg-primary text-primary-foreground shadow-lg"
+                      : "text-muted-foreground hover:text-foreground"
+                      }`}
                   >
                     {cat}
                   </button>
@@ -343,7 +343,7 @@ export default function CourseSection() {
               </p>
             </div>
           )}
-          {!loading && courses.length > 0 && (
+          {!loading && courses.length > 0 && mounted && (
             <div
               className="col-span-full relative mb-16 lg:mb-10 touch-pan-y select-none px-2 sm:px-4 md:px-0"
               {...swipeHandlers}
@@ -402,9 +402,9 @@ export default function CourseSection() {
                             visibleCount === 1
                               ? { width: "100%" }
                               : {
-                                  width: `calc((100% - ${(visibleCount - 1) * 2}rem) / ${visibleCount})`,
-                                  maxWidth: "360px",
-                                }
+                                width: `calc((100% - ${(visibleCount - 1) * 2}rem) / ${visibleCount})`,
+                                maxWidth: "360px",
+                              }
                           }
                         >
                           {/* Content block */}
@@ -421,36 +421,36 @@ export default function CourseSection() {
                                 </span>
                                 {(course.price != null ||
                                   course.discounted_price != null) && (
-                                  <span className="text-sm flex items-center gap-1.5">
-                                    <span className="font-semibold text-primary">
-                                      ₹
-                                      {Number(
-                                        course.discounted_price != null &&
+                                    <span className="text-sm flex items-center gap-1.5">
+                                      <span className="font-semibold text-primary">
+                                        ₹
+                                        {Number(
+                                          course.discounted_price != null &&
+                                            course.price != null &&
+                                            course.discounted_price < course.price
+                                            ? course.discounted_price
+                                            : course.discounted_price ?? course.price,
+                                        ).toLocaleString("en-IN", {
+                                          maximumFractionDigits: 2,
+                                          minimumFractionDigits: 0,
+                                        })}
+                                      </span>
+                                      {course.discounted_price != null &&
                                         course.price != null &&
-                                        course.discounted_price < course.price
-                                          ? course.discounted_price
-                                          : course.discounted_price ?? course.price,
-                                      ).toLocaleString("en-IN", {
-                                        maximumFractionDigits: 2,
-                                        minimumFractionDigits: 0,
-                                      })}
+                                        course.discounted_price < course.price && (
+                                          <span className="line-through text-gray-400">
+                                            ₹
+                                            {Number(course.price).toLocaleString(
+                                              "en-IN",
+                                              {
+                                                maximumFractionDigits: 2,
+                                                minimumFractionDigits: 0,
+                                              },
+                                            )}
+                                          </span>
+                                        )}
                                     </span>
-                                    {course.discounted_price != null &&
-                                      course.price != null &&
-                                      course.discounted_price < course.price && (
-                                        <span className="line-through text-gray-400">
-                                          ₹
-                                          {Number(course.price).toLocaleString(
-                                            "en-IN",
-                                            {
-                                              maximumFractionDigits: 2,
-                                              minimumFractionDigits: 0,
-                                            },
-                                          )}
-                                        </span>
-                                      )}
-                                  </span>
-                                )}
+                                  )}
                               </div>
                             </div>
                             {/* Title */}
@@ -523,7 +523,7 @@ export default function CourseSection() {
                   {Array.from({ length: totalSlides }).map((_, i) => (
                     <button
                       key={i}
-                         type="button"
+                      type="button"
                       onClick={() => setSlideIndex(i)}
                       aria-label={`Go to slide ${i + 1}`}
                       className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${i === slideIndex ? "bg-[#6B46E5] scale-125" : "bg-gray-300 dark:bg-gray-600 hover:bg-[#6B46E5]/70"}`}

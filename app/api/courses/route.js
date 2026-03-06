@@ -22,11 +22,22 @@ export async function GET(request) {
         }
 
         const data = await response.json();
-        const rawCourses = Array.isArray(data.data) ? data.data : (Array.isArray(data.courses) ? data.courses : []);
-        // Frontend: only show published courses (exclude draft and archived)
-        const publishedOnly = rawCourses.filter(
-            (c) => String(c.status || '').toLowerCase() === 'published'
-        );
+        // Support multiple backend response shapes
+        const rawCourses = Array.isArray(data.courses)
+            ? data.courses
+            : Array.isArray(data.data)
+                ? data.data
+                : Array.isArray(data.results)
+                    ? data.results
+                    : Array.isArray(data)
+                        ? data
+                        : [];
+        // Show published or no-status; hide only draft and archived
+        const publishedOnly = rawCourses.filter((c) => {
+            const status = String(c.status ?? '').toLowerCase();
+            if (status === 'draft' || status === 'archived') return false;
+            return status === 'published' || !status;
+        });
 
         // Transform the response to match our component structure
         const transformedData = {

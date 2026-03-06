@@ -1,6 +1,7 @@
 "use client"
 import React, { useState, useEffect, useCallback } from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Star, BarChart2, Calendar, ArrowRight, Loader2, ChevronLeft, ChevronRight } from 'lucide-react'
 import BrochureFormModal from './BrochureFormModal'
@@ -26,7 +27,8 @@ export default function TrainingSection() {
     const [enrollModalOpen, setEnrollModalOpen] = useState(false)
     const [enrollCourseTitle, setEnrollCourseTitle] = useState('')
     const [slideIndex, setSlideIndex] = useState(0)
-    const visibleCount = useVisibleCount()
+    const { visibleCount: visibleCountFromHook = 1, mounted } = useVisibleCount()
+    const visibleCount = Math.max(1, Number(visibleCountFromHook) || 1)
     const { openEnquiry } = useEnquiry()
 
     const openEnrollModal = (title) => {
@@ -70,9 +72,10 @@ export default function TrainingSection() {
     const fetchCourses = async () => {
         try {
             setLoading(true)
+            setError(null)
             let categoryMap = {}
             try {
-                const catRes = await fetch(`${API_BASE_URL}/api/courses/categories`, { cache: 'no-store' })
+                const catRes = await fetch('/api/courses/categories', { cache: 'no-store' })
                 if (catRes.ok) {
                     const catData = await catRes.json()
                     const catList = Array.isArray(catData) ? catData : (catData.categories ?? catData.data ?? [])
@@ -80,15 +83,31 @@ export default function TrainingSection() {
                 }
             } catch (_) {}
 
-            const response = await fetch(`${API_BASE_URL}/api/courses?page=1&limit=10`, { cache: 'no-store' })
+            // Try same-origin first, then fallback to backend URL (for production where /api may not proxy)
+            let response = await fetch('/api/courses?page=1&limit=10', { cache: 'no-store' })
             if (!response.ok) {
-                throw new Error('Failed to fetch courses')
+                response = await fetch(`${API_BASE_URL}/api/courses?page=1&limit=10`, { cache: 'no-store' })
+            }
+            if (!response.ok) {
+                throw new Error(`Failed to fetch courses: ${response.status}`)
             }
 
             const data = await response.json()
-
-            const rawList = Array.isArray(data.data) ? data.data : (Array.isArray(data.courses) ? data.courses : [])
-            const publishedList = rawList.filter((c) => String(c.status || '').toLowerCase() === 'published')
+            // Your API returns { success, data: [...], pagination }
+            const rawList = Array.isArray(data?.data)
+                ? data.data
+                : Array.isArray(data?.courses)
+                    ? data.courses
+                    : Array.isArray(data?.results)
+                        ? data.results
+                        : Array.isArray(data)
+                            ? data
+                            : []
+            const publishedList = rawList.filter((c) => {
+                const status = String(c?.status ?? '').toLowerCase()
+                if (status === 'draft' || status === 'archived') return false
+                return status === 'published' || !status
+            })
             const normalized = publishedList.map(course => ({
                 ...course,
                 category: getCategoryLabel(course, categoryMap)
@@ -110,7 +129,7 @@ export default function TrainingSection() {
         ? courses
         : courses.filter(course => course.category === activeCategory)
 
-    const totalSlides = Math.max(1, Math.ceil(filteredCourses.length / visibleCount))
+    const totalSlides = Math.max(1, Math.ceil(filteredCourses.length / (visibleCount || 1)) || 1)
     const canGoPrev = slideIndex > 0
     const canGoNext = slideIndex < totalSlides - 1
 
@@ -118,9 +137,10 @@ export default function TrainingSection() {
     const goNext = useCallback(() => setSlideIndex((i) => Math.min(totalSlides - 1, i + 1)), [totalSlides])
     const swipeHandlers = useSliderSwipe(slideIndex, totalSlides, goPrev, goNext)
     const slideChunks = React.useMemo(() => {
+        const count = visibleCount || 1
         const chunks = []
         for (let i = 0; i < totalSlides; i++) {
-            chunks.push(filteredCourses.slice(i * visibleCount, (i + 1) * visibleCount))
+            chunks.push(filteredCourses.slice(i * count, (i + 1) * count))
         }
         return chunks
     }, [filteredCourses, totalSlides, visibleCount])
@@ -325,7 +345,7 @@ export default function TrainingSection() {
                                                         const v = course.last_modified ?? course.updated_at ?? course.id ?? ''
                                                         return `${raw}${sep}v=${v}`
                                                     })()}
-                                                    alt={course.title}
+                                                    alt={course.title || 'Course'}
                                                     fill
                                                     unoptimized={!!(course.thumbnail || course.course_thumbnail || (typeof course.image === 'string' && course.image.startsWith('http')))}
                                                     className="object-cover transition-transform duration-500 group-hover:scale-105"
@@ -367,12 +387,15 @@ export default function TrainingSection() {
 
                 {/* View All Button */}
                 <div className="flex justify-center">
-                    <button className="group flex items-center gap-3 bg-[#1a1a2e] dark:bg-white text-white dark:text-[#1a1a2e] px-10 py-3 rounded-full font-bold text-lg hover:bg-[#6B46E5] dark:hover:bg-gray-200 transition-all hover:shadow-2xl active:scale-95">
+                    <Link
+                        href="/courses"
+                        className="group flex items-center gap-3 bg-[#1a1a2e] dark:bg-white text-white dark:text-[#1a1a2e] px-10 py-3 rounded-full font-bold text-lg hover:bg-[#6B46E5] dark:hover:bg-gray-200 transition-all hover:shadow-2xl active:scale-95"
+                    >
                         View All
                         <div className="w-7 h-7 bg-white/10 rounded-full flex items-center justify-center transition-transform group-hover:translate-x-1">
                             <ArrowRight className="w-4 h-4" />
                         </div>
-                    </button>
+                    </Link>
                 </div>
             </div>
         </section>

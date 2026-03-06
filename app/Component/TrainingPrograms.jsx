@@ -1,6 +1,7 @@
 "use client"
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import Image from 'next/image';
+import { Volume2, VolumeX } from 'lucide-react';
 import path from "./assets/path.webp";
 
 // Video from Cloudinary CDN
@@ -8,6 +9,15 @@ const TRAINING_VIDEO_SRC = "https://res.cloudinary.com/dwpkrvrfk/video/upload/v1
 
 
 export default function TrainingPrograms() {
+    const [isMuted, setIsMuted] = useState(true);
+    const videoRef = useRef(null);
+
+    const toggleMute = () => {
+        if (videoRef.current) {
+            videoRef.current.muted = !videoRef.current.muted;
+            setIsMuted(videoRef.current.muted);
+        }
+    };
 
     return (
         <section className="relative w-full bg-background py-6 md:py-10 px-3 md:px-6 overflow-hidden font-sans transition-colors duration-300">
@@ -42,17 +52,31 @@ export default function TrainingPrograms() {
                         <div className="relative w-full max-w-3xl mx-auto rounded-xl md:rounded-[2rem] overflow-hidden border-2 md:border-4 border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.3)] md:shadow-[0_20px_60px_rgba(0,0,0,0.3)] bg-black/20 backdrop-blur-sm group translate-y-2 aspect-video min-h-[200px]">
 
                             <video
+                                ref={videoRef}
                                 className="w-full h-full object-cover absolute inset-0"
                                 autoPlay
                                 loop
                                 muted
                                 playsInline
                                 preload="auto"
-
                             >
                                 <source src={TRAINING_VIDEO_SRC} type="video/mp4" />
                                 Your browser does not support the video tag.
                             </video>
+
+                            {/* Mute / Unmute button - bottom right */}
+                            <button
+                                type="button"
+                                onClick={toggleMute}
+                                aria-label={isMuted ? 'Unmute video' : 'Mute video'}
+                                className="absolute bottom-3 right-3 z-20 w-10 h-10 md:w-12 md:h-12 rounded-full bg-black/50 hover:bg-black/70 border border-white/20 flex items-center justify-center text-white transition-all duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white/50"
+                            >
+                                {isMuted ? (
+                                    <VolumeX className="w-5 h-5 md:w-6 md:h-6" />
+                                ) : (
+                                    <Volume2 className="w-5 h-5 md:w-6 md:h-6" />
+                                )}
+                            </button>
                         </div>
 
                         {/* Features - Simplified Layout */}

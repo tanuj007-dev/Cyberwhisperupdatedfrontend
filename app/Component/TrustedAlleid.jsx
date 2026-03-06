@@ -9,6 +9,7 @@ import p2 from './assets/off.webp';
 import p3 from './assets/redhat.webp';
 import p4 from './assets/cisco.webp';
 import p5 from './assets/d435261e-363a-4d68-8ced-c635a6df096a.png';
+import p6 from './assets/Untitled design (15).png';
 
 const partners = [
     { name: 'EC-Council', logo: p1, glowColor: '#9f1d22' },
@@ -16,12 +17,14 @@ const partners = [
     { name: 'Red Hat', logo: p3, glowColor: '#ee0000' },
     { name: 'CISCO', logo: p4, glowColor: '#00bceb' },
     { name: 'CompTIA', logo: p5, glowColor: '#ff0000' },
+ 
     // Duplicates for seamless scroll
     { name: 'EC-Council', logo: p1, glowColor: '#9f1d22' },
     { name: 'OffSec', logo: p2, glowColor: '#0088cc' },
     { name: 'Red Hat', logo: p3, glowColor: '#ee0000' },
     { name: 'CISCO', logo: p4, glowColor: '#00bceb' },
     { name: 'CompTIA', logo: p5, glowColor: '#ff0000' },
+ 
 ];
 
 export default function TrustedAlleid() {
@@ -34,7 +37,7 @@ export default function TrustedAlleid() {
                         Trusted Allies
                     </span>
                 </div>
-                <h2 className="text-3xl sm:text-4xl md:text-[42px] lg:text-[50px] font-semibold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 via-purple-700 to-purple-900 dark:from-white dark:via-purple-200 dark:to-purple-400 leading-tight pb-2">
+                <h2 className="text-3xl sm:text-4xl md:text-[42px] lg:text-[50px] font-semibold bg-clip-text text-transparent bg-linear-to-r from-gray-900 via-purple-700 to-purple-900 dark:from-white dark:via-purple-200 dark:to-purple-400 leading-tight pb-2">
                     Global Learning Partners
                 </h2>
             </div>

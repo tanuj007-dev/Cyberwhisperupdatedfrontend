@@ -86,12 +86,12 @@ export default function NewsletterSignup() {
 
         {/* Content */}
         <div className="relative z-10 text-center max-w-5xl mx-auto">
-          `<h2 className="text-2xl md:text-4xl font-bold text-white mb-2 leading-tight">
+          <h2 className="text-2xl md:text-4xl font-bold text-white mb-2 leading-tight">
             {NEWSLETTER_HEADING}
           </h2>
 
           <p className="text-white/90 mb-6 text-sm md:text-base font-medium">
-          Get updates on new labs, CTF challenges, training tracks, and security insights—straight to your inbox.
+            Get updates on new labs, CTF challenges, training tracks, and security insights—straight to your inbox.
           </p>
 
           {/* Success/Error Message */}

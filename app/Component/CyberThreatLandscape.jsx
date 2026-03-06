@@ -287,69 +287,39 @@ export default function CyberThreatLandscape() {
 
                         {/* Duplicate set for seamless loop */}
                         <div className="flex gap-4 sm:gap-6 md:gap-8 lg:gap-12 items-center">
-                            <div className="flex items-center gap-2 sm:gap-3 px-4 sm:px-5 py-2 sm:py-2.5 md:px-6 md:py-3 bg-white/50 backdrop-blur-sm border border-purple-200/50 shadow-lg rounded-full">
-                                <span className="w-2 h-2 bg-purple-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.6)]"></span>
-                                <span className="text-xs sm:text-sm md:text-base font-bold text-slate-800">2.3M+ Attacks Blocked Daily</span>
+                            <div className="flex items-center gap-2 sm:gap-3 px-4 sm:px-5 py-2 sm:py-2.5 md:px-6 md:py-3 bg-white/50 dark:bg-black/50 backdrop-blur-sm border border-purple-200/50 dark:border-purple-800/50 shadow-lg rounded-full">
+                                <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.6)]"></span>
+                                <span className="text-xs sm:text-sm md:text-base font-bold text-slate-800 dark:text-slate-200">2.3M+ Attacks Blocked Daily</span>
                             </div>
 
-                            <div className="flex items-center gap-2 sm:gap-3 px-4 sm:px-5 py-2 sm:py-2.5 md:px-6 md:py-3 bg-white/50 backdrop-blur-sm border border-indigo-200/50 shadow-lg rounded-full">
+                            <div className="flex items-center gap-2 sm:gap-3 px-4 sm:px-5 py-2 sm:py-2.5 md:px-6 md:py-3 bg-white/50 dark:bg-black/50 backdrop-blur-sm border border-indigo-200/50 dark:border-indigo-800/50 shadow-lg rounded-full">
                                 <span className="w-2 h-2 bg-purple-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.6)]"></span>
-                                <span className="text-xs sm:text-sm md:text-base font-bold text-slate-800">99.9% Threat Detection Rate</span>
+                                <span className="text-xs sm:text-sm md:text-base font-bold text-slate-800 dark:text-slate-200">99.9% Threat Detection Rate</span>
                             </div>
 
-                            <div className="flex items-center gap-2 sm:gap-3 px-4 sm:px-5 py-2 sm:py-2.5 md:px-6 md:py-3 bg-white/50 backdrop-blur-sm border border-purple-200/50 shadow-lg rounded-full">
-                                <span className="w-2 h-2 bg-purp    le-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(234,179,8,0.6)]"></span>
-                                <span className="text-xs sm:text-sm md:text-base font-bold text-slate-800">150+ Countries Protected</span>
+                            <div className="flex items-center gap-2 sm:gap-3 px-4 sm:px-5 py-2 sm:py-2.5 md:px-6 md:py-3 bg-white/50 dark:bg-black/50 backdrop-blur-sm border border-purple-200/50 dark:border-purple-800/50 shadow-lg rounded-full">
+                                <span className="w-2 h-2 bg-purple-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(234,179,8,0.6)]"></span>
+                                <span className="text-xs sm:text-sm md:text-base font-bold text-slate-800 dark:text-slate-200">150+ Countries Protected</span>
                             </div>
 
-                            <div className="flex items-center gap-2 sm:gap-3 px-4 sm:px-5 py-2 sm:py-2.5 md:px-6 md:py-3 bg-white/50 backdrop-blur-sm border border-indigo-200/50 shadow-lg rounded-full">
+                            <div className="flex items-center gap-2 sm:gap-3 px-4 sm:px-5 py-2 sm:py-2.5 md:px-6 md:py-3 bg-white/50 dark:bg-black/50 backdrop-blur-sm border border-indigo-200/50 dark:border-indigo-800/50 shadow-lg rounded-full">
                                 <span className="w-2 h-2 bg-purple-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(59,130,246,0.6)]"></span>
-                                <span className="text-xs sm:text-sm md:text-base font-bold text-slate-800">24/7 Real-Time Monitoring</span>
+                                <span className="text-xs sm:text-sm md:text-base font-bold text-slate-800 dark:text-slate-200">24/7 Real-Time Monitoring</span>
                             </div>
 
-                            <div className="flex items-center gap-2 sm:gap-3 px-4 sm:px-5 py-2 sm:py-2.5 md:px-6 md:py-3 bg-white/50 backdrop-blur-sm border border-purple-200/50 shadow-lg rounded-full">
+                            <div className="flex items-center gap-2 sm:gap-3 px-4 sm:px-5 py-2 sm:py-2.5 md:px-6 md:py-3 bg-white/50 dark:bg-black/50 backdrop-blur-sm border border-purple-200/50 dark:border-purple-800/50 shadow-lg rounded-full">
                                 <span className="w-2 h-2 bg-purple-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(168,85,247,0.6)]"></span>
-                                <span className="text-xs sm:text-sm md:text-base font-bold text-slate-800">5000+ Pros Trained</span>
+                                <span className="text-xs sm:text-sm md:text-base font-bold text-slate-800 dark:text-slate-200">5000+ Pros Trained</span>
                             </div>
 
-                            <div className="flex items-center gap-2 sm:gap-3 px-4 sm:px-5 py-2 sm:py-2.5 md:px-6 md:py-3 bg-white/50 backdrop-blur-sm border border-indigo-200/50 shadow-lg rounded-full">
+                            <div className="flex items-center gap-2 sm:gap-3 px-4 sm:px-5 py-2 sm:py-2.5 md:px-6 md:py-3 bg-white/50 dark:bg-black/50 backdrop-blur-sm border border-indigo-200/50 dark:border-indigo-800/50 shadow-lg rounded-full">
                                 <span className="w-2 h-2 bg-purple-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(249,115,22,0.6)]"></span>
-                                <span className="text-xs sm:text-sm md:text-base font-bold text-slate-800">Zero-Day Response</span>
+                                <span className="text-xs sm:text-sm md:text-base font-bold text-slate-800 dark:text-slate-200">Zero-Day Response</span>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-            {/* CSS Animation for Marquee & Glow Optimizations */}
-            <style jsx>{`
-                @keyframes marquee {
-                    0% {
-                        transform: translateX(0);
-                    }
-                    100% {
-                        transform: translateX(-50%);
-                    }
-                }
-                
-                .animate-marquee {
-                    animation: marquee 30s linear infinite;
-                }
-                
-                .animate-marquee:hover {
-                    animation-play-state: paused;
-                }
-
-                /* Only apply expensive SVG filters on non-mobile devices */
-                .glow-effect {
-                    filter: none;
-                }
-                @media (min-width: 768px) {
-                    .glow-effect {
-                        filter: url(#lineGlow);
-                    }
-                }
-            `}</style>
         </section>
     );
 }

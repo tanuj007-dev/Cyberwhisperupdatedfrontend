@@ -4,7 +4,7 @@
  * Use these functions to test your API endpoints in the browser console
  */
 
-const API_BASE = 'https://darkred-mouse-801836.hostingersite.com';
+const API_BASE = 'https://lightcoral-newt-645489.hostingersite.com';
 
 /**
  * Test thumbnail upload

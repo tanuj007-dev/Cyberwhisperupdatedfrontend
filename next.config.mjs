@@ -16,7 +16,11 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'darkred-mouse-801836.hostingersite.com',
+        hostname: 'lightcoral-newt-645489.hostingersite.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'i.pravatar.cc',
       },
       {
         protocol: 'http',
@@ -58,37 +62,36 @@ const nextConfig = {
     pagesBufferLength: 5,
   },
 
-  // API Proxy to bypass CORS (dev only; production uses backend URL directly)
+  // API Proxy: use env BACKEND_API_URL (no trailing slash). Courses always go through Next.js route for consistent response shape.
   async rewrites() {
-    if (process.env.NODE_ENV === 'development' && !process.env.BACKEND_API_URL) {
+    const backend = process.env.BACKEND_API_URL || (process.env.NODE_ENV === 'development' ? 'http://localhost:3031' : null)
+    if (backend) {
       return [
         // User management
-        { source: '/api/users/:path*', destination: 'http://localhost:3031/api/users/:path*' },
+        { source: '/api/users/:path*', destination: `${backend}/api/users/:path*` },
         // Admin authentication
-        { source: '/api/admin/:path*', destination: 'http://localhost:3031/api/admin/:path*' },
-        // Courses management
-        { source: '/api/courses/:path*', destination: 'http://localhost:3031/api/courses/:path*' },
-        // Brochure management
-        { source: '/api/brochure/:path*', destination: 'http://localhost:3031/api/brochure/:path*' },
+        { source: '/api/admin/:path*', destination: `${backend}/api/admin/:path*` },
+        // Brochure management (courses handled by Next.js route so response is normalized)
+        { source: '/api/brochure/:path*', destination: `${backend}/api/brochure/:path*` },
         // Gallery management
-        { source: '/api/gallery/:path*', destination: 'http://localhost:3031/api/gallery/:path*' },
+        { source: '/api/gallery/:path*', destination: `${backend}/api/gallery/:path*` },
         // Media management
-        { source: '/api/media/:path*', destination: 'http://localhost:3031/api/media/:path*' },
+        { source: '/api/media/:path*', destination: `${backend}/api/media/:path*` },
         // Newsletter
-        { source: '/api/newsletter/:path*', destination: 'http://localhost:3031/api/newsletter/:path*' },
+        { source: '/api/newsletter/:path*', destination: `${backend}/api/newsletter/:path*` },
         // Deploy team training
-        { source: '/api/deploy-team-training/:path*', destination: 'http://localhost:3031/api/deploy-team-training/:path*' },
+        { source: '/api/deploy-team-training/:path*', destination: `${backend}/api/deploy-team-training/:path*` },
         // Batches
-        { source: '/api/batches/:path*', destination: 'http://localhost:3031/api/batches/:path*' },
+        { source: '/api/batches/:path*', destination: `${backend}/api/batches/:path*` },
         // Blogs
-        { source: '/api/blogs/:path*', destination: 'http://localhost:3031/api/blogs/:path*' },
+        { source: '/api/blogs/:path*', destination: `${backend}/api/blogs/:path*` },
         // Help center
-        { source: '/api/helpcenter/:path*', destination: 'http://localhost:3031/api/helpcenter/:path*' },
+        { source: '/api/helpcenter/:path*', destination: `${backend}/api/helpcenter/:path*` },
         // Enquiries
-        { source: '/api/enquiries/:path*', destination: 'http://localhost:3031/api/enquiries/:path*' },
-      ];
+        { source: '/api/enquiries/:path*', destination: `${backend}/api/enquiries/:path*` },
+      ]
     }
-    return [];
+    return []
   },
 };
 

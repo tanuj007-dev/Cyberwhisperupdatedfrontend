@@ -164,8 +164,7 @@ const AddBlog = () => {
             const formDataUpload = new FormData();
             formDataUpload.append('thumbnail', file);
 
-            const base = (API_BASE_URL || '').replace(/\/$/, '');
-            const uploadUrl = base ? `${base}${API_CONFIG.endpoints.uploadThumbnail}` : API_CONFIG.endpoints.uploadThumbnail;
+            const uploadUrl = API_CONFIG.endpoints.uploadThumbnail;
             const response = await fetch(uploadUrl, {
                 method: 'POST',
                 body: formDataUpload
@@ -213,9 +212,7 @@ const AddBlog = () => {
             showToast('Uploading banner...', 'info');
             const formDataUpload = new FormData();
             formDataUpload.append('banner', file);
-            const base = (API_BASE_URL || '').replace(/\/$/, '');
-            const endpoint = API_CONFIG.endpoints.uploadBanner || API_CONFIG.endpoints.uploadThumbnail;
-            const uploadUrl = base ? `${base}${endpoint}` : endpoint;
+            const uploadUrl = API_CONFIG.endpoints.uploadBanner || API_CONFIG.endpoints.uploadThumbnail;
             const response = await fetch(uploadUrl, { method: 'POST', body: formDataUpload });
             if (!response.ok) {
                 const err = await response.json().catch(() => ({}));
@@ -248,8 +245,7 @@ const AddBlog = () => {
             showToast('Uploading image...', 'info');
             const formDataUpload = new FormData();
             formDataUpload.append('thumbnail', file);
-            const base = (API_BASE_URL || '').replace(/\/$/, '');
-            const uploadUrl = base ? `${base}${API_CONFIG.endpoints.uploadThumbnail}` : API_CONFIG.endpoints.uploadThumbnail;
+            const uploadUrl = API_CONFIG.endpoints.uploadThumbnail;
             const response = await fetch(uploadUrl, { method: 'POST', body: formDataUpload });
             if (!response.ok) {
                 const err = await response.json().catch(() => ({}));
@@ -273,8 +269,7 @@ const AddBlog = () => {
         if (file.size > 10 * 1024 * 1024) throw new Error('Image must be under 10MB');
         const formDataUpload = new FormData();
         formDataUpload.append('thumbnail', file);
-        const base = (API_BASE_URL || '').replace(/\/$/, '');
-        const uploadUrl = base ? `${base}${API_CONFIG.endpoints.uploadThumbnail}` : API_CONFIG.endpoints.uploadThumbnail;
+        const uploadUrl = API_CONFIG.endpoints.uploadThumbnail;
         const response = await fetch(uploadUrl, { method: 'POST', body: formDataUpload });
         if (!response.ok) {
             const err = await response.json().catch(() => ({}));

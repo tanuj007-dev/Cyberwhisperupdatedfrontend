@@ -7,6 +7,7 @@ const BREAKPOINTS = { sm: 640, md: 768, lg: 1024 };
 /** Mobile: 1 card. Tablet and desktop: 3 cards. */
 export function useVisibleCount() {
     const [visibleCount, setVisibleCount] = useState(1);
+    const [mounted, setMounted] = useState(false);
     useEffect(() => {
         const update = () => {
             const w = typeof window !== 'undefined' ? window.innerWidth : 1024;
@@ -14,10 +15,11 @@ export function useVisibleCount() {
             else setVisibleCount(3);
         };
         update();
+        setMounted(true);
         window.addEventListener('resize', update);
         return () => window.removeEventListener('resize', update);
     }, []);
-    return visibleCount;
+    return { visibleCount, mounted };
 }
 
 export function useSliderSwipe(slideIndex, totalSlides, goPrev, goNext) {

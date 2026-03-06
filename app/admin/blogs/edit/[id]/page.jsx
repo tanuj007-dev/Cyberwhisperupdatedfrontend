@@ -178,8 +178,7 @@ const EditBlog = () => {
             showToast('Uploading image...', 'info');
             const formDataUpload = new FormData();
             formDataUpload.append('thumbnail', file);
-            const base = (API_BASE_URL || '').replace(/\/$/, '');
-            const response = await fetch(`${base}${API_CONFIG.endpoints.uploadThumbnail}`, {
+            const response = await fetch(API_CONFIG.endpoints.uploadThumbnail, {
                 method: 'POST',
                 body: formDataUpload
             });
@@ -207,8 +206,7 @@ const EditBlog = () => {
         if (file.size > 10 * 1024 * 1024) throw new Error('Image must be under 10MB');
         const formDataUpload = new FormData();
         formDataUpload.append('thumbnail', file);
-        const base = (API_BASE_URL || '').replace(/\/$/, '');
-        const response = await fetch(`${base}${API_CONFIG.endpoints.uploadThumbnail}`, { method: 'POST', body: formDataUpload });
+        const response = await fetch(API_CONFIG.endpoints.uploadThumbnail, { method: 'POST', body: formDataUpload });
         if (!response.ok) {
             const err = await response.json().catch(() => ({}));
             throw new Error(err.error || err.message || 'Upload failed');

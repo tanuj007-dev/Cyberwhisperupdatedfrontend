@@ -22,7 +22,7 @@ import opencti from './assets/OpenCTI.webp';
 import mitre from './assets/5bfdce88cd3820f7c5c21e02_mitre.webp';
 import id8625 from './assets/1ff56c87-de11-4bb8-bb84-609cccd716c9.png';
 import suricata from './assets/Suricata_logo_600x600-1.webp';
- 
+
 import images_png from './assets/cf352209-6f33-4abc-92bb-b796e286e35c.png';
 import yara from './assets/Yara_logo.svg.webp';
 import images_1_png from './assets/8468d7a9-4618-40c3-9ab6-d4f6d4c1e067.png';
@@ -41,6 +41,7 @@ import misp from './assets/misp.png';
 import kali from './assets/15812df3-012f-4bfe-96f1-776bcd59d5e9.png';
 import atomic from './assets/atomic.png';
 import firewall from './assets/79-790653_next-generation-firewall-icon.png';
+// import pwc from './assets/Untitled design (15).png';
 
 const ToolsScroller = () => {
     const tools = [
@@ -51,33 +52,34 @@ const ToolsScroller = () => {
         // { image: tool5, name: "Tool 5" },
         // { image: tool6, name: "Tool 6" },
         // { image: tool7, name: "Tool 7" },
-        { image: unnamed, name: "Tool 8" },
-        { image: hash, name: "Hash" },
-        { image: opensearch, name: "OpenSearch" },
-        { image: sentinel, name: "Sentinel" },
-        { image: images_jpg, name: "Tool 12" },
-        { image: virustotal, name: "VirusTotal" },
-        { image: opencti, name: "OpenCTI" },
-        { image: mitre, name: "MITRE" },
-        { image: id8625, name: "Tool 16" },
-        { image: suricata, name: "Suricata" },
-        { image: images_png, name: "Tool 19" },
-        { image: yara, name: "YARA" },
-        { image: images_1_png, name: "Tool 21" },
-        { image: images_1_jpg, name: "Tool 22" },
-        { image: burp, name: "Burp Suite" },
-        { image: images_2_png, name: "Tool 24" },
-        { image: images_4_png, name: "Tool 25" },
-        { image: aws, name: "AWS" },
-        { image: azure, name: "Azure" },
-        { image: terraform, name: "Terraform" },
-        { image: images_2_jpg, name: "Tool 29" },
-        { image: kubernetes, name: "Kubernetes" },
-        { image: openai, name: "OpenAI" },
-        { image: wazuh, name: "Wazuh" },
-        { image: misp, name: "MISP" },
-        { image: kali, name: "Kali Linux" },
-        { image: atomic, name: "Atomic Red Team" },
+        { image: unnamed, name: "Tool 8", glowColor: "#4285F4" },
+        { image: hash, name: "Hash", glowColor: "#7C3AED" },
+        { image: opensearch, name: "OpenSearch", glowColor: "#005EB8" },
+        { image: sentinel, name: "Sentinel", glowColor: "#0078D4" },
+        { image: images_jpg, name: "Tool 12", glowColor: "#3B82F6" },
+        { image: virustotal, name: "VirusTotal", glowColor: "#1A56F0" },
+        { image: opencti, name: "OpenCTI", glowColor: "#EF4444" },
+        { image: mitre, name: "MITRE", glowColor: "#005B94" },
+        { image: id8625, name: "Tool 16", glowColor: "#10B981" },
+        { image: suricata, name: "Suricata", glowColor: "#EFBF00" },
+        { image: images_png, name: "Tool 19", glowColor: "#6366F1" },
+        { image: yara, name: "YARA", glowColor: "#F59E0B" },
+        { image: images_1_png, name: "Tool 21", glowColor: "#EC4899" },
+        { image: images_1_jpg, name: "Tool 22", glowColor: "#8B5CF6" },
+        { image: burp, name: "Burp Suite", glowColor: "#FF6633" },
+        { image: images_2_png, name: "Tool 24", glowColor: "#3B82F6" },
+        { image: images_4_png, name: "Tool 25", glowColor: "#06B6D4" },
+        { image: aws, name: "AWS", glowColor: "#FF9900" },
+        { image: azure, name: "Azure", glowColor: "#0089D6" },
+        { image: terraform, name: "Terraform", glowColor: "#7B42BC" },
+        { image: images_2_jpg, name: "Tool 29", glowColor: "#F43F5E" },
+        { image: kubernetes, name: "Kubernetes", glowColor: "#326CE5" },
+        { image: openai, name: "OpenAI", glowColor: "#10A37F" },
+        { image: wazuh, name: "Wazuh", glowColor: "#00A9E0" },
+        { image: misp, name: "MISP", glowColor: "#D0021B" },
+        { image: kali, name: "Kali Linux", glowColor: "#5579ED" },
+        { image: atomic, name: "Atomic Red Team", glowColor: "#CF202E" },
+        // { image: pwc, name: "PwC", glowColor: "#e0301e" },
     ];
 
     return (
@@ -114,9 +116,13 @@ const ToolsScroller = () => {
                             <div
                                 key={`original-${i}`}
                                 className="tool-card group"
+                                style={{ '--glow-color': tool.glowColor }}
                             >
                                 <div className="relative w-16 h-16 md:w-20 md:h-20 flex items-center justify-center">
-                                    <div className="absolute inset-0 rounded-full bg-primary/15 opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-lg" />
+                                    <div
+                                        className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-60 transition-opacity duration-300 blur-xl"
+                                        style={{ backgroundColor: tool.glowColor }}
+                                    />
                                     <Image
                                         src={tool.image}
                                         alt={tool.name}
@@ -135,9 +141,13 @@ const ToolsScroller = () => {
                             <div
                                 key={`duplicate-${i}`}
                                 className="tool-card group"
+                                style={{ '--glow-color': tool.glowColor }}
                             >
                                 <div className="relative w-16 h-16 md:w-20 md:h-20 flex items-center justify-center">
-                                    <div className="absolute inset-0 rounded-full bg-primary/15 opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-lg" />
+                                    <div
+                                        className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-60 transition-opacity duration-300 blur-xl"
+                                        style={{ backgroundColor: tool.glowColor }}
+                                    />
                                     <Image
                                         src={tool.image}
                                         alt={tool.name}
@@ -204,8 +214,9 @@ const ToolsScroller = () => {
 
                 .tool-card:hover {
                     transform: translateY(-8px);
-                    border-color: var(--primary);
-                    box-shadow: 0 10px 30px -10px var(--primary);
+                    border-color: var(--glow-color);
+                    box-shadow: 0 10px 40px -10px var(--glow-color);
+                    background: linear-gradient(135deg, var(--card) 0%, var(--glow-color) 400%);
                 }
 
                 @keyframes scroll {

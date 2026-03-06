@@ -108,19 +108,29 @@ const Particles = ({
         const container = containerRef.current;
         if (!container) return;
 
-        const renderer = new Renderer({
-            dpr: pixelRatio,
-            depth: false,
-            alpha: true
-        });
-        const gl = renderer.gl;
-        container.appendChild(gl.canvas);
-        gl.clearColor(0, 0, 0, 0);
+        let renderer, gl, camera, animationFrameId;
 
-        const camera = new Camera(gl, { fov: 15 });
-        camera.position.set(0, 0, cameraDistance);
+        try {
+            renderer = new Renderer({
+                dpr: pixelRatio,
+                depth: false,
+                alpha: true
+            });
+            gl = renderer.gl;
+            if (!gl) throw new Error("WebGL context not found");
+
+            container.appendChild(gl.canvas);
+            gl.clearColor(0, 0, 0, 0);
+
+            camera = new Camera(gl, { fov: 15 });
+            camera.position.set(0, 0, cameraDistance);
+        } catch (err) {
+            console.error("Particles: WebGL initialization failed", err);
+            return; // Gracefully bail out
+        }
 
         const resize = () => {
+            if (!container || !renderer || !camera || !gl) return;
             const width = container.clientWidth;
             const height = container.clientHeight;
             renderer.setSize(width, height);
@@ -130,6 +140,7 @@ const Particles = ({
         resize();
 
         const handleMouseMove = e => {
+            if (!container) return;
             const rect = container.getBoundingClientRect();
             const x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
             const y = -(((e.clientY - rect.top) / rect.height) * 2 - 1);
@@ -157,7 +168,7 @@ const Particles = ({
             const r = Math.cbrt(Math.random());
             positions.set([x * r, y * r, z * r], i * 3);
             randoms.set([Math.random(), Math.random(), Math.random(), Math.random()], i * 4);
-            const col = hexToRgb(palette[Math.floor(Math.random() * palette.length)]);
+            const col = hexToRgb(palette[Math.floor(Math.random() * palette.length)] || palette[0]);
             colors.set(col, i * 3);
         }
 
@@ -183,7 +194,6 @@ const Particles = ({
 
         const particles = new Mesh(gl, { mode: gl.POINTS, geometry, program });
 
-        let animationFrameId;
         let lastTime = performance.now();
         let elapsed = 0;
 
@@ -219,10 +229,11 @@ const Particles = ({
             if (moveParticlesOnHover) {
                 container.removeEventListener('mousemove', handleMouseMove);
             }
-            cancelAnimationFrame(animationFrameId);
-            if (container.contains(gl.canvas)) {
+            if (animationFrameId) cancelAnimationFrame(animationFrameId);
+            if (gl && gl.canvas && container.contains(gl.canvas)) {
                 container.removeChild(gl.canvas);
             }
+            // Dispose OGL resources if possible (OGL doesn't have much dispose but good to clear references)
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [

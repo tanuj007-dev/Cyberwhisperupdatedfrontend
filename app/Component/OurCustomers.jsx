@@ -11,6 +11,7 @@ import mha from './assets/Ministry_of_Home_Affairs_India.svg';
 import bsf from './assets/BSF_Logo.webp';
 import delhiUni from './assets/68470838-8f33-488d-842f-21b1cedeefff.png';
 import cgc from './assets/a75d76ef-5476-494f-a4ab-15d08d05ef0a.png';
+import pwc from './assets/Untitled design (15).png';
 
 const OurCustomers = () => {
     const customers = [
@@ -19,7 +20,8 @@ const OurCustomers = () => {
         { image: mha, name: 'Ministry of Home Affairs' },
         { image: bsf, name: 'Border Security Force' },
         { image: delhiUni, name: 'University of Delhi' },
-        { image: cgc, name: 'CGC Landran' }
+        { image: cgc, name: 'CGC Landran' },
+        { image: pwc, name: 'PwC', glowColor: '#e0301e' }
     ];
 
     return (

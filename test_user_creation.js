@@ -7,7 +7,7 @@
  * Usage: node test_user_creation.js
  */
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://darkred-mouse-801836.hostingersite.com';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://lightcoral-newt-645489.hostingersite.com/';
 
 const testUserData = {
     first_name: "John23",

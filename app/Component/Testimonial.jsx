@@ -1,7 +1,23 @@
 'use client';
 
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
+
+// Indian AI human images from local assets (one per testimonial)
+import avatar1 from './assets/people/16fb0a80f4751303be175bc69571e4e113a0f378.png';
+import avatar2 from './assets/people/0c0c6eff176f94e2b6434557d4851c28698038ba.png';
+import avatar3 from './assets/people/2a81a256468c886be234e6b47b89f495d49d57c0.png';
+import avatar4 from './assets/people/3eb722ada9706815c52e177b990093ffb3652ba5.png';
+import avatar5 from './assets/people/2e065837623aca3bbab7d78e0db99ce0f08fb5e6.png';
+import avatar6 from './assets/people/4de258ab9e2fd76e0f938c041dc76be769934fd8.png';
+import avatar7 from './assets/people/61653c3deb47eccb79fb4ec492d6a80c9981534b.png';
+import avatar8 from './assets/people/780dde118751a786c91a2380f6549d8bc2e8fef4.png';
+import avatar9 from './assets/people/84f873944daa4d26e2da8e280524852537a9dc21.png';
+import avatar10 from './assets/people/8af80c194e23f9f7c0141316a23021c213f44671.png';
+
+const peopleImages = [avatar1, avatar2, avatar3, avatar4, avatar5, avatar6, avatar7, avatar8, avatar9, avatar10];
+const getAvatarSrc = (id) => peopleImages[(id - 1) % peopleImages.length];
 
 const testimonials = [
   {
@@ -73,12 +89,14 @@ export default function TestimonialsSection() {
   const [isPaused, setIsPaused] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 768);
     };
     handleResize(); // Check on mount
+    setMounted(true);
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
@@ -164,77 +182,85 @@ export default function TestimonialsSection() {
           </div>
 
           {/* Slider Track */}
-          <div className="overflow-hidden py-6">
-            <div
-              className="flex transition-transform duration-700 ease-in-out"
-              style={{
-                transform: `translateX(-${currentIndex * (isMobile ? 100 : 100 / 3)}%)`,
-                transitionProperty: isTransitioning ? 'transform' : 'none'
-              }}
-            >
-              {extendedTestimonials.map((testimonial, i) => {
-                const isCenter = isMobile ? i === currentIndex : i === currentIndex + 1;
+          <div className="overflow-hidden py-6 min-h-[400px]">
+            {mounted && (
+              <div
+                className="flex transition-transform duration-700 ease-in-out"
+                style={{
+                  transform: `translateX(-${currentIndex * (isMobile ? 100 : 100 / 3)}%)`,
+                  transitionProperty: isTransitioning ? 'transform' : 'none'
+                }}
+              >
+                {extendedTestimonials.map((testimonial, i) => {
+                  const isCenter = isMobile ? i === currentIndex : i === currentIndex + 1;
 
-                return (
-                  <div
-                    key={`${testimonial.id}-${i}`}
-                    className="min-w-full md:min-w-[33.333%] px-4"
-                  >
-                    <motion.div
-                      animate={{
-                        scale: isCenter ? 1 : 0.92,
-                        opacity: isCenter ? 1 : 0.6
-                      }}
-                      className="relative rounded-3xl bg-white/10 border border-white/20 p-6 md:p-8 h-full flex flex-col justify-between backdrop-blur-md transition-all duration-500 hover:bg-white/[0.15] group shadow-2xl"
+                  return (
+                    <div
+                      key={`${testimonial.id}-${i}`}
+                      className="min-w-full md:min-w-[33.333%] px-4"
                     >
-                      {/* Top Row: Stars & Quote */}
-                      <div className="flex justify-between items-start mb-4 md:mb-6">
-                        <div className="flex gap-1">
-                          {[...Array(5)].map((_, s) => (
-                            <svg key={s} className="w-3 h-3 md:w-4 md:h-4 text-yellow-400 drop-shadow-[0_0_8px_rgba(250,204,21,0.5)]" fill="currentColor" viewBox="0 0 20 20">
-                              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      <motion.div
+                        animate={{
+                          scale: isCenter ? 1 : 0.92,
+                          opacity: isCenter ? 1 : 0.6
+                        }}
+                        className="relative rounded-3xl bg-white/10 border border-white/20 p-6 md:p-8 h-full flex flex-col justify-between backdrop-blur-md transition-all duration-500 hover:bg-white/[0.15] group shadow-2xl"
+                      >
+                        {/* Top Row: Stars & Quote */}
+                        <div className="flex justify-between items-start mb-4 md:mb-6">
+                          <div className="flex gap-1">
+                            {[...Array(5)].map((_, s) => (
+                              <svg key={s} className="w-3 h-3 md:w-4 md:h-4 text-yellow-400 drop-shadow-[0_0_8px_rgba(250,204,21,0.5)]" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                              </svg>
+                            ))}
+                          </div>
+                          <div className="text-white/20 group-hover:text-white/40 transition-colors duration-500 scale-75 origin-top-right">
+                            <svg width="40" height="30" viewBox="0 0 48 36" fill="currentColor">
+                              <path d="M20 0H28L22 18H28V36H10V18L16.5 0H20ZM40 0H48L42 18H48V36H30V18L36.5 0H40Z" transform="translate(-10,0)" />
                             </svg>
-                          ))}
-                        </div>
-                        <div className="text-white/20 group-hover:text-white/40 transition-colors duration-500 scale-75 origin-top-right">
-                          <svg width="40" height="30" viewBox="0 0 48 36" fill="currentColor">
-                            <path d="M20 0H28L22 18H28V36H10V18L16.5 0H20ZM40 0H48L42 18H48V36H30V18L36.5 0H40Z" transform="translate(-10,0)" />
-                          </svg>
-                        </div>
-                      </div>
-
-                      {/* Content */}
-                      <div className="grow">
-                        <p className="text-sm md:text-[15px] leading-relaxed text-white/90 font-medium italic mb-4 md:mb-6">
-                          {testimonial.text}
-                        </p>
-                      </div>
-
-                      {/* Divider */}
-                      <div className="w-full h-px bg-white/10 mb-4 md:mb-6" />
-
-                      {/* Author */}
-                      <div className="flex items-center gap-3 md:gap-4">
-                        <div className="relative">
-                          <div className="absolute -inset-1 bg-white/30 blur-md rounded-full group-hover:bg-white/50 transition-all duration-300" />
-                          <div className="relative w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center bg-white/20 border-2 border-white/60 shadow-lg text-white">
-                            <UserIcon />
                           </div>
                         </div>
-                        <div>
-                          <h4 className="text-white font-bold text-base md:text-lg tracking-tight leading-none">
-                            {testimonial.name}
-                          </h4>
-                          <p className="text-white/70 text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] mt-1 md:mt-2">
-                            {testimonial.role}
+
+                        {/* Content */}
+                        <div className="grow">
+                          <p className="text-sm md:text-[15px] leading-relaxed text-white/90 font-medium italic mb-4 md:mb-6">
+                            {testimonial.text}
                           </p>
                         </div>
-                      </div>
-                    </motion.div>
-                  </div>
-                );
-              })}
-            </div>
+
+                        {/* Divider */}
+                        <div className="w-full h-px bg-white/10 mb-4 md:mb-6" />
+
+                        {/* Author */}
+                        <div className="flex items-center gap-3 md:gap-4">
+                          <div className="relative">
+                            <div className="absolute -inset-1 bg-white/30 blur-md rounded-full group-hover:bg-white/50 transition-all duration-300" />
+                            <div className="relative w-12 h-12 md:w-14 md:h-14 rounded-full overflow-hidden flex items-center justify-center bg-white/20 border-2 border-white/60 shadow-lg">
+                              <Image
+                                src={getAvatarSrc(testimonial.id)}
+                                alt={testimonial.name}
+                                width={56}
+                                height={56}
+                                className="w-full h-full object-cover"
+                              />
+                            </div>
+                          </div>
+                          <div>
+                            <h4 className="text-white font-bold text-base md:text-lg tracking-tight leading-none">
+                              {testimonial.name}
+                            </h4>
+                            <p className="text-white/70 text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] mt-1 md:mt-2">
+                              {testimonial.role}
+                            </p>
+                          </div>
+                        </div>
+                      </motion.div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
 
           {/* Navigation Dots */}
@@ -279,10 +305,3 @@ function ArrowRightIcon() {
   );
 }
 
-function UserIcon() {
-  return (
-    <svg className="w-6 h-6 md:w-8 md:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-    </svg>
-  );
-}

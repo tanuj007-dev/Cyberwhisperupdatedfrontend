@@ -34,7 +34,7 @@ function HeroLayout({ isVideoOpen, setIsVideoOpen }) {
           priority
         />
         {/* Gradient Overlay for Text Visibility */}
-        <div className="absolute inset-0 bg-gradient-to-r from-white/90 via-white/50 to-transparent dark:from-[#02000d] dark:via-[#02000d]/80 dark:to-transparent/20"></div>
+        <div className="absolute inset-0 bg-linear-to-r from-white/90 via-white/50 to-transparent dark:from-[#02000d] dark:via-[#02000d]/80 dark:to-transparent/20"></div>
       </div>
       <div className="absolute inset-0 pointer-events-none opacity-30 block dark:hidden mix-blend-multiply bg-grid-slate-200" />
 
@@ -100,11 +100,10 @@ function HeroLayout({ isVideoOpen, setIsVideoOpen }) {
             <div className="relative inline-flex rounded-full p-[2px] overflow-hidden">
               {/* Moving Border */}
               <div
-                className="absolute inset-0 rounded-full"
+                className="absolute inset-0 rounded-full animate-border-move-inline"
                 style={{
                   background: "linear-gradient(90deg, #6932E2, #EBDFFF, #6932E2)",
                   backgroundSize: "200% 100%",
-                  animation: "borderMove 3s linear infinite",
                 }}
               />
 
@@ -115,29 +114,6 @@ function HeroLayout({ isVideoOpen, setIsVideoOpen }) {
                   Next Generation Cybersecurity
                 </span>
               </div>
-
-              {/* Keyframes */}
-              <style jsx>{`
-                @keyframes borderMove {
-                  0% {
-                    background-position: 0% 50%;
-                  }
-                  100% {
-                    background-position: 200% 50%;
-                  }
-                }
-                @keyframes shine {
-                  0% {
-                    transform: translateX(-100%);
-                  }
-                  50% {
-                    transform: translateX(300%);
-                  }
-                  100% {
-                    transform: translateX(-100%);
-                  }
-                }
-              `}</style>
             </div>
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
@@ -171,7 +147,7 @@ function HeroLayout({ isVideoOpen, setIsVideoOpen }) {
               className="flex flex-wrap gap-4 md:gap-5 pt-4 justify-center lg:justify-start"
             >
               <Link href="/services">
-                <button className="px-26 py-4 md:px-8 md:py-4 bg-[#a855f7] text-white font-bold rounded-2xl transition-all hover:bg-[#9333ea] active:scale-95 flex items-center justify-center gap-2 group text-sm md:text-base w-full sm:w-auto whitespace-nowrap">
+                <button className="px-6 py-4 md:px-8 md:py-4 bg-[#a855f7] text-white font-bold rounded-2xl transition-all hover:bg-[#9333ea] active:scale-95 flex items-center justify-center gap-2 group text-sm md:text-base w-full sm:w-auto whitespace-nowrap">
                   Explore Solutions
                   <GoArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
                 </button>
@@ -277,7 +253,7 @@ function HeroLayout({ isVideoOpen, setIsVideoOpen }) {
 
       {/* Video Modal - Top Level for correct stacking context. Path without spaces for Vercel. */}
       {isVideoOpen && (
-        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/90 backdrop-blur-md" onClick={() => setIsVideoOpen(false)}>
+        <div className="fixed inset-0 z-200 flex items-center justify-center p-4 bg-black/90 backdrop-blur-md" onClick={() => setIsVideoOpen(false)}>
           <div className="relative w-full max-w-5xl bg-black rounded-3xl overflow-hidden shadow-[0_0_50px_rgba(168,85,247,0.3)] border border-purple-500/20" onClick={e => e.stopPropagation()}>
             <button
               onClick={() => setIsVideoOpen(false)}

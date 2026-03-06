@@ -1,0 +1,21 @@
+{
+    "name": "CyberWhisper",
+    "short_name": "CyberWhisper",
+    "description": "Advanced cybersecurity training, B2B solutions, and cyber range services",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#1B0D37",
+    "theme_color": "#1B0D37",
+    "icons": [
+        {
+            "src": "/assets/cw_logo_sample_2.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/assets/cw_logo_sample_2.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}
