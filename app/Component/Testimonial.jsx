@@ -4,80 +4,126 @@ import { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 
-// Indian AI human images from local assets (one per testimonial)
-import avatar1 from './assets/people/16fb0a80f4751303be175bc69571e4e113a0f378.png';
-import avatar2 from './assets/people/0c0c6eff176f94e2b6434557d4851c28698038ba.png';
-import avatar3 from './assets/people/2a81a256468c886be234e6b47b89f495d49d57c0.png';
-import avatar4 from './assets/people/3eb722ada9706815c52e177b990093ffb3652ba5.png';
-import avatar5 from './assets/people/2e065837623aca3bbab7d78e0db99ce0f08fb5e6.png';
-import avatar6 from './assets/people/4de258ab9e2fd76e0f938c041dc76be769934fd8.png';
-import avatar7 from './assets/people/61653c3deb47eccb79fb4ec492d6a80c9981534b.png';
-import avatar8 from './assets/people/780dde118751a786c91a2380f6549d8bc2e8fef4.png';
-import avatar9 from './assets/people/84f873944daa4d26e2da8e280524852537a9dc21.png';
-import avatar10 from './assets/people/8af80c194e23f9f7c0141316a23021c213f44671.png';
+// Student images from assets/students (one per testimonial)
+import student1 from './assets/students/Ahmed.webp';
+import student2 from './assets/students/Adit.webp';
+import student3 from './assets/students/d7ba7ab9c583a0fa5e78e2035a2a2587.jpg';
+import student4 from './assets/students/Emily.webp';
+import student5 from './assets/students/Kunal.webp';
+import student6 from './assets/students/0665769062e5bfef8b168d3fc164acba.jpg';
+import student7 from './assets/students/Priya.webp';
+import student8 from './assets/students/a6fe39768c61358d5b58f291ee55bc3e.jpg';
+import student9 from './assets/students/Sneha.webp';
+import student10 from './assets/students/Sofia.webp';
 
-const peopleImages = [avatar1, avatar2, avatar3, avatar4, avatar5, avatar6, avatar7, avatar8, avatar9, avatar10];
-const getAvatarSrc = (id) => peopleImages[(id - 1) % peopleImages.length];
+const studentImages = [student1, student2, student3, student4, student5, student6, student7, student8, student9, student10];
+const getAvatarSrc = (id) => studentImages[(id - 1) % studentImages.length];
+
+const starClass = 'w-3 h-3 md:w-4 md:h-4 drop-shadow-[0_0_8px_rgba(250,204,21,0.5)]';
+const starPath = 'M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z';
+function StarRating({ rating = 5 }) {
+  const r = Number(rating) || 5;
+  return (
+    <div className="flex gap-1">
+      {[1, 2, 3, 4, 5].map((i) => {
+        if (r >= i) {
+          return (
+            <svg key={i} className={`${starClass} text-yellow-400`} fill="currentColor" viewBox="0 0 20 20">
+              <path d={starPath} />
+            </svg>
+          );
+        }
+        if (r >= i - 0.5) {
+          return (
+            <span key={i} className="relative inline-block w-3 h-3 md:w-4 md:h-4">
+              <svg className={`${starClass} text-white/20`} fill="currentColor" viewBox="0 0 20 20">
+                <path d={starPath} />
+              </svg>
+              <svg className={`${starClass} text-yellow-400 absolute left-0 top-0`} fill="currentColor" viewBox="0 0 20 20" style={{ clipPath: 'inset(0 50% 0 0)' }}>
+                <path d={starPath} />
+              </svg>
+            </span>
+          );
+        }
+        return (
+          <svg key={i} className={`${starClass} text-white/20`} fill="currentColor" viewBox="0 0 20 20">
+            <path d={starPath} />
+          </svg>
+        );
+      })}
+    </div>
+  );
+}
 
 const testimonials = [
   {
     id: 1,
     name: 'Aarav Mehta',
     role: 'Student (Mumbai, India)',
+    rating: 5,
     text: '"The training is completely hands-on. After every concept we worked on real SOC-style alerts, investigations, and reporting. Mentor support was quick and practical."',
   },
   {
     id: 2,
     name: 'Priya Sharma',
     role: 'Working Professional (Delhi, India)',
+    rating: 4.5,
     text: '"Cyber Whisper’s SIEM labs (Wazuh/ELK) made things click. The workflow—from triage to closure notes—felt exactly like what happens in a real SOC."',
   },
   {
     id: 3,
     name: 'Rohit Verma',
     role: 'Fresher (Bengaluru, India)',
+    rating: 4,
     text: '"I joined with basics and gained confidence fast. The cyber range labs and weekly checkpoints kept me consistent, and the capstone project helped my portfolio."',
   },
   {
     id: 4,
     name: 'Neha Iyer',
     role: 'Security Analyst (Pune, India)',
+    rating: 5,
     text: '"What I liked most was the real-world approach—log analysis, detection logic, incident timelines, and documentation. It improved how I communicate findings."',
   },
   {
     id: 5,
     name: 'Kunal Singh',
     role: 'Final Year Student (Hyderabad, India)',
+    rating: 4.5,
     text: '"The mentoring is strong and the labs are not generic. I learned alert triage, threat intel enrichment, and reporting in a structured way—very job-aligned."',
   },
   {
     id: 6,
     name: 'Emily Carter',
     role: 'Student (London, UK)',
+    rating: 4,
     text: '"The sessions are interactive and mentor-led, not one-way. The labs after each module helped me retain concepts and build a clear SOC workflow mindset."',
   },
   {
     id: 7,
     name: 'Michael Reyes',
     role: 'IT Support → SOC Transition (Austin, USA)',
+    rating: 5,
     text: '"I needed a practical bridge into blue-team work. The cyber range exercises, case investigations, and playbook-style learning gave me a solid foundation."',
   },
   {
     id: 8,
     name: 'Sophie Nguyen',
     role: 'Junior Analyst (Toronto, Canada)',
+    rating: 4.5,
     text: '"Great structure and guidance. The team explains why an alert matters, how to validate it, and how to document it properly—very useful for real operations."',
   },
   {
     id: 9,
     name: 'Jonas Weber',
     role: 'Working Professional (Berlin, Germany)',
+    rating: 4,
     text: '"Strong focus on detection and investigation. The log-based exercises felt realistic, and the mentor feedback improved my methodology and reporting clarity."',
   },
   {
     id: 10,
     name: 'Olivia Hart',
     role: 'Graduate Student (Sydney, Australia)',
+    rating: 5,
     text: '"The monthly checkpoints and hands-on labs kept me accountability. I learned how to approach incidents step-by-step and present findings confidently."',
   },
 ];
@@ -208,13 +254,7 @@ export default function TestimonialsSection() {
                       >
                         {/* Top Row: Stars & Quote */}
                         <div className="flex justify-between items-start mb-4 md:mb-6">
-                          <div className="flex gap-1">
-                            {[...Array(5)].map((_, s) => (
-                              <svg key={s} className="w-3 h-3 md:w-4 md:h-4 text-yellow-400 drop-shadow-[0_0_8px_rgba(250,204,21,0.5)]" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                              </svg>
-                            ))}
-                          </div>
+                          <StarRating rating={testimonial.rating ?? 5} />
                           <div className="text-white/20 group-hover:text-white/40 transition-colors duration-500 scale-75 origin-top-right">
                             <svg width="40" height="30" viewBox="0 0 48 36" fill="currentColor">
                               <path d="M20 0H28L22 18H28V36H10V18L16.5 0H20ZM40 0H48L42 18H48V36H30V18L36.5 0H40Z" transform="translate(-10,0)" />
@@ -304,4 +344,3 @@ function ArrowRightIcon() {
     </svg>
   );
 }
-
