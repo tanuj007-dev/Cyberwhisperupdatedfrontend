@@ -390,7 +390,6 @@ export default function EditCoursePage() {
                                                 ?? pathOrUrl(data.data?.path) ?? pathOrUrl(data.path);
                                             const finalUrl = (typeof raw === 'string' && raw.trim()) ? raw : (raw != null ? String(raw) : null);
                                             if (!finalUrl || (!finalUrl.startsWith('http') && !finalUrl.startsWith('/'))) throw new Error('No brochure URL returned. Backend API may not be configured properly.');
-                                            setBrochureUrl(finalUrl);
                                             setFormData((prev) => ({ ...prev, brochure_url: finalUrl }));
                                             setBrochureFileName(file.name);
                                         } catch (err) {
