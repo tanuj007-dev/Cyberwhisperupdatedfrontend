@@ -4,17 +4,17 @@ import { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 
-// Student images from assets/students (one per testimonial)
-import student1 from './assets/students/Ahmed.webp';
-import student2 from './assets/students/Adit.webp';
-import student3 from './assets/students/d7ba7ab9c583a0fa5e78e2035a2a2587.jpg';
-import student4 from './assets/students/Emily.webp';
-import student5 from './assets/students/Kunal.webp';
-import student6 from './assets/students/0665769062e5bfef8b168d3fc164acba.jpg';
-import student7 from './assets/students/Priya.webp';
-import student8 from './assets/students/a6fe39768c61358d5b58f291ee55bc3e.jpg';
-import student9 from './assets/students/Sneha.webp';
-import student10 from './assets/students/Sofia.webp';
+// Student images from assets/teststudents (one per testimonial)
+import student1 from './assets/teststudents/Aarav.webp';
+import student2 from './assets/teststudents/Priya.webp';
+import student3 from './assets/teststudents/Rohit.webp';
+import student4 from './assets/teststudents/Neha.webp';
+import student5 from './assets/teststudents/Kunal.webp';
+import student6 from './assets/teststudents/Emily.webp';
+import student7 from './assets/teststudents/Michael.webp';
+import student8 from './assets/teststudents/Sophie.webp';
+import student9 from './assets/teststudents/Jonas.webp';
+import student10 from './assets/teststudents/Olivia.webp';
 
 const studentImages = [student1, student2, student3, student4, student5, student6, student7, student8, student9, student10];
 const getAvatarSrc = (id) => studentImages[(id - 1) % studentImages.length];
@@ -282,7 +282,7 @@ export default function TestimonialsSection() {
                                 alt={testimonial.name}
                                 width={56}
                                 height={56}
-                                className="w-full h-full object-cover"
+                                className="w-full h-full object-cover object-top"
                               />
                             </div>
                           </div>
