@@ -21,7 +21,8 @@ import {
     LogOut,
     BookOpen,
     ClipboardList,
-    UserCircle
+    UserCircle,
+    Activity
 } from 'lucide-react';
 
 const ADMIN_LOGO = '/assets/cw_logo_sample_2.png';
@@ -112,6 +113,8 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
 
     // Role-based menu: Student = Blogs (including Add Blog) + My Profile only; Instructor = Blogs, Batches, Courses, Course Enrollments + My Profile (no Add Course); Admin = full
     const myProfileItem = { name: 'My Profile', icon: UserCircle, path: '/admin/profile' };
+    const activityLogItem = { name: 'Activity Log', icon: Activity, path: '/admin/activity-logs' };
+    
     const menuItems = (() => {
         if (role === 'STUDENT') {
             // Students get full Blogs submenu: All Blogs, Add Blog, Categories, Tags
@@ -129,7 +132,12 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                 return item;
             }).concat(myProfileItem);
         }
-        return [...allMenuItems, myProfileItem];
+        // SUPERADMIN and ADMIN get everything
+        const items = [...allMenuItems];
+        if (role === 'SUPERADMIN') {
+            return items.concat([activityLogItem, myProfileItem]);
+        }
+        return items.concat(myProfileItem);
     })();
 
     const isActive = (path) => pathname === path;
