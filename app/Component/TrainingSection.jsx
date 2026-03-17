@@ -382,6 +382,7 @@ export default function TrainingSection() {
                     onClose={() => { setBrochureModalOpen(false); setBrochureCourse(null) }}
                     brochureUrl={brochureCourse?.brochure_url || brochureCourse?.brochure}
                     courseTitle={brochureCourse?.title}
+                    courseId={brochureCourse?.id}
                 />
                 <EnrollModal open={enrollModalOpen} onClose={() => setEnrollModalOpen(false)} courseTitle={enrollCourseTitle} />
 

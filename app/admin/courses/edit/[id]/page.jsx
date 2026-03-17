@@ -31,6 +31,7 @@ export default function EditCoursePage() {
         meta_keywords: '',
         meta_description: '',
         brochure_url: '',
+        brochure_s3_key: '',
     });
     const [brochureUploading, setBrochureUploading] = useState(false);
     const [brochureFileName, setBrochureFileName] = useState('');
@@ -89,6 +90,7 @@ export default function EditCoursePage() {
                 meta_keywords: course.meta_keywords || '',
                 meta_description: course.meta_description || '',
                 brochure_url: course.brochure_url || course.brochure || '',
+                brochure_s3_key: course.brochure_s3_key || '',
             });
             if (course.brochure_url || course.brochure) setBrochureFileName('Current brochure attached');
             setCourseThumbnailUrl(course.thumbnail || course.course_thumbnail || course.thumbnail_url || '');
@@ -139,8 +141,8 @@ export default function EditCoursePage() {
                 is_free_course: formData.is_free_course ?? 0,
                 meta_keywords: formData.meta_keywords || undefined,
                 meta_description: formData.meta_description || undefined,
-                // Send null when removed so backend clears the value; otherwise backend may ignore undefined and keep old value
-                brochure_url: formData.brochure_url ? formData.brochure_url : null,
+                brochure_url: formData.brochure_s3_key || formData.brochure_url || null,
+                brochure_s3_key: formData.brochure_s3_key || null,
                 course_thumbnail: courseThumbnailUrl || null,
                 thumbnail: courseThumbnailUrl || null,
                 thumbnail_url: courseThumbnailUrl || null,
@@ -383,14 +385,13 @@ export default function EditCoursePage() {
                                             });
                                             const data = await res.json().catch(() => ({}));
                                             if (!res.ok) throw new Error(data.message || data.error || 'Upload failed');
-                                            const pathOrUrl = (p) => typeof p === 'string' && p ? (p.startsWith('http') ? p : `${API_BASE_URL.replace(/\/$/, '')}${p.startsWith('/') ? '' : '/'}${p}`) : null;
-                                            const raw = data.url ?? data.uri ?? data.file_url ?? data.file_uri ?? data.fileUrl ?? data.brochure_url ?? data.brochure_uri ?? data.download_url ?? data.link ?? data.result
-                                                ?? data.data?.url ?? data.data?.uri ?? data.data?.file_url ?? data.data?.file_uri ?? data.data?.fileUrl ?? data.data?.brochure_url ?? data.data?.brochure_uri
-                                                ?? data.file?.url ?? data.file?.uri ?? data.file?.path ?? data.data?.file?.url ?? data.data?.file?.uri
-                                                ?? pathOrUrl(data.data?.path) ?? pathOrUrl(data.path);
-                                            const finalUrl = (typeof raw === 'string' && raw.trim()) ? raw : (raw != null ? String(raw) : null);
-                                            if (!finalUrl || (!finalUrl.startsWith('http') && !finalUrl.startsWith('/'))) throw new Error('No brochure URL returned. Backend API may not be configured properly.');
-                                            setFormData((prev) => ({ ...prev, brochure_url: finalUrl }));
+                                            const s3Key = (data.data?.s3Key ?? data.s3Key ?? '').trim();
+                                            if (!s3Key) throw new Error('No S3 key returned from upload. Backend must return data.s3Key or data.data.s3Key.');
+                                            setFormData((prev) => ({
+                                                ...prev,
+                                                brochure_url: s3Key,
+                                                brochure_s3_key: s3Key,
+                                            }));
                                             setBrochureFileName(file.name);
                                         } catch (err) {
                                             alert(err.message || 'Upload failed');
@@ -409,7 +410,7 @@ export default function EditCoursePage() {
                                     </p>
                                     <button
                                         type="button"
-                                        onClick={() => { setFormData((prev) => ({ ...prev, brochure_url: '' })); setBrochureFileName(''); }}
+                                        onClick={() => { setFormData((prev) => ({ ...prev, brochure_url: '', brochure_s3_key: '' })); setBrochureFileName(''); }}
                                         className="text-sm text-red-600 hover:underline"
                                     >
                                         Remove

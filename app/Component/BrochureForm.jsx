@@ -2,12 +2,11 @@
 
 import React, { useState, useEffect } from 'react'
 import { FileDown, Loader2, X } from 'lucide-react'
-import { API_BASE_URL } from '../../lib/apiConfig'
+import { API_BASE_URL, apiUrl } from '../../lib/apiConfig'
 
-const DEFAULT_BROCHURE_URL = '/uploads/brochures/brochure.pdf'
 const BROCHURE_FILENAME = 'CyberWhisper_Brochure.pdf'
 
-export default function BrochureForm({ className = '', onSuccess, brochureUrl: brochureUrlProp, courseTitle }) {
+export default function BrochureForm({ className = '', onSuccess, brochureUrl: brochureUrlProp, courseTitle, courseId }) {
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -17,8 +16,8 @@ export default function BrochureForm({ className = '', onSuccess, brochureUrl: b
     const [isDownloading, setIsDownloading] = useState(false)
     const [message, setMessage] = useState(null)
     const [fetchedUrl, setFetchedUrl] = useState(null)
-    // Use course brochure if provided, else fallback from API (global brochure)
     const brochureUrl = brochureUrlProp ?? fetchedUrl ?? null
+    const hasBrochure = Boolean(courseId) || Boolean(brochureUrl)
 
     useEffect(() => {
         if (brochureUrlProp) return
@@ -37,14 +36,14 @@ export default function BrochureForm({ className = '', onSuccess, brochureUrl: b
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        if (!brochureUrl) {
+        if (!hasBrochure) {
             setMessage(courseTitle ? 'No brochure available for this course.' : 'No brochure available.')
             return
         }
         setIsSubmitting(true)
         setMessage(null)
         try {
-            const addRes = await fetch(`${API_BASE_URL}/api/brochure-downloads/add`, {
+            const addRes = await fetch(apiUrl('/api/brochure-downloads/add'), {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -59,33 +58,44 @@ export default function BrochureForm({ className = '', onSuccess, brochureUrl: b
                 throw new Error(errData.message || errData.error || 'Request failed')
             }
 
-            // Start download process
             setIsDownloading(true)
             setMessage('Preparing download...')
 
+            let downloadHref = null
+            if (courseId) {
+                const urlRes = await fetch(apiUrl(`/api/courses/${courseId}/brochure-download-url`), { headers: { 'Content-Type': 'application/json' } })
+                if (urlRes.ok) {
+                    const data = await urlRes.json().catch(() => ({}))
+                    const url = data?.url ?? data?.data?.url ?? data?.downloadUrl ?? data?.data?.downloadUrl ?? data?.presignedUrl ?? data?.data?.presignedUrl
+                    if (url && typeof url === 'string') downloadHref = url
+                }
+            }
+            if (!downloadHref && brochureUrl) {
+                const base = (API_BASE_URL || '').replace(/\/$/, '')
+                const isS3Url = brochureUrl.startsWith('http') && (brochureUrl.includes('amazonaws.com') || brochureUrl.includes('s3.'))
+                downloadHref = isS3Url
+                    ? (typeof window !== 'undefined' ? window.location.origin : '') + '/api/courses/brochure-download?url=' + encodeURIComponent(brochureUrl.startsWith('http') ? brochureUrl : (base || '') + brochureUrl)
+                    : brochureUrl.startsWith('http') ? brochureUrl : (base ? base : (typeof window !== 'undefined' ? window.location.origin : '')) + brochureUrl
+            }
+            if (!downloadHref) {
+                setMessage('Could not get download link. No brochure may be attached to this course.')
+                setIsDownloading(false)
+                return
+            }
+
             const link = document.createElement('a')
-            const base = (API_BASE_URL || '').replace(/\/$/, '');
-            // Use download proxy for S3 URLs to avoid Access Denied (private objects need presigned URL from backend)
-            const isS3Url = brochureUrl.startsWith('http') && (brochureUrl.includes('amazonaws.com') || brochureUrl.includes('s3.'));
-            const downloadHref = isS3Url
-                ? (typeof window !== 'undefined' ? window.location.origin : '') + '/api/courses/brochure-download?url=' + encodeURIComponent(brochureUrl.startsWith('http') ? brochureUrl : (base || '') + brochureUrl)
-                : brochureUrl.startsWith('http') ? brochureUrl : (base ? base : (typeof window !== 'undefined' ? window.location.origin : '')) + brochureUrl;
-
-            link.href = downloadHref;
+            link.href = downloadHref
             link.download = courseTitle ? `${courseTitle.replace(/[^a-zA-Z0-9.-]/g, '_').slice(0, 60)}_Brochure.pdf` : BROCHURE_FILENAME
-
             document.body.appendChild(link)
             link.click()
             document.body.removeChild(link)
 
-            // Give a moment for the browser to initiate the download, then dismiss the loader
             setTimeout(() => {
                 setMessage('Brochure is downloading. Check your downloads.')
                 setIsDownloading(false)
                 setFormData({ name: '', email: '', mobile: '' })
                 onSuccess?.()
             }, 2000)
-
         } catch (err) {
             setMessage(err.message || 'Something went wrong. Please try again.')
             setIsDownloading(false)
@@ -94,7 +104,7 @@ export default function BrochureForm({ className = '', onSuccess, brochureUrl: b
         }
     }
 
-    const noBrochure = !brochureUrl
+    const noBrochure = !hasBrochure
 
     return (
         <div className={`bg-card border border-[#7B2CFF]/30 rounded-2xl p-4 md:p-6 shadow-sm ${className}`}>

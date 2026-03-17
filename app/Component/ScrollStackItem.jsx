@@ -38,7 +38,7 @@ const ScrollStack = ({
 
   const calculateProgress = useCallback((scrollTop, start, end) => {
     if (scrollTop < start) return 0;
-    if (scrollTop > end) return 1;
+    if (scrollTop > end) return 1;                            
     return (scrollTop - start) / (end - start);
   }, []);
 
